@@ -1,0 +1,13 @@
+@import "./styles/about_us.scss";
+@import "./styles/catalog.scss";
+@import "./styles/footer.scss";
+@import "./styles/nav.scss";
+@import "./styles/product.scss";
+@import "./styles/home.scss";
+
+
+
+.app{
+    display: flex;
+    flex-direction: column;
+}
