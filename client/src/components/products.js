@@ -18,19 +18,19 @@ const products_template = [
     { id: 13, name: 'name of the product 9', price: "on request", description: "", company: "planmeca", type: "consumables", inStock: true, image: imageList[8] },
     { id: 14, name: 'name of the product 10', price: "on request", description: "", company: "", type: "equipment", inStock: true, image: imageList[9] }
 ];
-const categories =(category)=>{
-    try{
+const categories = (category) => {
+    try {
         const options = [
             ...new Set(
                 products_template.map(product => (product[category])
-            ))]
-        return options.filter(option => option!=="")
+                ))]
+        return options.filter(option => option !== "")
     }
-    catch{
+    catch {
         console.error("Error fetching categories")
         return []
     }
-    
+
 }
 
 module.exports = { products_template, categories };
