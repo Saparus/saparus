@@ -5,9 +5,13 @@
 @import "./styles/product.scss";
 @import "./styles/home.scss";
 
+.app {
+  display: flex;
+  flex-direction: column;
+  background-color: $base-color;
+  min-height: 100dvh;
+}
 
-
-.app{
-    display: flex;
-    flex-direction: column;
+.page {
+  flex: 1;
 }

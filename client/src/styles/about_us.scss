@@ -1,52 +1,49 @@
 @import "./variables";
 
 .about_us {
-    background-color: $base-color;
-    min-height: 100dvh;
+  background-color: $base-color;
+  min-height: 100dvh;
 
-    :nth-child(odd) {
-        background-color: $primary-color;
+  :nth-child(odd) {
+    background-color: $primary-color;
+  }
+
+  .parts {
+    height: 500px;
+  }
+
+  .first {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    .map {
+      border-radius: 10px;
+      border: solid 6px $secondary-color;
     }
+    .contacts {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 40px;
 
-    .parts {
-        height: 500px;
-    }
-
-    .first {
+      .contact {
+        color: $text-color;
+        font-family: $main-font;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: flex-start;
         align-items: center;
-        .map{
-            border-radius: 10px;
-            border: solid 6px $secondary-color;
+        gap: 10px;
+        text-decoration: none;
+
+        :visited {
+          color: inherit;
         }
-        .contacts {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            gap: 40px;
 
-            .contact {
-                
-                color: $text-color;
-                font-family: $main-font;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-                text-decoration: none;
-
-                :visited {
-                    color: inherit;
-                }
-
-                .icon {
-                    scale: 1.2;
-                    width: 30px;
-                }
-            }
+        .icon {
+          scale: 1.2;
+          width: 30px;
         }
+      }
     }
-
-
+  }
 }
