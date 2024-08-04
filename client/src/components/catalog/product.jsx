@@ -18,10 +18,6 @@ const Product = ({ product }) => {
         <p className="name">{product.name}</p>
         <div className="shop">
           <p className="price">{product.price}</p>
-          {/* <Phone className="cart" /> */}
-          {/* <Link to="/about">
-            <Phone className="cart" />
-          </Link> */}
           <p
             className="instock"
             style={{ color: product.inStock ? "green" : "red" }}
