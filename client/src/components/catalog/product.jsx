@@ -16,7 +16,6 @@ const Product = ({ product }) => {
       </div>
       <div className="information">
         <p className="name">{product.name}</p>
-
         <div className="shop">
           <p className="price">{product.price}</p>
           {/* <Phone className="cart" /> */}

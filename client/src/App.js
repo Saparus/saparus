@@ -8,6 +8,7 @@ import Catalog from "./components//catalog/catalog"
 import About from "./components/about_us/about_us"
 import Home from "./components/home/home"
 import Product from "./components/product/product"
+import PageNotFount from "./components/page_not_found/PageNotFount"
 
 function App() {
   return (
@@ -29,6 +30,10 @@ function App() {
         <Route
           path="/catalog/:id"
           element={<Product />}
+        />
+        <Route
+          path="*"
+          element={<PageNotFount />}
         />
       </Routes>
       <Footer />

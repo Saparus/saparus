@@ -11,28 +11,37 @@ const Product = () => {
 
   const product = fetchProduct(Number(id))
 
-  console.log(products_template)
+  console.log(product)
 
   return (
     <div className="page product-page">
       <div className="product-container">
-        <div className="product-content">
+        <div className="product-image-wrapper">
           <div className="product-image">
-            <img
-              src={product.image}
-              alt={product.name}
-            />
-          </div>
-          <div className="product-information">
-            <p className="product-name">{product.name}</p>
-            <p className="product-status">{product.inStock}</p>
-            <p className="product-description">{product.description}</p>
+            {product.image ? (
+              <img
+                src={product.image}
+                alt={product.name}
+              />
+            ) : (
+              <div className="image-not-found-message">Image not found</div>
+            )}
+
+            <div className="product-order">
+              <div className="price">{product.price}</div>
+              <button className="contact">contact</button>
+            </div>
           </div>
         </div>
-
-        <div className="product-order">
-          <div className="price">{product.price}</div>
-          <button className="contact">contact</button>
+        <div className="product-information">
+          <p className="product-name">{product.name}</p>
+          <p
+            className="product-status"
+            style={{ color: product.inStock ? "green" : "red" }}
+          >
+            {product.inStock ? "• in stock" : "• out of stock"}
+          </p>
+          <p className="product-description">{product.description}</p>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@
 @import "./styles/nav.scss";
 @import "./styles/product.scss";
 @import "./styles/home.scss";
+@import "./styles/page_not_found.scss";
 
 .app {
   display: flex;
@@ -14,4 +15,12 @@
 
 .page {
   flex: 1;
+}
+
+.truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--line-clamp, 3);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

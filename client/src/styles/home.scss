@@ -1,4 +1,197 @@
 @import "./variables";
 
 .home {
+  .hero {
+    height: 55dvh;
+    width: 100%;
+
+    background: linear-gradient(to bottom, #348ae1 0%, #013060 100%);
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    .hero-text {
+      flex: 1;
+      position: relative;
+
+      h2 {
+        width: fit-content;
+        font-size: 3rem;
+        color: white;
+        font-family: "Righteous", sans-serif;
+        position: absolute;
+        top: 40%;
+        left: 10%;
+        position: relative;
+        z-index: 10;
+      }
+    }
+
+    .hero-logo {
+      svg {
+        opacity: 0.5;
+        position: absolute;
+        right: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 30rem;
+        width: 30rem;
+        filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
+
+        path {
+          fill: #013060;
+        }
+      }
+    }
+
+    .hero-links {
+      flex: 1;
+      position: relative;
+
+      .hero-link-list {
+        position: absolute;
+        left: 10%;
+        bottom: 20%;
+        display: flex;
+        gap: 1rem;
+
+        .hero-link {
+          background-color: #013060;
+          height: 12rem;
+          width: 10rem;
+          display: block;
+          color: white;
+          padding: 0.25rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 6px 10px #16181833;
+          display: flex;
+          flex-direction: column;
+          transition: transform 200ms ease-in-out;
+
+          &:hover {
+            transform: translateY(-2.5%);
+          }
+
+          .hero-link-text {
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-family: "Righteous", sans-serif;
+          }
+
+          .icon-wrapper {
+            background-color: $primary-color;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+
+            svg {
+              // background-color: #e7e7e5;
+              padding: 0.5rem;
+              height: 8rem;
+              width: 8rem;
+              border-radius: 0.5rem;
+              // box-shadow: 0 6px 10px #16181833;
+              filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
+
+              path {
+                fill: #013060;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .home-page-news {
+    width: 80%;
+    margin: 2rem auto 1rem;
+    font-family: "Righteous", sans-serif;
+
+    h2 {
+      font-weight: 400;
+      font-size: 2.5rem;
+    }
+
+    .news {
+      display: flex;
+      margin-bottom: 6rem;
+      gap: 2rem;
+
+      .latest-news {
+        position: relative;
+        flex: 6;
+        display: block;
+        height: fit-content;
+        max-height: 580px;
+        max-width: 770px;
+
+        .image {
+          position: absolute;
+
+          width: 100%;
+          height: auto;
+
+          .latest-news-information {
+            position: absolute;
+            bottom: 0rem;
+            z-index: 50;
+            color: white;
+            padding: 1rem;
+
+            .title {
+              font-weight: 400;
+              font-size: 2rem;
+              margin-bottom: 0.5rem;
+            }
+
+            .description {
+            }
+          }
+
+          img {
+            width: 100%;
+            height: 100%;
+
+            max-height: 580px;
+            max-width: 770px;
+
+            object-fit: cover;
+          }
+        }
+      }
+
+      .news-list {
+        display: flex;
+        flex-direction: column;
+        flex: 4;
+
+        .news-item {
+          color: black;
+          border-bottom: 2px solid $primary-color;
+          padding: 0.5rem 0;
+
+          &:first-of-type {
+            padding-top: 0;
+            margin-top: -1rem;
+          }
+
+          &:last-of-type {
+            border: none;
+          }
+
+          .title {
+            font-weight: 400;
+            font-size: 1.5rem;
+          }
+          .description {
+            font-weight: 400;
+          }
+        }
+      }
+    }
+  }
 }
