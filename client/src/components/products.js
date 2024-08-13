@@ -11,7 +11,7 @@ export const products_template = [
     company: "",
     type: "accessories",
     inStock: true,
-    image: imageList[0],
+    images: [imageList[0], imageList[1], imageList[0], imageList[1], imageList[0]],
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ export const products_template = [
     company: "planmeca",
     type: "equipment",
     inStock: true,
-    image: imageList[1],
+    images: [imageList[1]],
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ export const products_template = [
     company: "planmeca",
     type: "software",
     inStock: false,
-    image: imageList[2],
+    images: [imageList[2]],
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ export const products_template = [
     company: "",
     type: "accessories",
     inStock: true,
-    image: imageList[3],
+    images: [imageList[3]],
   },
   {
     id: 5,
@@ -51,7 +51,7 @@ export const products_template = [
     company: "",
     type: "consumables",
     inStock: true,
-    image: imageList[4],
+    images: [imageList[4]],
   },
   {
     id: 6,
@@ -61,7 +61,7 @@ export const products_template = [
     company: "",
     type: "equipment",
     inStock: true,
-    image: imageList[5],
+    images: [imageList[5]],
   },
   {
     id: 7,
@@ -71,7 +71,7 @@ export const products_template = [
     company: "planmeca",
     type: "software",
     inStock: true,
-    image: imageList[6],
+    images: [imageList[6]],
   },
   {
     id: 8,
@@ -81,7 +81,7 @@ export const products_template = [
     company: "",
     type: "",
     inStock: true,
-    image: imageList[7],
+    images: [imageList[7]],
   },
   {
     id: 9,
@@ -91,7 +91,7 @@ export const products_template = [
     company: "planmeca",
     type: "consumables",
     inStock: true,
-    image: imageList[8],
+    images: [imageList[8]],
   },
   {
     id: 10,
@@ -101,7 +101,7 @@ export const products_template = [
     company: "",
     type: "equipment",
     inStock: true,
-    image: imageList[9],
+    images: [imageList[9]],
   },
   {
     id: 11,
@@ -111,7 +111,7 @@ export const products_template = [
     company: "planmeca",
     type: "software",
     inStock: true,
-    image: imageList[6],
+    images: [imageList[6]],
   },
   {
     id: 12,
@@ -121,7 +121,7 @@ export const products_template = [
     company: "",
     type: "",
     inStock: true,
-    image: imageList[7],
+    images: [imageList[7]],
   },
   {
     id: 13,
@@ -131,7 +131,7 @@ export const products_template = [
     company: "planmeca",
     type: "consumables",
     inStock: true,
-    image: imageList[8],
+    images: [imageList[8]],
   },
   {
     id: 14,
@@ -141,7 +141,7 @@ export const products_template = [
     company: "",
     type: "equipment",
     inStock: true,
-    image: imageList[9],
+    images: [imageList[9]],
   },
 ]
 

@@ -11,7 +11,7 @@ const Product = ({ product }) => {
       >
         <div className="image">
           <img
-            src={product.image}
+            src={product.images[0]}
             alt=""
           />
         </div>
