@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom"
 
+import ProductImageSelect from "./ProductImageSelect"
+
 import { products_template } from "../products"
 
 const fetchProduct = (id) => {
@@ -10,8 +12,6 @@ const Product = () => {
   const { id } = useParams()
 
   const product = fetchProduct(Number(id))
-
-  console.log(product)
 
   return (
     <div className="page product-page">
@@ -42,6 +42,7 @@ const Product = () => {
             {product.inStock ? "• in stock" : "• out of stock"}
           </p>
           <p className="product-description">{product.description}</p>
+          <ProductImageSelect />
         </div>
       </div>
     </div>

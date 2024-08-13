@@ -4,7 +4,7 @@ import { ReactComponent as Logo } from "../assets/logo.svg"
 
 function nav() {
   return (
-    <header className="nav">
+    <header className="header">
       <Link
         className="logo"
         to="/"

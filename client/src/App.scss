@@ -5,6 +5,7 @@
 @import "./styles/product.scss";
 @import "./styles/home.scss";
 @import "./styles/page_not_found.scss";
+@import "./styles/product_page.scss";
 
 .app {
   display: flex;
@@ -19,8 +20,22 @@
 
 .truncate {
   display: -webkit-box;
+  line-clamp: var(--line-clamp, 3);
   -webkit-line-clamp: var(--line-clamp, 3);
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.button {
+  background-color: $primary-color;
+  transition: background-color $animation_duration $animation, shadow $animation_duration $animation;
+  color: white;
+  border-radius: 0.5rem;
+  box-shadow: $shadow;
+
+  &:hover {
+    background-color: $primary-color-active !important;
+    box-shadow: $shadow_active;
+  }
 }

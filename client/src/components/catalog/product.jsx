@@ -4,20 +4,19 @@ import { ReactComponent as Phone } from "../../assets/phone.svg"
 
 const Product = ({ product }) => {
   return (
-    <Link
-      to={`/catalog/${product.id}`}
-      className="product"
-    >
-      <div className="image">
-        <img
-          src={product.image}
-          alt=""
-        />
-      </div>
-      <div className="information">
-        <p className="name">{product.name}</p>
-        <div className="shop">
-          <p className="price">{product.price}</p>
+    <div className="product">
+      <Link
+        className="product-link"
+        to={`/catalog/${product.id}`}
+      >
+        <div className="image">
+          <img
+            src={product.image}
+            alt=""
+          />
+        </div>
+        <div className="information">
+          <p className="name">{product.name}</p>
           <p
             className="instock"
             style={{ color: product.inStock ? "green" : "red" }}
@@ -25,8 +24,20 @@ const Product = ({ product }) => {
             {product.inStock ? "• in stock" : "• out of stock"}
           </p>
         </div>
-      </div>
-    </Link>
+      </Link>
+      <Link
+        className="product-shop"
+        to="/about"
+      >
+        <div className="shop">
+          <p className="price">{product.price}</p>
+          {/* STC */}
+          <Phone className="cart" />
+          <span className="go-to-contacts-text">go to contacts</span>
+          {/* STC */}
+        </div>
+      </Link>
+    </div>
   )
 }
 

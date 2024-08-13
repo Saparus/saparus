@@ -1,6 +1,6 @@
 @import "./variables";
 
-.nav {
+header {
   z-index: 9999;
   position: sticky;
   top: 0;
@@ -11,6 +11,7 @@
   justify-content: space-between;
   background-color: #fff;
   padding: 15px;
+  box-shadow: 0 1px 4px #1c1f1f13;
 
   .logo {
     position: flex-start;
@@ -47,10 +48,21 @@
         color: #348ae1;
         padding: 0.25rem 0.5rem;
         border-radius: 1rem;
+        transition: background-color $animation_duration $animation,
+          box-shadow $animation_duration $animation, color $animation_duration $animation;
+
+        &:hover {
+          color: $primary-color-active;
+        }
 
         &.active {
           background-color: #348ae1;
+          box-shadow: 0 2px 4px #16181833;
           color: white;
+
+          &:hover {
+            background-color: $primary-color-active;
+          }
         }
 
         :visited {

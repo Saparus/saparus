@@ -3,8 +3,9 @@ import { useState } from "react"
 import Companies from "./companies"
 import Categories from "./categories"
 import Products from "./products"
+import { Contacts } from "../footer"
 
-function Catalog() {
+const Catalog = () => {
   const [filter, setFilter] = useState({})
 
   return (

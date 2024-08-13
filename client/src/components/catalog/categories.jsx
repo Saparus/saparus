@@ -63,13 +63,13 @@ const Categories = ({ setFilter }) => {
 
       <div className="utils">
         <button
-          className="search-button"
+          className="button search-button "
           type="submit"
         >
           Search
         </button>
         <button
-          className="trash-button"
+          className="button trash-button "
           onClick={() => setInputValue({})}
         >
           <TrashIcon />
