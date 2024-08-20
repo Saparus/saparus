@@ -1,48 +1,48 @@
 @import "./variables";
 
 .footer {
-    background-color: $primary-color;
+  background-color: $primary-color;
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  height: 200px;
+
+  .logo {
     display: flex;
-    justify-content: space-between;
-    padding: 40px;
-    height: 200px;
-
-    .logo {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        gap:20px;
-        .stamp {
-            text-align: left;
-            margin-left: 10px;
-        }
-
-        .license {
-            color: $text-color;
-        }
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 20px;
+    .stamp {
+      text-align: left;
+      margin-left: 10px;
     }
 
-    .contacts {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        gap: 10px;
-
-        .contact {
-            color: $text-color;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 20px;
-            text-decoration: none;
-
-            :visited {
-                color: inherit;
-            }
-
-            .icon {
-                width: 30px;
-            }
-        }
+    .license {
+      color: $text-color;
     }
+  }
+
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+
+    .contact {
+      color: $text-color;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+      text-decoration: none;
+
+      :visited {
+        color: inherit;
+      }
+
+      .icon {
+        width: 30px;
+      }
+    }
+  }
 }

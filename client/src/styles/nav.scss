@@ -1,65 +1,96 @@
 @import "./variables";
 
-.nav {
-    z-index: 9999;
-    position: sticky;
-    top: 0;
+header {
+  z-index: 9999;
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: no-wrap;
+  gap: 15px;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 1px 4px #1c1f1f13;
+
+  .logo {
+    position: flex-start;
     display: flex;
+    gap: 10px;
     align-items: center;
-    flex-wrap: wrap;
-    gap:15px;
-    justify-content: space-between;
-    background-color: #fff;
-    ;
-    padding: 15px;
 
-    .logo {
-        position: flex-start;
-        display: flex;
-        gap: 10px;
-        align-items: center;
+    flex-direction: row;
 
-        h1 {
-            width: 192px;
-            flex-grow: 0;
-            font-family: "Inika", serif;
-            font-size: 20px;
-            text-align: left;
-            color: #348ae1;
-        }
+    h1 {
+      width: 192px;
+      flex-grow: 0;
+      font-family: "Inika", serif;
+      font-size: 20px;
+      text-align: left;
+      color: #348ae1;
     }
+  }
 
-    .nav-buttons {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-        padding-inline: 50px;
+  .nav-buttons {
+    ul {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-inline: 2rem;
+      list-style: none;
 
-        button {
-            text-decoration: none;
-            background-color: transparent;
-            font-family: $main-font;
-            font-size: 14px;
-            text-align: left;
-            color: #348ae1;
-
-            :visited {
-                color: inherit;
-            }
-        }
-
-        span {
-            color: #348ae1;
-        }
-    }
-
-    .contact_us {
-        text-align: center;
-        height: 11.5px;
+      .nav-link {
+        text-decoration: none;
+        background-color: transparent;
         font-family: $main-font;
-        font-size: 12px;
+        font-size: 14px;
         text-align: left;
-        color: #2b2be1;
-        text-wrap: nowrap;
+        color: #348ae1;
+        padding: 0.25rem 0.5rem;
+        border-radius: 1rem;
+        transition: background-color $animation_duration $animation,
+          box-shadow $animation_duration $animation, color $animation_duration $animation;
+
+        &:hover {
+          color: $primary-color-active;
+        }
+
+        &.active {
+          background-color: #348ae1;
+          box-shadow: 0 2px 4px #16181833;
+          color: white;
+
+          &:hover {
+            background-color: $primary-color-active;
+          }
+        }
+
+        :visited {
+          color: inherit;
+        }
+      }
+
+      .link-separator {
+        color: #348ae1;
+        user-select: none;
+      }
     }
+  }
+
+  .contact_us {
+    text-align: center;
+    height: 11.5px;
+    font-family: $main-font;
+    font-size: 12px;
+    text-align: left;
+
+    a {
+      color: black;
+      text-wrap: nowrap;
+
+      span {
+        color: #2b2be1;
+      }
+    }
+  }
 }

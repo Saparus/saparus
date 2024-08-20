@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
-import Companies from './companies';
-import Categories from './categories';
-import Products from './products';
+import { useState } from "react"
 
+import Companies from "./companies"
+import Categories from "./categories"
+import Products from "./products"
+import { Contacts } from "../footer"
 
-
-
-function Catalog() {
-  const [filter, setFilter] = useState({});
+const Catalog = () => {
+  const [filter, setFilter] = useState({})
 
   return (
-    <div className='catalog'>
+    <div className="page catalog">
       <Companies setFilter={setFilter} />
-      <div className='products_categories'>
+      <div className="products_categories">
         <Categories setFilter={setFilter} />
         <Products filtered={filter} />
       </div>
     </div>
-  );
+  )
 }
 
-export default Catalog;
+export default Catalog
