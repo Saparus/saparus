@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 
 import ProductImageSelect from "./ProductImageSelect"
 
-import { products_template } from "../products"
+import { products_template } from "../../data/products"
 
 const fetchProduct = (id) => {
   return products_template.filter((product) => product.id === id)[0]

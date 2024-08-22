@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import { ReactComponent as TrashIcon } from "../../assets/icons/trash.svg"
 
-import { categories } from "../products"
+import { categories } from "../../data/products"
 
 const Categories = ({ setFilter }) => {
   const used_categories = ["company", "type", "price"]

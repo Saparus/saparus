@@ -18,6 +18,7 @@
     height: 150px;
     padding: 20px 1%;
     gap: 20px;
+    box-shadow: 0 1px 10px #2b303133;
 
     .company {
       align-items: center;
@@ -26,6 +27,26 @@
       flex-direction: column;
       gap: 10px;
       text-align: center;
+      user-select: none;
+
+      &.selected {
+        .logo {
+          border: white solid 2px;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+          .logo {
+            border: white solid 2px;
+            opacity: 0.8;
+          }
+
+          span {
+            opacity: 0.8;
+          }
+        }
+      }
 
       span {
         cursor: default;
@@ -58,7 +79,7 @@
         height: 80px;
         border-radius: 50%;
 
-        transition: border 200ms ease-in-out;
+        transition: border $animation_duration $animation, opacity $animation_duration $animation;
       }
 
       span {

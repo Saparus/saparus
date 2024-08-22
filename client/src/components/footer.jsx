@@ -1,4 +1,5 @@
 import React from "react"
+import { useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ReactComponent as Logo } from "../assets/logo_white.svg"
 import { ReactComponent as Facebook } from "../assets/facebook.svg"
@@ -50,9 +51,13 @@ export function Contacts() {
   )
 }
 
-function Footer() {
+const Footer = () => {
+  const location = useLocation()
+
+  console.log(location.pathname)
+
   return (
-    <div className="footer">
+    <div className={`footer ${location.pathname === "/about" ? "hide-shadow" : ""}`}>
       <div className="logo">
         <button className="stamp">
           <Link to="/">

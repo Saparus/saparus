@@ -10,7 +10,10 @@ const Catalog = () => {
 
   return (
     <div className="page catalog">
-      <Companies setFilter={setFilter} />
+      <Companies
+        setFilter={setFilter}
+        selectedCompany={filter.company}
+      />
       <div className="products_categories">
         <Categories setFilter={setFilter} />
         <Products filtered={filter} />

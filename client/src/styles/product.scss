@@ -15,7 +15,8 @@
   transition: box-shadow $animation_duration $animation;
 
   .product-link {
-    padding: 1rem 1rem 0.25rem 1rem;
+    // padding: 1rem 1rem 0.25rem 1rem;
+    padding: 0.5rem 0.5rem 0.25rem 0.5rem;
     padding-bottom: auto;
     color: black;
     display: flex;
@@ -43,7 +44,7 @@
     border-radius: 0.5rem;
     background-color: $base-color;
 
-    box-shadow: 0 0 2px 2px #afc2c733;
+    // box-shadow: 0 0 2px 4px #383d3f0c;
 
     img {
       width: 100%;
@@ -113,6 +114,7 @@
     justify-content: flex-start;
     gap: 0.25rem;
     height: 100%;
+    padding: 1rem 0.5rem 0 0.5rem;
 
     .name {
       font-size: 13px;

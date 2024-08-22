@@ -26,10 +26,15 @@ const Home = () => {
           className="latest-news"
         >
           <div className="image">
-            <img
-              src={news[0].image}
-              alt={news[0].title}
-            />
+            {news[0].image ? (
+              <img
+                src={news[0].image}
+                alt={news[0].title}
+              />
+            ) : (
+              <div className="no-image-image"></div>
+            )}
+            <div className="shadow-holder"></div>
             <div className="latest-news-information">
               <div className="latest-news-title">
                 <h4 className="title">{news[0].title}</h4>

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { products_template } from "../products"
+import { products_template } from "../../data/products"
 import filterProducts from "./filter"
 
 import Product from "./product"

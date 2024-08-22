@@ -1,15 +1,25 @@
 import { ReactComponent as Logo } from "../../assets/companies/planmeca.svg"
-import { categories } from "../products"
+import { categories } from "../../data/products"
 
-const Companies = ({ setFilter }) => {
+const Companies = ({ setFilter, selectedCompany }) => {
   const companies = categories("company")
   return (
     <ul className="companies">
       {companies.map((company, index) => (
         <li
           key={index}
-          className="company"
-          onClick={() => setFilter({ company: company })}
+          className={`company ${company === selectedCompany ? "selected" : ""}`}
+          onClick={() => {
+            if (company !== selectedCompany) {
+              setFilter({ company: company })
+            } else {
+              setFilter((prevState) => {
+                const { company, ...newState } = prevState
+
+                return newState
+              })
+            }
+          }}
         >
           <Logo className="logo" />
           <span>{company}</span>
