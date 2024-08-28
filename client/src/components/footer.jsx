@@ -54,8 +54,6 @@ export function Contacts() {
 const Footer = () => {
   const location = useLocation()
 
-  console.log(location.pathname)
-
   return (
     <div className={`footer ${location.pathname === "/about" ? "hide-shadow" : ""}`}>
       <div className="logo">

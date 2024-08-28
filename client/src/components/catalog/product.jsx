@@ -30,10 +30,12 @@ const Product = ({ product }) => {
         to="/about"
       >
         <div className="shop">
-          <p className="price">{product.price}</p>
           {/* STC */}
+          <p className="price">{product.price}</p>
           <Phone className="cart" />
-          <span className="go-to-contacts-text">go to contacts</span>
+          <span className="go-to-contacts-text">
+            {product.price === "on request" ? "Contact for Pricing" : "Contact for Purchase"}
+          </span>
           {/* STC */}
         </div>
       </Link>

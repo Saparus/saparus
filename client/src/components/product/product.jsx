@@ -35,74 +35,112 @@ const Product = () => {
     setCurrentImageIndex(imageIndex)
   }
 
-  // useEffect(() => {
-  //   if (!product) {
-  //     navigate("/error")
-  //   }
-  // }, [product, navigate])
+  const renderImage = () => {
+    return (
+      <div className="product-image-wrapper">
+        <div className="product-image">
+          {product.images.length > 1 ? (
+            <>
+              <button
+                className="change-product-image next"
+                onClick={handleSelectNextImage}
+              >
+                {">"}
+              </button>
+              <button
+                className="change-product-image prev"
+                onClick={handleSelectPrevImage}
+              >
+                {"<"}
+              </button>
+            </>
+          ) : (
+            ""
+          )}
+
+          {product?.images[0] ? (
+            <img
+              src={product.images[currentImageIndex]}
+              alt={product.name}
+            />
+          ) : (
+            <div className="image-not-found-message">Image not found</div>
+          )}
+          {/* <div className="product-order">
+            <div className="price">{product.price}</div>
+            <Link
+              className="contact"
+              to="../about"
+            >
+              contact
+            </Link>
+          </div> */}
+        </div>
+        {/* {product.images.length > 1 ? (
+          <ProductImageSelect
+            images={product.images}
+            handleSelectImage={handleSelectImage}
+            currentIndex={currentImageIndex}
+          />
+        ) : (
+          ""
+        )} */}
+      </div>
+    )
+  }
+
+  const renderProductInformation = () => {
+    return (
+      <div className="product-information">
+        <p className="product-name">{product.name}</p>
+        <div className="product-short-information">
+          <p
+            className={`product-status ${
+              product.inStock ? "product-in-stock" : "product-not-in-stock"
+            }`}
+          >
+            {product.inStock ? "• in stock" : "• out of stock"}
+          </p>
+          <p className="product-price">
+            {product.price === "on request" ? (
+              <Link
+                className="contact-for-pricing-link"
+                to="../about"
+              >
+                Contact for Pricing
+              </Link>
+            ) : (
+              <>
+                {product.price}
+                <Link
+                  className="contact-for-purchasing-link"
+                  to="../about"
+                >
+                  Contact for Purchase
+                </Link>
+              </>
+            )}
+          </p>
+        </div>
+        <p className="product-description">{product.description}</p>
+        {product.images.length > 1 ? (
+          <ProductImageSelect
+            images={product.images}
+            handleSelectImage={handleSelectImage}
+            currentIndex={currentImageIndex}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className="page product-page">
       <div className="product-container">
-        <div className="product-image-wrapper">
-          <div className="product-image">
-            {product.images.length > 1 ? (
-              <>
-                <button
-                  className="change-product-image next"
-                  onClick={handleSelectNextImage}
-                >
-                  {">"}
-                </button>
-                <button
-                  className="change-product-image prev"
-                  onClick={handleSelectPrevImage}
-                >
-                  {"<"}
-                </button>
-              </>
-            ) : (
-              ""
-            )}
-
-            {product?.images[0] ? (
-              <img
-                src={product.images[currentImageIndex]}
-                alt={product.name}
-              />
-            ) : (
-              <div className="image-not-found-message">Image not found</div>
-            )}
-            <div className="product-order">
-              <div className="price">{product.price}</div>
-              <Link
-                className="contact"
-                to="../about"
-              >
-                contact
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="product-information">
-          <p className="product-name">{product.name}</p>
-          <p
-            className="product-status"
-            style={{ color: product.inStock ? "green" : "red" }}
-          >
-            {product.inStock ? "• in stock" : "• out of stock"}
-          </p>
-          <p className="product-description">{product.description}</p>
-          {product.images.length > 1 ? (
-            <ProductImageSelect
-              images={product.images}
-              handleSelectImage={handleSelectImage}
-              currentIndex={currentImageIndex}
-            />
-          ) : (
-            ""
-          )}
-        </div>
+        {renderImage()}
+        {renderProductInformation()}
       </div>
     </div>
   )

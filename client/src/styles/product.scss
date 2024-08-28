@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 6px 10px #afc2c733;
-  transition: box-shadow $animation_duration $animation;
+  transition: box-shadow $animation_duration $animation, transform $animation_duration $animation;
 
   .product-link {
     // padding: 1rem 1rem 0.25rem 1rem;
@@ -30,6 +30,7 @@
 
   &:hover {
     box-shadow: 0 6px 10px #72808533;
+    transform: translateY(-0.25rem);
   }
 
   .image {
@@ -70,10 +71,18 @@
 
         .go-to-contacts-text {
           opacity: 1;
+
+          transform: translateX(-1rem);
+        }
+
+        .price {
+          opacity: 0;
+          transform: translateX(-1.5rem);
         }
 
         .cart {
           opacity: 0;
+          transform: translateX(1.5rem);
         }
       }
     }
@@ -87,12 +96,17 @@
       padding-top: 0.75rem;
       align-items: center;
       color: black;
-      transition: opacity $animation_duration $animation;
+      transition: opacity $animation_duration $animation, transform $animation_duration $animation;
       position: relative;
 
       .cart {
         opacity: 1;
-        transition: opacity $animation_duration $animation;
+        transition: opacity $animation_duration $animation, transform $animation_duration $animation;
+      }
+
+      .price {
+        opacity: 1;
+        transition: opacity $animation_duration $animation, transform $animation_duration $animation;
       }
 
       .go-to-contacts-text {
@@ -101,7 +115,8 @@
         font-size: 0.75rem;
         right: 0;
         position: absolute;
-        transition: opacity $animation_duration $animation, width $animation_duration $animation;
+        transition: opacity $animation_duration $animation, width $animation_duration $animation,
+          transform $animation_duration $animation;
         font-weight: 600;
       }
     }

@@ -3,7 +3,7 @@ const filterProducts = (products, filter) => {
     const filters = Object.fromEntries(
       Object.entries(filter).filter(([key, value]) => value !== "")
     )
-    console.log(filters)
+
     const filteredByStartsWith = products.filter((product) => {
       return Object.keys(filters).every((key) => {
         const productValue = product[key]

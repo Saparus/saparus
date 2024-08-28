@@ -1,3 +1,5 @@
+import filterProducts from "../utils/filter"
+
 const images = require.context("../assets/product_images", true)
 const imageList = images.keys().map((image) => images(image))
 
@@ -11,12 +13,12 @@ export const products_template = [
     company: "",
     type: "accessories",
     inStock: true,
-    images: [imageList[0], imageList[1], imageList[0], imageList[1], imageList[0]],
+    images: [imageList[0], imageList[1], imageList[0], imageList[1], imageList[0], imageList[1]],
   },
   {
     id: 2,
     name: "name of the product 2",
-    price: "on request",
+    price: "2000$",
     description: "",
     company: "planmeca",
     type: "equipment",
@@ -105,7 +107,7 @@ export const products_template = [
   },
   {
     id: 11,
-    name: "name of the product 7",
+    name: "name of the product 11",
     price: "on request",
     description: "",
     company: "planmeca",
@@ -115,7 +117,7 @@ export const products_template = [
   },
   {
     id: 12,
-    name: "name of the product 8",
+    name: "name of the product 12",
     price: "on request",
     description: "",
     company: "",
@@ -125,7 +127,7 @@ export const products_template = [
   },
   {
     id: 13,
-    name: "name of the product 9",
+    name: "name of the product 13",
     price: "on request",
     description: "",
     company: "planmeca",
@@ -135,7 +137,7 @@ export const products_template = [
   },
   {
     id: 14,
-    name: "name of the product 10",
+    name: "name of the product 14",
     price: "on request",
     description: "",
     company: "",
@@ -155,4 +157,12 @@ export const categories = (category) => {
   }
 }
 
-// module.exports = { products_template, categories }
+const simulateDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+export const getProducts = async (filter) => {
+  await simulateDelay(200)
+
+  if (filter) return filterProducts(products_template, filter)
+
+  return products_template
+}

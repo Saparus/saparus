@@ -19,7 +19,7 @@
       h2 {
         width: fit-content;
         font-size: 3rem;
-        color: white;
+        color: $text-color;
         font-family: "Righteous", sans-serif;
         position: absolute;
         top: 40%;
@@ -82,7 +82,7 @@
             background-color: rgba($primary-color, 0.05);
 
             .icon-wrapper {
-              background-color: $accent_green_active;
+              // background-color: $accent_green_active;
             }
           }
 
@@ -99,7 +99,8 @@
             align-items: center;
             justify-content: center;
             border-radius: 0.5rem;
-            background-color: $accent_green;
+            // background-color: $accent_green;
+            background-color: $base-color;
             transition: background-color $animation_duration $animation;
 
             svg {
@@ -141,13 +142,14 @@
         position: absolute;
         bottom: -2rem;
         right: 0;
-        color: $accent-green;
+        // color: $accent-green;
+        color: $primary-color;
         transition: color $animation_duration $animation;
         text-decoration: underline;
         flex: 0;
 
         &:hover {
-          color: $accent-green-active;
+          color: $primary-color;
         }
       }
 
@@ -159,6 +161,12 @@
         // max-height: 580px;
         // max-width: 770px;
         transition: filter $animation_duration $animation;
+
+        &:hover {
+          .description {
+            line-clamp: 0 !important;
+          }
+        }
 
         .image {
           position: absolute;
@@ -189,7 +197,7 @@
             position: absolute;
             bottom: 0rem;
             z-index: 50;
-            color: white;
+            color: $base-color;
             padding: 1rem;
 
             .latest-news-title {

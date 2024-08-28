@@ -58,7 +58,7 @@ header {
         &.active {
           background-color: #348ae1;
           box-shadow: 0 2px 4px #16181833;
-          color: white;
+          color: $base-color;
 
           &:hover {
             background-color: $primary-color-active;
