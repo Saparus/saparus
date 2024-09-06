@@ -13,10 +13,18 @@ header {
   padding: 15px;
   box-shadow: 0 1px 4px #1c1f1f13;
 
+  .language-selector {
+    margin-right: 2rem;
+    font-family: $main-font;
+    font-size: 0.85rem;
+    color: $primary_color;
+    text-shadow: 0 0px 1px #272b2c3b;
+  }
+
   .logo {
     position: flex-start;
     display: flex;
-    gap: 10px;
+    gap: 0.75rem;
     align-items: center;
 
     flex-direction: row;
@@ -25,7 +33,7 @@ header {
       width: 192px;
       flex-grow: 0;
       font-family: "Inika", serif;
-      font-size: 20px;
+      font-size: 1.25rem;
       text-align: left;
       color: #348ae1;
     }
@@ -43,7 +51,8 @@ header {
         text-decoration: none;
         background-color: transparent;
         font-family: $main-font;
-        font-size: 14px;
+        font-size: 1rem;
+        font-weight: 500;
         text-align: left;
         color: #348ae1;
         padding: 0.25rem 0.5rem;
@@ -79,9 +88,9 @@ header {
 
   .contact_us {
     text-align: center;
-    height: 11.5px;
+    height: 0.85rem;
     font-family: $main-font;
-    font-size: 12px;
+    font-size: 0.85rem;
     text-align: left;
 
     a {

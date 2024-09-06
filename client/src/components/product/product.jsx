@@ -1,21 +1,27 @@
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { useQuery } from "react-query"
+import { useTranslation } from "react-i18next"
+
+import { getProduct } from "../../data/products"
 
 import ProductImageSelect from "./ProductImageSelect"
-
-import { products_template } from "../../data/products"
-
-const fetchProduct = (id) => {
-  return products_template.filter((product) => product.id === id)[0]
-}
+import Loading from "../other/Loading"
 
 const Product = () => {
-  // const navigate = useNavigate()
   const { id } = useParams()
+  const { i18n } = useTranslation()
+  const currentLanguage = i18n.language
+
+  const {
+    data: product,
+    isLoading,
+    error,
+  } = useQuery(["product", id, currentLanguage], () => getProduct(id, currentLanguage))
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  const product = fetchProduct(Number(id))
+  // const product = getProduct(Number(id))
 
   const handleSelectNextImage = () => {
     setCurrentImageIndex((prevState) => {
@@ -102,16 +108,9 @@ const Product = () => {
             {product.inStock ? "• in stock" : "• out of stock"}
           </p>
           <p className="product-price">
-            {product.price === "on request" ? (
-              <Link
-                className="contact-for-pricing-link"
-                to="../about"
-              >
-                Contact for Pricing
-              </Link>
-            ) : (
+            {product.fixedPrice ? (
               <>
-                {product.price}
+                {product.price}$
                 <Link
                   className="contact-for-purchasing-link"
                   to="../about"
@@ -119,6 +118,13 @@ const Product = () => {
                   Contact for Purchase
                 </Link>
               </>
+            ) : (
+              <Link
+                className="contact-for-pricing-link"
+                to="../about"
+              >
+                Contact for Pricing
+              </Link>
             )}
           </p>
         </div>
@@ -136,12 +142,21 @@ const Product = () => {
     )
   }
 
-  return (
-    <div className="page product-page">
-      <div className="product-container">
+  const renderProduct = () => {
+    if (isLoading) return <Loading />
+    if (error || !product) return <div>something went wrong</div>
+
+    return (
+      <>
         {renderImage()}
         {renderProductInformation()}
-      </div>
+      </>
+    )
+  }
+
+  return (
+    <div className="page product-page">
+      <div className="product-container">{renderProduct()}</div>
     </div>
   )
 }

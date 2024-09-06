@@ -31,10 +31,10 @@ const Product = ({ product }) => {
       >
         <div className="shop">
           {/* STC */}
-          <p className="price">{product.price}</p>
+          <p className="price">{product.fixedPrice ? product.price + "$" : "Price on Request"}</p>
           <Phone className="cart" />
           <span className="go-to-contacts-text">
-            {product.price === "on request" ? "Contact for Pricing" : "Contact for Purchase"}
+            {product.fixedPrice ? "Contact for Purchase" : "Contact for Pricing"}
           </span>
           {/* STC */}
         </div>

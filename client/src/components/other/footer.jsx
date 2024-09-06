@@ -1,11 +1,12 @@
 import React from "react"
 import { useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { ReactComponent as Logo } from "../assets/logo_white.svg"
-import { ReactComponent as Facebook } from "../assets/facebook.svg"
-import { ReactComponent as Mail } from "../assets/mail.svg"
-import { ReactComponent as Location } from "../assets/location.svg"
-import { ReactComponent as Phone } from "../assets/phone_white.svg"
+import { ReactComponent as Logo } from "../../assets/logo_white.svg"
+import { ReactComponent as Facebook } from "../../assets/facebook.svg"
+import { ReactComponent as Mail } from "../../assets/mail.svg"
+import { ReactComponent as Location } from "../../assets/location.svg"
+import { ReactComponent as Phone } from "../../assets/phone_white.svg"
+import { useTranslation } from "react-i18next"
 
 export function Contacts() {
   return (
@@ -52,6 +53,8 @@ export function Contacts() {
 }
 
 const Footer = () => {
+  const { t } = useTranslation("translation", { keyPrefix: "footer" })
+
   const location = useLocation()
 
   return (
@@ -62,7 +65,7 @@ const Footer = () => {
             <Logo />
           </Link>
         </button>
-        <h5 className="license">© 2024 Ltd. Saparus. All Rights Reserved</h5>
+        <h5 className="license">{t("© 2024 Ltd. Saparus. All Rights Reserved")}</h5>
       </div>
       <Contacts />
     </div>

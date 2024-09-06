@@ -8,6 +8,9 @@
   //   background-color: $primary-color;
   // }
 
+  p {
+  }
+
   .parts {
     height: 600px;
     box-shadow: 0 0 10px #9aa8acb4;
@@ -32,7 +35,9 @@
         }
 
         p {
-          font-size: 0.85rem;
+          font-size: 1rem;
+          text-align: justify;
+          word-break: keep-all;
         }
       }
     }
@@ -67,6 +72,10 @@
     &:nth-of-type(even) {
       .centered {
         flex-direction: row;
+      }
+
+      h2 {
+        text-align: right;
       }
     }
 

@@ -135,10 +135,10 @@
       .product-short-information {
         display: flex;
         gap: 2.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
 
         // border-top: 1px solid black;
-        padding-top: 1rem;
+        // padding-top: 0.25rem;
         // font-size: 0.75rem;
 
         .contact-for-purchasing-link {
@@ -150,6 +150,7 @@
           color: $primary_color;
           transition: color $animation_duration $animation;
           position: relative;
+          font-weight: 500;
 
           &::after {
             content: "";
@@ -175,13 +176,14 @@
       .product-status {
         &.product-in-stock {
           color: $success_green;
+          font-weight: 500;
         }
       }
 
       .product-description {
         border-top: 1px solid black;
         padding-top: 0.5rem;
-        font-size: 0.75rem;
+        font-size: 1rem;
         line-height: 150%;
       }
     }

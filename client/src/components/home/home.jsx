@@ -1,8 +1,10 @@
 import { useQuery } from "react-query"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 import HeroLink from "./HeroLink"
 import NewsItem from "./NewsItem"
+import Loading from "../other/Loading"
 
 // import { ReactComponent as Logo } from "../../assets/logo.svg"
 import { ReactComponent as LogoIcon } from "../../assets/logo_white.svg"
@@ -13,10 +15,19 @@ import { getAllNews } from "../../data/news"
 import formatDate from "../../utils/formatDate"
 
 const Home = () => {
-  const { data: news, isLoading, error } = useQuery("news", getAllNews)
+  const { t } = useTranslation("translation", { keyPrefix: "time" })
+  const { i18n } = useTranslation()
+
+  const currentLanguage = i18n.language
+
+  const {
+    data: news,
+    isLoading,
+    error,
+  } = useQuery(["news", currentLanguage], () => getAllNews(currentLanguage))
 
   const renderNews = () => {
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading) return <Loading />
     if (error) return <div>Error fetching news</div>
 
     const renderLatestNews = () => {
@@ -38,7 +49,7 @@ const Home = () => {
             <div className="latest-news-information">
               <div className="latest-news-title">
                 <h4 className="title">{news[0].title}</h4>
-                <p className="date">{formatDate(news[0].date)}</p>
+                <p className="date">{formatDate(t, news[0].date)}</p>
               </div>
               <p
                 className="description truncate"
@@ -63,7 +74,7 @@ const Home = () => {
                 key={newsItem.id}
                 title={newsItem.title}
                 text={newsItem.text}
-                date={formatDate(newsItem.date)}
+                date={formatDate(t, newsItem.date)}
                 url={`/news/${newsItem.id}`}
               />
             ))}

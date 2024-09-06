@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import "./index.scss"
 import App from "./App"
 
+import "./i18n"
+
 const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById("root"))

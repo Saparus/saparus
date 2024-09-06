@@ -1,8 +1,25 @@
-import React from "react"
 import { Link, NavLink } from "react-router-dom"
-import { ReactComponent as Logo } from "../assets/logo.svg"
+import { useTranslation } from "react-i18next"
+import { useEffect } from "react"
 
-function nav() {
+import { ReactComponent as Logo } from "../../assets/logo.svg"
+
+import LanguageSelector from "./LanguageSelector"
+
+const Header = () => {
+  const { t } = useTranslation("translation", { keyPrefix: "header" })
+
+  // const [language, setCurrentLanguage] = useStore((state) => [state.language, state.setLanguage])
+
+  // const systemDefaultLanguage = navigator.language.split("-")[0]
+  // let defaultLanguageToDisplay = "en"
+
+  // useEffect(() => {
+  //   console.log(language)
+  // }, [])
+
+  // console.log(systemDefaultLanguage)
+
   return (
     <header className="header">
       <Link
@@ -14,18 +31,21 @@ function nav() {
       </Link>
       <div className="contact_us">
         <a href="tel:+995591808457">
-          Contact Us: <span>(+995) 591 80 84 57</span>
+          {t("Contact Us")}: <span>(+995) 591 80 84 57</span>
         </a>
       </div>
       <nav className="nav-buttons">
         <ul>
+          <li>
+            <LanguageSelector />
+          </li>
           <li>
             <NavLink
               className="nav-link"
               end
               to="/"
             >
-              Home
+              {t("Home")}
             </NavLink>
           </li>
           <span className="link-separator">|</span>
@@ -35,7 +55,7 @@ function nav() {
               end
               to="/about"
             >
-              About
+              {t("About")}
             </NavLink>
           </li>
           <span className="link-separator">|</span>
@@ -45,7 +65,7 @@ function nav() {
               end
               to="/catalog"
             >
-              Catalog
+              {t("Catalog")}
             </NavLink>
           </li>
         </ul>
@@ -54,4 +74,4 @@ function nav() {
   )
 }
 
-export default nav
+export default Header
