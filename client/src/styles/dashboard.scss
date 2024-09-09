@@ -12,6 +12,7 @@
     width: 100%;
 
     .admin-code-panel {
+      width: 18rem;
       z-index: 10000;
       position: absolute;
       background-color: white;
@@ -45,9 +46,17 @@
 
       .admin-code-input {
         display: flex;
+        flex-direction: column;
         // width: calc(100% - 1.5rem);
         width: 100%;
         gap: 0.5rem;
+
+        p {
+          color: $primary-color;
+          font-weight: 600;
+          padding-left: 0.25rem;
+          margin-bottom: -0.25rem;
+        }
 
         input {
           outline: none;
@@ -67,11 +76,12 @@
         .submit-code {
           background-color: $primary-color;
           border-radius: 0.5rem;
-          width: 6rem;
           color: $text-color;
           font-family: $main-font;
           font-size: 1rem;
           font-weight: 500;
+          width: 100%;
+          padding: 0.5rem;
           cursor: pointer;
           transition: background-color $animation_duration $animation;
 

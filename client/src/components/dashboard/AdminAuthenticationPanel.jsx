@@ -1,10 +1,28 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
 
-const AuthenticationPanel = ({ setIsAuthorized }) => {
-  console.log(setIsAuthorized)
+import { login } from "../../services/ajax"
 
-  const handleLogIn = () => {
-    setIsAuthorized(true)
+const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
+  const [credentials, setCredentials] = useState({ email: "", password: "" })
+  const [error, setError] = useState(null)
+
+  const handleChangeCredentials = (credential, newValue) => {
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      [credential]: newValue,
+    }))
+  }
+
+  const handleLogIn = async () => {
+    try {
+      const response = await login(credentials)
+
+      setAccountInfo(response.data)
+      setIsAuthorized(true)
+    } catch (error) {
+      setError(error.response?.data?.message || "Login failed")
+    }
   }
 
   return (
@@ -17,10 +35,24 @@ const AuthenticationPanel = ({ setIsAuthorized }) => {
           go back{" "}
         </Link>
         <div className="admin-code-input">
+          <p>admin login</p>
           <input
-            name="admin-code"
-            placeholder="authentication code"
+            onChange={(e) => {
+              handleChangeCredentials("email", e.target.value)
+            }}
+            value={credentials.email}
+            name="email"
+            placeholder="email"
             type="text"
+          />
+          <input
+            onChange={(e) => {
+              handleChangeCredentials("password", e.target.value)
+            }}
+            value={credentials.username}
+            name="password"
+            placeholder="password"
+            type="password"
           />
           <button
             onClick={handleLogIn}

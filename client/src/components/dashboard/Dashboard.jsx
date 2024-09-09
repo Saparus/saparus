@@ -1,14 +1,35 @@
 import { NavLink, Outlet } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import AuthenticationPanel from "./AdminAuthenticationPanel"
 
 const Dashboard = () => {
   const [isAuthorized, setIsAuthorized] = useState(false)
-  const [token, setToken] = useState(null)
+  const [accountInfo, setAccountInfo] = useState(null)
+
+  const handleSetAccountInfo = (account) => {
+    setAccountInfo(account)
+    localStorage.setItem("accountInfo", JSON.stringify(account))
+  }
+
+  useEffect(() => {
+    const savedAccountInfo = localStorage.getItem("accountInfo")
+
+    if (savedAccountInfo) {
+      setAccountInfo(JSON.parse(savedAccountInfo))
+      setIsAuthorized(true)
+    }
+  }, [])
 
   const renderAskAuthenticationPanel = () => {
-    if (!isAuthorized) return <AuthenticationPanel setIsAuthorized={setIsAuthorized} />
+    if (!isAuthorized) {
+      return (
+        <AuthenticationPanel
+          setAccountInfo={handleSetAccountInfo}
+          setIsAuthorized={setIsAuthorized}
+        />
+      )
+    }
   }
 
   return (
