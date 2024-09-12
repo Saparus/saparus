@@ -352,7 +352,6 @@ const DashboardProductEdit = ({ mode }) => {
         </div>
         {activeFields.description ? (
           <textarea
-            // ref={descriptionFieldRef}
             type="text"
             name="description"
             autoFocus={true}

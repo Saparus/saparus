@@ -4,12 +4,15 @@
   position: relative;
 
   .admin-code {
+    animation: appear 500ms $animation forwards;
     position: absolute;
     top: 0;
     left: 0;
     // background-color: black;
     height: 100%;
     width: 100%;
+    opacity: 0;
+    z-index: 99999;
 
     .admin-code-panel {
       width: 18rem;
@@ -344,5 +347,14 @@
         }
       }
     }
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

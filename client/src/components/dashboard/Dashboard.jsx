@@ -12,11 +12,26 @@ const Dashboard = () => {
     localStorage.setItem("accountInfo", JSON.stringify(account))
   }
 
+  const handleLogOut = () => {
+    localStorage.removeItem("accountInfo")
+    setAccountInfo(null)
+    setIsAuthorized(false)
+  }
+
   useEffect(() => {
     const savedAccountInfo = localStorage.getItem("accountInfo")
 
-    if (savedAccountInfo) {
-      setAccountInfo(JSON.parse(savedAccountInfo))
+    if (!savedAccountInfo) return
+
+    const parsedAccountInfo = JSON.parse(savedAccountInfo)
+
+    const currentTime = new Date().getTime()
+
+    if (parsedAccountInfo.expirationDate && parsedAccountInfo.expirationDate < currentTime) {
+      localStorage.removeItem("accountInfo")
+      handleLogOut()
+    } else {
+      setAccountInfo(parsedAccountInfo)
       setIsAuthorized(true)
     }
   }, [])
@@ -40,7 +55,7 @@ const Dashboard = () => {
           <div className="dashboard-navigation-buttons">
             <NavLink to="products">Products</NavLink>
             <NavLink to="news">News</NavLink>
-            <button>log out</button>
+            <button onClick={handleLogOut}>log out</button>
           </div>
         </div>
         {/* <div className="dashboard-navbar">

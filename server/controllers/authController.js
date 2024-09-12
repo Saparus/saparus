@@ -55,9 +55,13 @@ const loginAdmin = (req, res) => {
     return
   }
 
+  const expirationDate = new Date()
+  expirationDate.setHours(expirationDate.getHours() + 24)
+
   res.status(201).json({
     name: user.name,
     token: generateToken(user._id),
+    expirationDate: expirationDate.getTime(),
   })
 }
 
