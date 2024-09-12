@@ -57,9 +57,14 @@
   }
 
   .instock {
-    color: rgb(68, 150, 68);
+    color: $success_green;
     margin-top: auto;
     font-weight: 600;
+
+    color: $warning_red;
+    &.is-in-stock {
+      color: $success_green;
+    }
   }
 
   .product-shop {
@@ -120,6 +125,18 @@
         transition: opacity $animation_duration $animation, width $animation_duration $animation,
           transform $animation_duration $animation;
         font-weight: 600;
+
+        .contact-purchase {
+          color: $success_green;
+        }
+
+        .contact-price {
+          color: $primary-color;
+        }
+
+        .contact-information {
+          color: $primary-color;
+        }
       }
     }
   }

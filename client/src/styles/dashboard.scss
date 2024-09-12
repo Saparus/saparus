@@ -1,6 +1,6 @@
 .dashboard {
-  width: 80%;
-  margin: 2rem auto 1rem;
+  width: 100%;
+  // margin: 2rem auto 1rem;
   position: relative;
 
   .admin-code {
@@ -94,7 +94,83 @@
   }
 
   .navbar {
+    z-index: 9998;
+    position: sticky;
+    top: 5.875rem;
+    box-shadow: 0 1px 1px #1c1f1f07;
+  }
+
+  .dashboard-title {
+    width: 100%;
+    background-color: $accent_green;
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
+
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    // position: relative;
+
+    .dashboard-navigation-buttons {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: fit-content;
+      height: 100%;
+      display: flex;
+
+      button {
+        background-color: $warning_red;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        // position: absolute;
+        padding-right: 2.75rem;
+        padding-left: 1.25rem;
+        right: 0;
+        // padding: 0.25rem 0.75rem;
+        font-weight: 500;
+        // border: 2px solid $accent_green;
+        transition: background-color $animation_duration $animation;
+        // border-radius: 0.5rem;
+        height: 100%;
+        align-items: center;
+
+        &:hover {
+          background-color: $warning_red_active;
+        }
+      }
+
+      a {
+        background-color: $primary-color;
+        color: $text-color;
+        display: flex;
+        align-items: center;
+        padding-right: 2.75rem;
+        padding-left: 2.75rem;
+        transition: background-color $animation_duration $animation,
+          color $animation_duration $animation;
+
+        &:hover {
+          background-color: $primary-color-active;
+        }
+        &.active {
+          color: lighten($accent_green, 10%);
+        }
+      }
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+  }
+
+  .dashboard-navbar {
+    display: flex;
+    box-shadow: 0 1px 1px #1c1f1f49;
     // gap: 0.25rem;
 
     a {
@@ -104,6 +180,7 @@
       flex: 1;
       text-align: center;
       padding: 0.5rem;
+
       transition: opacity $animation_duration $animation,
         background-color $animation_duration $animation;
 
@@ -112,11 +189,11 @@
       }
 
       &:first-of-type {
-        border-radius: 0.5rem 0 0 0.5rem;
+        // border-radius: 0.5rem 0 0 0.5rem;
       }
 
       &:last-of-type {
-        border-radius: 0 0.5rem 0.5rem 0;
+        // border-radius: 0 0.5rem 0.5rem 0;
       }
 
       &.active {
@@ -128,5 +205,144 @@
   .outlet {
     margin-top: 1rem;
     width: 100%;
+  }
+
+  .dashboard-product-page {
+    .field-button {
+      text-align: start;
+      cursor: pointer;
+      transition: opacity $animation_duration $animation;
+    }
+
+    .product-price {
+      margin-right: 0.25rem;
+    }
+
+    .product-name,
+    .product-description {
+      padding: 0 0.25rem;
+      margin-left: -0.25rem;
+      resize: none;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .dashboard-product-price {
+      max-width: 4rem;
+      min-width: 2rem;
+      height: 1.5rem;
+    }
+
+    .product-description {
+      display: flex;
+      min-height: 7.5rem;
+    }
+
+    .dashboard-product-image {
+      position: relative !important;
+
+      .product-options-buttons {
+        position: absolute;
+        left: -2.75rem;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .button {
+          background-color: $warning-red;
+          height: 2.25rem;
+          width: 2.25rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+
+          &.save-button {
+            background-color: $success_green;
+
+            &:hover {
+              background-color: $success_green_active !important;
+            }
+
+            &:disabled {
+              background-color: rgb(141, 141, 141);
+
+              &:hover {
+                background-color: rgb(141, 141, 141) !important;
+              }
+            }
+          }
+
+          &.trash-button {
+            &:hover {
+              background-color: $warning-red-active !important;
+            }
+          }
+
+          svg {
+            height: 1.5rem;
+            width: 1.5rem;
+            fill: $base-color;
+          }
+        }
+      }
+
+      .image-options-buttons {
+        position: absolute;
+        left: -2.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .button {
+          background-color: $warning-red;
+          height: 2.25rem;
+          width: 2.25rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+
+          .image-input {
+            position: absolute;
+            visibility: hidden;
+          }
+
+          svg {
+            height: 1.5rem;
+            width: 1.5rem;
+            fill: $base-color;
+          }
+
+          &.upload-button {
+            background-color: $primary-color;
+
+            &:hover {
+              background-color: $primary-color-active !important;
+            }
+          }
+
+          &.plus-button {
+            background-color: $accent_green;
+
+            &:hover {
+              background-color: $accent_green_active !important;
+            }
+          }
+
+          &:hover {
+            background-color: $warning-red-active !important;
+          }
+        }
+      }
+    }
   }
 }

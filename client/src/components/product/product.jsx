@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next"
 
 import { getProduct } from "../../data/products"
 
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow.svg"
+
 import ProductImageSelect from "./ProductImageSelect"
 import Loading from "../other/Loading"
 
@@ -51,13 +53,13 @@ const Product = () => {
                 className="change-product-image next"
                 onClick={handleSelectNextImage}
               >
-                {">"}
+                <ArrowIcon className="next-arrow" />
               </button>
               <button
                 className="change-product-image prev"
                 onClick={handleSelectPrevImage}
               >
-                {"<"}
+                <ArrowIcon className="prev-arrow" />
               </button>
             </>
           ) : (

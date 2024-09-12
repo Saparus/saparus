@@ -33,10 +33,20 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="dashboard page">
+    <div className="page dashboard">
       <nav className="navbar">
-        <NavLink to="news">News</NavLink>
+        <div className="dashboard-title">
+          <h3>Admin Dashboard</h3> - <p>{accountInfo?.name}</p>
+          <div className="dashboard-navigation-buttons">
+            <NavLink to="products">Products</NavLink>
+            <NavLink to="news">News</NavLink>
+            <button>log out</button>
+          </div>
+        </div>
+        {/* <div className="dashboard-navbar">
         <NavLink to="products">Products</NavLink>
+        <NavLink to="news">News</NavLink>
+        </div> */}
       </nav>
       {renderAskAuthenticationPanel()}
       <div className="outlet">

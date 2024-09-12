@@ -3,14 +3,14 @@ import { useQuery } from "react-query"
 import { useTranslation } from "react-i18next"
 import { useState, useEffect } from "react"
 
-import { getProducts } from "../../data/products"
+import { getProducts } from "../../../data/products"
 
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow.svg"
+import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 
-import Loading from "../other/Loading"
-import Product from "./product"
+import Loading from "../../other/Loading"
+import Product from "./Product"
 
-const Products = ({ filter, resetFilter }) => {
+const ProductList = ({ filter, resetFilter }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
@@ -125,4 +125,4 @@ const Products = ({ filter, resetFilter }) => {
   )
 }
 
-export default Products
+export default ProductList

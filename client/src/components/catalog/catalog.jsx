@@ -3,7 +3,6 @@ import { useState } from "react"
 import Companies from "./companies"
 import Categories from "./categories"
 import Products from "./products"
-import { Contacts } from "../other/footer"
 
 const Catalog = () => {
   const [filter, setFilter] = useState({})
@@ -16,7 +15,13 @@ const Catalog = () => {
       />
       <div className="products_categories">
         <Categories setFilter={setFilter} />
-        <Products filter={filter} />
+        <Products
+          filter={filter}
+          resetFilter={(event) => {
+            event.preventDefault()
+            setFilter({})
+          }}
+        />
       </div>
     </div>
   )

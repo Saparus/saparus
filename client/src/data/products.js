@@ -765,6 +765,63 @@ export const productList = [
     inStock: true,
     images: [imageList[33]],
   },
+  {
+    id: 41,
+    name: {
+      en: "name of product 41",
+      ka: "პროდუქტი 41-ის სახელი",
+      ru: "название продукта 41",
+    },
+    fixedPrice: true,
+    price: "3700",
+    description: {
+      en: "This is a product description for product 41. It provides detailed information about the product.",
+      ka: "ეს არის პროდუქტის აღწერა პროდუქტის 41-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
+      ru: "Это описание продукта для продукта 41. Оно предоставляет подробную информацию о продукте.",
+    },
+    company: "",
+    type: "software",
+    inStock: true,
+    images: [imageList[33]],
+  },
+  {
+    id: 42,
+    name: {
+      en: "name of product 42",
+      ka: "პროდუქტი 42-ის სახელი",
+      ru: "название продукта 42",
+    },
+    fixedPrice: true,
+    price: "3700",
+    description: {
+      en: "This is a product description for product 42. It provides detailed information about the product.",
+      ka: "ეს არის პროდუქტის აღწერა პროდუქტის 42-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
+      ru: "Это описание продукта для продукта 42. Оно предоставляет подробную информацию о продукте.",
+    },
+    company: "",
+    type: "software",
+    inStock: true,
+    images: [imageList[33]],
+  },
+  {
+    id: 43,
+    name: {
+      en: "name of product 43",
+      ka: "პროდუქტი 43-ის სახელი",
+      ru: "название продукта 43",
+    },
+    fixedPrice: true,
+    price: "3700",
+    description: {
+      en: "This is a product description for product 43. It provides detailed information about the product.",
+      ka: "ეს არის პროდუქტის აღწერა პროდუქტის 43-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
+      ru: "Это описание продукта для продукта 43. Оно предоставляет подробную информацию о продукте.",
+    },
+    company: "",
+    type: "software",
+    inStock: true,
+    images: [imageList[33]],
+  },
 ]
 
 export const categories = (category) => {
@@ -779,7 +836,7 @@ export const categories = (category) => {
 
 const simulateDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export const getProducts = async (filter, language = "en") => {
+export const getProducts = async (filter, language = "en", limit = 20, page = 1) => {
   await simulateDelay(200)
 
   let filteredProducts
@@ -787,7 +844,21 @@ export const getProducts = async (filter, language = "en") => {
   if (filter) filteredProducts = filterProducts(productList, filter, language)
   else filteredProducts = productList
 
-  return filteredProducts
+  const startIndex = (page - 1) * limit
+  const endIndex = startIndex + limit
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex)
+
+  const hasNextPage = endIndex < filteredProducts.length
+
+  return {
+    products: paginatedProducts,
+    pagination: {
+      currentPage: page,
+      hasNextPage: hasNextPage,
+      totalProducts: filteredProducts.length,
+      totalPages: Math.ceil(filteredProducts.length / limit),
+    },
+  }
 }
 
 export const getProduct = (id, language = "en") => {
@@ -796,4 +867,11 @@ export const getProduct = (id, language = "en") => {
   const { name, description } = product
 
   return { ...product, name: name[language], description: description[language] }
+}
+
+// gets product for edit page, it has all languages (so it will be possible to edit all of them)
+export const getEditProduct = (id) => {
+  const product = productList.filter((product) => product.id === Number(id))[0]
+
+  return product
 }

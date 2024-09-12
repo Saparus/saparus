@@ -25,3 +25,11 @@ export default ajax
 export const login = ({ email, password }) => {
   return ajax.post("/auth/login", { email, password })
 }
+
+export const editProduct = ({ id, name, image, inStock, fixedPrice, price }) => {
+  return ajax.post("/product/edit/:id", { name, image, inStock, fixedPrice, price })
+}
+
+export const addProduct = ({ name, image, inStock, fixedPrice, price }) => {
+  return ajax.post("/product/add", { name, image, inStock, fixedPrice, price })
+}

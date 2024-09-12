@@ -18,7 +18,7 @@ const Product = ({ product }) => {
         <div className="information">
           <p className="name">{product.name}</p>
           <p
-            className="instock"
+            className={`instock ${product.inStock ? "is-in-stock" : ""}`}
             style={{ color: product.inStock ? "green" : "red" }}
           >
             {product.inStock ? "• in stock" : "• out of stock"}
@@ -34,7 +34,21 @@ const Product = ({ product }) => {
           <p className="price">{product.fixedPrice ? product.price + "$" : "Price on Request"}</p>
           <Phone className="cart" />
           <span className="go-to-contacts-text">
-            {product.fixedPrice ? "Contact for Purchase" : "Contact for Pricing"}
+            {product.inStock ? (
+              product.fixedPrice ? (
+                <p className={`contact-purchase ${product.inStock ? "contact-in-stock" : ""}`}>
+                  Contact for Purchase
+                </p>
+              ) : (
+                <p className={`contact-price ${product.inStock ? "contact-in-stock" : ""}`}>
+                  Contact for Pricing
+                </p>
+              )
+            ) : (
+              <p className={`contact-information ${product.inStock ? "contact-in-stock" : ""}`}>
+                Contact for Information
+              </p>
+            )}
           </span>
           {/* STC */}
         </div>

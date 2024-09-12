@@ -1,6 +1,4 @@
 const filterProducts = (products, filter, language = "en") => {
-  console.log(filter)
-
   const translatedProducts = products.map((product) => {
     const { name, description } = product
 
