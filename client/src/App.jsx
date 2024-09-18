@@ -10,8 +10,9 @@ import Home from "./components/home/home"
 import Product from "./components/product/product"
 import Dashboard from "./components/dashboard/Dashboard"
 import DashboardNews from "./components/dashboard/dashboardNews/DashboardNews"
-import DashboardProducts from "./components/dashboard/dashboardProducts/DashboardProducts"
-import DashboardProductEdit from "./components/dashboard/dashboardProducts/DashboardProductEdit"
+import DashboardProductListPage from "./components/dashboard/dashboardProducts/DashboardProductList.page"
+import EditProductPage from "./components/dashboard/dashboardProducts/EditProduct.page"
+import AddProductPage from "./components/dashboard/dashboardProducts/AddProduct.page"
 import PageNotFount from "./components/other/PageNotFount"
 
 const App = () => {
@@ -36,36 +37,13 @@ const App = () => {
           path="/catalog/:id"
           element={<Product />}
         />
-
-        <Route
-          path="dashboard"
-          element={<Dashboard />}
-        >
-          <Route
-            path="products"
-            element={<DashboardProducts />}
-          />
-          <Route
-            path="news"
-            element={<DashboardNews />}
-          />
-          <Route
-            path="products/edit/:id"
-            element={<DashboardProductEdit mode="edit" />}
-          />
-          <Route
-            path="products/edit"
-            element={<DashboardProductEdit mode="add" />}
-          />
-        </Route>
-
         <Route
           path="admin"
           element={<Dashboard />}
         >
           <Route
             path="products"
-            element={<DashboardProducts />}
+            element={<DashboardProductListPage />}
           />
           <Route
             path="news"
@@ -73,11 +51,15 @@ const App = () => {
           />
           <Route
             path="products/edit/:id"
-            element={<DashboardProductEdit mode="edit" />}
+            element={<EditProductPage />}
           />
           <Route
-            path="products/edit"
-            element={<DashboardProductEdit mode="add" />}
+            path="products/add"
+            element={<AddProductPage />}
+          />
+          <Route
+            path="*"
+            element={<PageNotFount />}
           />
         </Route>
 

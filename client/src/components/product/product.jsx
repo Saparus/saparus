@@ -66,7 +66,7 @@ const Product = () => {
             ""
           )}
 
-          {product?.images[0] ? (
+          {product.images[currentImageIndex] ? (
             <img
               src={product.images[currentImageIndex]}
               alt={product.name}

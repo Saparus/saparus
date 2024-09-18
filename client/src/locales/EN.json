@@ -12,16 +12,18 @@
 
   "time": {
     "just now": "just now",
-    "minute ago": "{{count}} minute ago",
-    "minutes ago": "{{count}} minutes ago",
-    "hour ago": "{{count}} hour ago",
-    "hours ago": "{{count}} hours ago",
-    "day ago": "{{count}} day ago",
-    "days ago": "{{count}} days ago",
-    "month ago": "{{count}} month ago",
-    "months ago": "{{count}} months ago",
-    "year ago": "{{count}} year ago",
-    "years ago": "{{count}} years ago"
+    "minute": "{{count}} minute",
+    "minutes": "{{count}} minutes",
+    "hour": "{{count}} hour",
+    "hours": "{{count}} hours",
+    "day": "{{count}} day",
+    "days": "{{count}} days",
+    "month": "{{count}} month",
+    "months": "{{count}} months",
+    "year": "{{count}} year",
+    "years": "{{count}} years",
+    "ago": "ago",
+    "and": "and"
   },
 
   "about us": {

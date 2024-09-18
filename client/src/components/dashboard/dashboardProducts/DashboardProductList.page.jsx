@@ -3,12 +3,15 @@ import { useState } from "react"
 import ProductList from "./ProductList"
 import Categories from "../../catalog/categories"
 
-const DashboardProducts = () => {
+const DashboardProductListPage = () => {
   const [filter, setFilter] = useState({})
 
   return (
     <div className="dashboard-products">
-      <Categories setFilter={setFilter} />
+      <Categories
+        setFilter={setFilter}
+        showAddNewProductButton={true}
+      />
       <ProductList
         filter={filter}
         resetFilter={(event) => {
@@ -20,4 +23,4 @@ const DashboardProducts = () => {
   )
 }
 
-export default DashboardProducts
+export default DashboardProductListPage

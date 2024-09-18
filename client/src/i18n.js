@@ -7,13 +7,15 @@ import ru from "./locales/RU.json"
 
 import LanguageDetector from "i18next-browser-languagedetector"
 
+const languages = ["en", "ka", "ru"]
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    // lng: "en",
     fallbackLng: "en",
-    debug: process.env.MODE === "development" ? true : false,
+    whitelist: languages,
+    debug: process.env.REACT_APP_MODE === "development" ? true : false,
 
     resources: {
       en: {
@@ -34,5 +36,6 @@ i18n
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
+      checkWhitelist: true,
     },
   })

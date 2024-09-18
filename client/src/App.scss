@@ -43,46 +43,143 @@
   }
 }
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 50vh;
-  width: 100vw;
-  position: relative;
+// .loading-container {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   height: 50vh;
+//   width: 100vw;
+//   position: relative;
 
-  .loading-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%), translateY(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+//   .loading-content {
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translateX(-50%), translateY(-50%);
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: column;
 
-    .spinner {
-      width: 3rem;
-      height: 3rem;
-      border: 0.4rem solid rgba(0, 0, 0, 0.1);
-      border-top-color: $primary-color;
-      border-radius: 50%;
-      animation: spin 1s cubic-bezier(0.17, 0.6, 0.86, 0.75) infinite;
-    }
+//     .spinner {
+//       width: 3rem;
+//       height: 3rem;
+//       border: 0.4rem solid rgba(0, 0, 0, 0.1);
+//       border-top-color: $primary-color;
+//       border-radius: 50%;
+//       animation: spin 1s cubic-bezier(0.17, 0.6, 0.86, 0.75) infinite;
+//     }
 
-    p {
-      margin-top: 0.25rem;
-      font-size: 1rem;
-      font-weight: bold;
-      color: rgba(0, 0, 0, 0.2);
-      text-shadow: 0 0px 1px #272b2c3b;
-    }
+//     p {
+//       margin-top: 0.25rem;
+//       font-size: 1rem;
+//       font-weight: bold;
+//       color: rgba(0, 0, 0, 0.2);
+//       text-shadow: 0 0px 1px #272b2c3b;
+//     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+//     @keyframes spin {
+//       to {
+//         transform: rotate(360deg);
+//       }
+//     }
+//   }
+// }
+
+.confirm-deletion-modal {
+  background-color: $base-color;
+  box-shadow: 0 1px 4px 1000px #1c1f1f49, 2px 0px 4px #1c1f1f11;
+  position: absolute;
+  z-index: 100000;
+  max-width: 20rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  // width: 12rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+
+  &:hover {
+    transform: translate(-50%, -50%) !important;
+    top: 50% !important;
+    left: 50% !important;
+  }
+
+  .message {
+    font-weight: 500;
+    text-align: justify;
+    word-break: keep-all;
+    // text-align: center;
+  }
+
+  .confirm-deletion-modal-content {
+    .buttons {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 0.75rem;
+
+      .discard-button {
+        background-color: $primary-color !important;
+
+        &:hover {
+          background-color: $primary-color-active !important;
+        }
       }
+
+      .discard-button,
+      .delete-button {
+        flex: 1;
+        background-color: $warning-red;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        color: $base-color;
+        cursor: pointer;
+        transition: background-color $animation_duration $animation,
+          box-shadow $animation_duration $animation;
+        box-shadow: 2px 0px 4px #1c1f1f11;
+
+        &:hover {
+          background-color: $warning-red-active;
+          box-shadow: 0 6px 10px #72808533;
+        }
+      }
+    }
+  }
+}
+
+.loading-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%), translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 0.4rem solid rgba(0, 0, 0, 0.1);
+    border-top-color: $primary-color;
+    border-radius: 50%;
+    animation: spin 1s cubic-bezier(0.17, 0.6, 0.86, 0.75) infinite;
+  }
+
+  p {
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0px 1px #272b2c3b;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
   }
 }

@@ -1,12 +1,14 @@
 import { useState } from "react"
+import { useSearchParams, Link } from "react-router-dom"
 
 import { ReactComponent as TrashIcon } from "../../assets/icons/trash.svg"
 
 import { categories } from "../../data/products"
 
-const Categories = ({ setFilter }) => {
+const Categories = ({ setFilter, showAddNewProductButton = false }) => {
   const used_categories = ["company", "type", "price"]
   const [inputValue, setInputValue] = useState({})
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const handleInputChange = (event) => {
     const { name: category, value } = event.target
@@ -16,6 +18,20 @@ const Categories = ({ setFilter }) => {
   const handleFilter = (event) => {
     event.preventDefault()
     setFilter(inputValue)
+
+    goToPage(1)
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }
+
+  const goToPage = (newPage) => {
+    setSearchParams({ page: newPage })
+    scrollToTop()
   }
 
   return (
@@ -75,6 +91,19 @@ const Categories = ({ setFilter }) => {
           <TrashIcon />
         </button>
       </div>
+
+      {showAddNewProductButton ? (
+        <div className="utils">
+          <Link
+            className="button"
+            to="../../admin/products/add"
+          >
+            Add New Product
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
     </form>
   )
 }

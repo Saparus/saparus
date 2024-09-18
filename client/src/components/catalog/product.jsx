@@ -19,7 +19,7 @@ const Product = ({ product }) => {
           <p className="name">{product.name}</p>
           <p
             className={`instock ${product.inStock ? "is-in-stock" : ""}`}
-            style={{ color: product.inStock ? "green" : "red" }}
+            // style={{ color: product.inStock ? "green" : "red" }}
           >
             {product.inStock ? "• in stock" : "• out of stock"}
           </p>

@@ -12,16 +12,18 @@
 
   "time": {
     "just now": "только что",
-    "minute ago": "{{count}} минуту назад",
-    "minutes ago": "{{count}} минут назад",
-    "hour ago": "{{count}} час назад",
-    "hours ago": "{{count}} часов назад",
-    "day ago": "{{count}} день назад",
-    "days ago": "{{count}} дней назад",
-    "month ago": "{{count}} месяц назад",
-    "months ago": "{{count}} месяцев назад",
-    "year ago": "{{count}} год назад",
-    "years ago": "{{count}} лет назад"
+    "minute": "{{count}} минуту",
+    "minutes": "{{count}} минут",
+    "hour": "{{count}} час",
+    "hours": "{{count}} часов",
+    "day": "{{count}} день",
+    "days": "{{count}} дней",
+    "month": "{{count}} месяц",
+    "months": "{{count}} месяцев",
+    "year": "{{count}} год",
+    "years": "{{count}} лет",
+    "ago": "назад",
+    "and": "и"
   },
 
   "about us": {

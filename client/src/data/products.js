@@ -1,4 +1,3 @@
-// import filterProducts from "../utils/filter"
 import filterProducts from "../utils/filterProducts"
 
 const images = require.context("../assets/product_images", true)
@@ -13,7 +12,7 @@ export const productList = [
       ru: "Планмека Компакт™ i Classic",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 1. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 1-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -32,7 +31,7 @@ export const productList = [
       ru: "название продукта 2",
     },
     fixedPrice: true,
-    price: "2000",
+    price: 4000,
     description: {
       en: "This is a product description for product 2. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 2-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -50,8 +49,8 @@ export const productList = [
       ka: "პროდუქტი 3-ის სახელი",
       ru: "название продукта 3",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 3202,
     description: {
       en: "This is a product description for product 3. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 3-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -60,7 +59,15 @@ export const productList = [
     company: "planmeca",
     type: "software",
     inStock: false,
-    images: [imageList[2]],
+    images: [
+      imageList[2],
+      imageList[3],
+      imageList[4],
+      imageList[5],
+      imageList[6],
+      imageList[7],
+      imageList[1],
+    ],
   },
   {
     id: 4,
@@ -70,7 +77,7 @@ export const productList = [
       ru: "название продукта 4",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 4. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 4-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -88,8 +95,8 @@ export const productList = [
       ka: "პროდუქტი 5-ის სახელი",
       ru: "название продукта 5",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 1700,
     description: {
       en: "This is a product description for product 5. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 5-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -108,7 +115,7 @@ export const productList = [
       ru: "название продукта 6",
     },
     fixedPrice: false,
-    price: "500",
+    price: 0,
     description: {
       en: "This is a product description for product 6. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 6-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -126,8 +133,8 @@ export const productList = [
       ka: "პროდუქტი 7-ის სახელი",
       ru: "название продукта 7",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 4600,
     description: {
       en: "This is a product description for product 7. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 7-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -146,7 +153,7 @@ export const productList = [
       ru: "название продукта 8",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 8. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 8-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -165,7 +172,7 @@ export const productList = [
       ru: "название продукта 9",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 9. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 9-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -183,8 +190,8 @@ export const productList = [
       ka: "პროდუქტი 10-ის სახელი",
       ru: "название продукта 10",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 4200,
     description: {
       en: "This is a product description for product 10. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 10-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -203,7 +210,7 @@ export const productList = [
       ru: "название продукта 11",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 11. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 11-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -222,7 +229,7 @@ export const productList = [
       ru: "название продукта 12",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 12. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 12-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -241,7 +248,7 @@ export const productList = [
       ru: "название продукта 13",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 13. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 13-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -260,7 +267,7 @@ export const productList = [
       ru: "название продукта 14",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 14. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 14-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -279,7 +286,7 @@ export const productList = [
       ru: "название продукта 15",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 15. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 15-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -297,8 +304,8 @@ export const productList = [
       ka: "პროდუქტი 16-ის სახელი",
       ru: "название продукта 16",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 7500,
     description: {
       en: "This is a product description for product 16. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 16-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -317,7 +324,7 @@ export const productList = [
       ru: "название продукта 17",
     },
     fixedPrice: true,
-    price: "3000",
+    price: 2500,
     description: {
       en: "This is a product description for product 17. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 17-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -335,8 +342,8 @@ export const productList = [
       ka: "პროდუქტი 18-ის სახელი",
       ru: "название продукта 18",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 4800,
     description: {
       en: "This is a product description for product 18. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 18-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -355,7 +362,7 @@ export const productList = [
       ru: "название продукта 19",
     },
     fixedPrice: true,
-    price: "1500",
+    price: 3200,
     description: {
       en: "This is a product description for product 19. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 19-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -374,7 +381,7 @@ export const productList = [
       ru: "название продукта 20",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 20. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 20-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -393,7 +400,7 @@ export const productList = [
       ru: "название продукта 21",
     },
     fixedPrice: true,
-    price: "4000",
+    price: 4000,
     description: {
       en: "This is a product description for product 21. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 21-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -411,8 +418,8 @@ export const productList = [
       ka: "პროდუქტი 22-ის სახელი",
       ru: "название продукта 22",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 5400,
     description: {
       en: "This is a product description for product 22. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 22-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -431,7 +438,7 @@ export const productList = [
       ru: "название продукта 23",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 23. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 23-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -450,7 +457,7 @@ export const productList = [
       ru: "название продукта 24",
     },
     fixedPrice: true,
-    price: "7000",
+    price: 0,
     description: {
       en: "This is a product description for product 24. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 24-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -469,7 +476,7 @@ export const productList = [
       ru: "название продукта 25",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 25. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 25-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -488,7 +495,7 @@ export const productList = [
       ru: "название продукта 26",
     },
     fixedPrice: true,
-    price: "3200",
+    price: 2000,
     description: {
       en: "This is a product description for product 26. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 26-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -506,8 +513,8 @@ export const productList = [
       ka: "პროდუქტი 27-ის სახელი",
       ru: "название продукта 27",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 1000,
     description: {
       en: "This is a product description for product 27. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 27-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -525,8 +532,8 @@ export const productList = [
       ka: "პროდუქტი 28-ის სახელი",
       ru: "название продукта 28",
     },
-    fixedPrice: false,
-    price: "",
+    fixedPrice: true,
+    price: 4400,
     description: {
       en: "This is a product description for product 28. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 28-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -545,7 +552,7 @@ export const productList = [
       ru: "название продукта 29",
     },
     fixedPrice: true,
-    price: "2500",
+    price: 0,
     description: {
       en: "This is a product description for product 29. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 29-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -564,7 +571,7 @@ export const productList = [
       ru: "название продукта 30",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 30. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 30-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -583,7 +590,7 @@ export const productList = [
       ru: "название продукта 31",
     },
     fixedPrice: true,
-    price: "1800",
+    price: 2500,
     description: {
       en: "This is a product description for product 31. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 31-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -602,7 +609,7 @@ export const productList = [
       ru: "название продукта 32",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 32. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 32-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -621,7 +628,7 @@ export const productList = [
       ru: "название продукта 33",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 33. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 33-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -640,7 +647,7 @@ export const productList = [
       ru: "название продукта 34",
     },
     fixedPrice: true,
-    price: "3600",
+    price: 0,
     description: {
       en: "This is a product description for product 34. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 34-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -659,7 +666,7 @@ export const productList = [
       ru: "название продукта 35",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 35. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 35-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -678,7 +685,7 @@ export const productList = [
       ru: "название продукта 36",
     },
     fixedPrice: true,
-    price: "2900",
+    price: 0,
     description: {
       en: "This is a product description for product 36. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 36-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -697,7 +704,7 @@ export const productList = [
       ru: "название продукта 37",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 37. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 37-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -716,7 +723,7 @@ export const productList = [
       ru: "название продукта 38",
     },
     fixedPrice: true,
-    price: "4100",
+    price: 0,
     description: {
       en: "This is a product description for product 38. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 38-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -735,7 +742,7 @@ export const productList = [
       ru: "название продукта 39",
     },
     fixedPrice: false,
-    price: "",
+    price: 0,
     description: {
       en: "This is a product description for product 39. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 39-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -754,7 +761,7 @@ export const productList = [
       ru: "название продукта 40",
     },
     fixedPrice: true,
-    price: "3700",
+    price: 4000,
     description: {
       en: "This is a product description for product 40. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 40-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -773,7 +780,7 @@ export const productList = [
       ru: "название продукта 41",
     },
     fixedPrice: true,
-    price: "3700",
+    price: 0,
     description: {
       en: "This is a product description for product 41. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 41-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -792,7 +799,7 @@ export const productList = [
       ru: "название продукта 42",
     },
     fixedPrice: true,
-    price: "3700",
+    price: 0,
     description: {
       en: "This is a product description for product 42. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 42-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -811,7 +818,7 @@ export const productList = [
       ru: "название продукта 43",
     },
     fixedPrice: true,
-    price: "3700",
+    price: 0,
     description: {
       en: "This is a product description for product 43. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 43-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",

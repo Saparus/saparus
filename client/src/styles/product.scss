@@ -60,6 +60,7 @@
     color: $success_green;
     margin-top: auto;
     font-weight: 600;
+    user-select: none;
 
     color: $warning_red;
     &.is-in-stock {

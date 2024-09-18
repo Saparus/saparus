@@ -26,10 +26,14 @@ export const login = ({ email, password }) => {
   return ajax.post("/auth/login", { email, password })
 }
 
-export const editProduct = ({ id, name, image, inStock, fixedPrice, price }) => {
-  return ajax.post("/product/edit/:id", { name, image, inStock, fixedPrice, price })
+export const editProduct = ({ name, image, inStock, fixedPrice, price, id }) => {
+  return ajax.post(`/product/edit/:${id}`, { name, image, inStock, fixedPrice, price })
 }
 
 export const addProduct = ({ name, image, inStock, fixedPrice, price }) => {
   return ajax.post("/product/add", { name, image, inStock, fixedPrice, price })
+}
+
+export const deleteProduct = ({ id }) => {
+  return ajax.delete(`/product/:${id}`)
 }

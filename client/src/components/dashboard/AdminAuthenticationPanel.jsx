@@ -26,16 +26,16 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
   }
 
   return (
-    <div className="admin-code">
-      <div className="admin-code-panel">
+    <div className="admin-auth">
+      <div className="admin-auth-panel">
         <Link
           className="go-back-link"
           to="../../"
         >
           go back{" "}
         </Link>
-        <div className="admin-code-input">
-          <p>admin login</p>
+        <div className="admin-auth-input">
+          <p className="login-title">admin login</p>
           <input
             onChange={(e) => {
               handleChangeCredentials("email", e.target.value)

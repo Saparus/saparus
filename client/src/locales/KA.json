@@ -12,16 +12,18 @@
 
   "time": {
     "just now": "ახლა",
-    "minute ago": "{{count}} წუთის წინ",
-    "minutes ago": "{{count}} წუთის წინ",
-    "hour ago": "{{count}} საათის წინ",
-    "hours ago": "{{count}} საათის წინ",
-    "day ago": "{{count}} დღის წინ",
-    "days ago": "{{count}} დღის წინ",
-    "month ago": "{{count}} თვის წინ",
-    "months ago": "{{count}} თვის წინ",
-    "year ago": "{{count}} წლის წინ",
-    "years ago": "{{count}} წლის წინ"
+    "minute": "{{count}} წუთის",
+    "minutes": "{{count}} წუთის",
+    "hour": "{{count}} საათის",
+    "hours": "{{count}} საათის",
+    "day": "{{count}} დღის",
+    "days": "{{count}} დღის",
+    "month": "{{count}} თვის",
+    "months": "{{count}} თვის",
+    "year": "{{count}} წლის",
+    "years": "{{count}} წლის",
+    "ago": "წინ",
+    "and": "და"
   },
 
   "about us": {

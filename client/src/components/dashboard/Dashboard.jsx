@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import AuthenticationPanel from "./AdminAuthenticationPanel"
+import DashboardHeader from "./DashboardHeader"
 
 const Dashboard = () => {
   const [isAuthorized, setIsAuthorized] = useState(false)
@@ -40,6 +41,7 @@ const Dashboard = () => {
     if (!isAuthorized) {
       return (
         <AuthenticationPanel
+          isAuthorized={isAuthorized}
           setAccountInfo={handleSetAccountInfo}
           setIsAuthorized={setIsAuthorized}
         />
@@ -50,22 +52,15 @@ const Dashboard = () => {
   return (
     <div className="page dashboard">
       <nav className="navbar">
-        <div className="dashboard-title">
-          <h3>Admin Dashboard</h3> - <p>{accountInfo?.name}</p>
-          <div className="dashboard-navigation-buttons">
-            <NavLink to="products">Products</NavLink>
-            <NavLink to="news">News</NavLink>
-            <button onClick={handleLogOut}>log out</button>
-          </div>
-        </div>
-        {/* <div className="dashboard-navbar">
-        <NavLink to="products">Products</NavLink>
-        <NavLink to="news">News</NavLink>
-        </div> */}
+        <DashboardHeader
+          isAuthorized={isAuthorized}
+          name={accountInfo?.name}
+          handleLogOut={handleLogOut}
+        />
       </nav>
       {renderAskAuthenticationPanel()}
       <div className="outlet">
-        <Outlet />
+        <Outlet context={{ isAuthorized }} />
       </div>
     </div>
   )

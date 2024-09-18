@@ -3,7 +3,7 @@
   // margin: 2rem auto 1rem;
   position: relative;
 
-  .admin-code {
+  .admin-auth {
     animation: appear 500ms $animation forwards;
     position: absolute;
     top: 0;
@@ -14,7 +14,7 @@
     opacity: 0;
     z-index: 99999;
 
-    .admin-code-panel {
+    .admin-auth-panel {
       width: 18rem;
       z-index: 10000;
       position: absolute;
@@ -26,7 +26,7 @@
       transform: translateX(-50%) translateY(-50%);
       // height: 4.25rem;
       // width: 18rem;
-      padding: 0.25rem;
+      padding: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -47,18 +47,18 @@
         }
       }
 
-      .admin-code-input {
+      .admin-auth-input {
         display: flex;
         flex-direction: column;
         // width: calc(100% - 1.5rem);
         width: 100%;
         gap: 0.5rem;
 
-        p {
+        .login-title {
           color: $primary-color;
           font-weight: 600;
           padding-left: 0.25rem;
-          margin-bottom: -0.25rem;
+          margin-bottom: 0.5rem;
         }
 
         input {
@@ -73,6 +73,7 @@
 
           &:focus {
             border: 2px solid $primary-color-active;
+            outline: 1px solid $primary-color-active;
           }
         }
 
@@ -103,7 +104,7 @@
     box-shadow: 0 1px 1px #1c1f1f07;
   }
 
-  .dashboard-title {
+  .dashboard-header {
     width: 100%;
     background-color: $accent_green;
     color: white;
@@ -155,12 +156,30 @@
         padding-left: 2.75rem;
         transition: background-color $animation_duration $animation,
           color $animation_duration $animation;
+        position: relative;
+
+        box-shadow: 2px 0px 4px #1c1f1f11;
 
         &:hover {
           background-color: $primary-color-active;
         }
         &.active {
           color: lighten($accent_green, 10%);
+        }
+
+        &:nth-of-type(1) {
+          z-index: 10;
+
+          box-shadow: -2px 0px 4px #1c1f1f11, 2px 0px 4px #1c1f1f11;
+        }
+        &:nth-of-type(2) {
+          z-index: 9;
+        }
+        &:nth-of-type(3) {
+          z-index: 8;
+        }
+        &:nth-of-type(4) {
+          z-index: 7;
         }
       }
     }
@@ -210,7 +229,7 @@
     width: 100%;
   }
 
-  .dashboard-product-page {
+  .product-page {
     .field-button {
       text-align: start;
       cursor: pointer;
@@ -356,5 +375,15 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+.dashboard-product {
+  .product-shop {
+    &:hover {
+      .shop {
+        opacity: 1 !important;
+      }
+    }
   }
 }
