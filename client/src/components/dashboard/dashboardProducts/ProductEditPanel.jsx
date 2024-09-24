@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
@@ -33,7 +33,12 @@ const ProductEditPanel = ({ product, onSave }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "products" })
+
+  const descriptionRef = useRef(null)
+
   const [currentProduct, setCurrentProduct] = useState(structuredClone(product))
+  const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isUploadPanelVisible, setIsUploadPanelVisible] = useState(false)
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
@@ -63,23 +68,28 @@ const ProductEditPanel = ({ product, onSave }) => {
     )
   }
 
-  const handleAddEmptyImage = () => {
-    setCurrentProduct((prevState) => ({
-      ...prevState,
-      images: [...prevState.images, ""],
-    }))
-  }
+  // const handleAddEmptyImage = () => {
+  //   setCurrentProduct((prevState) => ({
+  //     ...prevState,
+  //     images: [...prevState.images, ""],
+  //   }))
+  // }
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0]
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
         const newImage = reader.result
-        setCurrentProduct((prevState) => ({
-          ...prevState,
-          images: [...prevState.images, newImage],
-        }))
+        setCurrentProduct((prevState) => {
+          const updatedImages = [...prevState.images, newImage]
+          setCurrentImageIndex(updatedImages.length - 1)
+
+          return {
+            ...prevState,
+            images: [...prevState.images, newImage],
+          }
+        })
         setIsUploadPanelVisible(false)
       }
       reader.readAsDataURL(file)
@@ -94,20 +104,26 @@ const ProductEditPanel = ({ product, onSave }) => {
     setActiveFields((prevState) => ({ ...prevState, [field]: false }))
   }
 
-  const handleInputChange = (event) => {
-    const { name: category, value } = event.target
+  const handleInputChange = (e) => {
+    const { name: category, value } = e.target
 
     setCurrentProduct((prevState) => {
       if (category === "name" || category === "description") {
-        // if (
-        //   Object.values(product.name).some(
-        //     (languageValue) => languageValue === value || languageValue === ""
-        //   ) ||
-        //   Object.values(product.description).some(
-        //     (languageValue) => languageValue === value || languageValue === ""
-        //   )
-        // )
+        return {
+          ...prevState,
+          [category]: { ...prevState[category], [selectedLanguage]: value },
+        }
+      }
 
+      if ((category === "price" && Number(value) <= 0) || !value) {
+        return {
+          ...prevState,
+          [category]: 0,
+          fixedPrice: false,
+        }
+      }
+
+      if (category === "price" && value[0] === "0") {
         if (
           product.name.en === value ||
           product.name.ka === value ||
@@ -121,6 +137,9 @@ const ProductEditPanel = ({ product, onSave }) => {
           currentProduct.description.en === "" ||
           currentProduct.description.ka === "" ||
           currentProduct.description.ru === "" ||
+          prevState.fixedPrice === product.fixedPrice ||
+          !product.price === currentProduct.price ||
+          prevState.inStock === product.inStock ||
           value === ""
         ) {
           setIsAbleToSave(false)
@@ -130,27 +149,18 @@ const ProductEditPanel = ({ product, onSave }) => {
 
         return {
           ...prevState,
-          [category]: { ...prevState[category], [currentLanguage]: value },
-        }
-      }
-
-      if ((category === "price" && Number(value) <= 0) || !value) {
-        return {
-          ...prevState,
-          [category]: 0,
-          fixedPrice: false,
-        }
-      }
-
-      if (category === "price" && value[0] === "0") {
-        return {
-          ...prevState,
           [category]: value.slice(1),
           fixedPrice: value.slice(1) !== 0,
         }
       }
 
       if (category === "price") {
+        if (product.price === Number(value) || product.price === value) {
+          setIsAbleToSave(false)
+        } else {
+          setIsAbleToSave(true)
+        }
+
         return {
           ...prevState,
           [category]: Number(value),
@@ -166,14 +176,56 @@ const ProductEditPanel = ({ product, onSave }) => {
   }
 
   const handleOpenConfirmCloseModal = () => {
-    console.log("Open confirm deletion modal")
-
     setIsConfirmDeletionModalVisible(true)
   }
 
   const handleCloseConfirmCloseModal = () => {
     setIsConfirmDeletionModalVisible(false)
   }
+
+  const handleRemoveImage = () => {
+    setCurrentProduct((prevState) => {
+      const updatedImages = prevState.images.filter((_, index) => index !== currentImageIndex)
+
+      return {
+        ...prevState,
+        images: updatedImages,
+      }
+    })
+
+    setCurrentImageIndex((prevState) => (prevState > 0 ? prevState - 1 : 0))
+  }
+
+  useEffect(() => {
+    const hasProductChanged = () => {
+      if (
+        currentProduct.name.en === "" ||
+        currentProduct.name.ka === "" ||
+        currentProduct.name.ru === "" ||
+        currentProduct.description.en === "" ||
+        currentProduct.description.ka === "" ||
+        currentProduct.description.ru === ""
+      ) {
+        return false
+      }
+
+      return (
+        product.name.en !== currentProduct.name.en ||
+        product.name.ka !== currentProduct.name.ka ||
+        product.name.ru !== currentProduct.name.ru ||
+        product.description.en !== currentProduct.description.en ||
+        product.description.ka !== currentProduct.description.ka ||
+        product.description.ru !== currentProduct.description.ru ||
+        product.inStock !== currentProduct.inStock ||
+        product.price !== currentProduct.price ||
+        product.fixedPrice !== currentProduct.fixedPrice ||
+        product.images.length !== currentProduct.images.length ||
+        product.images.some((image, index) => image !== currentProduct.images[index])
+      )
+    }
+
+    setIsAbleToSave(hasProductChanged())
+  }, [product, currentProduct])
 
   const renderImage = () => (
     <div className="product-image-wrapper">
@@ -204,13 +256,16 @@ const ProductEditPanel = ({ product, onSave }) => {
               onChange={handleImageUpload}
             />
           </label>
-          <button
+          {/* <button
             className="button plus-button"
             onClick={() => handleAddEmptyImage()}
           >
             <PlusIcon />
-          </button>
-          <button className="button trash-button">
+          </button> */}
+          <button
+            onClick={handleRemoveImage}
+            className="button trash-button"
+          >
             <MinusIcon />
           </button>
         </div>
@@ -225,33 +280,42 @@ const ProductEditPanel = ({ product, onSave }) => {
             className="button save-button"
             disabled={!isAbleToSave}
             type="submit"
-            onClick={() => {
-              onSave(
-                currentProduct.name,
-                currentProduct.images,
-                currentProduct.inStock,
-                currentProduct.fixedPrice,
-                currentProduct.price,
-                currentProduct.id
-              )
+            onClick={async () => {
+              try {
+                await onSave({
+                  ...currentProduct,
+                  id: currentProduct.id,
+                })
+                console.log("Product saved successfully.")
+              } catch (error) {
+                console.error("Error saving the product:", error)
+              }
             }}
           >
             <CheckmarkIcon />
           </button>
         </div>
-        {currentProduct?.images[0] ? (
+        {currentProduct.images[currentImageIndex] ? (
           <img
             src={currentProduct.images[currentImageIndex]}
-            alt={currentProduct.name[currentLanguage]}
+            // alt={currentProduct.name[selectedLanguage]}
           />
         ) : (
-          <div className="image-not-found-message">Image not found</div>
+          <div className="image-not-found-message">
+            <p>Image not found</p>
+          </div>
         )}
       </div>
     </div>
   )
 
   const renderProductInformation = () => {
+    const handleFocus = (e) => {
+      const textarea = e.target
+      const length = textarea.value.length
+      textarea.setSelectionRange(length, length)
+    }
+
     const renderName = () => {
       return activeFields.name ? (
         <input
@@ -261,8 +325,9 @@ const ProductEditPanel = ({ product, onSave }) => {
           autoFocus={true}
           className="product-name"
           onChange={handleInputChange}
-          value={currentProduct.name[currentLanguage]}
+          value={currentProduct.name[selectedLanguage]}
           onBlur={() => handleFieldEditFinish("name")}
+          onFocus={handleFocus}
           required
         />
       ) : (
@@ -270,7 +335,7 @@ const ProductEditPanel = ({ product, onSave }) => {
           onClick={() => handleFieldEditStart("name")}
           className="product-name field-button"
         >
-          {currentProduct.name[currentLanguage] || <p className="placeholder-text">name</p>}
+          {currentProduct.name[selectedLanguage] || <p className="placeholder-text">name</p>}
         </button>
       )
     }
@@ -280,10 +345,14 @@ const ProductEditPanel = ({ product, onSave }) => {
         <div className="product-short-information">
           <button
             onClick={() => {
-              setCurrentProduct((prevState) => ({
-                ...prevState,
-                inStock: !prevState.inStock,
-              }))
+              setCurrentProduct((prevState) => {
+                setIsAbleToSave(!prevState.inStock !== product.inStock)
+
+                return {
+                  ...prevState,
+                  inStock: !prevState.inStock,
+                }
+              })
             }}
             className={`product-status ${
               currentProduct.inStock ? "product-in-stock" : "product-not-in-stock"
@@ -302,10 +371,17 @@ const ProductEditPanel = ({ product, onSave }) => {
               name="fixedPrice"
               checked={currentProduct.fixedPrice}
               onChange={() => {
-                setCurrentProduct((prevState) => ({
-                  ...prevState,
-                  fixedPrice: !prevState.fixedPrice,
-                }))
+                setCurrentProduct((prevState) => {
+                  setIsAbleToSave(
+                    !prevState.fixedPrice !== product.fixedPrice ||
+                      product.price !== currentProduct.price
+                  )
+
+                  return {
+                    ...prevState,
+                    fixedPrice: !prevState.fixedPrice,
+                  }
+                })
               }}
               required
             />
@@ -345,12 +421,13 @@ const ProductEditPanel = ({ product, onSave }) => {
     const renderDescription = () => {
       return activeFields.description ? (
         <textarea
+          ref={descriptionRef}
           name="description"
           placeholder="description"
           autoFocus={true}
           className="product-description"
           onChange={handleInputChange}
-          value={currentProduct.description[currentLanguage]}
+          value={currentProduct.description[selectedLanguage]}
           onBlur={() => handleFieldEditFinish("description")}
           required
         />
@@ -359,7 +436,11 @@ const ProductEditPanel = ({ product, onSave }) => {
           onClick={() => handleFieldEditStart("description")}
           className="product-description field-button"
         >
-          {currentProduct.description[currentLanguage] || (
+          {currentProduct.description[selectedLanguage] ? (
+            <p className="product-description-content">
+              {currentProduct.description[selectedLanguage]}
+            </p>
+          ) : (
             <p className="placeholder-text">description</p>
           )}
         </button>
@@ -378,8 +459,40 @@ const ProductEditPanel = ({ product, onSave }) => {
       )
     }
 
+    const renderLanguageSelect = () => {
+      return (
+        <div className="language-select">
+          <button
+            className={`${selectedLanguage === "en" ? "language-selected" : ""}`}
+            onClick={() => {
+              setSelectedLanguage("en")
+            }}
+          >
+            {t("English")}
+          </button>
+          <button
+            className={`${selectedLanguage === "ka" ? "language-selected" : ""}`}
+            onClick={() => {
+              setSelectedLanguage("ka")
+            }}
+          >
+            {t("Georgian")}
+          </button>
+          <button
+            className={`${selectedLanguage === "ru" ? "language-selected" : ""}`}
+            onClick={() => {
+              setSelectedLanguage("ru")
+            }}
+          >
+            {t("Russian")}
+          </button>
+        </div>
+      )
+    }
+
     return (
       <div className="product-information">
+        {renderLanguageSelect()}
         {renderName()}
         {renderShortInformation()}
         {renderDescription()}
@@ -387,8 +500,6 @@ const ProductEditPanel = ({ product, onSave }) => {
       </div>
     )
   }
-
-  // console.log(currentProduct.name.en)
 
   return (
     <div className="product-page">

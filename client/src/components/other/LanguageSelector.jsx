@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next"
-import { useEffect } from "react"
 
 const LanguageSelector = () => {
   const { i18n } = useTranslation()
@@ -12,8 +11,6 @@ const LanguageSelector = () => {
   ]
 
   const changeLanguage = (language) => {
-    // setCurrentLanguage(language)
-    // localStorage.setItem("language", language)
     i18n.changeLanguage(language)
   }
 
@@ -22,25 +19,6 @@ const LanguageSelector = () => {
 
     changeLanguage(selectedLanguage)
   }
-
-  // useEffect(() => {
-  //   const systemDefaultLanguage = navigator.language.split("-")[0]
-
-  //   console.log(systemDefaultLanguage)
-
-  //   if (!currentLanguage) {
-  //     changeLanguage(systemDefaultLanguage)
-  //   } else {
-  //     changeLanguage(currentLanguage)
-  //   }
-  // }, [])
-
-  useEffect(() => {
-    // const storedLanguage = localStorage.getItem("language")
-    // if (storedLanguage) {
-    //   i18n.changeLanguage(storedLanguage)
-    // }
-  }, [i18n])
 
   return (
     <select

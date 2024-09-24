@@ -5,7 +5,7 @@ import { login } from "../../services/ajax"
 
 const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
-  const [error, setError] = useState(null)
+  const [error, setError] = useState({ emailError: "", passwordError: "" })
 
   const handleChangeCredentials = (credential, newValue) => {
     setCredentials((prevCredentials) => ({
@@ -21,7 +21,7 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
       setAccountInfo(response.data)
       setIsAuthorized(true)
     } catch (error) {
-      setError(error.response?.data?.message || "Login failed")
+      setError(error.response?.data || "Login failed")
     }
   }
 
@@ -36,24 +36,58 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
         </Link>
         <div className="admin-auth-input">
           <p className="login-title">admin login</p>
-          <input
-            onChange={(e) => {
-              handleChangeCredentials("email", e.target.value)
-            }}
-            value={credentials.email}
-            name="email"
-            placeholder="email"
-            type="text"
-          />
-          <input
-            onChange={(e) => {
-              handleChangeCredentials("password", e.target.value)
-            }}
-            value={credentials.username}
-            name="password"
-            placeholder="password"
-            type="password"
-          />
+          <label htmlFor="name">
+            <input
+              onChange={(e) => {
+                handleChangeCredentials("email", e.target.value)
+              }}
+              value={credentials.email}
+              id="name"
+              name="email"
+              placeholder="email"
+              type="text"
+            />
+            {error.emailError ? (
+              <div className="error-list">
+                {error.emailError.map((emailError) => (
+                  <p
+                    className="error-item"
+                    key={emailError}
+                  >
+                    {emailError}
+                  </p>
+                ))}
+              </div>
+            ) : (
+              ""
+            )}
+          </label>
+          <label htmlFor="password">
+            <input
+              onChange={(e) => {
+                handleChangeCredentials("password", e.target.value)
+              }}
+              value={credentials.username}
+              id="password"
+              name="password"
+              placeholder="password"
+              type="password"
+            />
+            {error.passwordError ? (
+              <div className="error-list">
+                {error.passwordError.map((passwordError) => (
+                  <p
+                    className="error-item"
+                    key={passwordError}
+                  >
+                    {passwordError}
+                  </p>
+                ))}
+              </div>
+            ) : (
+              ""
+            )}
+          </label>
           <button
             onClick={handleLogIn}
             className="submit-code"

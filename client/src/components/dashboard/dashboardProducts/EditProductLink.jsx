@@ -23,10 +23,14 @@ const EditProductLink = ({ product }) => {
   const handleOpenConfirmCloseModal = (e) => {
     e.preventDefault()
 
+    setIsHovering(false)
     setIsConfirmDeletionModalVisible(true)
   }
 
-  const handleCloseConfirmCloseModal = () => {
+  const handleCloseConfirmCloseModal = (e) => {
+    e.preventDefault()
+
+    setIsHovering(false)
     setIsConfirmDeletionModalVisible(false)
   }
 

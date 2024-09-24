@@ -9,7 +9,12 @@ const filterProducts = (products, filter, language = "en") => {
     const { name, description, ...rest } = item
 
     const matchesFilter = Object.keys(filter).every((key) => {
-      if (key === "name" || key === "description") return true
+      if (key === "name" || key === "description") {
+        return (
+          name.includes(filter[key].toLowerCase()) ||
+          description.toLowerCase().includes(filter[key].toLowerCase())
+        )
+      }
 
       return rest[key] === filter[key]
     })

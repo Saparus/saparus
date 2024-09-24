@@ -26,12 +26,28 @@ export const login = ({ email, password }) => {
   return ajax.post("/auth/login", { email, password })
 }
 
-export const editProduct = ({ name, image, inStock, fixedPrice, price, id }) => {
-  return ajax.post(`/product/edit/:${id}`, { name, image, inStock, fixedPrice, price })
+export const editProduct = (name, image, inStock, fixedPrice, price, id, token) => {
+  return ajax.post(
+    `/product/edit/:${id}`,
+    { name, image, inStock, fixedPrice, price },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
 }
 
-export const addProduct = ({ name, image, inStock, fixedPrice, price }) => {
-  return ajax.post("/product/add", { name, image, inStock, fixedPrice, price })
+export const addProduct = (name, image, inStock, fixedPrice, price, token) => {
+  return ajax.post(
+    "/product/add",
+    { name, image, inStock, fixedPrice, price },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
 }
 
 export const deleteProduct = ({ id }) => {

@@ -2,8 +2,9 @@ import { NavLink } from "react-router-dom"
 
 const DashboardHeader = ({ name, handleLogOut }) => {
   return (
-    <div className="dashboard-header">
-      <h3>Admin Dashboard</h3> - <p>{name}</p>
+    <div className={`dashboard-header`}>
+      <h3>Admin Dashboard</h3>
+      {/* - <p>{name}</p> */}
       <div className="dashboard-navigation-buttons">
         <NavLink to="products">Products</NavLink>
         <NavLink to="news">News</NavLink>

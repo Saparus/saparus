@@ -5,19 +5,19 @@ const accounts = [
     id: 1,
     name: "Johnny Doe",
     email: "1@saparus.ge",
-    password: "password1",
+    password: "$2a$10$Vf/wstJI66eqye6HcE1efewU7xeR9.vy5ZFKPWPbnsmOL7xXXNotq", // strongerpassword
   },
   {
     id: 2,
     name: "Johnathan Doe",
     email: "2@saparus.ge",
-    password: "password1",
+    password: "$2a$10$iAlSy21oKKAEHqUf0VPyMeCE7pPAJdxLzi3rk7PQA8gad/giZiffG", // password
   },
   {
     id: 3,
     name: "Jon Doe",
     email: "3@saparus.ge",
-    password: "password1",
+    password: "$2a$10$nzUSPWTYYb1uidO/IuKFbeN8G1L.E3pcFnvHmxRNVxEFnTTslDubu", // mYrP4W4FORCKko1IRfIlZ14S
   },
 ]
 

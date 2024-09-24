@@ -23,25 +23,30 @@ const ConfirmDeletionModal = ({ deleteItem, message, onClose, isVisible }) => {
   if (!portalRoot) return null
 
   return createPortal(
-    <div
-      className="confirm-deletion-modal"
-      ref={modalRef}
-    >
-      <div className="confirm-deletion-modal-content">
-        <div className="message">{message}</div>
-        <div className="buttons">
-          <button
-            className="delete-button"
-            onClick={deleteItem}
-          >
-            confirm
-          </button>
-          <button
-            className="discard-button"
-            onClick={onClose}
-          >
-            discard
-          </button>
+    <div className="confirm-deletion-modal-wrapper">
+      <div
+        className="confirm-deletion-modal"
+        ref={modalRef}
+        onClick={(e) => {
+          e.preventDefault()
+        }}
+      >
+        <div className="confirm-deletion-modal-content">
+          <div className="message">{message}</div>
+          <div className="buttons">
+            <button
+              className="delete-button"
+              onClick={deleteItem}
+            >
+              confirm
+            </button>
+            <button
+              className="discard-button"
+              onClick={onClose}
+            >
+              discard
+            </button>
+          </div>
         </div>
       </div>
     </div>,

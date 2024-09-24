@@ -4,8 +4,8 @@
   background-color: $primary-color;
   display: flex;
   justify-content: space-between;
-  padding: 40px;
-  height: 200px;
+  padding: 1.75rem 2rem;
+  // height: 200px;
   box-shadow: 0 -1px 10px #2b303133;
 
   &.hide-shadow {

@@ -8,7 +8,7 @@
     font-family: $main-font;
     border-radius: 0.5rem;
     display: flex;
-    gap: 3rem;
+    gap: 1.75rem;
 
     // margin-bottom: 6rem;
 
@@ -61,6 +61,23 @@
     .image-not-found-message-small {
       font-size: 0.75rem;
       opacity: 0.75;
+
+      background-color: $text-color !important;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0.5rem;
+      box-shadow: 0 6px 10px #afc2c733;
+
+      &:hover {
+        opacity: 0.85;
+        cursor: pointer;
+
+        img {
+          box-shadow: 0 6px 10px #72808533;
+        }
+      }
     }
 
     .product-image-select-wrapper {
@@ -72,28 +89,38 @@
         // display: flex;
         // flex-wrap: wrap;
         // gap: 0.5rem;
-        display: flex;
-        flex-wrap: nowrap;
+        display: grid;
+        // flex-wrap: nowrap;
 
         gap: 0.25rem;
         // row-gap: 0.425rem;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
 
         .image-button {
           width: fit-content;
+          object-fit: cover;
           transition: opacity $animation_duration $animation,
             box-shadow $animation_duration $animation, border 100ms $animation;
 
-          box-shadow: 0 6px 10px #afc2c733;
           border: 2px solid transparent;
           border-radius: 0.25rem;
           // max-height: 6rem;
-          min-width: calc(7.5rem + 6px);
-          min-height: calc(5.75rem + 4px);
+          min-height: calc(6.5rem + 10px);
+          // height: 100%;
           width: 100%;
-          height: auto;
-          background-color: white;
+          // height: auto;
+
           border-radius: 0.5rem;
+
+          img {
+            height: 100%;
+            box-shadow: 0 6px 10px #afc2c733;
+            // width: calc(9.5rem + 6px);
+            // min-height: calc(6.5rem + 4px);
+            object-fit: cover;
+            transition: opacity $animation_duration $animation,
+              box-shadow $animation_duration $animation, border 100ms $animation;
+          }
 
           &.product-image-selected {
             border: 2px solid $primary_color;
@@ -114,7 +141,10 @@
           &:hover {
             opacity: 0.85;
             cursor: pointer;
-            box-shadow: 0 6px 10px #72808533;
+
+            img {
+              box-shadow: 0 6px 10px #72808533;
+            }
           }
         }
       }
@@ -128,12 +158,19 @@
 
       .product-image {
         border-radius: 0.5rem;
+        // object-fit: fill;
         background-color: $text-color;
         box-shadow: 0 6px 10px #afc2c733;
-        max-height: 31.25rem;
+
         justify-content: center;
-        height: auto;
+        // height: auto;
         position: relative;
+
+        // min-height: 31.25rem;
+        // min-width: 41.625rem;
+        // max-height: 31.25rem;
+        // max-width: 41.625rem;
+        // object-fit: contain;
 
         .change-product-image {
           position: absolute;
@@ -170,18 +207,27 @@
           justify-content: center;
           align-items: center;
           pointer-events: none;
+
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
         }
 
         img {
+          // min-height: 31.25rem;
+
           min-height: 31.25rem;
-          width: 100%;
+          min-width: 41.625rem;
+          max-height: 31.25rem;
+          max-width: 41.625rem;
+          object-fit: cover;
+
           border-radius: 0.5rem;
           margin: 0 auto;
           display: block;
 
           aspect-ratio: 4 / 3;
-
-          object-fit: fill;
         }
       }
     }
@@ -195,7 +241,38 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      position: relative;
       // flex: 4;
+
+      .language-select {
+        display: flex;
+        gap: 0.5rem;
+        position: absolute;
+        top: -1.75rem;
+
+        button {
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.25rem;
+          font-size: 0.75rem;
+          background-color: white;
+          box-shadow: 0 6px 10px #afc2c733;
+          transition: opacity $animation_duration $animation,
+            box-shadow $animation_duration $animation,
+            background-color $animation_duration $animation, color $animation_duration $animation;
+          font-weight: 600;
+
+          &.language-selected {
+            background-color: $primary-color;
+            color: $text-color;
+          }
+
+          &:hover {
+            opacity: 0.85;
+            cursor: pointer;
+            box-shadow: 0 6px 10px #72808533;
+          }
+        }
+      }
 
       .product-name {
         font-size: 1.5rem;
@@ -316,9 +393,14 @@
         line-height: 150%;
         text-align: justify;
         word-break: keep-all;
-
+        overflow-x: hidden !important;
+        height: 12rem;
         max-height: 12rem;
         overflow-y: auto;
+
+        .product-description-content {
+          overflow-y: auto;
+        }
       }
     }
 

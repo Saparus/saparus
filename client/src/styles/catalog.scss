@@ -273,9 +273,33 @@
           }
         }
 
-        .prev-page-button {
+        .prev-page-button,
+        .first-page-button {
           svg {
             rotate: 180deg;
+          }
+        }
+
+        .first-page-button,
+        .last-page-button {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+
+        .first-page-button {
+          svg:first-of-type {
+            position: relative;
+            left: 1rem;
+          }
+        }
+
+        .last-page-button {
+          svg:last-of-type {
+            position: relative;
+            left: -1rem;
           }
         }
 
@@ -326,10 +350,10 @@
         }
 
         .next-page-button {
-          margin-right: 0.75rem;
+          // margin-right: 0.75rem;
         }
         .prev-page-button {
-          margin-left: 0.75rem;
+          // margin-left: 0.75rem;
         }
       }
 
