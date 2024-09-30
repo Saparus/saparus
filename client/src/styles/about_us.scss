@@ -29,25 +29,54 @@
       gap: 2rem;
 
       .information {
-        h2 {
-          font-size: 1.75rem;
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        height: 28rem;
+        justify-content: center;
+        // margin-bottom: 2rem;
+
+        .about-information-title {
+          font-size: 1.75rem !important;
           margin-bottom: 0.5rem;
+          outline: none;
+          width: 100%;
+          font-weight: 700;
+
+          &:focus {
+            outline: 2px solid black;
+            border-radius: 0.25rem;
+          }
         }
 
-        p {
+        textarea {
+          // background-color: red;
+        }
+
+        .about-information-text {
           font-size: 1rem;
           text-align: justify;
           word-break: keep-all;
+          overflow-x: hidden !important;
+          height: 20rem;
+
+          &:focus {
+            outline: 2px solid black;
+            border-radius: 0.25rem;
+          }
         }
       }
     }
 
-    img {
-      height: 480px;
-      width: auto;
-      border: 3px solid $primary-color;
-      border-radius: 0.5rem;
-      box-shadow: 0 3px 10px #292c2e59;
+    .image {
+      img {
+        height: 30rem;
+        width: auto;
+        border: 3px solid $primary-color;
+        border-radius: 0.5rem;
+        box-shadow: 0 3px 10px #292c2e59;
+      }
     }
 
     &:nth-of-type(1) {
@@ -58,10 +87,33 @@
 
     &:nth-of-type(odd) {
       background-color: $primary-color;
-      color: $base-color;
 
       .centered {
         flex-direction: row-reverse;
+      }
+
+      .about-information-title {
+        display: flex;
+        justify-content: start !important;
+        color: $base-color !important;
+
+        //  direction: ltr
+        // scrollbar-color: #888 #edf6fa;
+
+        // &:focus {
+        //   border: 1px solid $base-color !important;
+        // }
+      }
+
+      .about-information-text {
+        color: $base-color !important;
+        text-align: justify;
+        word-break: keep-all;
+        overflow-x: hidden !important;
+        text-align-last: end;
+
+        direction: rtl;
+        scrollbar-color: $base-color $primary-color;
       }
 
       img {
@@ -74,15 +126,20 @@
         flex-direction: row;
       }
 
-      h2 {
+      .about-information-title {
         text-align: right;
+        display: flex;
+        justify-content: end;
+      }
+      .about-information-text {
+        scrollbar-color: $primary-color $base-color;
       }
     }
 
     &:last-of-type {
-      .centered {
-        padding-bottom: 3rem;
-      }
+      // .centered {
+      //   margin-bottom: 3rem;
+      // }
     }
   }
 

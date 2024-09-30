@@ -1,6 +1,7 @@
 import { useQuery } from "react-query"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useEffect } from "react"
 
 import HeroLink from "./HeroLink"
 import NewsItem from "./NewsItem"
@@ -17,6 +18,10 @@ import formatDate from "../../utils/formatDate"
 
 const Home = () => {
   const { t } = useTranslation("translation", { keyPrefix: "home" })
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="page home">

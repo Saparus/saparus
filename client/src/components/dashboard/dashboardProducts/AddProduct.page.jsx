@@ -1,3 +1,5 @@
+import { useOutletContext } from "react-router-dom"
+
 import { addProduct } from "../../../services/ajax"
 
 import ProductEditPanel from "./ProductEditPanel"
@@ -21,10 +23,13 @@ const emptyProductData = {
 }
 
 const AddProductPage = () => {
+  const { token } = useOutletContext()
+
   return (
     <ProductEditPanel
       product={emptyProductData}
       onSave={addProduct}
+      token={token}
     />
   )
 }

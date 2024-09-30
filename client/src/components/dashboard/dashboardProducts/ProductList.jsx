@@ -11,7 +11,7 @@ import Loading from "../../other/Loading"
 import Product from "./EditProductLink"
 import PageSelect from "../../catalog/PageSelect"
 
-const ProductList = ({ filter, resetFilter }) => {
+const ProductList = ({ filter, resetFilter, token }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 

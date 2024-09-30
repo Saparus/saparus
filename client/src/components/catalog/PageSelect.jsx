@@ -13,6 +13,14 @@ const PageSelect = ({ currentPage, totalPages, maximumPages, goToPage }) => {
     goToPage(Math.max(currentPage - 1, 1))
   }
 
+  const goToFirstPage = () => {
+    goToPage(1)
+  }
+
+  const goToLastPage = () => {
+    goToPage(totalPages)
+  }
+
   useEffect(() => {
     const startPage = Math.max(
       1,
@@ -32,15 +40,15 @@ const PageSelect = ({ currentPage, totalPages, maximumPages, goToPage }) => {
       <div className="page-select-placeholder"></div>
       <div className="page-select">
         <button
-          className={`first-page-button ${currentPage > 1 ? "" : "disabled"}`}
-          onClick={goToPreviousPage}
+          className={`first-page-button ${currentPage === 1 ? "" : "disabled"}`}
+          onClick={goToFirstPage}
           disabled={currentPage === 1}
         >
           <ArrowIcon className="prev-arrow" />
           <ArrowIcon className="prev-arrow" />
         </button>
         <button
-          className={`prev-page-button ${currentPage > 1 ? "" : "disabled"}`}
+          className={`prev-page-button ${currentPage === 1 ? "" : "disabled"}`}
           onClick={goToPreviousPage}
           disabled={currentPage === 1}
         >
@@ -63,9 +71,9 @@ const PageSelect = ({ currentPage, totalPages, maximumPages, goToPage }) => {
           <ArrowIcon className="next-arrow" />
         </button>
         <button
-          className={`last-page-button ${totalPages > currentPage ? "" : "disabled"}`}
-          onClick={goToNextPage}
-          disabled={totalPages <= currentPage}
+          className={`last-page-button ${totalPages === currentPage ? "" : "disabled"}`}
+          onClick={goToLastPage}
+          disabled={totalPages === currentPage}
         >
           <ArrowIcon className="next-arrow" />
           <ArrowIcon className="next-arrow" />

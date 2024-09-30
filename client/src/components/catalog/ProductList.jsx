@@ -8,10 +8,10 @@ import { getProducts } from "../../data/products"
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow.svg"
 
 import Loading from "../other/Loading"
-import Product from "./product"
+import Product from "./Product"
 import PageSelect from "./PageSelect"
 
-const Products = ({ filter, resetFilter }) => {
+const ProductList = ({ filter, resetFilter }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
@@ -89,4 +89,4 @@ const Products = ({ filter, resetFilter }) => {
   return <div className="products">{renderProducts()}</div>
 }
 
-export default Products
+export default ProductList

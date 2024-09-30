@@ -287,6 +287,27 @@
           justify-content: center;
           align-items: center;
           cursor: pointer;
+
+          &:hover {
+            svg {
+              opacity: 0.75;
+            }
+          }
+
+          &:disabled {
+            opacity: 0.15 !important;
+            // background-color: $primary-color !important;
+            &:hover {
+              opacity: 0.15 !important;
+              // background-color: $primary-color !important;
+            }
+
+            svg {
+              &:hover {
+                opacity: 1;
+              }
+            }
+          }
         }
 
         .first-page-button {

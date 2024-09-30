@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useQuery } from "react-query"
 import { useTranslation } from "react-i18next"
+import { useOutletContext } from "react-router-dom"
 
 import { getEditProduct } from "../../../data/products"
 import { editProduct } from "../../../services/ajax"
@@ -9,15 +10,15 @@ import ProductEditPanel from "./ProductEditPanel"
 import Loading from "../../other/Loading"
 
 const EditProductPage = () => {
+  const { token } = useOutletContext()
+
   const { id } = useParams()
-  const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
 
   const {
     data: product,
     isLoading,
     error,
-  } = useQuery(["dashboard-product", id, currentLanguage], () => getEditProduct(id))
+  } = useQuery(["dashboard-product", id, token], () => getEditProduct(id, token))
 
   if (isLoading) return <Loading />
   if (error || !product) return <div>Something went wrong</div>
@@ -25,8 +26,8 @@ const EditProductPage = () => {
   return (
     <ProductEditPanel
       product={product}
-      currentLanguage={currentLanguage}
       onSave={editProduct}
+      token={token}
     />
   )
 }

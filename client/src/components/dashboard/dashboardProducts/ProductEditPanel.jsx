@@ -29,7 +29,13 @@ const emptyProductData = {
   images: [],
 }
 
-const ProductEditPanel = ({ product, onSave }) => {
+const languages = [
+  { code: "en", name: "English" },
+  { code: "ka", name: "Georgian" },
+  { code: "ru", name: "Russian" },
+]
+
+const ProductEditPanel = ({ product, onSave, token }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
@@ -285,6 +291,7 @@ const ProductEditPanel = ({ product, onSave }) => {
                 await onSave({
                   ...currentProduct,
                   id: currentProduct.id,
+                  token,
                 })
                 console.log("Product saved successfully.")
               } catch (error) {
@@ -462,30 +469,17 @@ const ProductEditPanel = ({ product, onSave }) => {
     const renderLanguageSelect = () => {
       return (
         <div className="language-select">
-          <button
-            className={`${selectedLanguage === "en" ? "language-selected" : ""}`}
-            onClick={() => {
-              setSelectedLanguage("en")
-            }}
-          >
-            {t("English")}
-          </button>
-          <button
-            className={`${selectedLanguage === "ka" ? "language-selected" : ""}`}
-            onClick={() => {
-              setSelectedLanguage("ka")
-            }}
-          >
-            {t("Georgian")}
-          </button>
-          <button
-            className={`${selectedLanguage === "ru" ? "language-selected" : ""}`}
-            onClick={() => {
-              setSelectedLanguage("ru")
-            }}
-          >
-            {t("Russian")}
-          </button>
+          {languages.map((language) => (
+            <button
+              key={language.code}
+              className={`${selectedLanguage === language.code ? "language-selected" : ""}`}
+              onClick={() => {
+                setSelectedLanguage(language.code)
+              }}
+            >
+              {language.name}
+            </button>
+          ))}
         </div>
       )
     }

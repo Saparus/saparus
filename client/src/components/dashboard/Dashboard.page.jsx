@@ -56,11 +56,12 @@ const Dashboard = () => {
           isAuthorized={isAuthorized}
           name={accountInfo?.name}
           handleLogOut={handleLogOut}
+          token={accountInfo?.token}
         />
       </nav>
       {renderAskAuthenticationPanel()}
       <div className="outlet">
-        <Outlet context={{ isAuthorized }} />
+        <Outlet context={{ isAuthorized, token: accountInfo?.token }} />
       </div>
     </div>
   )

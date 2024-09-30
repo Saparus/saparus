@@ -1,18 +1,19 @@
 import { Routes, Route } from "react-router-dom"
 import "./App.scss"
 
-import Header from "./components/other/header"
-import Footer from "./components/other/footer"
+import Header from "./components/other/Header"
+import Footer from "./components/other/Footer"
 
-import Catalog from "./components/catalog/catalog"
-import About from "./components/about_us/about_us"
-import Home from "./components/home/home"
-import Product from "./components/product/product"
-import Dashboard from "./components/dashboard/Dashboard"
-import DashboardNews from "./components/dashboard/dashboardNews/DashboardNews"
+import CatalogPage from "./components/catalog/catalog"
+import AboutPage from "./components/about/About.page"
+import HomePage from "./components/home/Home.page"
+import ProductPage from "./components/product/Product.page"
+import DashboardPage from "./components/dashboard/Dashboard.page"
+import DashboardNews from "./components/dashboard/dashboardNews/DashboardNews.page"
 import DashboardProductListPage from "./components/dashboard/dashboardProducts/DashboardProductList.page"
 import EditProductPage from "./components/dashboard/dashboardProducts/EditProduct.page"
 import AddProductPage from "./components/dashboard/dashboardProducts/AddProduct.page"
+import DashboardAboutPage from "./components/dashboard/dashboardAbout/DashboardAbout.page"
 import PageNotFount from "./components/other/PageNotFount"
 
 const App = () => {
@@ -22,28 +23,32 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={<Home />}
+          element={<HomePage />}
         />
 
         <Route
           path="/about"
-          element={<About />}
+          element={<AboutPage />}
         />
         <Route
           path="/catalog"
-          element={<Catalog />}
+          element={<CatalogPage />}
         />
         <Route
           path="/catalog/:id"
-          element={<Product />}
+          element={<ProductPage />}
         />
         <Route
           path="admin"
-          element={<Dashboard />}
+          element={<DashboardPage />}
         >
           <Route
             path="products"
             element={<DashboardProductListPage />}
+          />
+          <Route
+            path="about"
+            element={<DashboardAboutPage />}
           />
           <Route
             path="news"

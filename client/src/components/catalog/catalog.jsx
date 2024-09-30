@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import Companies from "./companies"
 import Categories from "./categories"
-import Products from "./products"
+import Products from "./ProductList"
 
 const Catalog = () => {
   const [filter, setFilter] = useState({})
