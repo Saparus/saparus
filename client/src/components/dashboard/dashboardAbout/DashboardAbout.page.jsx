@@ -147,8 +147,8 @@ const DashboardAboutPage = () => {
 
   const handleAddNewAboutItem = () => {
     addNewAboutItems(
-      aboutItemList.length + 1,
-      aboutItemList[aboutItemList.length - 1].position + 1,
+      (aboutItemList?.length || 0) + 1,
+      (aboutItemList?.[aboutItemList.length - 1]?.position || 0) + 1,
       { en: "", ka: "", ru: "" },
       { en: "", ka: "", ru: "" },
       null

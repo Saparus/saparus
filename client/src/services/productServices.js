@@ -10,6 +10,8 @@ export const editProduct = async (
   id,
   token
 ) => {
+  if (!token) return
+
   const response = await ajax.patch(
     `/product/edit/${id}`,
     { name, description, images, inStock, fixedPrice, price },
@@ -24,6 +26,8 @@ export const editProduct = async (
 }
 
 export const addProduct = async (name, images, inStock, fixedPrice, price, token) => {
+  if (!token) return
+
   const response = await ajax.post(
     "/product/add",
     { name, images, inStock, fixedPrice, price },
@@ -38,6 +42,8 @@ export const addProduct = async (name, images, inStock, fixedPrice, price, token
 }
 
 export const deleteProduct = async (id, token) => {
+  if (!token) return
+
   const response = await ajax.delete(`/product/delete/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -64,6 +70,8 @@ export const getProduct = async (id, language) => {
 }
 
 export const getEditProduct = async (id, token) => {
+  if (!token) return
+
   const response = await ajax.get(`/product/getEdit/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,

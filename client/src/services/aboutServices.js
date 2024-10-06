@@ -7,7 +7,7 @@ export const getAllAboutItems = async (language) => {
 }
 
 export const getAllEditAboutItems = async (token) => {
-  console.log(token)
+  if (!token) return
 
   const response = await ajax.get(`/about/getEdit`, {
     headers: {
