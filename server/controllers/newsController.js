@@ -1,14 +1,30 @@
-const getAllNews = () => {}
+const getAllNewsArticles = async (req, res) => {
+  res.status(201).json({ message: "edit News articles" })
+}
 
-const getSingleNewsArticle = () => {}
+const getSingleNewsArticle = async (req, res) => {
+  const { id } = req.params
 
-const postNews = () => {}
+  res.status(201).json({ message: "get News article" })
+}
 
-const updateNews = () => {}
+// PROTECTED
+const postNewsArticle = async (req, res) => {
+  const { title, text, images } = req.body
+
+  res.status(201).json({ message: "post News article" })
+}
+
+// PROTECTED
+const editNewsArticle = async (req, res) => {
+  const { id } = req.params
+
+  res.status(201).json({ message: "edit News article" })
+}
 
 module.exports = {
-  getAllNews,
+  getAllNewsArticles,
   getSingleNewsArticle,
-  postNews,
-  updateNews,
+  postNewsArticle,
+  editNewsArticle,
 }

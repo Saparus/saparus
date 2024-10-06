@@ -31,7 +31,9 @@ const Product = ({ product }) => {
       >
         <div className="shop">
           {/* STC */}
-          <p className="price">{product.fixedPrice ? product.price + "$" : "Price on Request"}</p>
+          <p className={`price ${product.fixedPrice ? "fixed-price" : "unfixed-price"}`}>
+            {product.fixedPrice ? product.price + "$" : "Price on Request"}
+          </p>
           <Phone className="cart" />
           <span className="go-to-contacts-text">
             {product.inStock ? (

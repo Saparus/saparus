@@ -6,11 +6,11 @@ const PageSelect = ({ currentPage, totalPages, maximumPages, goToPage }) => {
   const [pageNumbers, setPageNumbers] = useState([])
 
   const goToNextPage = () => {
-    goToPage(currentPage + 1)
+    goToPage(Number(currentPage) + 1)
   }
 
   const goToPreviousPage = () => {
-    goToPage(Math.max(currentPage - 1, 1))
+    goToPage(Math.max(Number(currentPage) - 1, 1))
   }
 
   const goToFirstPage = () => {
@@ -24,7 +24,7 @@ const PageSelect = ({ currentPage, totalPages, maximumPages, goToPage }) => {
   useEffect(() => {
     const startPage = Math.max(
       1,
-      Math.min(currentPage - Math.floor(maximumPages / 2), totalPages - maximumPages + 1)
+      Math.min(Number(currentPage) - Math.floor(maximumPages / 2), totalPages - maximumPages + 1)
     )
     const endPage = Math.min(totalPages, startPage + maximumPages - 1)
 
@@ -40,40 +40,40 @@ const PageSelect = ({ currentPage, totalPages, maximumPages, goToPage }) => {
       <div className="page-select-placeholder"></div>
       <div className="page-select">
         <button
-          className={`first-page-button ${currentPage === 1 ? "" : "disabled"}`}
+          className={`first-page-button ${Number(currentPage) === 1 ? "" : "disabled"}`}
           onClick={goToFirstPage}
-          disabled={currentPage === 1}
+          disabled={Number(currentPage) === 1}
         >
           <ArrowIcon className="prev-arrow" />
           <ArrowIcon className="prev-arrow" />
         </button>
         <button
-          className={`prev-page-button ${currentPage === 1 ? "" : "disabled"}`}
+          className={`prev-page-button ${Number(currentPage) === 1 ? "" : "disabled"}`}
           onClick={goToPreviousPage}
-          disabled={currentPage === 1}
+          disabled={Number(currentPage) === 1}
         >
           <ArrowIcon className="prev-arrow" />
         </button>
         {pageNumbers.map((pageNumber) => (
           <button
             key={pageNumber}
-            className={`page-number-button ${pageNumber === currentPage ? "active" : ""}`}
+            className={`page-number-button ${pageNumber === Number(currentPage) ? "active" : ""}`}
             onClick={() => goToPage(pageNumber)}
           >
             {pageNumber}
           </button>
         ))}
         <button
-          className={`next-page-button ${totalPages > currentPage ? "" : "disabled"}`}
+          className={`next-page-button ${totalPages > Number(currentPage) ? "" : "disabled"}`}
           onClick={goToNextPage}
-          disabled={totalPages <= currentPage}
+          disabled={totalPages <= Number(currentPage)}
         >
           <ArrowIcon className="next-arrow" />
         </button>
         <button
-          className={`last-page-button ${totalPages === currentPage ? "" : "disabled"}`}
+          className={`last-page-button ${totalPages === Number(currentPage) ? "" : "disabled"}`}
           onClick={goToLastPage}
-          disabled={totalPages === currentPage}
+          disabled={totalPages === Number(currentPage)}
         >
           <ArrowIcon className="next-arrow" />
           <ArrowIcon className="next-arrow" />

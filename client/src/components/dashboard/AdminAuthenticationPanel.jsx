@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-import { login } from "../../services/ajax"
+import { login } from "../../services/authServices"
 
 const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
@@ -18,7 +18,7 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
     try {
       const response = await login(credentials)
 
-      setAccountInfo(response.data)
+      setAccountInfo(response)
       setIsAuthorized(true)
     } catch (error) {
       setError(error.response?.data || "Login failed")

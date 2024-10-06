@@ -36,7 +36,10 @@ const ConfirmDeletionModal = ({ deleteItem, message, onClose, isVisible }) => {
           <div className="buttons">
             <button
               className="delete-button"
-              onClick={deleteItem}
+              onClick={() => {
+                deleteItem()
+                onClose()
+              }}
             >
               confirm
             </button>

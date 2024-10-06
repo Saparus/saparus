@@ -1,12 +1,12 @@
 import { useState } from "react"
+import { useMutation } from "react-query"
 import { Link } from "react-router-dom"
 
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
-import { deleteProduct } from "../../../services/ajax"
 
 import ConfirmDeletionModal from "../ConfirmDeletionModal"
 
-const EditProductLink = ({ product }) => {
+const EditProductLink = ({ product, handleDelete }) => {
   const [isHovering, setIsHovering] = useState(false)
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
 
@@ -21,14 +21,14 @@ const EditProductLink = ({ product }) => {
   }
 
   const handleOpenConfirmCloseModal = (e) => {
-    e.preventDefault()
+    e?.preventDefault()
 
     setIsHovering(false)
     setIsConfirmDeletionModalVisible(true)
   }
 
   const handleCloseConfirmCloseModal = (e) => {
-    e.preventDefault()
+    e?.preventDefault()
 
     setIsHovering(false)
     setIsConfirmDeletionModalVisible(false)
@@ -78,6 +78,7 @@ const EditProductLink = ({ product }) => {
       </div>
       {isConfirmDeletionModalVisible ? (
         <ConfirmDeletionModal
+          deleteItem={handleDelete}
           onClose={handleCloseConfirmCloseModal}
           message="are you sure you want to delete this product? this action cannot be undone."
         />

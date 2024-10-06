@@ -21,6 +21,26 @@
   flex: 1;
 }
 
+.Toastify__toast {
+  background-color: #ffffff !important;
+  color: #1f5489 !important;
+  font-weight: 600;
+  border-radius: 0.5rem !important;
+  font-family: "Poppins", "Roboto", "Noto Sans Georgian", sans-serif !important;
+}
+
+.Toastify__toast--success {
+  // background-color: rgb(52, 177, 52) !important;
+}
+
+.Toastify__toast--error {
+  // background-color: rgb(219, 68, 68) !important;
+}
+
+.Toastify__progress-bar {
+  // background: #348ae1 !important;
+}
+
 .truncate {
   display: -webkit-box;
   line-clamp: var(--line-clamp, 3);
@@ -68,16 +88,16 @@
 }
 
 .confirm-deletion-modal-wrapper {
-  position: absolute;
+  position: fixed !important;
   top: 0;
   left: 0;
   background-color: #1c1f1f49;
-  height: 100%;
-  width: 100%;
-  z-index: 100000;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1000000;
 
   .confirm-deletion-modal {
-    background-color: $base-color;
+    background-color: #ffffff !important;
     box-shadow: 2px 0px 4px #1c1f1f11;
     position: absolute;
     max-width: 20rem;

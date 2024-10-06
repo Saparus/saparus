@@ -1,3 +1,5 @@
+import { useQuery } from "react-query"
+
 import { ReactComponent as Logo } from "../../assets/companies/planmeca.svg"
 import { categories } from "../../data/products"
 

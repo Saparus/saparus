@@ -1,9 +1,11 @@
 import { useSearchParams } from "react-router-dom"
-import { useQuery } from "react-query"
+import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useTranslation } from "react-i18next"
 import { useState, useEffect } from "react"
+import { toast } from "react-toastify"
 
-import { getProducts } from "../../../data/products"
+import { getProducts } from "../../../services/productServices"
+import { deleteProduct } from "../../../services/productServices"
 
 import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 
@@ -20,10 +22,28 @@ const ProductList = ({ filter, resetFilter, token }) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Number(searchParams.get("page")) || 1
 
+  const queryClient = useQueryClient()
+
   const { data, isLoading, error } = useQuery(
     ["products", filter, currentLanguage, limit, page],
     () => getProducts(filter, currentLanguage, limit, page)
   )
+
+  const deleteProductMutation = useMutation({
+    mutationFn: async (id) => {
+      return await deleteProduct(id, token)
+    },
+    onSuccess: () => {
+      toast.success("Successfully deleted product")
+      queryClient.invalidateQueries(["products", filter, currentLanguage, limit, page])
+    },
+    onError: (error) => {
+      console.log(error.message)
+      toast.error(
+        "Something went wrong while adding product, check browser console for more detailed explanation"
+      )
+    },
+  })
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -67,6 +87,9 @@ const ProductList = ({ filter, resetFilter, token }) => {
               <Product
                 key={index}
                 product={product}
+                handleDelete={() => {
+                  deleteProductMutation.mutate(product.id)
+                }}
               />
             ))}
           </div>

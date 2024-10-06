@@ -1,7 +1,15 @@
-const images = require.context("../assets/about_images", true)
-const imageList = images.keys().map((image) => images(image))
+const fs = require("fs")
+const path = require("path")
 
-export const aboutList = [
+const imagesDirectory = path.join(__dirname, "./images/about_images")
+const imageFiles = fs.readdirSync(imagesDirectory)
+const imageList = imageFiles.map((file) => {
+  const filePath = path.join(imagesDirectory, file)
+  const imageData = fs.readFileSync(filePath).toString("base64")
+  return `data:image/jpeg;base64,${imageData}`
+})
+
+const aboutList = [
   {
     id: 1,
     position: 0,
@@ -44,20 +52,4 @@ export const aboutList = [
   },
 ]
 
-const simulateDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-export const getAboutItems = async (language) => {
-  await simulateDelay(200)
-
-  return aboutList.map((aboutItem) => {
-    const { title, text } = aboutItem
-
-    return { ...aboutItem, title: title[language], text: text[language] }
-  })
-}
-
-export const getEditAboutItems = async () => {
-  await simulateDelay(200)
-
-  return aboutList
-}
+module.exports = aboutList

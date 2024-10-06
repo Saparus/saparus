@@ -6,12 +6,16 @@ import { editAboutItem } from "../../../services/ajax"
 
 import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
+import { ReactComponent as UploadIcon } from "../../../assets/icons/upload.svg"
+
+import ConfirmDeletionModal from "../ConfirmDeletionModal"
 
 const EditAboutItem = ({
   aboutItem,
   handleChange,
   handleUnchange,
   currentLanguage,
+  handleEditAboutItem,
   selectedLanguage,
   handleAboutItemMoveUp,
   handleAboutItemMoveDown,
@@ -24,6 +28,7 @@ const EditAboutItem = ({
     text: false,
   })
   const [currentItem, setCurrentItem] = useState(structuredClone(aboutItem))
+  const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
 
   const DashboardAboutItemRef = useRef()
 
@@ -58,10 +63,18 @@ const EditAboutItem = ({
           }
         })
       }
-      reader.readAsDataURL(file)
-    }
 
-    handleUnchange()
+      handleEditAboutItem(
+        currentItem.id,
+        currentItem.position,
+        currentItem.title,
+        currentItem.text,
+        currentItem.image
+      )
+
+      reader.readAsDataURL(file)
+      handleChange()
+    }
   }
 
   const handleFieldEditStart = (field) => {
@@ -71,11 +84,27 @@ const EditAboutItem = ({
   const handleFieldEditFinish = (field) => {
     setActiveFields((prevState) => ({ ...prevState, [field]: false }))
 
-    if (JSON.stringify(currentItem) === JSON.stringify(aboutItem)) {
-      handleUnchange()
-    } else {
+    if (JSON.stringify(currentItem[field]) !== JSON.stringify(aboutItem[field])) {
       handleChange()
+
+      console.log(currentItem)
+
+      handleEditAboutItem(
+        currentItem.id,
+        currentItem.position,
+        currentItem.title,
+        currentItem.text,
+        currentItem.image
+      )
     }
+  }
+
+  const handleOpenConfirmCloseModal = () => {
+    setIsConfirmDeletionModalVisible(true)
+  }
+
+  const handleCloseConfirmCloseModal = () => {
+    setIsConfirmDeletionModalVisible(false)
   }
 
   const { id, title, text, image } = currentItem
@@ -152,17 +181,8 @@ const EditAboutItem = ({
   }
 
   useEffect(() => {
-    setCurrentItem(aboutItem)
+    // setCurrentItem(aboutItem)
   }, [aboutItem])
-
-  // not the best way to do it, will change latter
-  // useEffect(() => {
-  //   if (JSON.stringify(currentItem) === JSON.stringify(aboutItem)) {
-  //     handleUnchange()
-  //   } else {
-  //     handleChange()
-  //   }
-  // }, [currentItem, aboutItem])
 
   return (
     <div
@@ -185,18 +205,29 @@ const EditAboutItem = ({
           </button>
 
           <button
-            onClick={handleDeleteAboutItem}
+            onClick={handleOpenConfirmCloseModal}
             className="move-about-item remove"
           >
             <TrashIcon className="icon" />
           </button>
         </div>
         {renderItemInformation()}
+        {isConfirmDeletionModalVisible ? (
+          <ConfirmDeletionModal
+            onClose={handleCloseConfirmCloseModal}
+            message="are you sure you want to delete this? this action cannot be undone."
+            deleteItem={handleDeleteAboutItem}
+          />
+        ) : (
+          ""
+        )}
         <div className="image">
           <img
             src={image}
             alt=""
           />
+          <UploadIcon className="icon upload-icon" />
+          <div className="image-panel"></div>
           <input
             className="image-input"
             type="file"

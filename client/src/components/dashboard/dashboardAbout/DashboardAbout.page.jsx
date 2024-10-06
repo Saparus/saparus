@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useQuery } from "react-query"
+import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
+import { toast } from "react-toastify"
 
 import { Contacts } from "../../other/Footer"
 
-import { getEditAboutItems } from "../../../data/about"
+import { getAllEditAboutItems, editAllAboutItems } from "../../../services/aboutServices"
 
 import Loading from "../../other/Loading"
 import EditAboutItem from "./EditAboutItem"
@@ -28,16 +29,26 @@ const DashboardAboutPage = () => {
 
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [wasSomethingChanged, setWasSomethingChanged] = useState(false)
-  // const [newAboutItems, setNewAboutItems] = useState([])
 
   const [aboutItemList, setAboutItemList] = useState()
 
-  const { data, isLoading, error } = useQuery({
-    queryFn: () => getEditAboutItems(token),
-    queryKey: ["about", token],
-  })
+  const { data, isLoading, error } = useQuery(["about", token], () => getAllEditAboutItems(token))
 
-  // const aboutItemList = [...data, ...newAboutItems]
+  const queryClient = useQueryClient()
+
+  const editAboutItemsMutation = useMutation({
+    mutationFn: async () => await editAllAboutItems(aboutItemList, token),
+    onSuccess: () => {
+      toast.success("Changes saved successfully")
+      queryClient.invalidateQueries(["about", token]) // it will cause refetching
+    },
+    onError: (error) => {
+      console.log(error)
+      toast.error(
+        "Something went wrong while saving About page, check browser console for more detailed explanation"
+      )
+    },
+  })
 
   useEffect(() => {
     if (isLoading || error) return
@@ -53,7 +64,7 @@ const DashboardAboutPage = () => {
     setWasSomethingChanged(false)
   }
 
-  const handleAddNewAboutItems = (id, position, title, text, image) => {
+  const addNewAboutItems = (id, position, title, text, image) => {
     setWasSomethingChanged(true)
     setAboutItemList((prevState) => [
       ...prevState,
@@ -78,10 +89,6 @@ const DashboardAboutPage = () => {
 
       const stateToUpdate = structuredClone(prevState)
 
-      // console.log(
-      //   `Editing item at index ${indexToUpdate}, id: ${id} position: ${position} title: ${title} image: ${image}`
-      // )
-
       stateToUpdate[indexToUpdate] = {
         ...stateToUpdate[indexToUpdate],
         id,
@@ -96,23 +103,26 @@ const DashboardAboutPage = () => {
   }
 
   const swapPlaces = (id1, id2) => {
-    // console.log({ id1, id2 })
+    console.log(aboutItemList)
 
-    const [item1, item2] = aboutItemList.reduce(
-      (acc, item, index) => {
-        if (item.id === id1) acc[0] = item
-        if (item.id === id2) acc[1] = item
-        return acc
-      },
-      [null, null]
-    )
+    const itemList = structuredClone(aboutItemList)
 
-    if (!item1 || !item2) {
-      return
-    }
+    const index1 = itemList.findIndex((item) => item.id === id1)
+    const index2 = itemList.findIndex((item) => item.id === id2)
 
-    handleEditAboutItem(item1.id, item2.position)
-    handleEditAboutItem(item2.id, item1.position)
+    let temp = { ...itemList[index1] }
+
+    itemList[index1].position = itemList[index2].position
+    itemList[index2].position = temp.position
+
+    temp = itemList[index1]
+
+    itemList[index1] = itemList[index2]
+    itemList[index2] = temp
+
+    itemList.sort((a, b) => a.position - b.position)
+
+    setAboutItemList(itemList)
   }
 
   const handleAboutItemMoveUp = (id) => {
@@ -135,19 +145,34 @@ const DashboardAboutPage = () => {
     }
   }
 
-  const handleSave = () => {
-    //
+  const handleAddNewAboutItem = () => {
+    addNewAboutItems(
+      aboutItemList.length + 1,
+      aboutItemList[aboutItemList.length - 1].position + 1,
+      { en: "", ka: "", ru: "" },
+      { en: "", ka: "", ru: "" },
+      null
+    )
+  }
+
+  const handleSave = async () => {
+    editAboutItemsMutation.mutate()
+
     handleUnchange()
   }
 
   const handleDiscard = () => {
-    setAboutItemList(data)
+    setAboutItemList(structuredClone(data))
     handleUnchange()
   }
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  useEffect(() => {
+    setSelectedLanguage(currentLanguage)
+  }, [currentLanguage])
 
   const renderLanguageSelect = () => {
     return (
@@ -172,29 +197,31 @@ const DashboardAboutPage = () => {
 
     if (!data || !aboutItemList || error) return <div>something went wrong</div>
 
-    return [...aboutItemList]
-      .sort((a, b) => a.position - b.position)
-      .map((aboutItem) => {
-        return (
-          <EditAboutItem
-            key={aboutItem.id}
-            currentLanguage={currentLanguage}
-            aboutItem={aboutItem}
-            handleChange={handleChange}
-            handleUnchange={handleUnchange}
-            selectedLanguage={selectedLanguage}
-            handleAboutItemMoveUp={() => {
-              handleAboutItemMoveUp(aboutItem.id)
-            }}
-            handleAboutItemMoveDown={() => {
-              handleAboutItemMoveDown(aboutItem.id)
-            }}
-            handleDeleteAboutItem={() => {
-              handleDeleteAboutItem(aboutItem.id)
-            }}
-          />
-        )
-      })
+    return aboutItemList.map((aboutItem) => {
+      return (
+        <EditAboutItem
+          key={aboutItem.id}
+          currentLanguage={currentLanguage}
+          aboutItem={aboutItem}
+          handleChange={handleChange}
+          handleUnchange={handleUnchange}
+          handleEditAboutItem={handleEditAboutItem}
+          selectedLanguage={selectedLanguage}
+          handleAboutItemMoveUp={() => {
+            handleChange()
+            handleAboutItemMoveUp(aboutItem.id)
+          }}
+          handleAboutItemMoveDown={() => {
+            handleChange()
+            handleAboutItemMoveDown(aboutItem.id)
+          }}
+          handleDeleteAboutItem={() => {
+            handleChange()
+            handleDeleteAboutItem(aboutItem.id)
+          }}
+        />
+      )
+    })
   }
 
   const renderConfirmChange = () => {
@@ -226,6 +253,13 @@ const DashboardAboutPage = () => {
         </div>
       </div>
       {renderContent()}
+
+      <button
+        className="add-about-item"
+        onClick={handleAddNewAboutItem}
+      >
+        add
+      </button>
       {wasSomethingChanged ? renderConfirmChange() : ""}
     </div>
   )

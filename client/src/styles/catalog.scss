@@ -258,6 +258,7 @@
           cursor: pointer;
           padding: 0.5rem;
           transition: opacity $animation_duration $animation;
+          color: $dark-text-color;
 
           &:hover {
             opacity: 0.75;
@@ -271,6 +272,10 @@
               color: $primary-color-active;
             }
           }
+        }
+
+        svg {
+          fill: $dark-text-color !important;
         }
 
         .prev-page-button,

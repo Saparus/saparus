@@ -3,9 +3,8 @@ import { useTranslation } from "react-i18next"
 import { useQuery } from "react-query"
 
 import { Contacts } from "../other/Footer"
-import aboutImage1 from "../../assets/about_images/about1.png"
-import aboutImage2 from "../../assets/about_images/about2.png"
-import { getAboutItems } from "../../data/about"
+
+import { getAllAboutItems } from "../../services/aboutServices"
 
 import Loading from "../other/Loading"
 
@@ -17,10 +16,9 @@ const About = () => {
 
   const currentLanguage = i18n.language
 
-  const { data, isLoading, error } = useQuery({
-    queryFn: () => getAboutItems(currentLanguage),
-    queryKey: ["about", currentLanguage],
-  })
+  const { data, isLoading, error } = useQuery(["about", currentLanguage], () =>
+    getAllAboutItems(currentLanguage)
+  )
 
   useEffect(() => {
     window.scrollTo(0, 0)

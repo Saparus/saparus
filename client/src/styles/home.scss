@@ -129,12 +129,15 @@
 
   .home-page-news {
     width: 80%;
+    // max-width: 1240px;
+    // padding: 0.25rem;
     margin: 2rem auto 1rem;
     font-family: $main-font;
 
     h2 {
       font-weight: 400;
       font-size: 2.5rem;
+      color: $dark-text-color;
     }
 
     .news {
@@ -208,11 +211,13 @@
               .date {
                 font-size: 1.25rem;
                 opacity: 0.75;
+                color: $base-color;
               }
 
               .title {
                 font-weight: 500;
                 font-size: 2rem;
+                color: $base-color;
               }
             }
 
@@ -220,6 +225,7 @@
               font-size: 0.85rem;
               text-align: justify;
               word-break: keep-all;
+              color: $base-color;
             }
           }
 
@@ -278,6 +284,7 @@
             font-size: 0.85rem;
             margin-right: 0.25rem;
             margin-bottom: 0.25rem;
+            color: $dark-text-color;
 
             .title {
               font-weight: 500;
@@ -300,9 +307,16 @@
             font-size: 0.85rem;
             text-align: justify;
             word-break: keep-all;
+            color: $dark-text-color;
           }
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 1240px) {
+  .home-page-news {
+    width: calc(100% - 0.5rem) !important;
   }
 }

@@ -111,14 +111,18 @@
     color: white;
     // padding: 0.5rem;
     height: 2.5rem;
-    text-align: center;
+    text-align: start;
 
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 0.5rem;
     box-shadow: 0 1px 4px #1c1f1f13;
     // position: relative;
+
+    h3 {
+      margin-left: 2rem;
+    }
 
     &.hidden {
       opacity: 0;
@@ -356,6 +360,7 @@
           .image-input {
             position: absolute;
             visibility: hidden;
+            height: fit-content;
           }
 
           svg {
@@ -385,6 +390,27 @@
           }
         }
       }
+    }
+  }
+
+  .add-about-item {
+    cursor: pointer;
+    padding: 0.25rem;
+    // margin-top: 25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color $animation $animation_duration;
+    background-color: $accent_green;
+    width: 100%;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: $base-color;
+    font-weight: 600;
+    box-shadow: 0 1px 1px #1c1f1f07;
+    // margin-bottom: 0.5rem;
+    &:hover {
+      background-color: $accent_green_active;
     }
   }
 
@@ -450,6 +476,10 @@
   }
 
   .about-parts {
+    &:last-of-type {
+      box-shadow: none !important;
+    }
+
     .centered {
       position: relative;
 
@@ -502,6 +532,43 @@
     .image {
       position: relative;
       height: fit-content;
+
+      &:hover {
+        .image-panel {
+          opacity: 0.15;
+          border-radius: 0.5rem;
+        }
+
+        .upload-icon {
+          scale: 1.5;
+          bottom: 2rem;
+          left: 1.5rem;
+          // fill: $accent-green;
+        }
+      }
+
+      .upload-icon {
+        height: 2.5rem;
+        width: 2.5rem;
+        fill: $base-color;
+        position: absolute;
+        bottom: 1.5rem;
+        left: 1rem;
+        transition: scale $animation_duration $animation, fill $animation_duration $animation,
+          left calc($animation_duration * 1.05) $animation,
+          bottom calc($animation_duration * 1.05) $animation;
+      }
+
+      .image-panel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: $base-color;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        transition: opacity $animation_duration $animation;
+      }
 
       .image-input {
         position: absolute;

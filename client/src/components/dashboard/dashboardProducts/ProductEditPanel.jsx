@@ -286,17 +286,20 @@ const ProductEditPanel = ({ product, onSave, token }) => {
             className="button save-button"
             disabled={!isAbleToSave}
             type="submit"
-            onClick={async () => {
-              try {
-                await onSave({
-                  ...currentProduct,
-                  id: currentProduct.id,
-                  token,
-                })
-                console.log("Product saved successfully.")
-              } catch (error) {
-                console.error("Error saving the product:", error)
-              }
+            // onClick={async () => {
+            //   try {
+            //     await onSave({
+            //       ...currentProduct,
+            //       id: currentProduct.id,
+            //       token,
+            //     })
+            //     console.log("Product saved successfully.")
+            //   } catch (error) {
+            //     console.error("Error saving the product:", error)
+            //   }
+            // }}
+            onClick={() => {
+              onSave(currentProduct)
             }}
           >
             <CheckmarkIcon />
@@ -305,7 +308,7 @@ const ProductEditPanel = ({ product, onSave, token }) => {
         {currentProduct.images[currentImageIndex] ? (
           <img
             src={currentProduct.images[currentImageIndex]}
-            // alt={currentProduct.name[selectedLanguage]}
+            alt={""}
           />
         ) : (
           <div className="image-not-found-message">

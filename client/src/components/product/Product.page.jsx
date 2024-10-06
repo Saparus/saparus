@@ -3,7 +3,8 @@ import { useState, useEffect } from "react"
 import { useQuery } from "react-query"
 import { useTranslation } from "react-i18next"
 
-import { getProduct } from "../../data/products"
+// import { getProduct } from "../../data/products"
+import { getProduct } from "../../services/productServices"
 
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow.svg"
 

@@ -3,17 +3,17 @@ const express = require("express")
 const protect = require("../middleware/authMiddleware")
 
 const {
-  getAllNews,
+  getAllNewsArticles,
   getSingleNewsArticle,
-  postNews,
-  updateNews,
+  postNewsArticle,
+  editNewsArticle,
 } = require("../controllers/newsController")
 
 const router = express.Router()
 
-router.get("/get", getAllNews)
+router.get("/get", getAllNewsArticles)
 router.get("/get/:id", getSingleNewsArticle)
-router.post("/post", protect, postNews)
-router.patch("/update/:id", protect, updateNews)
+router.post("/post", protect, postNewsArticle)
+router.patch("/edit/:id", protect, editNewsArticle)
 
 module.exports = router

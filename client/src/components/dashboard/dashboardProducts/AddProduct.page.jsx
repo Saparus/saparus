@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom"
 
-import { addProduct } from "../../../services/ajax"
+import { addProduct } from "../../../services/productServices"
 
 import ProductEditPanel from "./ProductEditPanel"
 

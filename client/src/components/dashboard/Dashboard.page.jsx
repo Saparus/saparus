@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { toast } from "react-toastify"
 
 import AuthenticationPanel from "./AdminAuthenticationPanel"
 import DashboardHeader from "./DashboardHeader"
@@ -11,12 +12,25 @@ const Dashboard = () => {
   const handleSetAccountInfo = (account) => {
     setAccountInfo(account)
     localStorage.setItem("accountInfo", JSON.stringify(account))
+
+    toast.success("You've successfully logged in.")
   }
 
-  const handleLogOut = () => {
+  const handleLogOut = (showToast = true) => {
     localStorage.removeItem("accountInfo")
     setAccountInfo(null)
     setIsAuthorized(false)
+
+    if (showToast) toast.success("You've successfully logged out.")
+  }
+
+  const checkTokenExpiration = (expirationDate) => {
+    const currentTime = Date.now()
+
+    if (currentTime > expirationDate) {
+      handleLogOut(false)
+      toast.success("Your session has expired, please, log in again")
+    }
   }
 
   useEffect(() => {
@@ -27,6 +41,8 @@ const Dashboard = () => {
     const parsedAccountInfo = JSON.parse(savedAccountInfo)
 
     const currentTime = new Date().getTime()
+
+    checkTokenExpiration(accountInfo?.expirationDate)
 
     if (parsedAccountInfo.expirationDate && parsedAccountInfo.expirationDate < currentTime) {
       localStorage.removeItem("accountInfo")

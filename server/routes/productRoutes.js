@@ -4,18 +4,20 @@ const protect = require("../middleware/authMiddleware")
 
 const {
   getProducts,
-  getSingleProduct,
+  getProduct,
   getEditProduct,
+  deleteProduct,
   addProducts,
-  updateProduct,
+  editProduct,
 } = require("../controllers/productController")
 
 const router = express.Router()
 
-router.get("/get", protect, getProducts)
-router.get("/get/:id", getSingleProduct)
-router.post("/getEdit/:id", protect, getEditProduct)
+router.get("/get", getProducts)
+router.get("/get/:id", getProduct)
+router.get("/getEdit/:id", protect, getEditProduct)
+router.delete("/delete/:id", protect, deleteProduct)
 router.post("/add", protect, addProducts)
-router.patch("/update/:id", protect, updateProduct)
+router.patch("/edit/:id", protect, editProduct)
 
 module.exports = router

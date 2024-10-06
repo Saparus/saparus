@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom"
-import { useQuery } from "react-query"
+import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useTranslation } from "react-i18next"
 import { useOutletContext } from "react-router-dom"
+import { toast } from "react-toastify"
 
-import { getEditProduct } from "../../../data/products"
-import { editProduct } from "../../../services/ajax"
+// import { getEditProduct } from "../../../data/products"
+import { editProduct, getEditProduct } from "../../../services/productServices"
 
 import ProductEditPanel from "./ProductEditPanel"
 import Loading from "../../other/Loading"
@@ -20,13 +21,33 @@ const EditProductPage = () => {
     error,
   } = useQuery(["dashboard-product", id, token], () => getEditProduct(id, token))
 
+  const queryClient = useQueryClient()
+
+  const editProductMutation = useMutation({
+    mutationFn: async (product) => {
+      const { name, description, images, inStock, fixedPrice, price, id } = product
+
+      return await editProduct(name, description, images, inStock, fixedPrice, price, id, token)
+    },
+    onSuccess: () => {
+      toast.success("Changes saved successfully")
+      queryClient.invalidateQueries(["about", token]) // it will cause refetching
+    },
+    onError: (error) => {
+      console.log(error.message)
+      toast.error(
+        "Something went wrong while adding product, check browser console for more detailed explanation"
+      )
+    },
+  })
+
   if (isLoading) return <Loading />
   if (error || !product) return <div>Something went wrong</div>
 
   return (
     <ProductEditPanel
       product={product}
-      onSave={editProduct}
+      onSave={editProductMutation.mutate}
       token={token}
     />
   )

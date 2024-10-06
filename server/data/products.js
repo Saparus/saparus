@@ -1,7 +1,15 @@
-const images = require.context("../assets/product_images", true)
-const imageList = images.keys().map((image) => images(image))
+const fs = require("fs")
+const path = require("path")
 
-export const productList = [
+const imagesDirectory = path.join(__dirname, "./images/product_images")
+const imageFiles = fs.readdirSync(imagesDirectory)
+const imageList = imageFiles.map((file) => {
+  const filePath = path.join(imagesDirectory, file)
+  const imageData = fs.readFileSync(filePath).toString("base64")
+  return `data:image/jpeg;base64,${imageData}`
+})
+
+const productList = [
   {
     id: 1,
     name: {
@@ -19,7 +27,7 @@ export const productList = [
     company: "",
     type: "accessories",
     inStock: true,
-    images: [imageList[0], imageList[1], imageList[0], imageList[1], imageList[0], imageList[1]],
+    images: [imageList[3], imageList[4], imageList[3], imageList[4], imageList[3], imageList[4]],
   },
   {
     id: 2,
@@ -38,7 +46,7 @@ export const productList = [
     company: "planmeca",
     type: "equipment",
     inStock: true,
-    images: [imageList[1]],
+    images: [imageList[4]],
   },
   {
     id: 3,
@@ -48,7 +56,7 @@ export const productList = [
       ru: "название продукта 3",
     },
     fixedPrice: true,
-    price: 3202,
+    price: 3200,
     description: {
       en: "This is a product description for product 3. It provides detailed information about the product.",
       ka: "ეს არის პროდუქტის აღწერა პროდუქტის 3-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
@@ -829,12 +837,4 @@ export const productList = [
   },
 ]
 
-export const categories = (category) => {
-  try {
-    const options = [...new Set(productList.map((product) => product[category]))]
-    return options.filter((option) => option !== "")
-  } catch {
-    console.error("Error fetching categories")
-    return []
-  }
-}
+module.exports = productList

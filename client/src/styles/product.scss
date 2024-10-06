@@ -22,6 +22,7 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    color: $dark-text-color;
 
     &:hover {
       // outline: 1px solid red;
@@ -82,9 +83,14 @@
           transform: translateX(-1rem);
         }
 
-        .price {
+        .unfixed-price {
           opacity: 0;
           transform: translateX(-1.5rem);
+        }
+
+        .fixed-price {
+          // scale: 0.75;
+          transform: translateX(-0.25rem);
         }
 
         .cart {
@@ -102,9 +108,15 @@
       margin-top: auto;
       padding-top: 0.75rem;
       align-items: center;
-      color: black;
+      color: $dark-text-color;
       transition: opacity $animation_duration $animation, transform $animation_duration $animation;
       position: relative;
+
+      svg {
+        path {
+          fill: $dark-text-color !important;
+        }
+      }
 
       .cart {
         opacity: 1;
@@ -114,7 +126,9 @@
       .price {
         font-weight: 500;
         opacity: 1;
-        transition: opacity $animation_duration $animation, transform $animation_duration $animation;
+        transition: opacity $animation_duration $animation, transform $animation_duration $animation,
+          scale $animation_duration $animation;
+        color: $dark-text-color;
       }
 
       .go-to-contacts-text {

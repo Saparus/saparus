@@ -66,7 +66,7 @@ const loginAdmin = async (req, res) => {
 
   res.status(201).json({
     name: user.name,
-    token: generateToken(user._id),
+    token: generateToken(user.id),
     expirationDate: expirationDate.getTime(),
   })
 }

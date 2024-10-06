@@ -42,7 +42,8 @@ header {
       gap: 1.5rem;
 
       span {
-        color: $primary_color;
+        color: darken($primary_color, 15%);
+        // color: $dark-text-color;
         font-weight: 700;
       }
 
