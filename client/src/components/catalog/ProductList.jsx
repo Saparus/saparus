@@ -40,7 +40,7 @@ const ProductList = ({ filter, resetFilter }) => {
 
   const renderProducts = () => {
     if (isLoading) return <Loading />
-    if (error || !data?.products) return <div>Something went wrong</div>
+    if (error || !data) return <div>Something went wrong</div>
 
     const { products, pagination } = data
 

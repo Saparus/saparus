@@ -181,7 +181,7 @@ const EditAboutItem = ({
   }
 
   useEffect(() => {
-    // setCurrentItem(aboutItem)
+    setCurrentItem(structuredClone(aboutItem))
   }, [aboutItem])
 
   return (

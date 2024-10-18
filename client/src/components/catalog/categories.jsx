@@ -1,19 +1,43 @@
 import { useState } from "react"
 import { useSearchParams, Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useQuery } from "react-query"
 
 import { ReactComponent as TrashIcon } from "../../assets/icons/trash.svg"
 
-import { categories } from "../../data/products"
+import { getCategories } from "../../services/productServices"
+
+import PriceSlider from "./PriceSlider"
+import Loading from "../other/Loading"
 
 const Categories = ({ setFilter, showAddNewProductButton = false }) => {
+  const { t } = useTranslation("translation", { keyPrefix: "products" })
+
   const used_categories = ["company", "type", "price"]
   const [inputValue, setInputValue] = useState({})
+  const [defaultPriceExtremum, setDefaultPriceExtremum] = useState({})
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const { data, isLoading, error } = useQuery(["categories"], getCategories, {
+    onSuccess: (fetchedData) => {
+      const { minPrice, maxPrice } = fetchedData
+
+      if (minPrice == null || maxPrice == null || inputValue.minPrice || inputValue.maxPrice) return
+
+      setInputValue((prevState) => ({ ...prevState, minPrice, maxPrice }))
+      setDefaultPriceExtremum({ minPrice, maxPrice })
+    },
+  })
 
   const handleInputChange = (event) => {
     const { name: category, value } = event.target
     setInputValue((filter) => ({ ...filter, [category]: value }))
   }
+
+  // const handleOnSelect = (e) => {
+  //   const { name: category, value } = e.target
+  //   setInputValue((filter) => ({ ...filter, categories: { ...categories, [category]: value } }))
+  // }
 
   const handleFilter = (event) => {
     event.preventDefault()
@@ -34,6 +58,153 @@ const Categories = ({ setFilter, showAddNewProductButton = false }) => {
     scrollToTop()
   }
 
+  const renderCategories = () => {
+    if (isLoading) return <Loading />
+    if (error || !data) return <div>something went wrong</div>
+
+    const handleOnSelect = (event) => {
+      const { name, value } = event.target
+
+      if (name === "companies") {
+        setInputValue((prev) => ({
+          ...prev,
+          categories: {
+            ...prev.categories,
+            company: value === "All" ? "" : value,
+          },
+        }))
+      } else {
+        setInputValue((prev) => ({
+          ...prev,
+          categories: {
+            ...prev.categories,
+            [name]: value === "All" ? "" : value,
+          },
+        }))
+      }
+    }
+
+    const { categories, companies, minPrice, maxPrice } = data
+
+    const priceOptions = []
+    for (let i = minPrice; i <= maxPrice; i += 100) {
+      priceOptions.push(i)
+    }
+
+    const renderCategorySelect = (key, categoryArray) => {
+      const categoriesToNotTranslate = ["price", "company"]
+      return (
+        <div key={key}>
+          <select
+            id={`select-${key}`}
+            className="select category"
+            name={key}
+            value={inputValue.categories?.[key] || ""}
+            onChange={handleOnSelect}
+          >
+            <option
+              defaultValue
+              disabled
+              value=""
+            >
+              {t(key)}
+            </option>
+            <option value="All">{t("All")}</option>
+            {categoryArray.map((category, index) => (
+              <option
+                key={index}
+                value={category.name}
+              >
+                {categoriesToNotTranslate.includes(key)
+                  ? category.name + ` (${category.amount})`
+                  : t(category.name) + ` (${category.amount})`}
+              </option>
+            ))}
+          </select>
+        </div>
+      )
+    }
+
+    const renderCompanySelect = () => {
+      return (
+        <div>
+          <select
+            id="select-companies"
+            className="select category"
+            name="companies"
+            value={inputValue.categories?.company || ""}
+            onChange={handleOnSelect}
+          >
+            <option
+              defaultValue
+              disabled
+              value=""
+            >
+              {t("companies")}
+            </option>
+            <option value="All">{t("All")}</option>
+            {companies.map((company, index) => (
+              <option
+                key={index}
+                value={company.name}
+              >
+                {company.name + ` (${company.amount})`}
+              </option>
+            ))}
+          </select>
+        </div>
+      )
+    }
+
+    const renderPriceRanges = () => {
+      if (maxPrice === minPrice || maxPrice === 0) return
+
+      const handleMinPriceChange = (event) => {
+        const value = Number(event.target.value)
+        const newMinPrice = Math.min(value, inputValue.maxPrice || maxPrice)
+        const fivePercentDiff = Math.ceil((maxPrice - minPrice) * 0.1)
+
+        setInputValue((prev) => ({
+          ...prev,
+          minPrice: Math.min(newMinPrice, prev.maxPrice - fivePercentDiff),
+        }))
+      }
+
+      const handleMaxPriceChange = (event) => {
+        const value = Number(event.target.value)
+        const newMaxPrice = Math.max(value, inputValue.minPrice || minPrice)
+        const fivePercentDiff = Math.ceil((maxPrice - minPrice) * 0.1)
+
+        setInputValue((prev) => ({
+          ...prev,
+          maxPrice: Math.max(newMaxPrice, prev.minPrice + fivePercentDiff),
+        }))
+      }
+
+      return (
+        <PriceSlider
+          handleMinPriceChange={handleMinPriceChange}
+          handleMaxPriceChange={handleMaxPriceChange}
+          maxPrice={maxPrice}
+          minPrice={minPrice}
+          currentMaxPrice={inputValue.maxPrice}
+          currentMinPrice={inputValue.minPrice}
+          t={t}
+        />
+      )
+    }
+
+    return (
+      <div className="select-list">
+        {Object.entries(categories).map(([key, categoryArray]) =>
+          renderCategorySelect(key, categoryArray)
+        )}
+        {renderCompanySelect()}
+        {renderPriceRanges()}
+      </div>
+    )
+  }
+
   return (
     <form
       className="categories"
@@ -47,46 +218,23 @@ const Categories = ({ setFilter, showAddNewProductButton = false }) => {
         onChange={handleInputChange}
         placeholder="search by name"
       />
-
-      {used_categories.map((category, index) => {
-        const options = categories(category) || []
-        return (
-          <select
-            key={index}
-            className="select category"
-            name={category}
-            value={inputValue[category] || ""}
-            onChange={handleInputChange}
-          >
-            <option
-              defaultValue
-              disabled
-              value=""
-            >
-              {category}
-            </option>
-            {options.map((option, index) => (
-              <option
-                key={index}
-                value={option}
-              >
-                {option}
-              </option>
-            ))}
-          </select>
-        )
-      })}
+      {renderCategories()}
 
       <div className="utils">
         <button
           className="button search-button "
           type="submit"
         >
-          Search
+          {t("Search")}
         </button>
         <button
           className="button trash-button "
-          onClick={() => setInputValue({})}
+          onClick={() =>
+            setInputValue((prevState) => ({
+              minPrice: defaultPriceExtremum.minPrice,
+              maxPrice: defaultPriceExtremum.maxPrice,
+            }))
+          }
         >
           <TrashIcon />
         </button>
@@ -98,7 +246,7 @@ const Categories = ({ setFilter, showAddNewProductButton = false }) => {
             className="button"
             to="../../admin/products/add"
           >
-            Add New Product
+            {t("Add New Product")}
           </Link>
         </div>
       ) : (

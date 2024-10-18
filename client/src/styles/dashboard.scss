@@ -3,6 +3,22 @@
   // margin: 2rem auto 1rem;
   position: relative;
 
+  .add-new-article-button {
+    background-color: $primary-color;
+    color: $base-color;
+    display: block;
+    width: fit-content;
+    align-items: center;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin: 1.25rem auto -1.25rem auto;
+    transition: background-color $animation_duration $animation;
+
+    &:hover {
+      background-color: $primary-color-active;
+    }
+  }
+
   .admin-auth {
     animation: appear 500ms $animation forwards;
     position: absolute;
@@ -122,6 +138,7 @@
 
     h3 {
       margin-left: 2rem;
+      opacity: 0.75;
     }
 
     &.hidden {
@@ -267,6 +284,49 @@
       margin-right: 0.25rem;
     }
 
+    .category-list {
+      .category-item {
+        display: flex;
+        gap: 0.5rem;
+
+        .category-item-text {
+          display: flex;
+          gap: 0.25rem;
+
+          .category-type-key {
+            opacity: 0.75;
+          }
+        }
+
+        &:hover {
+          button {
+            display: flex;
+          }
+        }
+
+        button {
+          // display: none;
+          display: flex;
+          gap: 0.5rem;
+          margin-right: -0.25rem;
+          // padding: 0 0.25rem;
+          cursor: pointer;
+
+          svg {
+            fill: $warning-red;
+            height: 1.25rem;
+            width: 1.25rem;
+          }
+
+          &:hover {
+            svg {
+              fill: $warning-red-active;
+            }
+          }
+        }
+      }
+    }
+
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -285,6 +345,7 @@
     .product-description {
       display: flex;
       min-height: 7.5rem;
+      padding-right: 0.25rem;
     }
 
     .product-image-wrapper {
@@ -330,6 +391,14 @@
           &.trash-button {
             &:hover {
               background-color: $warning-red-active !important;
+            }
+          }
+
+          &.reset-button {
+            background-color: $primary-color;
+
+            &:hover {
+              background-color: $primary-color-active !important;
             }
           }
 
@@ -540,8 +609,8 @@
         }
 
         .upload-icon {
-          scale: 1.5;
-          bottom: 2rem;
+          scale: 1.15;
+          bottom: 1.5rem;
           left: 1.5rem;
           // fill: $accent-green;
         }
@@ -642,6 +711,242 @@
           cursor: pointer;
           box-shadow: 0 6px 10px #72808533;
         }
+      }
+    }
+  }
+
+  .edit-news-article-page {
+    width: 100%;
+    padding: 0 0.25rem;
+
+    .delete-button {
+    }
+
+    .edit-article {
+      min-height: 50vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-upload {
+      position: relative;
+      width: 10rem;
+      height: 2.5rem;
+      cursor: pointer;
+      margin-top: auto;
+
+      &:hover {
+        .upload-image-text {
+          background-color: $primary-color-active;
+        }
+      }
+
+      .upload-image-text {
+        background-color: $primary-color;
+        width: fit-content;
+        // padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        color: $base-color;
+        width: 10rem;
+        height: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color $animation $animation_duration;
+      }
+      .image-input {
+        // opacity: 0;
+        width: 10rem;
+        height: 2.5rem;
+        position: absolute;
+        outline: 1px solid red;
+        top: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+    }
+
+    .field-button {
+      text-align: start;
+      cursor: pointer;
+      transition: opacity $animation_duration $animation;
+    }
+
+    .article-title,
+    .article-text {
+      // padding: 0 0.25rem;
+      // margin-left: -0.25rem;
+      // margin-right: -0.25rem;
+      resize: none;
+    }
+
+    .article-title {
+      padding: 0 0.25rem;
+    }
+
+    .article-text {
+      min-height: 3rem;
+      position: relative;
+      padding: 0.25rem 0.25rem;
+
+      .placeholder-text {
+        position: absolute;
+        top: 0.5rem;
+      }
+    }
+
+    .date {
+      white-space: nowrap;
+      margin-left: 1rem;
+    }
+
+    .article-title {
+      font-size: 1.5rem;
+      width: 100%;
+
+      h1 {
+        font-size: 1rem;
+      }
+    }
+
+    textarea.article-text {
+      overflow: visible !important;
+      height: 8rem;
+
+      // .article-text-content {
+      //   overflow: visible !important;
+      // }
+    }
+
+    .article-buttons {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+
+      .language-select {
+        margin-right: auto;
+        display: flex;
+        gap: 0.5rem;
+        // position: absolute;
+        // bottom: -2.5rem;
+        z-index: 1000;
+
+        button {
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.25rem;
+          font-size: 0.75rem;
+          background-color: white;
+          box-shadow: 0 6px 10px #afc2c733;
+          transition: opacity $animation_duration $animation,
+            box-shadow $animation_duration $animation,
+            background-color $animation_duration $animation, color $animation_duration $animation;
+          font-weight: 600;
+
+          &.language-selected {
+            background-color: $primary-color;
+            color: $text-color;
+          }
+
+          &:hover {
+            opacity: 0.85;
+            cursor: pointer;
+            box-shadow: 0 6px 10px #72808533;
+          }
+        }
+      }
+
+      .confirm-button,
+      .delete-button {
+        cursor: pointer;
+        padding: 0.5rem;
+        background-color: $warning-red;
+        border-radius: 0.5rem;
+        display: flex;
+        // margin-left: auto;
+        transition: background-color $animation_duration $animation;
+
+        &:hover {
+          background-color: $warning-red-active;
+        }
+
+        svg {
+          height: 1.5rem;
+          width: 1.5rem;
+
+          path {
+            fill: $base-color;
+          }
+        }
+      }
+
+      .confirm-button {
+        background-color: $success_green;
+
+        &:hover {
+          background-color: $success_green_active;
+        }
+      }
+    }
+
+    .news-images {
+      .image {
+        position: relative;
+        width: fit-content;
+
+        img {
+          max-width: 800px;
+        }
+
+        .delete-button {
+          position: absolute;
+          // top: 0.5rem;
+          top: 0;
+          right: -3.25rem;
+          cursor: pointer;
+          padding: 0.5rem;
+          background-color: $warning-red;
+          border-radius: 0.5rem;
+          display: flex;
+          transition: background-color $animation_duration $animation;
+
+          &:hover {
+            background-color: $warning-red-active;
+
+            svg {
+              path {
+                // fill: $warning-red-active;
+              }
+            }
+          }
+
+          svg {
+            height: 1.5rem;
+            width: 1.5rem;
+
+            path {
+              fill: $base-color;
+            }
+          }
+        }
+      }
+    }
+
+    .article-text {
+      padding-top: 0.5rem;
+      font-size: 1rem;
+      text-align: justify;
+      word-break: keep-all;
+      overflow-x: hidden !important;
+      width: 100%;
+      height: auto;
+      // height: 12rem;
+      // max-height: 12rem;
+      // overflow-y: auto;
+
+      .article-text-content {
+        // overflow-y: auto;
       }
     }
   }

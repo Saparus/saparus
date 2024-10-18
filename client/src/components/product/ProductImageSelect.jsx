@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow.svg"
 
@@ -8,6 +9,8 @@ const ProductImageSelect = ({
   currentIndex,
   maxSimultaneousImages = 4,
 }) => {
+  const { t } = useTranslation("translation", { keyPrefix: "products" })
+
   const [slideIndex, setSlideIndex] = useState(0)
 
   const handlePrev = () => {
@@ -61,7 +64,7 @@ const ProductImageSelect = ({
             alt=" "
           />
         ) : (
-          <div className="image-not-found-message-small">Image not found</div>
+          <div className="image-not-found-message-small">{t("Image not found")}</div>
         )}
       </button>
     ))

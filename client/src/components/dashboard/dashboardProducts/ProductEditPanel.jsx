@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
+import { ReactComponent as ResetIcon } from "../../../assets/icons/spinning-arrow.svg"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as UploadIcon } from "../../../assets/icons/upload.svg"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
@@ -10,30 +11,8 @@ import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 
 import ProductImageSelect from "../../product/ProductImageSelect"
 import ConfirmDeletionModal from "../ConfirmDeletionModal"
-
-const emptyProductData = {
-  id: null,
-  name: {
-    en: "",
-    ka: "",
-    ru: "",
-  },
-  description: {
-    en: "",
-    ka: "",
-    ru: "",
-  },
-  inStock: false,
-  price: 0,
-  fixedPrice: false,
-  images: [],
-}
-
-const languages = [
-  { code: "en", name: "English" },
-  { code: "ka", name: "Georgian" },
-  { code: "ru", name: "Russian" },
-]
+import LanguageSelect from "../LanguageSelect"
+import EditCategoryList from "./EditCategoryList"
 
 const ProductEditPanel = ({ product, onSave, token }) => {
   const { i18n } = useTranslation()
@@ -48,6 +27,7 @@ const ProductEditPanel = ({ product, onSave, token }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isUploadPanelVisible, setIsUploadPanelVisible] = useState(false)
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
+  const [newCategory, setNewCategory] = useState({ key: "", value: "" })
   const [isAbleToSave, setIsAbleToSave] = useState(false)
   const [activeFields, setActiveFields] = useState({
     name: false,
@@ -56,6 +36,7 @@ const ProductEditPanel = ({ product, onSave, token }) => {
     price: false,
     fixedPrice: false,
     images: false,
+    categories: false,
   })
 
   const handleSelectImage = (imageIndex) => {
@@ -73,13 +54,6 @@ const ProductEditPanel = ({ product, onSave, token }) => {
       prevState - 1 < 0 ? currentProduct.images.length - 1 : prevState - 1
     )
   }
-
-  // const handleAddEmptyImage = () => {
-  //   setCurrentProduct((prevState) => ({
-  //     ...prevState,
-  //     images: [...prevState.images, ""],
-  //   }))
-  // }
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
@@ -108,6 +82,10 @@ const ProductEditPanel = ({ product, onSave, token }) => {
 
   const handleFieldEditFinish = (field) => {
     setActiveFields((prevState) => ({ ...prevState, [field]: false }))
+  }
+
+  const handleReset = () => {
+    setCurrentProduct(structuredClone(product))
   }
 
   const handleInputChange = (e) => {
@@ -203,6 +181,7 @@ const ProductEditPanel = ({ product, onSave, token }) => {
   }
 
   useEffect(() => {
+    // fix latter, don't forget
     const hasProductChanged = () => {
       if (
         currentProduct.name.en === "" ||
@@ -216,6 +195,7 @@ const ProductEditPanel = ({ product, onSave, token }) => {
       }
 
       return (
+        JSON.stringify(product.categories) !== JSON.stringify(currentProduct.categories) ||
         product.name.en !== currentProduct.name.en ||
         product.name.ka !== currentProduct.name.ka ||
         product.name.ru !== currentProduct.name.ru ||
@@ -283,21 +263,15 @@ const ProductEditPanel = ({ product, onSave, token }) => {
             <TrashIcon />
           </button>
           <button
+            className="button reset-button"
+            onClick={handleReset}
+          >
+            <ResetIcon />
+          </button>
+          <button
             className="button save-button"
             disabled={!isAbleToSave}
             type="submit"
-            // onClick={async () => {
-            //   try {
-            //     await onSave({
-            //       ...currentProduct,
-            //       id: currentProduct.id,
-            //       token,
-            //     })
-            //     console.log("Product saved successfully.")
-            //   } catch (error) {
-            //     console.error("Error saving the product:", error)
-            //   }
-            // }}
             onClick={() => {
               onSave(currentProduct)
             }}
@@ -457,6 +431,24 @@ const ProductEditPanel = ({ product, onSave, token }) => {
       )
     }
 
+    const renderCategories = () => {
+      const { categories } = currentProduct
+
+      const categoryArray = Object.entries(categories).map(([key, value]) => ({ key, value }))
+
+      return (
+        <EditCategoryList
+          categories={categoryArray}
+          isActive={activeFields.categories}
+          newCategory={newCategory}
+          setNewCategory={setNewCategory}
+          setCurrentProduct={setCurrentProduct}
+          handleFieldEditStart={handleFieldEditStart}
+          handleFieldEditFinish={handleFieldEditFinish}
+        />
+      )
+    }
+
     const renderImageList = () => {
       return (
         currentProduct?.images?.length > 1 && (
@@ -469,30 +461,18 @@ const ProductEditPanel = ({ product, onSave, token }) => {
       )
     }
 
-    const renderLanguageSelect = () => {
-      return (
-        <div className="language-select">
-          {languages.map((language) => (
-            <button
-              key={language.code}
-              className={`${selectedLanguage === language.code ? "language-selected" : ""}`}
-              onClick={() => {
-                setSelectedLanguage(language.code)
-              }}
-            >
-              {language.name}
-            </button>
-          ))}
-        </div>
-      )
-    }
+    //
 
     return (
       <div className="product-information">
-        {renderLanguageSelect()}
+        <LanguageSelect
+          selectedLanguage={selectedLanguage}
+          setSelectedLanguage={setSelectedLanguage}
+        />
         {renderName()}
         {renderShortInformation()}
         {renderDescription()}
+        {renderCategories()}
         {renderImageList()}
       </div>
     )

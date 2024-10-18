@@ -13,9 +13,6 @@ import { ReactComponent as LogoIcon } from "../../assets/logo_white.svg"
 import { ReactComponent as CatalogIcon } from "../../assets/icons/catalog.svg"
 import { ReactComponent as Child } from "../../assets/icons/child.svg"
 
-import { getAllNews } from "../../data/news"
-import formatDate from "../../utils/formatDate"
-
 const Home = () => {
   const { t } = useTranslation("translation", { keyPrefix: "home" })
 

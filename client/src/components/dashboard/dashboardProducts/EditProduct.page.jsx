@@ -25,13 +25,24 @@ const EditProductPage = () => {
 
   const editProductMutation = useMutation({
     mutationFn: async (product) => {
-      const { name, description, images, inStock, fixedPrice, price, id } = product
+      const { name, description, company, type, images, inStock, fixedPrice, price, id } = product
 
-      return await editProduct(name, description, images, inStock, fixedPrice, price, id, token)
+      return await editProduct(
+        name,
+        description,
+        company,
+        type,
+        images,
+        inStock,
+        fixedPrice,
+        price,
+        id,
+        token
+      )
     },
     onSuccess: () => {
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["about", token]) // it will cause refetching
+      queryClient.invalidateQueries(["products", token]) // this will cause refetching
     },
     onError: (error) => {
       console.log(error.message)

@@ -8,7 +8,7 @@
       to bottom,
       $primary-color 0%,
       lighten($secondary-color, 20%) 50%,
-      lighten($secondary-color, 7.5%) 100%
+      lighten($secondary-color, 15%) 100%
     );
     position: relative;
     box-shadow: 0 1px 4px #1c1f1f13;
@@ -135,15 +135,16 @@
     font-family: $main-font;
 
     h2 {
-      font-weight: 400;
-      font-size: 2.5rem;
+      font-weight: 500;
+      font-size: 2rem;
       color: $dark-text-color;
     }
 
     .news {
       display: flex;
       margin-bottom: 6rem;
-      gap: 2rem;
+      height: 550px;
+      gap: 1.25rem;
       position: relative;
 
       .view-more-news-link {
@@ -165,9 +166,6 @@
         position: relative;
         flex: 3;
         display: block;
-        // height: fit-content;
-        // max-height: 580px;
-        // max-width: 770px;
         transition: filter $animation_duration $animation;
 
         &:hover {
@@ -212,12 +210,14 @@
                 font-size: 1.25rem;
                 opacity: 0.75;
                 color: $base-color;
+                white-space: nowrap;
               }
 
               .title {
                 font-weight: 500;
                 font-size: 2rem;
                 color: $base-color;
+                white-space: nowrap;
               }
             }
 
@@ -261,11 +261,11 @@
         .news-item {
           color: black;
           border-bottom: 2px solid $primary-color;
-          padding: 0.5rem 0;
+          padding: 0.25rem 0;
           transition: opacity $animation_duration $animation;
 
           &:hover {
-            opacity: 0.85;
+            opacity: 0.75;
           }
 
           &:first-of-type {
@@ -282,15 +282,16 @@
             justify-content: space-between;
             align-items: end;
             font-size: 0.85rem;
-            margin-right: 0.25rem;
-            margin-bottom: 0.25rem;
+            // margin-right: 0.25rem;
+            // margin-bottom: 0.25rem;
+            margin-top: 0.5rem;
             color: $dark-text-color;
 
             .title {
               font-weight: 500;
-              font-size: 1.5rem;
-              overflow: hidden;
-              text-overflow: ellipsis;
+              font-size: 1.25rem;
+              // overflow: hidden;
+              // text-overflow: ellipsis;
               white-space: nowrap;
               margin-right: 1.5rem;
               max-width: 20rem;
@@ -305,6 +306,7 @@
           .description {
             font-weight: 400;
             font-size: 0.85rem;
+            margin-bottom: 0.25rem;
             text-align: justify;
             word-break: keep-all;
             color: $dark-text-color;

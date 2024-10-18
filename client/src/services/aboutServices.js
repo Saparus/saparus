@@ -19,9 +19,6 @@ export const getAllEditAboutItems = async (token) => {
 }
 
 export const editAllAboutItems = async (aboutItems, token) => {
-  // const dataSize = new TextEncoder().encode(JSON.stringify(aboutItems)).length
-  // console.log(`Data size: ${dataSize} bytes`)
-
   const response = await ajax.patch(
     `/about/edit`,
     { aboutItems },

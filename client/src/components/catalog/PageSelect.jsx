@@ -35,6 +35,10 @@ const PageSelect = ({ currentPage, totalPages, maximumPages, goToPage }) => {
     setPageNumbers(newPageNumbers)
   }, [currentPage, totalPages, maximumPages])
 
+  if (totalPages === 1) {
+    return ""
+  }
+
   return (
     <>
       <div className="page-select-placeholder"></div>

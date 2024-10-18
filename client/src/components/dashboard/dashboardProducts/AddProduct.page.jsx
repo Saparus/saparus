@@ -1,4 +1,6 @@
 import { useOutletContext } from "react-router-dom"
+import { useMutation, useQueryClient } from "react-query"
+import { toast } from "react-toastify"
 
 import { addProduct } from "../../../services/productServices"
 
@@ -16,6 +18,7 @@ const emptyProductData = {
     ka: "",
     ru: "",
   },
+  categories: {},
   inStock: false,
   price: 0,
   fixedPrice: false,
@@ -25,10 +28,41 @@ const emptyProductData = {
 const AddProductPage = () => {
   const { token } = useOutletContext()
 
+  const queryClient = useQueryClient()
+
+  const addProductMutation = useMutation({
+    mutationFn: async (product) => {
+      const { name, description, company, type, images, inStock, fixedPrice, price, id } = product
+
+      return await addProduct(
+        name,
+        description,
+        company,
+        type,
+        images,
+        inStock,
+        fixedPrice,
+        price,
+        id,
+        token
+      )
+    },
+    onSuccess: () => {
+      toast.success("Changes saved successfully")
+      queryClient.invalidateQueries(["products", token]) // this will cause refetching
+    },
+    onError: (error) => {
+      console.log(error.message)
+      toast.error(
+        "Something went wrong while adding product, check browser console for more detailed explanation"
+      )
+    },
+  })
+
   return (
     <ProductEditPanel
       product={emptyProductData}
-      onSave={addProduct}
+      onSave={addProductMutation.mutate}
       token={token}
     />
   )

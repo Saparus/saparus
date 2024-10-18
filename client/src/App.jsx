@@ -7,9 +7,13 @@ import Footer from "./components/other/Footer"
 import CatalogPage from "./components/catalog/catalog"
 import AboutPage from "./components/about/About.page"
 import HomePage from "./components/home/Home.page"
+import NewsPage from "./components/news/News.page"
+import NewsArticlePage from "./components/news/NewsArticle.page"
 import ProductPage from "./components/product/Product.page"
 import DashboardPage from "./components/dashboard/Dashboard.page"
 import DashboardNews from "./components/dashboard/dashboardNews/DashboardNews.page"
+import AddNewsArticlePage from "./components/dashboard/dashboardNews/AddNewsArticle.page"
+import EditNewsArticlePage from "./components/dashboard/dashboardNews/EditNewsArticle.page"
 import DashboardProductListPage from "./components/dashboard/dashboardProducts/DashboardProductList.page"
 import EditProductPage from "./components/dashboard/dashboardProducts/EditProduct.page"
 import AddProductPage from "./components/dashboard/dashboardProducts/AddProduct.page"
@@ -39,6 +43,15 @@ const App = () => {
           element={<ProductPage />}
         />
         <Route
+          path="/news"
+          element={<NewsPage />}
+        />
+        <Route
+          path="/news/:id"
+          element={<NewsArticlePage />}
+        />
+
+        <Route
           path="admin"
           element={<DashboardPage />}
         >
@@ -53,6 +66,14 @@ const App = () => {
           <Route
             path="news"
             element={<DashboardNews />}
+          />
+          <Route
+            path="news/add"
+            element={<AddNewsArticlePage />}
+          />
+          <Route
+            path="news/:id"
+            element={<EditNewsArticlePage />}
           />
           <Route
             path="products/edit/:id"

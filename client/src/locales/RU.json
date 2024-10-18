@@ -1,29 +1,21 @@
 {
+  "other": {
+    "Loading...": "Loading...",
+    "Georgia, Tbilisi, Navtlughi St. 2": "Georgia, Tbilisi, Navtlughi St. 2",
+    "Page Not Found": "Page Not Found"
+  },
+
   "header": {
     "Contact Us": "Contact Us",
     "Home": "Home",
     "About": "About",
-    "Catalog": "Catalog"
+    "Catalog": "Catalog",
+    "Dental instruments & Equipment": "Dental instruments & Equipment",
+    "Georgia, Tbilisi, Navtlughi St. 2": "Georgia, Tbilisi, Navtlughi St. 2"
   },
 
   "footer": {
     "© 2024 Ltd. Saparus. All Rights Reserved": "© 2024 Ltd. Saparus. All Rights Reserved"
-  },
-
-  "time": {
-    "just now": "только что",
-    "minute": "{{count}} минуту",
-    "minutes": "{{count}} минут",
-    "hour": "{{count}} час",
-    "hours": "{{count}} часов",
-    "day": "{{count}} день",
-    "days": "{{count}} дней",
-    "month": "{{count}} месяц",
-    "months": "{{count}} месяцев",
-    "year": "{{count}} год",
-    "years": "{{count}} лет",
-    "ago": "назад",
-    "and": "и"
   },
 
   "about us": {
@@ -35,6 +27,21 @@
   "products": {
     "English": "English",
     "Georgian": "Georgian",
-    "Russian": "Russian"
+    "Russian": "Russian",
+    "Contact for Purchase": "Contact for Purchase",
+    "Contact for Pricing": "Contact for Pricing,",
+    "Price on Request": "Price on Request",
+    "Image not found": "Image not found",
+    "• in stock": "• in stock",
+    "• out of stock": "• out of stock",
+    "company": "company",
+    "type": "type",
+    "accessories": "accessories",
+    "equipment": "equipment",
+    "software": "software",
+    "consumables": "consumables",
+    "search by name": "search by name",
+    "price": "price",
+    "Search": "Search"
   }
 }

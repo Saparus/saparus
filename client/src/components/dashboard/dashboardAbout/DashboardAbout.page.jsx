@@ -10,14 +10,9 @@ import { getAllEditAboutItems, editAllAboutItems } from "../../../services/about
 
 import Loading from "../../other/Loading"
 import EditAboutItem from "./EditAboutItem"
+import LanguageSelect from "../LanguageSelect"
 
 import Map from "../../other/Map"
-
-const languages = [
-  { code: "en", name: "English" },
-  { code: "ka", name: "Georgian" },
-  { code: "ru", name: "Russian" },
-]
 
 const DashboardAboutPage = () => {
   const { token } = useOutletContext()
@@ -162,6 +157,8 @@ const DashboardAboutPage = () => {
   }
 
   const handleDiscard = () => {
+    console.log(data[0].image)
+
     setAboutItemList(structuredClone(data))
     handleUnchange()
   }
@@ -173,24 +170,6 @@ const DashboardAboutPage = () => {
   useEffect(() => {
     setSelectedLanguage(currentLanguage)
   }, [currentLanguage])
-
-  const renderLanguageSelect = () => {
-    return (
-      <div className="language-select">
-        {languages.map((language) => (
-          <button
-            key={language.code}
-            className={`${selectedLanguage === language.code ? "language-selected" : ""}`}
-            onClick={() => {
-              setSelectedLanguage(language.code)
-            }}
-          >
-            {language.name}
-          </button>
-        ))}
-      </div>
-    )
-  }
 
   const renderContent = () => {
     if (isLoading) return <Loading />
@@ -247,7 +226,10 @@ const DashboardAboutPage = () => {
     <div className="about_us page">
       <div className="parts first">
         <div className="centered">
-          {renderLanguageSelect()}
+          <LanguageSelect
+            selectedLanguage={selectedLanguage}
+            setSelectedLanguage={setSelectedLanguage}
+          />
           <Map />
           <Contacts />
         </div>

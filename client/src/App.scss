@@ -7,6 +7,7 @@
 @import "./styles/page_not_found.scss";
 @import "./styles/product_page.scss";
 @import "./styles/dashboard.scss";
+@import "./styles/news.scss";
 
 .app {
   display: flex;
@@ -39,6 +40,13 @@
 
 .Toastify__progress-bar {
   // background: #348ae1 !important;
+}
+
+.icon {
+  height: 1.25rem;
+  width: 1.25rem;
+  fill: $text-color;
+  transition: fill $animation_duration $animation;
 }
 
 .truncate {
@@ -205,4 +213,152 @@
 
 .prev-arrow {
   rotate: 180deg;
+}
+
+.page-select-placeholder {
+  height: 4rem;
+}
+
+.page-select {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  justify-content: space-between;
+
+  display: flex;
+  // width: 12rem;
+  margin: auto 0;
+  gap: 0.25rem;
+
+  .page-number-button {
+    font-family: $main-font;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: opacity $animation_duration $animation;
+    color: $dark-text-color;
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    &.active {
+      color: $primary-color;
+      // text-decoration: underline;
+
+      &:hover {
+        color: $primary-color-active;
+      }
+    }
+  }
+
+  svg {
+    fill: $dark-text-color !important;
+  }
+
+  .prev-page-button,
+  .first-page-button {
+    svg {
+      rotate: 180deg;
+    }
+  }
+
+  .first-page-button,
+  .last-page-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      svg {
+        opacity: 0.75;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.15 !important;
+      // background-color: $primary-color !important;
+      &:hover {
+        opacity: 0.15 !important;
+        // background-color: $primary-color !important;
+      }
+
+      svg {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .first-page-button {
+    svg:first-of-type {
+      position: relative;
+      left: 1rem;
+    }
+  }
+
+  .last-page-button {
+    svg:last-of-type {
+      position: relative;
+      left: -1rem;
+    }
+  }
+
+  .next-page-button,
+  .prev-page-button {
+    font-weight: 500;
+    font-family: $main-font;
+    background-color: transparent !important;
+    color: $text-color;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: opacity $animation_duration $animation;
+    width: 6rem;
+    height: 2.25rem;
+    width: 2.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    &:disabled {
+      opacity: 0.15 !important;
+      // background-color: $primary-color !important;
+      &:hover {
+        opacity: 0.15 !important;
+        // background-color: $primary-color !important;
+      }
+
+      svg {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    // &:hover {
+    //   background-color: $primary-color-active;
+    // }
+  }
+
+  .next-page-button {
+    // margin-right: 0.75rem;
+  }
+  .prev-page-button {
+    // margin-left: 0.75rem;
+  }
 }

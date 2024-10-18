@@ -30,39 +30,14 @@ const getAllEditAboutItems = async (req, res) => {
 }
 
 // PROTECTED
-const postAboutItem = async (req, res) => {
-  const { language } = req.body
-  const { id } = req.params
-
-  res.status(201).json({ message: "post About item" })
-}
-
-// PROTECTED
 const editAllAboutItems = async (req, res) => {
   const { aboutItems } = req.body
 
   res.status(201).json({ message: "edit All About items" })
 }
 
-// PROTECTED
-const editAboutItem = async (req, res) => {
-  const { id } = req.params
-
-  res.status(201).json({ message: "edit About item" })
-}
-
-// PROTECTED
-const deleteAboutItem = async (req, res) => {
-  const { id, name, images, inStock, fixedPrice, price } = req.body
-
-  res.status(201).json({ message: "delete About item" })
-}
-
 module.exports = {
   getAllAboutItems,
   getAllEditAboutItems,
-  postAboutItem,
   editAllAboutItems,
-  editAboutItem,
-  deleteAboutItem,
 }

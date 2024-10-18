@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom"
 
 import ProductList from "./ProductList"
 import Categories from "../../catalog/categories"
+import Companies from "../../catalog/companies"
 
 const DashboardProductListPage = () => {
   const [filter, setFilter] = useState({})
@@ -10,20 +11,26 @@ const DashboardProductListPage = () => {
   const { token } = useOutletContext()
 
   return (
-    <div className="dashboard-products">
-      <Categories
+    <>
+      <Companies
         setFilter={setFilter}
-        showAddNewProductButton={true}
+        selectedCompany={filter.company}
       />
-      <ProductList
-        filter={filter}
-        token={token}
-        resetFilter={(event) => {
-          event.preventDefault()
-          setFilter({})
-        }}
-      />
-    </div>
+      <div className="dashboard-products">
+        <Categories
+          setFilter={setFilter}
+          showAddNewProductButton={true}
+        />
+        <ProductList
+          filter={filter}
+          token={token}
+          resetFilter={(event) => {
+            event.preventDefault()
+            setFilter({})
+          }}
+        />
+      </div>
+    </>
   )
 }
 

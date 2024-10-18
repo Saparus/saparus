@@ -84,7 +84,7 @@
     .product-image-select-wrapper {
       // max-width: 80%;
       overflow: visible;
-      margin-top: auto;
+      margin-top: 0.75rem;
       margin-right: 1.5rem;
 
       .product-image-select {
@@ -119,7 +119,9 @@
             box-shadow: 0 6px 10px #afc2c733;
             // width: calc(9.5rem + 6px);
             // min-height: calc(6.5rem + 4px);
-            object-fit: cover;
+            object-fit: contain;
+            aspect-ratio: 4/3;
+            background-color: white;
             transition: opacity $animation_duration $animation,
               box-shadow $animation_duration $animation, border 100ms $animation;
           }
@@ -168,6 +170,22 @@
         // height: auto;
         position: relative;
 
+        img {
+          // min-height: 31.25rem;
+
+          min-height: 31.25rem;
+          min-width: 41.625rem;
+          max-height: 31.25rem;
+          max-width: 41.625rem;
+          object-fit: contain;
+
+          border-radius: 0.5rem;
+          margin: 0 auto;
+          display: block;
+
+          aspect-ratio: 4 / 3;
+        }
+
         // min-height: 31.25rem;
         // min-width: 41.625rem;
         // max-height: 31.25rem;
@@ -214,22 +232,6 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
-        }
-
-        img {
-          // min-height: 31.25rem;
-
-          min-height: 31.25rem;
-          min-width: 41.625rem;
-          max-height: 31.25rem;
-          max-width: 41.625rem;
-          object-fit: cover;
-
-          border-radius: 0.5rem;
-          margin: 0 auto;
-          display: block;
-
-          aspect-ratio: 4 / 3;
         }
       }
     }
@@ -396,12 +398,121 @@
         text-align: justify;
         word-break: keep-all;
         overflow-x: hidden !important;
-        height: 12rem;
-        max-height: 12rem;
+        height: 15rem;
+        max-height: 15rem;
         overflow-y: auto;
 
         .product-description-content {
           overflow-y: auto;
+        }
+      }
+
+      .category-list {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: auto;
+        flex-wrap: wrap;
+
+        .add-category-button {
+          padding: 0.25rem;
+          background-color: $accent_green;
+          color: $base-color;
+          border-radius: 0.5rem;
+          box-shadow: 0 6px 10px #afc2c733;
+          cursor: pointer;
+          display: flex;
+          transition: background-color $animation_duration $animation;
+
+          &:hover {
+            box-shadow: 0 6px 10px #72808533;
+            background-color: $accent-green-active;
+          }
+        }
+
+        .new-category-input {
+          display: flex;
+          gap: 0.5rem;
+
+          input {
+            background-color: $accent-green;
+            border-radius: 0.5rem;
+            color: $base-color;
+            padding: 0.25rem 0.75rem;
+            box-shadow: 0 6px 10px #afc2c733;
+            outline: none;
+            width: 9rem;
+            transition: background-color $animation_duration $animation,
+              box-shadow $animation_duration $animation;
+
+            &.category-key {
+              width: 5rem;
+              border-radius: 0.5rem 0 0 0.5rem;
+              margin-right: -0.25rem;
+              font-size: 0.85rem;
+            }
+
+            &.category-value {
+              width: 9rem;
+              border-radius: 0 0.5rem 0.5rem 0;
+              font-size: 0.85rem;
+            }
+
+            &::placeholder {
+              color: rgb(206, 243, 240);
+            }
+
+            &:focus {
+              outline: 2px solid $primary-color;
+            }
+
+            &:focus,
+            &:hover {
+              box-shadow: 0 6px 10px #72808533;
+              background-color: $accent-green-active;
+            }
+          }
+
+          .add-button,
+          .discard-button {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            background-color: $primary-color;
+            box-shadow: 0 6px 10px #afc2c733;
+            color: $base-color;
+            border-radius: 0.5rem;
+            transition: background-color $animation_duration $animation,
+              box-shadow $animation_duration $animation;
+            cursor: pointer;
+
+            &:hover {
+              background-color: $primary_color_active;
+              box-shadow: 0 6px 10px #72808533;
+            }
+          }
+
+          .discard-button {
+            background-color: $warning_red;
+
+            &:hover {
+              background-color: $warning_red_active;
+            }
+          }
+        }
+
+        .category-item {
+          padding: 0.25rem 0.75rem;
+          background-color: $accent_green;
+          color: $base-color;
+          border-radius: 0.5rem;
+          box-shadow: 0 6px 10px #afc2c733;
+          font-size: 0.85rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: default;
+
+          &.category-company {
+          }
         }
       }
     }

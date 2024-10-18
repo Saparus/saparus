@@ -28,6 +28,7 @@ root.render(
           draggable
           pauseOnHover
           limit={3}
+          style={{ width: "400px" }}
         />
       </Router>
     </QueryClientProvider>

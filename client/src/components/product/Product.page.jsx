@@ -10,8 +10,11 @@ import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow.svg"
 
 import ProductImageSelect from "./ProductImageSelect"
 import Loading from "../other/Loading"
+import CategoryList from "./CategoryList"
 
 const Product = () => {
+  const { t } = useTranslation("translation", { keyPrefix: "products" })
+
   const { id } = useParams()
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
@@ -73,52 +76,32 @@ const Product = () => {
               alt={product.name}
             />
           ) : (
-            <div className="image-not-found-message">Image not found</div>
+            <div className="image-not-found-message">{t("Image not found")}</div>
           )}
-          {/* <div className="product-order">
-            <div className="price">{product.price}</div>
-            <Link
-              className="contact"
-              to="../about"
-            >
-              contact
-            </Link>
-          </div> */}
         </div>
-        {/* {product.images.length > 1 ? (
-          <ProductImageSelect
-            images={product.images}
-            handleSelectImage={handleSelectImage}
-            currentIndex={currentImageIndex}
-          />
-        ) : (
-          ""
-        )} */}
       </div>
     )
   }
 
   const renderProductInformation = () => {
+    const { id, name, description, images, inStock, fixedPrice, price, categories } = product
+
     return (
       <div className="product-information">
-        <p className="product-name">{product.name}</p>
+        <p className="product-name">{name}</p>
         <div className="product-short-information">
-          <p
-            className={`product-status ${
-              product.inStock ? "product-in-stock" : "product-not-in-stock"
-            }`}
-          >
-            {product.inStock ? "• in stock" : "• out of stock"}
+          <p className={`product-status ${inStock ? "product-in-stock" : "product-not-in-stock"}`}>
+            {inStock ? t("• in stock") : t("• out of stock")}
           </p>
           <p className="product-price">
-            {product.fixedPrice ? (
+            {fixedPrice ? (
               <>
-                {product.price}$
+                {price}$
                 <Link
                   className="contact-for-purchasing-link"
                   to="../about"
                 >
-                  Contact for Purchase
+                  {t("Contact for Purchase")}
                 </Link>
               </>
             ) : (
@@ -126,15 +109,16 @@ const Product = () => {
                 className="contact-for-pricing-link"
                 to="../about"
               >
-                Contact for Pricing
+                {t("Contact for Pricing")}
               </Link>
             )}
           </p>
         </div>
-        <p className="product-description">{product.description}</p>
-        {product.images.length > 1 ? (
+        <p className="product-description">{description}</p>
+        <CategoryList categories={categories} />
+        {images.length > 1 ? (
           <ProductImageSelect
-            images={product.images}
+            images={images}
             handleSelectImage={handleSelectImage}
             currentIndex={currentImageIndex}
           />

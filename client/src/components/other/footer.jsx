@@ -8,7 +8,9 @@ import { ReactComponent as Location } from "../../assets/location.svg"
 import { ReactComponent as Phone } from "../../assets/phone_white.svg"
 import { useTranslation } from "react-i18next"
 
-export function Contacts() {
+export const Contacts = () => {
+  const { t } = useTranslation("translation", { keyPrefix: "other" })
+
   return (
     <div className="contacts">
       <a
@@ -36,7 +38,7 @@ export function Contacts() {
         rel="noreferrer"
       >
         <Location className="icon" />
-        Georgia, Tbilisi, Navtlughi St. 2
+        {t("Georgia, Tbilisi, Navtlughi St. 2")}
       </a>
       <a
         href="tel:+995591808457"

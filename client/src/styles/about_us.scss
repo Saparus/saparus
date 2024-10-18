@@ -128,7 +128,13 @@
     }
 
     &:nth-of-type(odd) {
-      background-color: $primary-color;
+      // background-color: $primary-color;
+      background: linear-gradient(
+        to bottom,
+        $primary-color 0%,
+        lighten($secondary-color, 20%) 50%,
+        lighten($secondary-color, 15%) 100%
+      );
 
       .centered {
         flex-direction: row-reverse;
@@ -180,6 +186,14 @@
     &:nth-of-type(even) {
       .centered {
         flex-direction: row;
+      }
+
+      .about-item-options {
+        button {
+          svg {
+            fill: $dark-text-color;
+          }
+        }
       }
 
       .image {
