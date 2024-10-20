@@ -93,6 +93,19 @@
           }
         }
 
+        .error-list {
+          display: flex;
+          flex-direction: column;
+          margin-top: 0.25rem;
+          margin-left: 1rem;
+          margin-bottom: 0.25rem;
+
+          .error-item {
+            font-size: 0.75rem;
+            color: $warning-red;
+          }
+        }
+
         .submit-code {
           background-color: $primary-color;
           border-radius: 0.5rem;

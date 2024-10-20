@@ -45,11 +45,14 @@ const loginAdmin = async (req, res) => {
   const user = accounts.find((account) => account.email === email)
 
   if (!user) {
-    res.status(400).json({ emailError: ["wrong email"], passwordError: [] })
+    res.status(400).json({ emailError: ["incorrect email"], passwordError: [] })
     return
   }
 
-  console.log(user, await bcrypt.compare(password, user.password))
+  console.log(
+    user.name,
+    (await bcrypt.compare(password, user.password)) ? "logged in" : "didn't log in"
+  )
 
   if (user && !(await bcrypt.compare(password, user.password))) {
     res.status(400).json({ emailError: [], passwordError: ["incorrect password"] })

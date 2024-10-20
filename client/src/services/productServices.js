@@ -13,6 +13,8 @@ export const editProduct = async (
 ) => {
   if (!token) return
 
+  console.log(token)
+
   const response = await ajax.patch(
     `/product/edit/${id}`,
     { name, description, images, inStock, fixedPrice, price, categories },

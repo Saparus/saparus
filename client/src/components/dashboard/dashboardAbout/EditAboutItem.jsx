@@ -87,8 +87,6 @@ const EditAboutItem = ({
     if (JSON.stringify(currentItem[field]) !== JSON.stringify(aboutItem[field])) {
       handleChange()
 
-      console.log(currentItem)
-
       handleEditAboutItem(
         currentItem.id,
         currentItem.position,

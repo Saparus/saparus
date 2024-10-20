@@ -25,17 +25,16 @@ const EditProductPage = () => {
 
   const editProductMutation = useMutation({
     mutationFn: async (product) => {
-      const { name, description, company, type, images, inStock, fixedPrice, price, id } = product
+      const { name, description, categories, images, inStock, fixedPrice, price, id } = product
 
       return await editProduct(
         name,
         description,
-        company,
-        type,
         images,
         inStock,
         fixedPrice,
         price,
+        categories,
         id,
         token
       )
@@ -59,7 +58,6 @@ const EditProductPage = () => {
     <ProductEditPanel
       product={product}
       onSave={editProductMutation.mutate}
-      token={token}
     />
   )
 }

@@ -14,7 +14,7 @@ import ConfirmDeletionModal from "../ConfirmDeletionModal"
 import LanguageSelect from "../LanguageSelect"
 import EditCategoryList from "./EditCategoryList"
 
-const ProductEditPanel = ({ product, onSave, token }) => {
+const ProductEditPanel = ({ product, onSave }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
@@ -211,7 +211,7 @@ const ProductEditPanel = ({ product, onSave, token }) => {
     }
 
     setIsAbleToSave(hasProductChanged())
-  }, [product, currentProduct])
+  }, [product, currentProduct, currentProduct.categories])
 
   const renderImage = () => (
     <div className="product-image-wrapper">
@@ -273,6 +273,7 @@ const ProductEditPanel = ({ product, onSave, token }) => {
             disabled={!isAbleToSave}
             type="submit"
             onClick={() => {
+              console.log(currentProduct)
               onSave(currentProduct)
             }}
           >

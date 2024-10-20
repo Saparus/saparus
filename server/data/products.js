@@ -190,6 +190,42 @@ const productList = [
     inStock: true,
     images: [imageList[9]],
   },
+  {
+    id: 11,
+    name: {
+      en: "name of product11",
+      ka: "პროდუქტი 11-ის სახელი",
+      ru: "название продукта 11",
+    },
+    fixedPrice: true,
+    price: 3250,
+    description: {
+      en: "This is a product description for product 11. It provides detailed information about the product.",
+      ka: "ეს არის პროდუქტის აღწერა პროდუქტის 11-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
+      ru: "Это описание продукта для продукта 11. Оно предоставляет подробную информацию о продукте.",
+    },
+    categories: { company: "KaVo Dental", type: "dental units" },
+    inStock: true,
+    images: [imageList[5]],
+  },
+  {
+    id: 12,
+    name: {
+      en: "name of product12",
+      ka: "პროდუქტი 12-ის სახელი",
+      ru: "название продукта 12",
+    },
+    fixedPrice: true,
+    price: 3250,
+    description: {
+      en: "This is a product description for product 12. It provides detailed information about the product.",
+      ka: "ეს არის პროდუქტის აღწერა პროდუქტის 12-ისთვის. ეს აღწერს პროდუქტის დეტალურ ინფორმაციას.",
+      ru: "Это описание продукта для продукта 12. Оно предоставляет подробную информацию о продукте.",
+    },
+    categories: { company: "Dentsply Sirona", type: "software" },
+    inStock: true,
+    images: [imageList[2]],
+  },
 ]
 
 module.exports = productList

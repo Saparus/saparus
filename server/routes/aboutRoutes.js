@@ -12,6 +12,6 @@ const router = express.Router()
 
 router.get("/get", getAllAboutItems)
 router.get("/getEdit", protect, getAllEditAboutItems)
-router.patch("/edit", express.json({ limit: "20mb" }), protect, editAllAboutItems)
+router.patch("/edit", express.json({ limit: "50mb" }), protect, editAllAboutItems)
 
 module.exports = router

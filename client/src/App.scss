@@ -89,6 +89,10 @@
   background-color: #555;
 }
 
+select {
+  font-family: $main-font !important;
+}
+
 /* Firefox */
 * {
   scrollbar-width: thin;

@@ -47,17 +47,17 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               placeholder="email"
               type="text"
             />
-            {error.emailError ? (
-              <div className="error-list">
+            {error.emailError.length > 0 ? (
+              <ul className="error-list">
                 {error.emailError.map((emailError) => (
-                  <p
+                  <li
                     className="error-item"
                     key={emailError}
                   >
                     {emailError}
-                  </p>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
               ""
             )}
@@ -73,17 +73,17 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               placeholder="password"
               type="password"
             />
-            {error.passwordError ? (
-              <div className="error-list">
+            {error.passwordError.length > 0 ? (
+              <ul className="error-list">
                 {error.passwordError.map((passwordError) => (
-                  <p
+                  <li
                     className="error-item"
                     key={passwordError}
                   >
                     {passwordError}
-                  </p>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
               ""
             )}

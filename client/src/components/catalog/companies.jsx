@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useQuery } from "react-query"
 
 import { ReactComponent as PlanmecaLogo } from "../../assets/companies/planmeca.svg"
+import { ReactComponent as QuestionMark } from "../../assets/companies/undefined-company.svg"
 import { getCategories } from "../../services/productServices"
 
 import Loading from "../other/Loading"
@@ -21,7 +22,7 @@ const Companies = ({ setFilter, selectedCompany }) => {
         case "planmeca":
           return <PlanmecaLogo className="logo" />
         default:
-          return <PlanmecaLogo className="logo" />
+          return <QuestionMark className="logo undefined-company" />
       }
     }
 
@@ -33,17 +34,21 @@ const Companies = ({ setFilter, selectedCompany }) => {
         className={`company ${company.name === selectedCompany ? "selected" : ""}`}
         onClick={() => {
           if (company.name !== selectedCompany) {
-            setFilter({ company: company })
+            setFilter((prevState) => ({
+              ...prevState,
+              categories: { ...prevState.categories, company: company.name },
+            }))
           } else {
             setFilter((prevState) => {
-              const { company, ...newState } = prevState
+              const { categories, ...newState } = prevState
+              const {} = categories
 
               return newState
             })
           }
         }}
       >
-        {renderLogo()}
+        {renderLogo(company.name)}
         <span>{company.name}</span>
       </li>
     ))

@@ -98,8 +98,6 @@ const DashboardAboutPage = () => {
   }
 
   const swapPlaces = (id1, id2) => {
-    console.log(aboutItemList)
-
     const itemList = structuredClone(aboutItemList)
 
     const index1 = itemList.findIndex((item) => item.id === id1)
@@ -157,8 +155,6 @@ const DashboardAboutPage = () => {
   }
 
   const handleDiscard = () => {
-    console.log(data[0].image)
-
     setAboutItemList(structuredClone(data))
     handleUnchange()
   }
@@ -168,7 +164,7 @@ const DashboardAboutPage = () => {
   }, [])
 
   useEffect(() => {
-    setSelectedLanguage(currentLanguage)
+    setSelectedLanguage(currentLanguage.split("-")[0])
   }, [currentLanguage])
 
   const renderContent = () => {
