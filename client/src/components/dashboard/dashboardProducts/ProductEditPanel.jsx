@@ -273,7 +273,6 @@ const ProductEditPanel = ({ product, onSave }) => {
             disabled={!isAbleToSave}
             type="submit"
             onClick={() => {
-              console.log(currentProduct)
               onSave(currentProduct)
             }}
           >

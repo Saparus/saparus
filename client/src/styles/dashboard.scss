@@ -823,7 +823,7 @@
     }
 
     textarea.article-text {
-      overflow: visible !important;
+      overflow-y: visible !important;
       height: 8rem;
 
       // .article-text-content {

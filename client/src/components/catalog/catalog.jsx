@@ -14,7 +14,10 @@ const Catalog = () => {
         selectedCompany={filter?.categories?.company}
       />
       <div className="products_categories">
-        <Categories setFilter={setFilter} />
+        <Categories
+          selectedCompany={filter?.categories?.company}
+          setFilter={setFilter}
+        />
         <Products
           filter={filter}
           resetFilter={(event) => {

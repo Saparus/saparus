@@ -21,3 +21,10 @@ ajax.interceptors.request.use(
 )
 
 export default ajax
+
+// utility function to include authorization headers
+export const authHeaders = (token) => ({
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+})

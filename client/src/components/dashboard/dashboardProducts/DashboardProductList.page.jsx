@@ -14,7 +14,7 @@ const DashboardProductListPage = () => {
     <>
       <Companies
         setFilter={setFilter}
-        selectedCompany={filter.company}
+        selectedCompany={filter?.categories?.company}
       />
       <div className="dashboard-products">
         <Categories

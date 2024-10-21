@@ -25,9 +25,11 @@ const DashboardAboutPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [wasSomethingChanged, setWasSomethingChanged] = useState(false)
 
-  const [aboutItemList, setAboutItemList] = useState()
+  const [aboutItemList, setAboutItemList] = useState([])
 
-  const { data, isLoading, error } = useQuery(["about", token], () => getAllEditAboutItems(token))
+  const { data, isLoading, error } = useQuery(["about", token], () => getAllEditAboutItems(token), {
+    enabled: !!token,
+  })
 
   const queryClient = useQueryClient()
 
@@ -82,15 +84,14 @@ const DashboardAboutPage = () => {
     setAboutItemList((prevState) => {
       const indexToUpdate = prevState.findIndex((item) => item.id === id)
 
-      const stateToUpdate = structuredClone(prevState)
+      const stateToUpdate = prevState
 
       stateToUpdate[indexToUpdate] = {
-        ...stateToUpdate[indexToUpdate],
         id,
-        position: position !== undefined ? position : prevState[indexToUpdate]?.position,
-        title: title !== undefined ? title : prevState[indexToUpdate]?.title,
-        text: text !== undefined ? text : prevState[indexToUpdate]?.text,
-        image: image !== undefined ? image : prevState[indexToUpdate]?.image,
+        position: position || prevState[indexToUpdate]?.position,
+        title: title || prevState[indexToUpdate]?.title,
+        text: text || prevState[indexToUpdate]?.text,
+        image: image || prevState[indexToUpdate]?.image,
       }
 
       return stateToUpdate
@@ -110,8 +111,8 @@ const DashboardAboutPage = () => {
 
     temp = itemList[index1]
 
-    itemList[index1] = itemList[index2]
-    itemList[index2] = temp
+    itemList[index1] = structuredClone(itemList[index2])
+    itemList[index2] = structuredClone(temp)
 
     itemList.sort((a, b) => a.position - b.position)
 
@@ -123,6 +124,8 @@ const DashboardAboutPage = () => {
 
     if (itemToUpdate.position > 0) {
       const itemToSwap = aboutItemList.find((item) => item.position === itemToUpdate.position - 1)
+
+      if (!itemToSwap) return
 
       swapPlaces(id, itemToSwap.id)
     }

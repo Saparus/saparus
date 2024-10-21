@@ -56,24 +56,24 @@ const EditAboutItem = ({
       const reader = new FileReader()
       reader.onloadend = () => {
         const newImage = reader.result
-        setCurrentItem((prevState) => {
-          return {
-            ...prevState,
-            image: newImage,
-          }
-        })
+
+        setCurrentItem((prevState) => ({
+          ...prevState,
+          image: newImage,
+        }))
+
+        handleEditAboutItem(
+          currentItem.id,
+          currentItem.position,
+          currentItem.title,
+          currentItem.text,
+          newImage || currentItem.image
+        )
+
+        handleChange()
       }
 
-      handleEditAboutItem(
-        currentItem.id,
-        currentItem.position,
-        currentItem.title,
-        currentItem.text,
-        currentItem.image
-      )
-
       reader.readAsDataURL(file)
-      handleChange()
     }
   }
 
@@ -191,6 +191,7 @@ const EditAboutItem = ({
         <div className="about-item-options">
           <button
             onClick={handleAboutItemMoveUp}
+            disabled={aboutItem.position === 0}
             className="move-about-item move-up"
           >
             <ArrowIcon className="icon" />

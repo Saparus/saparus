@@ -5,7 +5,7 @@ import { login } from "../../services/authServices"
 
 const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
-  const [error, setError] = useState({ emailError: "", passwordError: "" })
+  const [error, setError] = useState({ emailError: [], passwordError: [] })
 
   const handleChangeCredentials = (credential, newValue) => {
     setCredentials((prevCredentials) => ({
@@ -15,6 +15,14 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
   }
 
   const handleLogIn = async () => {
+    if (!credentials.email || !credentials.password) {
+      setError({
+        emailError: !credentials.email ? ["Email is required"] : [],
+        passwordError: !credentials.password ? ["Password is required"] : [],
+      })
+      return
+    }
+
     try {
       const response = await login(credentials)
 
@@ -47,7 +55,7 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               placeholder="email"
               type="text"
             />
-            {error.emailError.length > 0 ? (
+            {error?.emailError?.length > 0 ? (
               <ul className="error-list">
                 {error.emailError.map((emailError) => (
                   <li
@@ -73,7 +81,7 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               placeholder="password"
               type="password"
             />
-            {error.passwordError.length > 0 ? (
+            {error?.passwordError?.length > 0 ? (
               <ul className="error-list">
                 {error.passwordError.map((passwordError) => (
                   <li

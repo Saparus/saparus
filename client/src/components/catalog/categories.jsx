@@ -10,7 +10,7 @@ import { getCategories } from "../../services/productServices"
 import PriceSlider from "./PriceSlider"
 import Loading from "../other/Loading"
 
-const Categories = ({ setFilter, showAddNewProductButton = false }) => {
+const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = false }) => {
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 
   const used_categories = ["company", "type", "price"]
@@ -33,11 +33,6 @@ const Categories = ({ setFilter, showAddNewProductButton = false }) => {
     const { name: category, value } = event.target
     setInputValue((filter) => ({ ...filter, [category]: value }))
   }
-
-  // const handleOnSelect = (e) => {
-  //   const { name: category, value } = e.target
-  //   setInputValue((filter) => ({ ...filter, categories: { ...categories, [category]: value } }))
-  // }
 
   const handleFilter = (event) => {
     event.preventDefault()
@@ -132,7 +127,7 @@ const Categories = ({ setFilter, showAddNewProductButton = false }) => {
             id="select-companies"
             className="select category"
             name="companies"
-            value={inputValue.categories?.company || ""}
+            value={inputValue.categories?.company || selectedCompany || ""}
             onChange={handleOnSelect}
           >
             <option
