@@ -122,6 +122,7 @@
 .news-article-page,
 .edit-news-article-page {
   max-width: 1240px;
+  width: calc(100% - 1.25rem) !important;
   margin: 1.5rem auto;
 
   .title-div {
@@ -158,4 +159,25 @@
       border-radius: 0.5rem;
     }
   }
+}
+
+@media screen and (max-width: 1240px) {
+}
+
+@media screen and (max-width: 960px) {
+  .news-article-list {
+    width: calc(100% - 1rem) !important;
+
+    .news-image {
+      max-width: 100% !important;
+      height: auto;
+    }
+  }
+
+  .news-article-page {
+    width: calc(100% - 1.25rem) !important;
+  }
+}
+
+@media screen and (max-width: 560px) {
 }

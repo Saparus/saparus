@@ -149,7 +149,7 @@
 
       .view-more-news-link {
         position: absolute;
-        bottom: -2rem;
+        bottom: -3rem;
         right: 0;
         // color: $accent-green;
         color: $primary-color;
@@ -320,5 +320,118 @@
 @media screen and (max-width: 1240px) {
   .home-page-news {
     width: calc(100% - 0.5rem) !important;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .home {
+    .hero {
+      height: 45dvh;
+
+      .hero-text {
+        h2 {
+          padding: 0 1rem;
+          left: 0 !important;
+          top: 20%;
+          text-align: center;
+          width: 100%;
+        }
+      }
+    }
+
+    .home-page-news {
+      h2 {
+        text-align: center;
+      }
+    }
+
+    .hero-link-list {
+      padding: 0 1rem;
+      left: 0 !important;
+      bottom: 5% !important;
+      gap: 0.5rem !important;
+      width: 100%;
+      height: auto;
+      justify-content: center;
+    }
+
+    .view-more-news-link {
+      position: static !important;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      font-size: 1.25rem;
+      margin: auto;
+    }
+
+    .news {
+      flex-direction: column;
+      padding: 0.5rem;
+      height: auto !important;
+      margin-bottom: 1rem !important;
+
+      .no-image-image {
+        height: auto;
+      }
+
+      .latest-news {
+        margin-top: auto;
+
+        .latest-news-information {
+          position: static !important;
+          padding: 0 !important;
+          border-bottom: 2px solid $primary-color;
+
+          .latest-news-title {
+            margin-bottom: 0 !important;
+
+            .date {
+              font-size: 0.85rem !important;
+              color: $dark-text-color !important;
+              opacity: 0.5 !important;
+            }
+
+            .title {
+              color: $dark-text-color !important;
+              font-size: 1.25rem !important;
+            }
+          }
+
+          .description {
+            color: $dark-text-color !important;
+            line-clamp: 6 !important;
+            -webkit-line-clamp: 6 !important;
+            padding-bottom: 0.25rem;
+          }
+        }
+
+        .image {
+          position: static !important;
+
+          img {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .hero-link-list {
+    padding: 0 !important;
+    width: 100% !important;
+    gap: 0.25rem !important;
+
+    .hero-link {
+      height: 10rem !important;
+      width: 7.5rem !important;
+
+      .icon-wrapper {
+        svg {
+          height: 6rem !important;
+          width: 6rem !important;
+        }
+      }
+    }
   }
 }

@@ -1,8 +1,10 @@
 import { Link, NavLink, useLocation, useMatch } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useEffect } from "react"
+import { useEffect, useState, useRef } from "react"
 
+import { useOnClickOutside } from "../../hooks/useOnClickOutside"
 import { ReactComponent as Logo } from "../../assets/logo.svg"
+import { ReactComponent as Hamburger } from "../../assets/icons/hamburger.svg"
 
 import LanguageSelector from "./LanguageSelector"
 
@@ -10,6 +12,20 @@ const Header = () => {
   const { t } = useTranslation("translation", { keyPrefix: "header" })
 
   const isAdmin = useMatch("/admin/*")
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const navRef = useRef()
+
+  const handleOpenDropdownMenu = () => {
+    setIsMenuOpen(true)
+  }
+
+  const handleCloseDropdownMenu = () => {
+    setIsMenuOpen(false)
+  }
+
+  useOnClickOutside(navRef, handleCloseDropdownMenu)
 
   return (
     <header className="header">
@@ -22,7 +38,10 @@ const Header = () => {
           <h1>{t("Dental instruments & Equipment")}</h1>
         </Link>
 
-        <nav className="nav-buttons">
+        <nav
+          ref={navRef}
+          className={`nav-buttons ${isMenuOpen ? "visible" : "inVisible"}`}
+        >
           <ul>
             <li>
               <LanguageSelector />
@@ -58,6 +77,13 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+        <button
+          onClick={handleOpenDropdownMenu}
+          className="hamburger-menu-button"
+        >
+          <Hamburger />
+        </button>
+        <div className={`nav-bg ${isMenuOpen ? "visible" : "inVisible"}`}></div>
       </div>
 
       {isAdmin ? (

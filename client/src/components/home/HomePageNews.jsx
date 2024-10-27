@@ -77,7 +77,7 @@ const HomePageNews = () => {
             className="view-more-news-link"
             to="news"
           >
-            View More
+            View All News Articles
           </Link>
         ) : (
           ""

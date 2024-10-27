@@ -13,7 +13,7 @@ const Catalog = () => {
         setFilter={setFilter}
         selectedCompany={filter?.categories?.company}
       />
-      <div className="products_categories">
+      <div className="products-categories">
         <Categories
           selectedCompany={filter?.categories?.company}
           setFilter={setFilter}

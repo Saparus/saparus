@@ -89,7 +89,10 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
     const renderCategorySelect = (key, categoryArray) => {
       const categoriesToNotTranslate = ["price", "company"]
       return (
-        <div key={key}>
+        <div
+          className="select-holder"
+          key={key}
+        >
           <select
             id={`select-${key}`}
             className="select category"
@@ -122,7 +125,7 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
 
     const renderCompanySelect = () => {
       return (
-        <div>
+        <div className="select-holder">
           <select
             id="select-companies"
             className="select category"
@@ -151,52 +154,61 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
       )
     }
 
-    const renderPriceRanges = () => {
-      if (maxPrice === minPrice || maxPrice === 0) return
-
-      const handleMinPriceChange = (event) => {
-        const value = Number(event.target.value)
-        const newMinPrice = Math.min(value, inputValue.maxPrice || maxPrice)
-        const fivePercentDiff = Math.ceil((maxPrice - minPrice) * 0.1)
-
-        setInputValue((prev) => ({
-          ...prev,
-          minPrice: Math.min(newMinPrice, prev.maxPrice - fivePercentDiff),
-        }))
-      }
-
-      const handleMaxPriceChange = (event) => {
-        const value = Number(event.target.value)
-        const newMaxPrice = Math.max(value, inputValue.minPrice || minPrice)
-        const fivePercentDiff = Math.ceil((maxPrice - minPrice) * 0.1)
-
-        setInputValue((prev) => ({
-          ...prev,
-          maxPrice: Math.max(newMaxPrice, prev.minPrice + fivePercentDiff),
-        }))
-      }
-
-      return (
-        <PriceSlider
-          handleMinPriceChange={handleMinPriceChange}
-          handleMaxPriceChange={handleMaxPriceChange}
-          maxPrice={maxPrice}
-          minPrice={minPrice}
-          currentMaxPrice={inputValue.maxPrice}
-          currentMinPrice={inputValue.minPrice}
-          t={t}
-        />
-      )
-    }
-
     return (
-      <div className="select-list">
+      <>
         {Object.entries(categories).map(([key, categoryArray]) =>
           renderCategorySelect(key, categoryArray)
         )}
         {renderCompanySelect()}
-        {renderPriceRanges()}
-      </div>
+      </>
+    )
+  }
+
+  const renderPriceRanges = () => {
+    if (isLoading) return
+    if (error || !data) return
+
+    const { categories, companies, minPrice, maxPrice } = data
+
+    const priceOptions = []
+    for (let i = minPrice; i <= maxPrice; i += 100) {
+      priceOptions.push(i)
+    }
+
+    if (maxPrice === minPrice || maxPrice === 0) return
+
+    const handleMinPriceChange = (event) => {
+      const value = Number(event.target.value)
+      const newMinPrice = Math.min(value, inputValue.maxPrice || maxPrice)
+      const fivePercentDiff = Math.ceil((maxPrice - minPrice) * 0.1)
+
+      setInputValue((prev) => ({
+        ...prev,
+        minPrice: Math.min(newMinPrice, prev.maxPrice - fivePercentDiff),
+      }))
+    }
+
+    const handleMaxPriceChange = (event) => {
+      const value = Number(event.target.value)
+      const newMaxPrice = Math.max(value, inputValue.minPrice || minPrice)
+      const fivePercentDiff = Math.ceil((maxPrice - minPrice) * 0.1)
+
+      setInputValue((prev) => ({
+        ...prev,
+        maxPrice: Math.max(newMaxPrice, prev.minPrice + fivePercentDiff),
+      }))
+    }
+
+    return (
+      <PriceSlider
+        handleMinPriceChange={handleMinPriceChange}
+        handleMaxPriceChange={handleMaxPriceChange}
+        maxPrice={maxPrice}
+        minPrice={minPrice}
+        currentMaxPrice={inputValue.maxPrice}
+        currentMinPrice={inputValue.minPrice}
+        t={t}
+      />
     )
   }
 
@@ -205,15 +217,18 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
       className="categories"
       onSubmit={handleFilter}
     >
-      <input
-        name="name"
-        className="input category"
-        type="text"
-        value={inputValue.name || ""}
-        onChange={handleInputChange}
-        placeholder="search by name"
-      />
-      {renderCategories()}
+      <div className="categories-main-part">
+        <input
+          name="name"
+          className="input category"
+          type="text"
+          value={inputValue.name || ""}
+          onChange={handleInputChange}
+          placeholder="search by name"
+        />
+        {renderCategories()}
+      </div>
+      {renderPriceRanges()}
 
       <div className="utils">
         <button
