@@ -360,6 +360,22 @@
   }
 }
 
+@media screen and (max-width: 700px) {
+  .parts {
+    .centered {
+      .image {
+        // width: 100% !important;
+        height: fit-content !important;
+
+        img {
+          width: 100% !important;
+          height: auto !important;
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 600px) {
   .parts.first {
     height: 430px;
