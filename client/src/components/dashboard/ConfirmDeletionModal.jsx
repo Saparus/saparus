@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react"
-import { createPortal } from "react-dom" // Correct import
+import { createPortal } from "react-dom"
 import { useOnClickOutside } from "../../hooks/useOnClickOutside"
 
 const ConfirmDeletionModal = ({ deleteItem, message, onClose, isVisible }) => {

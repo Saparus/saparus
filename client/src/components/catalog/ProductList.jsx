@@ -6,8 +6,6 @@ import { useState, useEffect } from "react"
 // import { getProducts } from "../../data/products"
 import { getProducts } from "../../services/productServices"
 
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow.svg"
-
 import Loading from "../other/Loading"
 import Product from "./Product"
 import PageSelect from "./PageSelect"

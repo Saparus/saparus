@@ -1,6 +1,6 @@
-import { Link, NavLink, useLocation, useMatch } from "react-router-dom"
+import { Link, NavLink, useMatch } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useEffect, useState, useRef } from "react"
+import { useState, useRef } from "react"
 
 import { useOnClickOutside } from "../../hooks/useOnClickOutside"
 import { ReactComponent as Logo } from "../../assets/logo.svg"

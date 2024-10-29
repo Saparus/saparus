@@ -32,7 +32,7 @@ const AddProductPage = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (product) => {
-      const { name, description, images, inStock, fixedPrice, price, categories, id } = product
+      const { name, description, images, inStock, fixedPrice, price, categories } = product
 
       return await addProduct(
         name,

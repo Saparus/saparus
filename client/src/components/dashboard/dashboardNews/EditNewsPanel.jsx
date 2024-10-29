@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { useMutation, useQueryClient } from "react-query"
 import { useParams, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -9,7 +9,6 @@ import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as CheckmarkIcon } from "../../../assets/icons/checkmark.svg"
 import { deleteNewsArticle } from "../../../services/newsServices"
 
-import Loading from "../../other/Loading"
 import ConfirmDeletionModal from "../ConfirmDeletionModal.jsx"
 import LanguageSelect from "../LanguageSelect.jsx"
 
@@ -25,14 +24,11 @@ const EditNewsArticlePanel = ({ article, onSave, token }) => {
 
   const textRef = useRef(null)
 
-  const currentDate = new Date()
-
   const queryClient = useQueryClient()
 
   const [currentArticle, setCurrentArticle] = useState(structuredClone(article))
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
-  const [isAbleToSave, setIsAbleToSave] = useState(false)
   const [activeFields, setActiveFields] = useState({
     title: false,
     text: false,
@@ -60,7 +56,7 @@ const EditNewsArticlePanel = ({ article, onSave, token }) => {
       reader.onloadend = () => {
         const newImage = reader.result
         setCurrentArticle((prevState) => {
-          const updatedImages = [...prevState.images, newImage]
+          // const updatedImages = [...prevState.images, newImage]
 
           return {
             ...prevState,

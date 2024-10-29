@@ -11,8 +11,6 @@ const NewsArticle = () => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
-  const { t } = useTranslation("translation", { keyPrefix: "time" })
-
   const { data, isLoading, error } = useQuery(["news-article", id], () =>
     getSingleNewsArticle(id, currentLanguage)
   )

@@ -7,8 +7,6 @@ import { toast } from "react-toastify"
 import { getProducts } from "../../../services/productServices"
 import { deleteProduct } from "../../../services/productServices"
 
-import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
-
 import Loading from "../../other/Loading"
 import Product from "./EditProductLink"
 import PageSelect from "../../catalog/PageSelect"

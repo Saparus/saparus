@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
 
@@ -51,7 +51,8 @@ const Dashboard = () => {
       setAccountInfo(parsedAccountInfo)
       setIsAuthorized(true)
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountInfo?.expirationDate])
 
   const renderAskAuthenticationPanel = () => {
     if (!isAuthorized) {

@@ -77,7 +77,7 @@ const HomePageNews = () => {
             className="view-more-news-link"
             to="news"
           >
-            View All News Articles
+            {t("View All News Articles")}
           </Link>
         ) : (
           ""

@@ -5,7 +5,6 @@ import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
 import { ReactComponent as ResetIcon } from "../../../assets/icons/spinning-arrow.svg"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as UploadIcon } from "../../../assets/icons/upload.svg"
-import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
 import { ReactComponent as CheckmarkIcon } from "../../../assets/icons/checkmark.svg"
 import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 
@@ -25,7 +24,6 @@ const ProductEditPanel = ({ product, onSave }) => {
   const [currentProduct, setCurrentProduct] = useState(structuredClone(product))
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isUploadPanelVisible, setIsUploadPanelVisible] = useState(false)
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
   const [newCategory, setNewCategory] = useState({ key: "", value: "" })
   const [isAbleToSave, setIsAbleToSave] = useState(false)
@@ -70,7 +68,6 @@ const ProductEditPanel = ({ product, onSave }) => {
             images: [...prevState.images, newImage],
           }
         })
-        setIsUploadPanelVisible(false)
       }
       reader.readAsDataURL(file)
     }
@@ -483,7 +480,7 @@ const ProductEditPanel = ({ product, onSave }) => {
       {isConfirmDeletionModalVisible ? (
         <ConfirmDeletionModal
           onClose={handleCloseConfirmCloseModal}
-          message="are you sure you want to delete this product? this action cannot be undone."
+          message={t("are you sure you want to delete this product? this action cannot be undone.")}
         />
       ) : (
         ""

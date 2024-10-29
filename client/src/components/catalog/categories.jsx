@@ -13,9 +13,10 @@ import Loading from "../other/Loading"
 const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = false }) => {
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 
-  const used_categories = ["company", "type", "price"]
+  // const used_categories = ["company", "type", "price"]
   const [inputValue, setInputValue] = useState({})
   const [defaultPriceExtremum, setDefaultPriceExtremum] = useState({})
+  // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams()
 
   const { data, isLoading, error } = useQuery(["categories"], getCategories, {
@@ -168,7 +169,7 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
     if (isLoading) return
     if (error || !data) return
 
-    const { categories, companies, minPrice, maxPrice } = data
+    const { minPrice, maxPrice } = data
 
     const priceOptions = []
     for (let i = minPrice; i <= maxPrice; i += 100) {

@@ -11,35 +11,6 @@ const NewsArticle = ({ title, text, date, image, id }) => {
           src={image}
           alt=""
         />
-
-        {/* {images?.length > 1 ? (
-          <>
-            <div className="other-images">
-              {images.slice(1, 4).map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt=""
-                />
-              ))}
-            </div>
-            {images.length > 4 ? (
-              <div className="smallest-images">
-                {images.slice(4, 10).map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt=""
-                  />
-                ))}
-              </div>
-            ) : (
-              ""
-            )}
-          </>
-        ) : (
-          ""
-        )} */}
       </div>
     )
   }

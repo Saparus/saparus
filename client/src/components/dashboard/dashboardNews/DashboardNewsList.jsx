@@ -8,7 +8,6 @@ import { getEditNewsArticles } from "../../../services/newsServices"
 import NewsArticleEdit from "./NewsArticleEdit"
 import Loading from "../../other/Loading"
 import PageSelect from "../../catalog/PageSelect"
-import LanguageSelect from "../LanguageSelect"
 
 const DashboardNewsList = ({ token }) => {
   const { i18n } = useTranslation()

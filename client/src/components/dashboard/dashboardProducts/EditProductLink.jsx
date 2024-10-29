@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useMutation } from "react-query"
 import { Link } from "react-router-dom"
 
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"

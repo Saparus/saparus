@@ -9,7 +9,6 @@ import { getEditSingleNewsArticle, editNewsArticle } from "../../../services/new
 
 import EditNewsPanel from "./EditNewsPanel"
 import Loading from "../../other/Loading"
-import LanguageSelect from "../LanguageSelect"
 
 const EditNewsArticlePage = () => {
   const { token } = useOutletContext()

@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useOnClickOutside } from "../../../hooks/useOnClickOutside"
-import { editAboutItem } from "../../../services/ajax"
-
 import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
 import { ReactComponent as UploadIcon } from "../../../assets/icons/upload.svg"
@@ -105,7 +102,7 @@ const EditAboutItem = ({
     setIsConfirmDeletionModalVisible(false)
   }
 
-  const { id, title, text, image } = currentItem
+  const { title, text, image } = currentItem
 
   const renderItemInformation = () => {
     const handleFocus = (e) => {
@@ -136,7 +133,7 @@ const EditAboutItem = ({
           {title[selectedLanguage] ? (
             <h2 className="about-information-title">{title[selectedLanguage]}</h2>
           ) : (
-            <h2 className="about-information-title">title</h2>
+            <h2 className="about-information-title">{t("title")}</h2>
           )}
         </button>
       )

@@ -17,9 +17,7 @@ import Map from "../../other/Map"
 const DashboardAboutPage = () => {
   const { token } = useOutletContext()
 
-  const { t } = useTranslation("translation", { keyPrefix: "about us" })
   const { i18n } = useTranslation()
-
   const currentLanguage = i18n.language
 
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])

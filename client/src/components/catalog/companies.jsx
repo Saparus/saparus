@@ -1,11 +1,8 @@
-import { useState } from "react"
 import { useQuery } from "react-query"
 
 import { ReactComponent as PlanmecaLogo } from "../../assets/companies/planmeca.svg"
 import { ReactComponent as QuestionMark } from "../../assets/companies/undefined-company.svg"
 import { getCategories } from "../../services/productServices"
-
-import Loading from "../other/Loading"
 
 const Companies = ({ setFilter, selectedCompany }) => {
   const { data, isLoading, error } = useQuery(["categories"], getCategories, {
@@ -41,7 +38,6 @@ const Companies = ({ setFilter, selectedCompany }) => {
           } else {
             setFilter((prevState) => {
               const { categories, ...newState } = prevState
-              const {} = categories
 
               return newState
             })
