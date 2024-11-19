@@ -76,6 +76,8 @@ const loginAdmin = async (req, res) => {
 
 // temp code, is used only to hash passwords
 const registerAdmin = async (req, res) => {
+  return
+
   const { name, email, password } = req.body
 
   const salt = await bcrypt.genSalt(10)

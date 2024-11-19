@@ -24,7 +24,7 @@ export const getSingleNewsArticle = async (id, language) => {
 
 // fetch editable news articles (requires token)
 export const getEditNewsArticles = async (limit, page, token) => {
-  if (!token) throw new Error("token is required")
+  if (!token) return
 
   try {
     const { data } = await ajax.get(`/news/getEdit?page=${page}&limit=${limit}`, authHeaders(token))

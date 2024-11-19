@@ -9,6 +9,7 @@ const DashboardHeader = ({ name, handleLogOut }) => {
         <NavLink to="news">News</NavLink>
         <NavLink to="about">About</NavLink>
         <NavLink to="products">Products</NavLink>
+        <NavLink to="children">Child Program</NavLink>
         <button onClick={handleLogOut}>log out</button>
       </div>
     </div>

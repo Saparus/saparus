@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-const NewsArticle = ({ title, text, date, image, id }) => {
+const NewsArticle = ({ title, text, date, image, to }) => {
   const renderImage = () => {
     if (image?.length < 1) return
 
@@ -17,7 +17,7 @@ const NewsArticle = ({ title, text, date, image, id }) => {
 
   return (
     <Link
-      to={`../news/${id}`}
+      to={to}
       className="news-article"
     >
       <div className="news-title">

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams, Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useQuery } from "react-query"
@@ -10,7 +10,7 @@ import { getCategories } from "../../services/productServices"
 import PriceSlider from "./PriceSlider"
 import Loading from "../other/Loading"
 
-const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = false }) => {
+const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButton = false }) => {
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 
   // const used_categories = ["company", "type", "price"]
@@ -53,6 +53,16 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
     setSearchParams({ page: newPage })
     scrollToTop()
   }
+
+  useEffect(() => {
+    setInputValue((prev) => ({
+      ...prev,
+      categories: {
+        ...prev.categories,
+        company: selectedCompany === "All" ? "" : selectedCompany,
+      },
+    }))
+  }, [selectedCompany])
 
   const renderCategories = () => {
     if (isLoading) return <Loading />

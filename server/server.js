@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes")
 const productRoutes = require("./routes/productRoutes")
 const aboutRoutes = require("./routes/aboutRoutes")
 const newsRoutes = require("./routes/newsRoutes")
+const childrenRoutes = require("./routes/childrenProgramRoutes")
 
 const PORT = process.env.PORT || 8000
 
@@ -30,5 +31,6 @@ app.use("/auth", authRoutes)
 app.use("/product", productRoutes)
 app.use("/about", aboutRoutes)
 app.use("/news", newsRoutes)
+app.use("/children", childrenRoutes)
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`))

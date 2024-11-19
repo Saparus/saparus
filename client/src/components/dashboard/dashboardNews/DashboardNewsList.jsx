@@ -4,12 +4,13 @@ import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
 import { getEditNewsArticles } from "../../../services/newsServices"
+import { getEditChildrenProgramArticles } from "../../../services/childrenProgramServices"
 
 import NewsArticleEdit from "./NewsArticleEdit"
 import Loading from "../../other/Loading"
 import PageSelect from "../../catalog/PageSelect"
 
-const DashboardNewsList = ({ token }) => {
+const DashboardNewsList = ({ token, type = "news" }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
@@ -18,8 +19,10 @@ const DashboardNewsList = ({ token }) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Number(searchParams.get("page")) || 1
 
-  const { data, isLoading, error } = useQuery(["news", limit, page, token], () =>
-    getEditNewsArticles(limit, page, token)
+  const { data, isLoading, error } = useQuery([limit, page, token, type], () =>
+    type === "news"
+      ? getEditNewsArticles(limit, page, token)
+      : getEditChildrenProgramArticles(limit, page, token)
   )
 
   if (isLoading) return <Loading />
@@ -47,7 +50,9 @@ const DashboardNewsList = ({ token }) => {
     const { articles, pagination } = data
 
     if (articles?.length === 0) {
-      return <p>no news</p>
+      return (
+        <p className="no-items-message">no items, create new ones by pressing the button above</p>
+      )
     } else {
       return (
         <>

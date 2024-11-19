@@ -8,11 +8,12 @@ import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as CheckmarkIcon } from "../../../assets/icons/checkmark.svg"
 import { deleteNewsArticle } from "../../../services/newsServices"
+import { deleteChildrenProgramArticle } from "../../../services/childrenProgramServices.js"
 
 import ConfirmDeletionModal from "../ConfirmDeletionModal.jsx"
 import LanguageSelect from "../LanguageSelect.jsx"
 
-const EditNewsArticlePanel = ({ article, onSave, token }) => {
+const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
   const navigate = useNavigate()
   // const { title, text, date, images } = article
 
@@ -35,7 +36,10 @@ const EditNewsArticlePanel = ({ article, onSave, token }) => {
   })
 
   const deleteMutation = useMutation({
-    mutationFn: async () => await deleteNewsArticle(id, token),
+    mutationFn: async () =>
+      type === "news"
+        ? await deleteNewsArticle(id, token)
+        : await deleteChildrenProgramArticle(id, token),
     onSuccess: () => {
       toast.success("Successfully deleted news article")
       queryClient.invalidateQueries(["news", token]) // this will cause refetching

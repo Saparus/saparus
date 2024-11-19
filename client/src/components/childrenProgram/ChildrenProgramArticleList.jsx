@@ -3,13 +3,13 @@ import { useQuery } from "react-query"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
-import { getNewsArticles } from "../../services/newsServices"
+import { getChildrenProgramArticles } from "../../services/childrenProgramServices"
 
-import NewsArticle from "./NewsArticle"
+import NewsArticle from "../news/NewsArticle"
 import Loading from "../other/Loading"
 import PageSelect from "../catalog/PageSelect"
 
-const NewsList = () => {
+const ChildrenProgramArticleList = () => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
@@ -18,8 +18,9 @@ const NewsList = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Number(searchParams.get("page")) || 1
 
-  const { data, isLoading, error } = useQuery(["news", currentLanguage, limit, page], () =>
-    getNewsArticles(currentLanguage, limit, page)
+  const { data, isLoading, error } = useQuery(
+    ["children program", currentLanguage, limit, page],
+    () => getChildrenProgramArticles(currentLanguage, limit, page)
   )
 
   if (isLoading) return <Loading />
@@ -47,7 +48,7 @@ const NewsList = () => {
     const { articles, pagination } = data
 
     if (articles?.length === 0) {
-      return <p>no news</p>
+      return <p>no children programs</p>
     } else {
       return (
         <>
@@ -78,4 +79,4 @@ const NewsList = () => {
   return <div className="news-articles">{renderNewsArticles()}</div>
 }
 
-export default NewsList
+export default ChildrenProgramArticleList

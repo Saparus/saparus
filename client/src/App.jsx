@@ -9,11 +9,16 @@ import AboutPage from "./components/about/About.page"
 import HomePage from "./components/home/Home.page"
 import NewsPage from "./components/news/News.page"
 import NewsArticlePage from "./components/news/NewsArticle.page"
+import ChildrenProgramPage from "./components/childrenProgram/ChildrenProgram.page"
+import ChildrenProgramArticlePage from "./components/childrenProgram/ChildrenProgramArticle.page"
 import ProductPage from "./components/product/Product.page"
 import DashboardPage from "./components/dashboard/Dashboard.page"
 import DashboardNews from "./components/dashboard/dashboardNews/DashboardNews.page"
 import AddNewsArticlePage from "./components/dashboard/dashboardNews/AddNewsArticle.page"
 import EditNewsArticlePage from "./components/dashboard/dashboardNews/EditNewsArticle.page"
+import DashboardChildrenProgramArticlesPage from "./components/dashboard/dashboardChildrenProgram/DashboardChildrenProgramArticles.page"
+import AddChildrenArticlePage from "./components/dashboard/dashboardChildrenProgram/AddChildrenProgramArticle.page"
+import EditChildrenProgramArticlePage from "./components/dashboard/dashboardChildrenProgram/EditChildrenProgramArticle.page"
 import DashboardProductListPage from "./components/dashboard/dashboardProducts/DashboardProductList.page"
 import EditProductPage from "./components/dashboard/dashboardProducts/EditProduct.page"
 import AddProductPage from "./components/dashboard/dashboardProducts/AddProduct.page"
@@ -29,7 +34,6 @@ const App = () => {
           path="/"
           element={<HomePage />}
         />
-
         <Route
           path="/about"
           element={<AboutPage />}
@@ -49,6 +53,14 @@ const App = () => {
         <Route
           path="/news/:id"
           element={<NewsArticlePage />}
+        />
+        <Route
+          path="/children"
+          element={<ChildrenProgramPage />}
+        />
+        <Route
+          path="/children/:id"
+          element={<ChildrenProgramArticlePage />}
         />
 
         <Route
@@ -74,6 +86,18 @@ const App = () => {
           <Route
             path="news/:id"
             element={<EditNewsArticlePage />}
+          />
+          <Route
+            path="children"
+            element={<DashboardChildrenProgramArticlesPage />}
+          />
+          <Route
+            path="children/add"
+            element={<AddChildrenArticlePage />}
+          />
+          <Route
+            path="children/:id"
+            element={<EditChildrenProgramArticlePage />}
           />
           <Route
             path="products/edit/:id"
