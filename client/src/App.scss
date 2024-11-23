@@ -27,7 +27,7 @@
   color: #1f5489 !important;
   font-weight: 600;
   border-radius: 0.5rem !important;
-  font-family: "Poppins", "Roboto", "Noto Sans Georgian", sans-serif !important;
+  font-family: $main-font;
 }
 
 .Toastify__toast--success {

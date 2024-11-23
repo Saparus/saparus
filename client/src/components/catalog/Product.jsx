@@ -37,7 +37,7 @@ const Product = ({ product }) => {
         <div className="shop">
           {/* STC */}
           <p className={`price ${fixedPrice ? "fixed-price" : "unfixed-price"}`}>
-            {fixedPrice ? price + "$" : "Price on Request"}
+            {fixedPrice ? price + "$" : t("Price on Request")}
           </p>
           <Phone className="cart" />
           <span className="go-to-contacts-text">

@@ -7,6 +7,7 @@
     lighten($secondary-color, 20%) 50%,
     lighten($secondary-color, 18.5%) 100%
   );
+  font-family: monospace;
   display: flex;
   justify-content: space-between;
   padding: 1.15rem 2rem;

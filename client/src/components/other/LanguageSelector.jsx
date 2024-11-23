@@ -7,7 +7,7 @@ const LanguageSelector = () => {
   const availableLanguages = [
     { name: "english", code: "en" },
     { name: "ქართული", code: "ka" },
-    { name: "russian", code: "ru" },
+    { name: "pyccкий", code: "ru" },
   ]
 
   const changeLanguage = (language) => {
