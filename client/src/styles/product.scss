@@ -1,12 +1,10 @@
 @import "./variables";
 
 .product {
-  // padding: 1rem;
   min-width: 16rem;
   max-width: 16rem;
   height: 20rem;
   border-radius: 0.5rem;
-  // border: solid 1px #e0e0e0;
   background-color: $text-color;
   font-size: 0.85rem;
   display: flex;
@@ -15,7 +13,6 @@
   transition: box-shadow $animation_duration $animation, transform $animation_duration $animation;
 
   .product-link {
-    // padding: 1rem 1rem 0.25rem 1rem;
     padding: 0.5rem 0.5rem 0.25rem 0.5rem;
     padding-bottom: auto;
     color: black;
@@ -23,10 +20,6 @@
     flex-direction: column;
     flex-grow: 1;
     color: $dark-text-color;
-
-    &:hover {
-      // outline: 1px solid red;
-    }
   }
 
   &:hover {
@@ -45,8 +38,6 @@
 
     border-radius: 0.5rem;
     background-color: white;
-
-    // box-shadow: 0 0 2px 4px #383d3f0c;
 
     img {
       width: 100%;
@@ -70,7 +61,6 @@
   }
 
   .product-shop {
-    // margin-top: auto;
     padding: 0 1rem 0.75rem 1rem;
 
     &:hover {
@@ -89,7 +79,6 @@
         }
 
         .fixed-price {
-          // scale: 0.75;
           transform: translateX(-0.25rem);
         }
 
@@ -133,8 +122,6 @@
 
       .go-to-contacts-text {
         opacity: 0;
-        // bottom: -0.75rem;
-        // font-size: 0.75rem;
         right: 0;
         position: absolute;
         transition: opacity $animation_duration $animation, width $animation_duration $animation,

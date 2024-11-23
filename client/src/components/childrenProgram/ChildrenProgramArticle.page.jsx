@@ -11,6 +11,8 @@ const NewsArticle = () => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "children program" })
+
   const { data, isLoading, error } = useQuery(["children-program-article", id], () =>
     getSingleChildrenProgramArticle(id, currentLanguage)
   )
@@ -32,7 +34,7 @@ const NewsArticle = () => {
   const renderArticle = () => {
     if (isLoading) return <Loading />
 
-    if (error || !data) return <div>something went wrong</div>
+    if (error || !data) return <div>{t("Something went wrong")}</div>
 
     return (
       <div>

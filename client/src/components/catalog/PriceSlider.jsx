@@ -111,7 +111,8 @@ const PriceSlider = ({
       <div className="slider">
         <div className="price-info">
           <p>
-            prices from <span>{currentMinPrice}$</span> to <span>{currentMaxPrice}$</span>
+            {t("prices from")} <span>{currentMinPrice}$</span> {t("to")}{" "}
+            <span>{currentMaxPrice}$</span>
           </p>
         </div>
         <div

@@ -116,7 +116,7 @@ const EditAboutItem = ({
         <input
           type="text"
           name="title"
-          placeholder="title"
+          placeholder={t("title")}
           autoFocus={true}
           className="about-information-title"
           onChange={handleInputChange}

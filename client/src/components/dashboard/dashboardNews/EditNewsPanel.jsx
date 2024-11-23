@@ -48,7 +48,9 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
     onError: (error) => {
       console.log(error.message)
       toast.error(
-        "Something went wrong while deleting news article, check browser console for more detailed explanation"
+        t(
+          "Something went wrong while deleting news article, check browser console for more detailed explanation"
+        )
       )
     },
   })

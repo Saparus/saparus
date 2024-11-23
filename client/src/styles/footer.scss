@@ -10,7 +10,6 @@
   display: flex;
   justify-content: space-between;
   padding: 1.15rem 2rem;
-  // height: 200px;
   box-shadow: 0 -1px 10px #2b303133;
 
   &.hide-shadow {
@@ -62,5 +61,12 @@
 
   &:hover {
     opacity: 0.8;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .footer {
+    flex-direction: column-reverse;
+    gap: 2rem;
   }
 }

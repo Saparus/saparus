@@ -67,7 +67,9 @@ const Footer = () => {
             <Logo />
           </Link>
         </button>
-        <h5 className="license">{t("© 2024 Ltd. Saparus. All Rights Reserved")}</h5>
+        <h5 className="license">
+          © {new Date().getFullYear()} {t("Ltd. Saparus. All Rights Reserved")}
+        </h5>
       </div>
       <Contacts />
     </div>

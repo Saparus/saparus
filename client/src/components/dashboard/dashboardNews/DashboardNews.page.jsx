@@ -1,10 +1,13 @@
 import { useOutletContext } from "react-router-dom"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 import DashboardNewsList from "./DashboardNewsList"
 
 const DashboardNews = () => {
   const { token } = useOutletContext()
+
+  const { t } = useTranslation("translation", { keyPrefix: "news" })
 
   return (
     <div className="page dashboard-news-page">
@@ -13,7 +16,7 @@ const DashboardNews = () => {
           to="../../admin/news/add"
           className="add-new-article-button"
         >
-          Add New Article
+          {t("Add New Article")}
         </Link>
       </div>
 

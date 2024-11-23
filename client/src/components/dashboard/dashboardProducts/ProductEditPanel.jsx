@@ -302,7 +302,7 @@ const ProductEditPanel = ({ product, onSave }) => {
         <input
           type="text"
           name="name"
-          placeholder="name"
+          placeholder={t("name")}
           autoFocus={true}
           className="product-name"
           onChange={handleInputChange}
@@ -316,7 +316,7 @@ const ProductEditPanel = ({ product, onSave }) => {
           onClick={() => handleFieldEditStart("name")}
           className="product-name field-button"
         >
-          {currentProduct.name[selectedLanguage] || <p className="placeholder-text">name</p>}
+          {currentProduct.name[selectedLanguage] || <p className="placeholder-text">{t("name")}</p>}
         </button>
       )
     }
@@ -339,13 +339,13 @@ const ProductEditPanel = ({ product, onSave }) => {
               currentProduct.inStock ? "product-in-stock" : "product-not-in-stock"
             } field-button`}
           >
-            {currentProduct.inStock ? "• in stock" : "• out of stock"}
+            {currentProduct.inStock ? t("• in stock") : t("• out of stock")}
           </button>
           <label
             className="fixed-price-label"
             htmlFor="fixedPrice"
           >
-            <p>fixed price</p>
+            <p>{t("fixed price")}</p>
             <input
               type="checkbox"
               id="fixedPrice"
@@ -374,7 +374,7 @@ const ProductEditPanel = ({ product, onSave }) => {
               <input
                 type="number"
                 name="price"
-                placeholder="price"
+                placeholder={t("price")}
                 autoFocus={true}
                 className="dashboard-product-price product-price"
                 onChange={handleInputChange}
@@ -390,7 +390,7 @@ const ProductEditPanel = ({ product, onSave }) => {
               onClick={() => handleFieldEditStart("price")}
             >
               <div className="product-price">
-                {currentProduct.price || <p className="placeholder-text">price</p>}
+                {currentProduct.price || <p className="placeholder-text">{t("price")}</p>}
               </div>
               $
             </button>
@@ -404,7 +404,7 @@ const ProductEditPanel = ({ product, onSave }) => {
         <textarea
           ref={descriptionRef}
           name="description"
-          placeholder="description"
+          placeholder={t("description")}
           autoFocus={true}
           className="product-description"
           onChange={handleInputChange}
@@ -422,7 +422,7 @@ const ProductEditPanel = ({ product, onSave }) => {
               {currentProduct.description[selectedLanguage]}
             </p>
           ) : (
-            <p className="placeholder-text">description</p>
+            <p className="placeholder-text">{t("description")}</p>
           )}
         </button>
       )

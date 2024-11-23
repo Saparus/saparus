@@ -13,6 +13,8 @@ const ChildrenProgramArticleList = () => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "children program" })
+
   const [limit] = useState(20)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -26,7 +28,7 @@ const ChildrenProgramArticleList = () => {
   if (isLoading) return <Loading />
   if (error || !data) {
     console.log(error)
-    return <div>something went wrong</div>
+    return <div>{t("Something went wrong")}</div>
   }
 
   const scrollToTop = () => {
@@ -43,12 +45,12 @@ const ChildrenProgramArticleList = () => {
 
   const renderNewsArticles = () => {
     if (isLoading) return <Loading />
-    if (error || !data) return <div>something went wrong</div>
+    if (error || !data) return <div>{t("Something went wrong")}</div>
 
     const { articles, pagination } = data
 
     if (articles?.length === 0) {
-      return <p>no children programs</p>
+      return <p>{t("no children programs")}</p>
     } else {
       return (
         <>

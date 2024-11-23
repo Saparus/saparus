@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 // import { getEditProduct } from "../../../data/products"
 // import { editProduct, getEditProduct } from "../../../services/productServices"
@@ -14,6 +15,8 @@ const EditNewsArticlePage = () => {
   const { token } = useOutletContext()
 
   const { id } = useParams()
+
+  const { t } = useTranslation("translation", { keyPrefix: "news" })
 
   const {
     data: article,
@@ -42,7 +45,7 @@ const EditNewsArticlePage = () => {
   })
 
   if (isLoading) return <Loading />
-  if (error || !article) return <div>Something went wrong</div>
+  if (error || !article) return <div>{t("Something went wrong")}</div>
 
   return (
     <EditNewsPanel

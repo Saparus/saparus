@@ -1,4 +1,17 @@
 {
+  "company": "company",
+  "type": "type",
+  "accessory": "accessory",
+  "dental units": "dental units",
+  "accessories": "accessories",
+  "equipment": "equipment",
+  "software": "software",
+  "consumables": "consumables",
+  "clinical furniture": "clinical furniture",
+  "orthodontic tool": "orthodontic tool",
+  "surgical tool": "surgical tool",
+  "dental tool": "dental tool",
+
   "other": {
     "Loading...": "Loading...",
     "Georgia, Tbilisi, Navtlughi St. 2": "Georgia, Tbilisi, Navtlughi St. 2",
@@ -16,7 +29,7 @@
   },
 
   "footer": {
-    "© 2024 Ltd. Saparus. All Rights Reserved": "© 2024 Ltd. Saparus. All Rights Reserved"
+    "Ltd. Saparus. All Rights Reserved": " Ltd. Saparus. All Rights Reserved"
   },
 
   "about us": {
@@ -54,6 +67,70 @@
     "maxPrice": "maximum price",
     "companies": "companies",
     "All": "All",
-    "Add New Product": "Add New Product"
+    "Add New Product": "Add New Product",
+    "title": "title",
+    "prices from": "price from",
+    "to": "price to",
+    "fixed price": "fixed price",
+    "description": "description",
+    "name": "name"
+  },
+
+  "news": {
+    "English": "English",
+    "Georgian": "Georgian",
+    "Russian": "Russian",
+    "Something went wrong while deleting news article, check browser console for more detailed explanation": "Something went wrong while deleting news article, check browser console for more detailed explanation",
+    "no items, create new ones by pressing the button above": "no items, create new ones by pressing the button above",
+    "Add New Article": "Add New Article",
+    "Editing": "editing",
+    "Upload image": "upload image",
+    "are you sure you want to delete this product? this action cannot be undone.": "are you sure you want to delete this product? this action cannot be undone.",
+    "Contact for Purchase": "Contact for Purchase",
+    "Contact for Pricing": "Contact for Pricing",
+    "Contact for Information": "Contact for Information",
+    "• in stock": "• in stock",
+    "• out of stock": "• out of stock"
+  },
+
+  "admin": {
+    "something went wrong": "something went wrong",
+    "no news": "no news",
+    "News": "News",
+    "About": "About",
+    "Products": "Products",
+    "Child Program": "Child Program",
+    "log out": "log out",
+    "confirm": "confirm",
+    "discard": "discard",
+    "go back": "go back",
+    "Something went wrong while adding product, check browser console for more detailed explanation": "Something went wrong while adding product, check browser console for more detailed explanation",
+    "are you sure you want to delete this product? this action cannot be undone.": "are you sure you want to delete this product? this action cannot be undone.",
+    "Price on Request": "Price on Request",
+    "• in stock": "• in stock",
+    "• out of stock": "• out of stock",
+    "click here to reset filters": "click here to reset filters",
+    "Products not found": "Products not found",
+    "Changes saved successfully": "Changes saved successfully",
+    "Add New Child Program Article": "Add New Child Program Article",
+    "enter": "enter",
+    "admin login": "admin login",
+    "English": "English",
+    "Georgian": "Georgian",
+    "Russian": "Russian",
+    "Admin Dashboard": "Admin Dashboard",
+    "password": "password",
+    "email": "email"
+  },
+
+  "home": {
+    "Empowering Smiles With Precision": "Empowering Smiles With Precision",
+    "Contact Us": "Contact Us",
+    "View Catalog": "View Catalog",
+    "Child Program": "Child Program"
+  },
+
+  "time": {
+    "View All News Articles": "View All News Articles"
   }
 }

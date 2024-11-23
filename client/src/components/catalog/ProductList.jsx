@@ -14,6 +14,8 @@ const ProductList = ({ filter, resetFilter }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "children program" })
+
   const [limit] = useState(20)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -38,7 +40,7 @@ const ProductList = ({ filter, resetFilter }) => {
 
   const renderProducts = () => {
     if (isLoading) return <Loading />
-    if (error || !data) return <div>Something went wrong</div>
+    if (error || !data) return <div>{t("Something went wrong")}</div>
 
     const { products, pagination } = data
 
@@ -53,7 +55,7 @@ const ProductList = ({ filter, resetFilter }) => {
             }}
           >
             <h3 className="products-not-found-message">
-              Products not found, <span>click here to reset filters</span>
+              {t("Products not found")}, <span>{t("click here to reset filters")}</span>
             </h3>
           </button>
         </>

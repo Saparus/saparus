@@ -28,17 +28,17 @@ const Home = () => {
         <div className="hero-links">
           <div className="hero-link-list">
             <HeroLink
-              text="Contact Us"
+              text={t("Contact Us")}
               url="/about"
               icon={<LogoIcon />}
             />
             <HeroLink
-              text="View Catalog"
+              text={t("View Catalog")}
               url="/catalog"
               icon={<CatalogIcon />}
             />
             <HeroLink
-              text="Child Program"
+              text={t("Child Program")}
               url="/children"
               icon={<Child />}
             />

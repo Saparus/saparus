@@ -15,6 +15,8 @@ const ProductList = ({ filter, resetFilter, token }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "admin" })
+
   const [limit] = useState(20)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -38,7 +40,9 @@ const ProductList = ({ filter, resetFilter, token }) => {
     onError: (error) => {
       console.log(error.message)
       toast.error(
-        "Something went wrong while adding product, check browser console for more detailed explanation"
+        t(
+          "Something went wrong while adding product, check browser console for more detailed explanation"
+        )
       )
     },
   })
@@ -57,7 +61,7 @@ const ProductList = ({ filter, resetFilter, token }) => {
 
   const renderProducts = () => {
     if (isLoading) return <Loading />
-    if (error || !data?.products) return <div>Something went wrong</div>
+    if (error || !data?.products) return <div>{t("Something went wrong")}</div>
 
     const { products, pagination } = data
 
@@ -72,7 +76,7 @@ const ProductList = ({ filter, resetFilter, token }) => {
             }}
           >
             <h3 className="products-not-found-message">
-              Products not found, <span>click here to reset filters</span>
+              {t("Products not found")}, <span>{t("click here to reset filters")}</span>
             </h3>
           </button>
         </>

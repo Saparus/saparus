@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { useOnClickOutside } from "../../hooks/useOnClickOutside"
@@ -5,6 +6,8 @@ import { useOnClickOutside } from "../../hooks/useOnClickOutside"
 const ConfirmDeletionModal = ({ deleteItem, message, onClose, isVisible }) => {
   const modalRef = useRef(null)
   const portalRoot = document.querySelector(".app")
+
+  const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
   useOnClickOutside(modalRef, onClose)
 
@@ -41,13 +44,13 @@ const ConfirmDeletionModal = ({ deleteItem, message, onClose, isVisible }) => {
                 onClose()
               }}
             >
-              confirm
+              {t("confirm")}
             </button>
             <button
               className="discard-button"
               onClick={onClose}
             >
-              discard
+              {t("discard")}
             </button>
           </div>
         </div>

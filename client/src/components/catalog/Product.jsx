@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 import { ReactComponent as Phone } from "../../assets/phone.svg"
 
 const Product = ({ product }) => {
   const { id, name, images, inStock, fixedPrice, price } = product
+
+  const { t } = useTranslation("translation", { keyPrefix: "news" })
 
   return (
     <div className="product">
@@ -23,7 +26,7 @@ const Product = ({ product }) => {
             className={`instock ${inStock ? "is-in-stock" : ""}`}
             // style={{ color: product.inStock ? "green" : "red" }}
           >
-            {inStock ? "• in stock" : "• out of stock"}
+            {inStock ? t("• in stock") : t("• out of stock")}
           </p>
         </div>
       </Link>
@@ -41,16 +44,16 @@ const Product = ({ product }) => {
             {product.inStock ? (
               product.fixedPrice ? (
                 <p className={`contact-purchase ${inStock ? "contact-in-stock" : ""}`}>
-                  Contact for Purchase
+                  {t("Contact for Purchase")}
                 </p>
               ) : (
                 <p className={`contact-price ${inStock ? "contact-in-stock" : ""}`}>
-                  Contact for Pricing
+                  {t("Contact for Pricing")}
                 </p>
               )
             ) : (
               <p className={`contact-information ${inStock ? "contact-in-stock" : ""}`}>
-                Contact for Information
+                {t("Contact for Information")}
               </p>
             )}
           </span>

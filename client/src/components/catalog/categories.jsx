@@ -235,7 +235,7 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
           type="text"
           value={inputValue.name || ""}
           onChange={handleInputChange}
-          placeholder="search by name"
+          placeholder={t("search by name")}
         />
         {renderCategories()}
       </div>

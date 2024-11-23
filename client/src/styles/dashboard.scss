@@ -1,6 +1,5 @@
 .dashboard {
   width: 100%;
-  // margin: 2rem auto 1rem;
   position: relative;
 
   .add-new-article-button {
@@ -24,7 +23,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    // background-color: black;
     height: 100%;
     width: 100%;
     opacity: 0;
@@ -40,8 +38,6 @@
       top: 40vh;
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
-      // height: 4.25rem;
-      // width: 18rem;
       padding: 0.5rem;
       display: flex;
       align-items: center;
@@ -66,7 +62,6 @@
       .admin-auth-input {
         display: flex;
         flex-direction: column;
-        // width: calc(100% - 1.5rem);
         width: 100%;
         gap: 0.5rem;
 
@@ -138,7 +133,6 @@
     z-index: 8999;
     background-color: $accent_green;
     color: white;
-    // padding: 0.5rem;
     height: 2.5rem;
     text-align: start;
 
@@ -147,7 +141,6 @@
     align-items: center;
     gap: 0.5rem;
     box-shadow: 0 1px 4px #1c1f1f13;
-    // position: relative;
 
     h3 {
       margin-left: 2rem;
@@ -175,18 +168,13 @@
         color: white;
         font-size: 1rem;
         cursor: pointer;
-        // position: absolute;
         padding-right: 2.75rem;
         padding-left: 1.25rem;
         right: 0;
-        // padding: 0.25rem 0.75rem;
         font-weight: 500;
-        // border: 2px solid $accent_green;
         transition: background-color $animation_duration $animation;
-        // border-radius: 0.5rem;
         height: 100%;
         align-items: center;
-        // box-shadow: 2px 0px 12px #1c1f1f09, inset 2px 0px 12px #1c1f1f09;
 
         &:hover {
           background-color: $warning_red_active;
@@ -204,8 +192,6 @@
           color $animation_duration $animation;
         position: relative;
 
-        // box-shadow: 2px 0px 12px #1c1f1f09, inset 2px 0px 12px #1c1f1f09;
-
         &:hover {
           background-color: $primary-color-active;
         }
@@ -215,8 +201,6 @@
 
         &:nth-of-type(1) {
           z-index: 10;
-
-          // box-shadow: inset 2px 0px 12px #1c1f1f11;
         }
         &:nth-of-type(2) {
           z-index: 9;
@@ -239,7 +223,6 @@
   .dashboard-navbar {
     display: flex;
     box-shadow: 0 1px 1px #1c1f1f49;
-    // gap: 0.25rem;
 
     a {
       background-color: $primary-color;
@@ -254,14 +237,6 @@
 
       &:hover {
         opacity: 0.9;
-      }
-
-      &:first-of-type {
-        // border-radius: 0.5rem 0 0 0.5rem;
-      }
-
-      &:last-of-type {
-        // border-radius: 0 0.5rem 0.5rem 0;
       }
 
       &.active {
@@ -318,11 +293,9 @@
         }
 
         button {
-          // display: none;
           display: flex;
           gap: 0.5rem;
           margin-right: -0.25rem;
-          // padding: 0 0.25rem;
           cursor: pointer;
 
           svg {
@@ -347,6 +320,7 @@
     }
     input[type="number"] {
       -moz-appearance: textfield;
+      appearance: textfield;
     }
 
     .dashboard-product-price {
@@ -478,7 +452,6 @@
   .add-about-item {
     cursor: pointer;
     padding: 0.25rem;
-    // margin-top: 25rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -490,7 +463,6 @@
     color: $base-color;
     font-weight: 600;
     box-shadow: 0 1px 1px #1c1f1f07;
-    // margin-bottom: 0.5rem;
     &:hover {
       background-color: $accent_green_active;
     }
@@ -500,7 +472,6 @@
     text-align: center;
     font-size: 1.5rem;
     box-shadow: 0 1px 1px #1c1f1f07;
-    // width: 100%;
     position: sticky;
     bottom: 0;
 
@@ -625,7 +596,6 @@
           scale: 1.15;
           bottom: 1.5rem;
           left: 1.5rem;
-          // fill: $accent-green;
         }
       }
 
@@ -674,21 +644,6 @@
         text-align: justify;
         word-break: keep-all;
         width: 100%;
-
-        // padding-top: 0.5rem;
-        // font-size: 1rem;
-        // line-height: 150%;
-        // text-align: justify;
-        // word-break: keep-all;
-        // overflow-x: hidden !important;
-        // height: 30rem;
-        // max-height: 30rem;
-        // width: 100%;
-        // overflow-y: auto;
-
-        .product-description-content {
-          // overflow-y: auto;
-        }
       }
     }
   }
@@ -732,9 +687,6 @@
     width: 100%;
     padding: 0 0.25rem;
 
-    .delete-button {
-    }
-
     .edit-article {
       min-height: 50vh;
       display: flex;
@@ -757,7 +709,6 @@
       .upload-image-text {
         background-color: $primary-color;
         width: fit-content;
-        // padding: 0.5rem 1rem;
         border-radius: 0.5rem;
         color: $base-color;
         width: 10rem;
@@ -767,8 +718,8 @@
         align-items: center;
         transition: background-color $animation $animation_duration;
       }
+
       .image-input {
-        // opacity: 0;
         width: 10rem;
         height: 2.5rem;
         position: absolute;
@@ -787,9 +738,6 @@
 
     .article-title,
     .article-text {
-      // padding: 0 0.25rem;
-      // margin-left: -0.25rem;
-      // margin-right: -0.25rem;
       resize: none;
     }
 
@@ -825,10 +773,6 @@
     textarea.article-text {
       overflow-y: visible !important;
       height: 8rem;
-
-      // .article-text-content {
-      //   overflow: visible !important;
-      // }
     }
 
     .article-buttons {
@@ -842,8 +786,6 @@
         margin-right: auto;
         display: flex;
         gap: 0.5rem;
-        // position: absolute;
-        // bottom: -2.5rem;
         z-index: 1000;
 
         button {
@@ -877,7 +819,6 @@
         background-color: $warning-red;
         border-radius: 0.5rem;
         display: flex;
-        // margin-left: auto;
         transition: background-color $animation_duration $animation;
 
         &:hover {
@@ -914,7 +855,6 @@
 
         .delete-button {
           position: absolute;
-          // top: 0.5rem;
           top: 0;
           right: -3.25rem;
           cursor: pointer;
@@ -926,12 +866,6 @@
 
           &:hover {
             background-color: $warning-red-active;
-
-            svg {
-              path {
-                // fill: $warning-red-active;
-              }
-            }
           }
 
           svg {
@@ -954,13 +888,6 @@
       overflow-x: hidden !important;
       width: 100%;
       height: auto;
-      // height: 12rem;
-      // max-height: 12rem;
-      // overflow-y: auto;
-
-      .article-text-content {
-        // overflow-y: auto;
-      }
     }
   }
 }

@@ -42,7 +42,6 @@
         right: 12.5%;
         top: 50%;
         transform: translateY(-50%);
-        // transform: translateY(-50%) scale(5);
         height: 30rem;
         width: 30rem;
         max-height: calc(100% - 2rem);
@@ -92,9 +91,12 @@
           }
 
           .hero-link-text {
-            padding: 1rem 0.5rem 1rem 0.5rem;
+            height: 4rem;
             text-align: center;
             font-family: $secondary-font;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           .icon-wrapper {
@@ -105,16 +107,13 @@
             justify-content: center;
             border-radius: 0.5rem;
             background-color: $accent_green;
-            // background-color: $base-color;
             transition: background-color $animation_duration $animation;
 
             svg {
-              // background-color: #e7e7e5;
               padding: 0.5rem;
               height: 8rem;
               width: 8rem;
               border-radius: 0.5rem;
-              // box-shadow: 0 6px 10px #16181833;
               filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
 
               path {
@@ -129,8 +128,6 @@
 
   .home-page-news {
     width: 80%;
-    // max-width: 1240px;
-    // padding: 0.25rem;
     margin: 2rem auto 1rem;
     font-family: $main-font;
 
@@ -151,7 +148,6 @@
         position: absolute;
         bottom: -3rem;
         right: 0;
-        // color: $accent-green;
         color: $primary-color;
         transition: color $animation_duration $animation;
         text-decoration: underline;
@@ -168,18 +164,11 @@
         display: block;
         transition: filter $animation_duration $animation;
 
-        &:hover {
-          .description {
-            // --line-clamp: 0 !important;
-          }
-        }
-
         .image {
           position: absolute;
           width: 100%;
           height: auto;
           max-height: 100%;
-          // overflow: hidden;
 
           .shadow-holder {
             width: 100%;
@@ -247,7 +236,6 @@
 
             border-radius: 0.5rem;
             border: 3px solid $primary-color;
-            // max-height: 100% !important;
             object-fit: cover;
           }
         }
@@ -282,16 +270,12 @@
             justify-content: space-between;
             align-items: end;
             font-size: 0.85rem;
-            // margin-right: 0.25rem;
-            // margin-bottom: 0.25rem;
             margin-top: 0.5rem;
             color: $dark-text-color;
 
             .title {
               font-weight: 500;
               font-size: 1.25rem;
-              // overflow: hidden;
-              // text-overflow: ellipsis;
               white-space: nowrap;
               margin-right: 1.5rem;
               max-width: 20rem;

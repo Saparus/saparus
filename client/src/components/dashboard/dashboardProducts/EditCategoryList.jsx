@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 import { ReactComponent as XMarkIcon } from "../../../assets/icons/xmark.svg"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
 
@@ -98,12 +100,14 @@ const EditCategoryList = ({
 export default EditCategoryList
 
 const CategoryItem = ({ type, value, removeCategory }) => {
+  const { t } = useTranslation("translation")
+
   return (
     <div className="category-item">
       <div className="category-item-text">
-        <p className={`category-type-key`}>{type}</p>
+        <p className={`category-type-key`}>{t(type)}</p>
         <p className={`category-type-key`}>|</p>
-        <p className={`category-${type}`}>{value}</p>
+        <p className={`category-${type}`}>{t(value)}</p>
       </div>
 
       <button onClick={removeCategory}>

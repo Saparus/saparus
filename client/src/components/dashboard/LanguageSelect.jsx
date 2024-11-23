@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 const languages = [
   { code: "en", name: "English" },
   { code: "ka", name: "Georgian" },
@@ -5,6 +7,8 @@ const languages = [
 ]
 
 const LanguageSelect = ({ selectedLanguage, setSelectedLanguage }) => {
+  const { t } = useTranslation("translation", { keyPrefix: "admin" })
+
   return (
     <div className="language-select">
       {languages.map((language) => (
@@ -15,7 +19,7 @@ const LanguageSelect = ({ selectedLanguage, setSelectedLanguage }) => {
             setSelectedLanguage(language.code)
           }}
         >
-          {language.name}
+          {t(language.name)}
         </button>
       ))}
     </div>

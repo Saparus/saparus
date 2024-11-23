@@ -13,6 +13,8 @@ const NewsList = () => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "news" })
+
   const [limit] = useState(20)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -25,7 +27,7 @@ const NewsList = () => {
   if (isLoading) return <Loading />
   if (error || !data) {
     console.log(error)
-    return <div>something went wrong</div>
+    return <div>{t("something went wrong")}</div>
   }
 
   const scrollToTop = () => {
@@ -42,12 +44,12 @@ const NewsList = () => {
 
   const renderNewsArticles = () => {
     if (isLoading) return <Loading />
-    if (error || !data) return <div>something went wrong</div>
+    if (error || !data) return <div>{t("something went wrong")}</div>
 
     const { articles, pagination } = data
 
     if (articles?.length === 0) {
-      return <p>no news</p>
+      return <p>{t("no news")}</p>
     } else {
       return (
         <>

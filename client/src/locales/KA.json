@@ -1,8 +1,20 @@
 {
+  "company": "კომპანია",
+  "type": "ტიპი",
+  "dental units": "სტომატოლოგიური აპარატურა",
+  "accessories": "აქსესუარები",
+  "equipment": "აღჭურვილობა",
+  "software": "პროგრამული უზრუნველყოფა",
+  "consumables": "მოხმარებითი მასალა",
+  "clinical furniture": "კლინიკური ავეჯი",
+  "orthodontic tool": "ორთოდონტული ხელსაწყოები",
+  "surgical tool": "ქირურგიული ხელსაწყოები",
+  "dental tool": "სტომატოლოგიური ხელსაწყოები",
+
   "other": {
-    "Loading...": "Loading...",
-    "Georgia, Tbilisi, Navtlughi St. 2": "Georgia, Tbilisi, Navtlughi St. 2",
-    "Page Not Found": "Page Not Found"
+    "Loading...": "იტვირთება...",
+    "Georgia, Tbilisi, Navtlughi St. 2": "საქართველო, თბილისი, ნავთლუღის ქ. 2",
+    "Page Not Found": "გვერდი ვერ მოიძებნა"
   },
 
   "header": {
@@ -10,39 +22,114 @@
     "Home": "მთავარი",
     "About": "ჩვენს შესახებ",
     "Catalog": "კატალოგი",
-    "Dental instruments & Equipment": "Dental instruments & Equipment",
-    "Georgia, Tbilisi, Navtlughi St. 2": "Georgia, Tbilisi, Navtlughi St. 2",
-    "Empowering Smiles With Precision": "Empowering Smiles With Precision"
+    "Dental instruments & Equipment": "სტომატოლოგიური ხელსაწყოები და აღჭურვილობა",
+    "Georgia, Tbilisi, Navtlughi St. 2": "საქართველო, თბილისი, ნავთლუღის ქ. 2",
+    "Empowering Smiles With Precision": "ღიმილის გაძლიერება სიზუსტით"
   },
 
   "footer": {
-    "© 2024 Ltd. Saparus. All Rights Reserved": "© 2024 Ltd. Saparus. All Rights Reserved"
+    "Ltd. Saparus. All Rights Reserved": "შპს საპარუსი. ყველა უფლება დაცულია"
   },
 
   "about us": {
-    "English": "English",
-    "Georgian": "Georgian",
-    "Russian": "Russian"
+    "English": "ინგლისური",
+    "Georgian": "ქართული",
+    "Russian": "რუსული"
   },
 
   "products": {
     "English": "ინგლისური",
     "Georgian": "ქართული",
     "Russian": "რუსული",
-    "Contact for Purchase": "Contact for Purchase",
-    "Contact for Pricing": "Contact for Pricing,",
-    "Price on Request": "Price on Request",
-    "Image not found": "Image not found",
-    "• in stock": "• in stock",
-    "• out of stock": "• out of stock",
-    "company": "company",
-    "type": "type",
-    "accessories": "accessories",
-    "equipment": "equipment",
-    "software": "software",
-    "consumables": "consumables",
-    "search by name": "search by name",
-    "price": "price",
-    "Search": "Search"
+    "Contact for Purchase": "დაგვიკავშირდით ყიდვაზე",
+    "Contact for Pricing": "დაგვიკავშირდით ფასზე",
+    "Price on Request": "ფასი მოთხოვნით",
+    "Image not found": "სურათი ვერ მოიძებნა",
+    "• in stock": "• ხელმისაწვდომია",
+    "• out of stock": "• არ არის ხელმისაწვდომი",
+    "company": "კომპანია",
+    "type": "ტიპი",
+    "accessory": "აქსესუარი",
+    "dental units": "სტომატოლოგიური აპარატურა",
+    "accessories": "აქსესუარები",
+    "equipment": "აღჭურვილობა",
+    "software": "პროგრამული უზრუნველყოფა",
+    "consumables": "მოხმარებითი მასალა",
+    "clinical furniture": "კლინიკური ავეჯი",
+    "orthodontic tool": "ორთოდონტული ხელსაწყოები",
+    "surgical tool": "ქირურგიული ხელსაწყოები",
+    "dental tool": "სტომატოლოგიური ხელსაწყოები",
+    "search by name": "ძებნა სახელით",
+    "price": "ფასი",
+    "Search": "ძიება",
+    "minPrice": "მინიმალური ფასი",
+    "maxPrice": "მაქსიმალური ფასი",
+    "companies": "კომპანიები",
+    "All": "ყველა",
+    "Add New Product": "ახალი პროდუქტის დამატება",
+    "title": "სათაური",
+    "prices from": "ფასები",
+    "to": "დან",
+    "fixed price": "ფიქსირებული ფასი",
+    "description": "აღწერა",
+    "name": "სახელი"
+  },
+
+  "news": {
+    "English": "ინგლისური",
+    "Georgian": "ქართული",
+    "Russian": "რუსული",
+    "Something went wrong while deleting news article, check browser console for more detailed explanation": "სტატიის წაშლისას შეცდომა მოხდა, დამატებითი დეტალები იხილეთ ბრაუზერის კონსოლში",
+    "no items, create new ones by pressing the button above": "ჩანაწერები არ არის, ახალი შექმენით ზედა ღილაკზე დაჭერით",
+    "Add New Article": "ახალი სტატიის დამატება",
+    "Editing": "რედაქტირება",
+    "Upload image": "სურათის ატვირთვა",
+    "are you sure you want to delete this product? this action cannot be undone.": "დარწმუნებული ხართ, რომ გსურთ ამ პროდუქტის წაშლა? ეს ქმედება შეუქცევადია.",
+    "Contact for Purchase": "დაგვიკავშირდით ყიდვისთვის",
+    "Contact for Pricing": "დაგვიკავშირდით ფასების შესახებ",
+    "Contact for Information": "დაგვიკავშირდით ინფორმაციისთვის",
+    "• in stock": "• ხელმისაწვდომია",
+    "• out of stock": "• არ არის ხელმისაწვდომი"
+  },
+
+  "admin": {
+    "something went wrong": "მოხდა შეცდომა",
+    "no news": "სიახლეები არ არის",
+    "News": "სიახლეები",
+    "About": "ჩვენ შესახებ",
+    "Products": "პროდუქცია",
+    "Child Program": "ბავშვების პროგრამა",
+    "log out": "გამოსვლა",
+    "confirm": "დადასტურება",
+    "discard": "გაუქმება",
+    "go back": "უკან დაბრუნება",
+    "Something went wrong while adding product, check browser console for more detailed explanation": "პროდუქტის დამატებისას მოხდა შეცდომა , დამატებითი დეტალები იხილეთ ბრაუზერის კონსოლში",
+    "are you sure you want to delete this product? this action cannot be undone.": "დარწმუნებული ხართ, რომ გსურთ ამ პროდუქტის წაშლა? ეს ქმედება შეუქცევადია.",
+    "Price on Request": "ფასი მოთხოვნით",
+    "• in stock": "• ხელმისაწვდომია",
+    "• out of stock": "• არ არის ხელმისაწვდომი",
+    "click here to reset filters": "ფილტრების გადასატვირთად დააწკაპუნეთ აქ",
+    "Products not found": "პროდუქცია ვერ მოიძებნა",
+    "Changes saved successfully": "ცვლილებები წარმატებით შენახულია",
+    "Add New Child Program Article": "ბავშვების პროგრამის სტატიის დამატება",
+    "enter": "შესვლა",
+    "admin login": "ადმინისტრატორის შესვლა",
+    "English": "ინგლისური",
+    "Georgian": "ქართული",
+    "Russian": "რუსული",
+    "Admin Dashboard": "ადმინისტრატორის პანელი",
+    "password": "პაროლი",
+    "email": "ელ. ფოსტა"
+  },
+
+  "home": {
+    "Empowering Smiles With Precision": "ღიმილის გაძლიერება სიზუსტით",
+    "Contact Us": "დაგვიკავშირდით",
+    "View Catalog": "კატალოგის ნახვა",
+    "Child Program": "ბავშვების პროგრამა"
+  },
+
+  "time": {
+    "View All News Articles": "ყველა სტატიის ნახვა"
   }
 }

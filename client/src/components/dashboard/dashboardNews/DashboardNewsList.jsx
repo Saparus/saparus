@@ -14,6 +14,8 @@ const DashboardNewsList = ({ token, type = "news" }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "news" })
+
   const [limit] = useState(20)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -28,7 +30,7 @@ const DashboardNewsList = ({ token, type = "news" }) => {
   if (isLoading) return <Loading />
   if (error || !data) {
     console.log(error)
-    return <div>something went wrong</div>
+    return <div>{t("Something went wrong")}</div>
   }
 
   const scrollToTop = () => {
@@ -45,13 +47,15 @@ const DashboardNewsList = ({ token, type = "news" }) => {
 
   const renderNewsArticles = () => {
     if (isLoading) return <Loading />
-    if (error || !data) return <div>Something went wrong</div>
+    if (error || !data) return <div>{t("Something went wrong")}</div>
 
     const { articles, pagination } = data
 
     if (articles?.length === 0) {
       return (
-        <p className="no-items-message">no items, create new ones by pressing the button above</p>
+        <p className="no-items-message">
+          {t("no items, create new ones by pressing the button above")}
+        </p>
       )
     } else {
       return (

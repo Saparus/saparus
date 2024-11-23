@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
 
@@ -8,6 +9,8 @@ import ConfirmDeletionModal from "../ConfirmDeletionModal"
 const EditProductLink = ({ product, handleDelete }) => {
   const [isHovering, setIsHovering] = useState(false)
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
+
+  const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
   const handleOnHover = () => {
     if (isConfirmDeletionModalVisible) return
@@ -56,7 +59,7 @@ const EditProductLink = ({ product, handleDelete }) => {
             className="instock"
             style={{ color: product.inStock ? "green" : "red" }}
           >
-            {product.inStock ? "• in stock" : "• out of stock"}
+            {product.inStock ? t("• in stock") : t("• out of stock")}
           </p>
         </div>
       </div>
@@ -72,14 +75,14 @@ const EditProductLink = ({ product, handleDelete }) => {
       )}
       <div className="product-shop">
         <div className="shop">
-          <p>{product.fixedPrice ? product.price + "$" : "Price on Request"}</p>
+          <p>{product.fixedPrice ? product.price + "$" : t("Price on Request")}</p>
         </div>
       </div>
       {isConfirmDeletionModalVisible ? (
         <ConfirmDeletionModal
           deleteItem={handleDelete}
           onClose={handleCloseConfirmCloseModal}
-          message="are you sure you want to delete this product? this action cannot be undone."
+          message={t("are you sure you want to delete this product? this action cannot be undone.")}
         />
       ) : (
         ""

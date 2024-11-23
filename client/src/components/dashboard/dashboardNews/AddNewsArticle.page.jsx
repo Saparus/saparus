@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 import { addNewsArticle } from "../../../services/newsServices"
 
@@ -24,6 +25,8 @@ const emptyNewsArticle = {
 const AddNewsArticlePage = () => {
   const { token } = useOutletContext()
 
+  const { t } = useTranslation("translation", { keyPrefix: "admin" })
+
   const queryClient = useQueryClient()
 
   const addProductMutation = useMutation({
@@ -33,7 +36,7 @@ const AddNewsArticlePage = () => {
       return await addNewsArticle(title, text, images, id, token)
     },
     onSuccess: () => {
-      toast.success("Changes saved successfully")
+      toast.success(t("Changes saved successfully"))
       queryClient.invalidateQueries(["news", token]) // this will cause refetching
     },
     onError: (error) => {

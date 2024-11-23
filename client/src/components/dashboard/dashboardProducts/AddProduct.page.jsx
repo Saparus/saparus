@@ -1,6 +1,7 @@
 import { useOutletContext } from "react-router-dom"
 import { useMutation, useQueryClient } from "react-query"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 import { addProduct } from "../../../services/productServices"
 
@@ -28,6 +29,8 @@ const emptyProductData = {
 const AddProductPage = () => {
   const { token } = useOutletContext()
 
+  const { t } = useTranslation("translation", { keyPrefix: "admin" })
+
   const queryClient = useQueryClient()
 
   const addProductMutation = useMutation({
@@ -52,7 +55,9 @@ const AddProductPage = () => {
     onError: (error) => {
       console.log(error.message)
       toast.error(
-        "Something went wrong while adding product, check browser console for more detailed explanation"
+        t(
+          "Something went wrong while adding product, check browser console for more detailed explanation"
+        )
       )
     },
   })

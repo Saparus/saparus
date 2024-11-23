@@ -105,8 +105,6 @@ export const getProduct = async (id, language) => {
 
 // get an editable product by id (requires token)
 export const getEditProduct = async (id, token) => {
-  if (!token) throw new Error("token is required")
-
   try {
     const { data } = await ajax.get(`/product/getEdit/${id}`, authHeaders(token))
     return data

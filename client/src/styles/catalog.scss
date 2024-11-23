@@ -19,11 +19,7 @@
     align-items: center;
     justify-content: center;
     height: 2rem;
-    // margin-bottom: 1.5rem;
-    // margin-top: 1.25rem;
-    // width: 260px;
     width: 100%;
-    // max-width: 280px;
     padding: 2.5rem 0.5rem 2rem 0.5rem;
     border: 1px solid $gray;
     border-radius: 0.5rem;
@@ -31,8 +27,6 @@
     .slider {
       position: relative;
       width: 90%;
-      // max-width: 280px;
-      // width: 260px;
 
       .price-info {
         display: flex;
@@ -94,16 +88,14 @@
     }
 
     .slider-left-value {
-      // left: 6px;
       left: -0.25rem;
     }
 
     .slider-right-value {
-      // right: -4px;
       right: -0.25rem;
     }
 
-    /* Removing the default appearance */
+    /* removes the default scrollbar appearance */
     .thumb,
     .thumb::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -115,8 +107,6 @@
       position: absolute;
       height: 0;
       width: 90%;
-      // max-width: 280px;
-      // width: 260px;
       display: block;
       outline: none;
     }
@@ -154,7 +144,6 @@
 
       &:active {
         background-color: $primary-color-active;
-        // opacity: 0.75;
       }
     }
 
@@ -181,12 +170,8 @@
 
       &:active {
         background-color: $primary-color-active;
-        // opacity: 0.75;
       }
     }
-  }
-
-  .products-not-found-message {
   }
 
   .categories-main-part {
@@ -300,9 +285,6 @@
     }
   }
 
-  .products_categories {
-  }
-
   .products-categories,
   .dashboard-products {
     padding: 2rem 1rem 2rem 0;
@@ -329,14 +311,12 @@
       cursor: pointer;
       opacity: 0;
       padding: 0.5rem;
-      // transform: scale(0.8);
       transition: opacity $animation_duration $animation,
         background-color $animation_duration $animation, transform $animation_duration $animation;
       animation: appearFromTopLeft $animation_duration $animation forwards;
 
       &:hover {
         background-color: $warning_red_active;
-        // transform: scale(1.25) !important;
       }
 
       svg {
@@ -372,10 +352,8 @@
       }
 
       .utils {
-        // gap: 20%;
         gap: 0.75rem;
         display: flex;
-        // padding: 10%;
 
         a {
           width: 100%;
@@ -399,7 +377,6 @@
           min-width: 50px;
           width: 40%;
 
-          // height: 30px;
           border-radius: 0.5rem;
           padding: 0.65rem 0.35rem;
           background-color: $primary-color;
@@ -429,8 +406,6 @@
     }
 
     .products {
-      // padding-block: 10px;
-      // min-height: 100dvh;
       height: fit-content;
       width: 100%;
       flex: 4;
@@ -441,7 +416,6 @@
         flex-wrap: wrap;
         gap: 1rem;
         justify-content: start;
-        // position: relative;
       }
 
       .reset-filters {
@@ -508,8 +482,6 @@
         }
 
         .select-list {
-          // flex-direction: row;
-
           .select-list-items {
             flex-direction: row;
           }
@@ -531,53 +503,3 @@
     }
   }
 }
-
-// @media screen and (max-width: 540px) {
-//   .products {
-//     .product-list {
-//       .product {
-//         min-width: auto;
-//         max-width: 24rem;
-//         height: auto;
-//         width: calc(100% - 1rem);
-//         aspect-ratio: 4/5;
-//         font-size: 1rem;
-
-//         .information {
-//           margin-top: auto;
-//           height: fit-content;
-
-//           .name {
-//             font-size: 1rem;
-//           }
-
-//           .instock {
-//             margin-top: 0;
-//           }
-//         }
-
-//         .image {
-//           min-width: auto;
-//           max-width: 24rem;
-//           height: auto;
-//           max-height: 21rem;
-//           width: calc(100% - 1rem);
-//           aspect-ratio: 6/11;
-//           flex-grow: 1;
-
-//           img {
-//             height: auto;
-//             width: 100%;
-//             height: 20rem !important;
-//             // aspect-ratio: 11/6;
-//             // min-width: auto;
-//             // max-width: 24rem;
-//             // height: auto;
-//             // width: calc(100% - 1rem);
-//             // aspect-ratio: 4/5;
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
