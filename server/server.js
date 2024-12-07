@@ -1,11 +1,7 @@
-// import express from "express"
-const express = require("express")
-// import cors from "cors"
-const cors = require("cors")
+const serverless = require("serverless-http")
 
-// import authRoutes from "./routes/authRoutes"
-// import productRoutes from "./routes/productRoutes"
-// import newsRoutes from "./routes/newsRoutes"
+const express = require("express")
+const cors = require("cors")
 
 const authRoutes = require("./routes/authRoutes")
 const productRoutes = require("./routes/productRoutes")
@@ -13,7 +9,7 @@ const aboutRoutes = require("./routes/aboutRoutes")
 const newsRoutes = require("./routes/newsRoutes")
 const childrenRoutes = require("./routes/childrenProgramRoutes")
 
-const PORT = process.env.PORT || 8000
+// const PORT = process.env.PORT || 8000
 
 const app = express()
 
@@ -33,4 +29,5 @@ app.use("/about", aboutRoutes)
 app.use("/news", newsRoutes)
 app.use("/children", childrenRoutes)
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+// app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+module.exports.handler = serverless(app)
