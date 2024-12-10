@@ -1,4 +1,4 @@
-const filterProducts = (products, filter, language = "en") => {
+export const filterProducts = (products, filter, language = "en") => {
   const translatedProducts = products.map((product) => {
     const { name, description } = product
 
@@ -37,5 +37,3 @@ const filterProducts = (products, filter, language = "en") => {
 
   return filteredProducts
 }
-
-module.exports = filterProducts

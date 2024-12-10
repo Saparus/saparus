@@ -1,4 +1,4 @@
-const filterProducts = (products, filter) => {
+export const filterProducts = (products, filter) => {
   try {
     const filters = Object.fromEntries(
       Object.entries(filter).filter(([key, value]) => value !== "")
@@ -26,5 +26,3 @@ const filterProducts = (products, filter) => {
     return []
   }
 }
-
-module.exports = filterProducts

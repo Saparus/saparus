@@ -1,0 +1,97 @@
+service: server-service
+org: saparus
+app: saparus-backend
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: us-west-2
+  environment:
+    PRODUCTS: productsTable
+    USERS: usersTable
+    JWT_SECRET: ${self:provider.environment.JWT_SECRET}
+
+functions:
+  # products
+  addProduct:
+    handler: products.addProduct
+    events:
+      - http:
+          path: products
+          method: post
+
+  getCategories:
+    handler: products.getCategories
+    events:
+      - http:
+          path: products/categories
+          method: get
+
+  getProduct:
+    handler: products.getProduct
+    events:
+      - http:
+          path: products/{id}
+          method: get
+
+  getProducts:
+    handler: products.getProducts
+    events:
+      - http:
+          path: products
+          method: get
+
+  editProduct:
+    handler: products.editProduct
+    events:
+      - http:
+          path: products/{id}
+          method: put
+
+  deleteProduct:
+    handler: products.deleteProduct
+    events:
+      - http:
+          path: products/{id}
+          method: delete
+
+  # authentication
+  register:
+    handler: auth.register
+    events:
+      - http:
+          path: auth/register
+          method: post
+
+  login:
+    handler: auth.login
+    events:
+      - http:
+          path: auth/login
+          method: post
+
+resources:
+  Resources:
+    ProductsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: products
+        AttributeDefinitions:
+          - AttributeName: products
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: users
+        AttributeDefinitions:
+          - AttributeName: users
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

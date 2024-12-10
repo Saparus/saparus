@@ -1,4 +1,4 @@
-const summarizeCategoryData = (products) => {
+export const summarizeCategoryData = (products) => {
   const categoryData = {}
   const companyData = {}
   let overallMinPrice = Infinity
@@ -53,5 +53,3 @@ const summarizeCategoryData = (products) => {
     maxPrice: overallMaxPrice,
   }
 }
-
-module.exports = summarizeCategoryData

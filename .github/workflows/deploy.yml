@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "22"
+
+      - name: Install dependencies (frontend)
+        working-directory: frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Deploy frontend to S3 & CloudFront
+        env:
+          # secrets should be added on github (not sure at all)
+          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
+        run: |
+          aws s3 sync frontend/build/ s3://${{ secrets.BUCKET_NAME }} --delete
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
+
+      - name: Install dependencies (backend)
+        working-directory: backend
+        run: npm install
+
+      - name: Deploy backend using Serverless
+        working-directory: backend
+        env:
+          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: serverless deploy --stage production
