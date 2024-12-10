@@ -1,7 +1,15 @@
+import dotenv from "dotenv"
 import jwt from "jsonwebtoken"
-import { DynamoDB } from "aws-sdk"
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
+import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb"
 
-const dynamoDB = new DynamoDB.DocumentClient()
+dotenv.config()
+
+const client = new DynamoDBClient({})
+
+const dynamoDB = DynamoDBDocumentClient.from(client)
+
+const tableName = "users"
 
 export const authMiddleware = async (handler) => async (event) => {
   if (event.headers.authorization && event.headers.authorization.startsWith("Bearer")) {
@@ -14,7 +22,7 @@ export const authMiddleware = async (handler) => async (event) => {
 
       // finds user by ID from the accounts array
       const params = {
-        TableName: "USERS",
+        TableName: tableName,
         Key: { userId: decoded.userId },
       }
 
