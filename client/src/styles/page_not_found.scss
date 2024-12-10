@@ -6,5 +6,12 @@
   h2 {
     font-family: "Righteous", sans-serif;
     font-size: 3rem;
+    color: $primary-color;
+    text-shadow: 0 0px 1px #272b2c3b;
+
+    span {
+      color: $accent_green;
+      text-shadow: 0 0px 1px #272b2c3b;
+    }
   }
 }

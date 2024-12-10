@@ -4,9 +4,15 @@
   .hero {
     height: 55dvh;
     width: 100%;
-    background: linear-gradient(to bottom, #348ae1 0%, $secondary-color 100%);
+    background: linear-gradient(
+      to bottom,
+      $primary-color 0%,
+      lighten($secondary-color, 20%) 50%,
+      lighten($secondary-color, 15%) 100%
+    );
     position: relative;
     box-shadow: 0 1px 4px #1c1f1f13;
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
@@ -18,7 +24,7 @@
       h2 {
         width: fit-content;
         font-size: 3rem;
-        color: white;
+        color: $text-color;
         font-family: "Righteous", sans-serif;
         position: absolute;
         top: 40%;
@@ -33,7 +39,7 @@
       svg {
         opacity: 0.5;
         position: absolute;
-        right: 10%;
+        right: 12.5%;
         top: 50%;
         transform: translateY(-50%);
         height: 30rem;
@@ -60,7 +66,8 @@
         gap: 1rem;
 
         .hero-link {
-          background-color: $secondary-color;
+          background-color: rgba($primary-color, 0.2);
+          backdrop-filter: blur(6px);
           height: 12rem;
           width: 10rem;
           display: block;
@@ -70,12 +77,13 @@
           box-shadow: 0 6px 10px #2b303133;
           display: flex;
           flex-direction: column;
-          transition: transform $animation $animation_duration,
-            box-shadow $animation $animation_duration;
+          transition: background-color $animation $animation_duration,
+            transform $animation $animation_duration, box-shadow $animation $animation_duration;
 
           &:hover {
             transform: translateY(-2.5%);
             box-shadow: 0 6px 10px #272b2c3b;
+            background-color: rgba($primary-color, 0.05);
 
             .icon-wrapper {
               background-color: $accent_green_active;
@@ -83,9 +91,12 @@
           }
 
           .hero-link-text {
-            padding: 1rem 0.5rem;
+            height: 4rem;
             text-align: center;
-            font-family: "Righteous", sans-serif;
+            font-family: $secondary-font;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           .icon-wrapper {
@@ -99,12 +110,10 @@
             transition: background-color $animation_duration $animation;
 
             svg {
-              // background-color: #e7e7e5;
               padding: 0.5rem;
               height: 8rem;
               width: 8rem;
               border-radius: 0.5rem;
-              // box-shadow: 0 6px 10px #16181833;
               filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
 
               path {
@@ -120,30 +129,32 @@
   .home-page-news {
     width: 80%;
     margin: 2rem auto 1rem;
-    font-family: "Righteous", sans-serif;
+    font-family: $main-font;
 
     h2 {
-      font-weight: 400;
-      font-size: 2.5rem;
+      font-weight: 500;
+      font-size: 2rem;
+      color: $dark-text-color;
     }
 
     .news {
       display: flex;
       margin-bottom: 6rem;
-      gap: 2rem;
+      height: 550px;
+      gap: 1.25rem;
       position: relative;
 
       .view-more-news-link {
         position: absolute;
-        bottom: -2rem;
+        bottom: -3rem;
         right: 0;
-        color: $accent-green;
+        color: $primary-color;
         transition: color $animation_duration $animation;
         text-decoration: underline;
         flex: 0;
 
         &:hover {
-          color: $accent-green-active;
+          color: $primary-color;
         }
       }
 
@@ -151,22 +162,30 @@
         position: relative;
         flex: 3;
         display: block;
-        // height: fit-content;
-        // max-height: 580px;
-        // max-width: 770px;
         transition: filter $animation_duration $animation;
 
         .image {
           position: absolute;
-
           width: 100%;
           height: auto;
+          max-height: 100%;
+
+          .shadow-holder {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-radius: 0.5rem;
+            background: linear-gradient(to top, #22242538 10%, rgba(255, 255, 255, 0) 40%);
+            height: fit-content;
+          }
 
           .latest-news-information {
             position: absolute;
             bottom: 0rem;
             z-index: 50;
-            color: white;
+            color: $base-color;
             padding: 1rem;
 
             .latest-news-title {
@@ -179,29 +198,44 @@
               .date {
                 font-size: 1.25rem;
                 opacity: 0.75;
-                margin-right: 0.75rem;
+                color: $base-color;
+                white-space: nowrap;
               }
 
               .title {
-                font-weight: 400;
+                font-weight: 500;
                 font-size: 2rem;
+                color: $base-color;
+                white-space: nowrap;
               }
             }
 
             .description {
+              font-size: 0.85rem;
+              text-align: justify;
+              word-break: keep-all;
+              color: $base-color;
             }
+          }
+
+          .no-image-image {
+            height: 550px;
+            max-height: 100%;
+            width: 100%;
+            border-radius: 0.5rem;
+            position: relative;
+            z-index: 10;
+            border: 3px solid $primary-color;
           }
 
           img {
             width: 100%;
-            height: auto;
-            // height: 100%;
+            height: 100%;
+            height: 550px;
+            box-shadow: 0 2px 4px #16181833;
+
             border-radius: 0.5rem;
             border: 3px solid $primary-color;
-
-            max-height: 580px;
-            // max-width: 770px;
-
             object-fit: cover;
           }
         }
@@ -215,11 +249,11 @@
         .news-item {
           color: black;
           border-bottom: 2px solid $primary-color;
-          padding: 0.5rem 0;
+          padding: 0.25rem 0;
           transition: opacity $animation_duration $animation;
 
           &:hover {
-            opacity: 0.85;
+            opacity: 0.75;
           }
 
           &:first-of-type {
@@ -236,22 +270,150 @@
             justify-content: space-between;
             align-items: end;
             font-size: 0.85rem;
-            margin-right: 0.25rem;
-            margin-bottom: 0.25rem;
+            margin-top: 0.5rem;
+            color: $dark-text-color;
 
             .title {
-              font-weight: 400;
-              font-size: 1.5rem;
+              font-weight: 500;
+              font-size: 1.25rem;
+              white-space: nowrap;
+              margin-right: 1.5rem;
+              max-width: 20rem;
             }
 
             .date {
               opacity: 0.5;
+              white-space: nowrap;
             }
           }
 
           .description {
             font-weight: 400;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            text-align: justify;
+            word-break: keep-all;
+            color: $dark-text-color;
           }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1240px) {
+  .home-page-news {
+    width: calc(100% - 0.5rem) !important;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .home {
+    .hero {
+      height: 45dvh;
+
+      .hero-text {
+        h2 {
+          padding: 0 1rem;
+          left: 0 !important;
+          top: 20%;
+          text-align: center;
+          width: 100%;
+        }
+      }
+    }
+
+    .home-page-news {
+      h2 {
+        text-align: center;
+      }
+    }
+
+    .hero-link-list {
+      padding: 0 1rem;
+      left: 0 !important;
+      bottom: 5% !important;
+      gap: 0.5rem !important;
+      width: 100%;
+      height: auto;
+      justify-content: center;
+    }
+
+    .view-more-news-link {
+      position: static !important;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      font-size: 1.25rem;
+      margin: auto;
+    }
+
+    .news {
+      flex-direction: column;
+      padding: 0.5rem;
+      height: auto !important;
+      margin-bottom: 1rem !important;
+
+      .no-image-image {
+        height: auto;
+      }
+
+      .latest-news {
+        margin-top: auto;
+
+        .latest-news-information {
+          position: static !important;
+          padding: 0 !important;
+          border-bottom: 2px solid $primary-color;
+
+          .latest-news-title {
+            margin-bottom: 0 !important;
+
+            .date {
+              font-size: 0.85rem !important;
+              color: $dark-text-color !important;
+              opacity: 0.5 !important;
+            }
+
+            .title {
+              color: $dark-text-color !important;
+              font-size: 1.25rem !important;
+            }
+          }
+
+          .description {
+            color: $dark-text-color !important;
+            line-clamp: 6 !important;
+            -webkit-line-clamp: 6 !important;
+            padding-bottom: 0.25rem;
+          }
+        }
+
+        .image {
+          position: static !important;
+
+          img {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .hero-link-list {
+    padding: 0 !important;
+    width: 100% !important;
+    gap: 0.25rem !important;
+
+    .hero-link {
+      height: 10rem !important;
+      width: 7.5rem !important;
+
+      .icon-wrapper {
+        svg {
+          height: 6rem !important;
+          width: 6rem !important;
         }
       }
     }

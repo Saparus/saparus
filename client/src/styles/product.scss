@@ -1,66 +1,66 @@
 @import "./variables";
 
 .product {
-  // padding: 1rem;
   min-width: 16rem;
   max-width: 16rem;
-  height: 21rem;
+  height: 20rem;
   border-radius: 0.5rem;
-  // border: solid 1px #e0e0e0;
   background-color: $text-color;
-  font-size: 13px;
+  font-size: 0.85rem;
   display: flex;
   flex-direction: column;
   box-shadow: 0 6px 10px #afc2c733;
-  transition: box-shadow $animation_duration $animation;
+  transition: box-shadow $animation_duration $animation, transform $animation_duration $animation;
 
   .product-link {
-    padding: 1rem 1rem 0.25rem 1rem;
+    padding: 0.5rem 0.5rem 0.25rem 0.5rem;
     padding-bottom: auto;
     color: black;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-
-    &:hover {
-      // outline: 1px solid red;
-    }
+    color: $dark-text-color;
   }
 
   &:hover {
     box-shadow: 0 6px 10px #72808533;
+    transform: translateY(-0.25rem);
   }
 
   .image {
     margin: 0 auto;
 
-    min-width: 14rem;
-    min-height: 11.375rem;
+    min-width: 15rem;
+    min-height: 12rem;
 
-    max-width: 14rem;
-    max-height: 11.375rem;
+    max-width: 15rem;
+    max-height: 12rem;
 
     border-radius: 0.5rem;
-    background-color: $base-color;
-
-    box-shadow: 0 0 2px 2px #afc2c733;
+    background-color: white;
 
     img {
       width: 100%;
       height: 100%;
-      height: 11.375rem;
+      height: 12rem;
 
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 
   .instock {
-    color: rgb(68, 150, 68);
+    color: $success_green;
     margin-top: auto;
+    font-weight: 600;
+    user-select: none;
+
+    color: $warning_red;
+    &.is-in-stock {
+      color: $success_green;
+    }
   }
 
   .product-shop {
-    // margin-top: auto;
     padding: 0 1rem 0.75rem 1rem;
 
     &:hover {
@@ -69,10 +69,22 @@
 
         .go-to-contacts-text {
           opacity: 1;
+
+          transform: translateX(-1rem);
+        }
+
+        .unfixed-price {
+          opacity: 0;
+          transform: translateX(-1.5rem);
+        }
+
+        .fixed-price {
+          transform: translateX(-0.25rem);
         }
 
         .cart {
           opacity: 0;
+          transform: translateX(1.5rem);
         }
       }
     }
@@ -85,23 +97,48 @@
       margin-top: auto;
       padding-top: 0.75rem;
       align-items: center;
-      color: black;
-      transition: opacity $animation_duration $animation;
+      color: $dark-text-color;
+      transition: opacity $animation_duration $animation, transform $animation_duration $animation;
       position: relative;
+
+      svg {
+        path {
+          fill: $dark-text-color !important;
+        }
+      }
 
       .cart {
         opacity: 1;
-        transition: opacity $animation_duration $animation;
+        transition: opacity $animation_duration $animation, transform $animation_duration $animation;
+      }
+
+      .price {
+        font-weight: 500;
+        opacity: 1;
+        transition: opacity $animation_duration $animation, transform $animation_duration $animation,
+          scale $animation_duration $animation;
+        color: $dark-text-color;
       }
 
       .go-to-contacts-text {
         opacity: 0;
-        // bottom: -0.75rem;
-        font-size: 0.75rem;
         right: 0;
         position: absolute;
-        transition: opacity $animation_duration $animation, width $animation_duration $animation;
+        transition: opacity $animation_duration $animation, width $animation_duration $animation,
+          transform $animation_duration $animation;
         font-weight: 600;
+
+        .contact-purchase {
+          color: $success_green;
+        }
+
+        .contact-price {
+          color: $primary-color;
+        }
+
+        .contact-information {
+          color: $primary-color;
+        }
       }
     }
   }
@@ -113,10 +150,11 @@
     justify-content: flex-start;
     gap: 0.25rem;
     height: 100%;
+    padding: 1rem 0.5rem 0 0.5rem;
 
     .name {
-      font-size: 13px;
-      font-weight: bold;
+      font-size: 0.85rem;
+      font-weight: 600;
       text-wrap: balance;
     }
   }
