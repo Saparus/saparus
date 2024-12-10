@@ -1,25 +1,31 @@
 import dotenv from "dotenv"
 import jwt from "jsonwebtoken"
-import AWS from "aws-sdk"
 import bcrypt from "bcrypt"
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
+import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb"
+import { uuidv4 } from "uuid"
 
 dotenv.config()
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient()
+const client = new DynamoDBClient({})
+
+const dynamoDB = DynamoDBDocumentClient.from(client)
+
+const tableName = "users"
 
 // POST /auth/login
 export const login = async (event) => {
   const { username, password } = JSON.parse(event.body)
 
   const params = {
-    TableName: process.env.USERS_TABLE,
+    TableName: tableName,
     Key: {
       username: username,
     },
   }
 
   try {
-    const data = await dynamoDb.get(params).promise()
+    const data = await dynamoDB.send(new GetCommand(params))
     const user = data.Item
 
     if (user && (await bcrypt.compare(password, user.hashedPassword))) {
@@ -50,7 +56,7 @@ export const register = async (event) => {
   const hashedPassword = await bcrypt.hash(password, 10)
 
   const params = {
-    TableName: process.env.USERS,
+    TableName: tableName,
     Item: {
       id: uuidv4(),
       username: username,
@@ -59,7 +65,7 @@ export const register = async (event) => {
   }
 
   try {
-    await dynamoDb.put(params).promise()
+    await dynamoDB.put(params).promise()
     return {
       statusCode: 201,
       body: JSON.stringify({ message: "User created successfully" }),
