@@ -1,16 +1,18 @@
-service: server-service
-org: saparus
-app: saparus-backend
+service: saparus
 
 provider:
   name: aws
-  runtime: nodejs22.x
+  runtime: nodejs20.x
   region: us-west-2
-  environment:
-    PRODUCTS: productsTable
-    USERS: usersTable
-    JWT_SECRET: ${self:provider.environment.JWT_SECRET}
 
+plugins:
+  - serverless-s3-sync
+
+custom:
+  s3Sync:
+    - bucketName: saparus-products
+      localDir: client/build
+# Backend: Lambda + API Gateway configuration
 functions:
   # products
   addProduct:
@@ -72,26 +74,30 @@ functions:
 
 resources:
   Resources:
-    ProductsTable:
-      Type: AWS::DynamoDB::Table
+    # CloudFront distribution for serving the frontend
+    FrontendCloudFront:
+      Type: AWS::CloudFront::Distribution
       Properties:
-        TableName: products
-        AttributeDefinitions:
-          - AttributeName: products
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
+        DistributionConfig:
+          Enabled: 'true'
+          Origins:
+            - DomainName: saparus-products.s3.us-west-2.amazonaws.com
+              Id: S3Origin
+              S3OriginConfig:
+                OriginAccessIdentity: ''
+          DefaultCacheBehavior:
+            TargetOriginId: S3Origin
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: 'false'
+              Cookies:
+                Forward: 'none'
+          DefaultRootObject: index.html
 
-    UsersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: users
-        AttributeDefinitions:
-          - AttributeName: users
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
+# Define the deployment path for frontend files
+package:
+  exclude:
+    - "server/**"
+  include:
+    - "client/**"
+
