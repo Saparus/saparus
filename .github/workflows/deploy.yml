@@ -1,52 +1,30 @@
-name: Deploy
-
+name: Deploy Frontend to AWS
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+      - master  # Trigger deployment when pushing to the main branch
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "22"
+          node-version: '22'
 
-      - name: Install dependencies (frontend)
-        working-directory: frontend
-        run: npm install
-
-      - name: Build frontend
-        working-directory: frontend
-        run: npm run build
-
-      - name: Deploy frontend to S3 & CloudFront
-        env:
-          # secrets should be added on github (not sure at all)
-          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
+      - name: Install dependencies
         run: |
-          aws s3 sync frontend/build/ s3://${{ secrets.BUCKET_NAME }} --delete
-          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
+          npm install
+          npm install -g serverless
 
-      - name: Install dependencies (backend)
-        working-directory: backend
-        run: npm install
-
-      - name: Deploy backend using Serverless
-        working-directory: backend
+      - name: Deploy to AWS
+        run: |
+          serverless deploy
         env:
-          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: serverless deploy --stage production
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-west-2'
