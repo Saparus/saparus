@@ -73,8 +73,7 @@ functions:
           method: post
 
 resources:
-  Resources:
-    # CloudFront distribution for serving the frontend
+  Resources: # CloudFront distribution for serving the frontend
     FrontendCloudFront:
       Type: AWS::CloudFront::Distribution
       Properties:
@@ -100,4 +99,3 @@ package:
     - "server/**"
   include:
     - "client/**"
-

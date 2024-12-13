@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master  # Trigger deployment when pushing to the main branch
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
