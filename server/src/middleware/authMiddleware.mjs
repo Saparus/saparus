@@ -14,7 +14,7 @@ export const authMiddleware = async (handler) => async (event) => {
 
       // finds user by ID from the accounts array
       const params = {
-        TableName: "USERS",
+        TableName: "User",
         Key: { userId: decoded.userId },
       }
 
@@ -37,3 +37,4 @@ export const authMiddleware = async (handler) => async (event) => {
     }
   }
 }
+
