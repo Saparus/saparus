@@ -5,7 +5,7 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs22.x
-  region: us-west-2
+  region: ${{secrets.AWS_REGION}}
   environment:
     ABOUT_TABLE: ${self:provider.about_table}
     CHILDREN_PROGRAMS_TABLE: ${self:provider.children_programs_table}
