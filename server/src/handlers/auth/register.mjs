@@ -4,7 +4,7 @@ import { bcrypt } from "bcrypt"
 import { db } from "../../util/db.mjs"
 
 export const register = async (event) => {
-  const { username, password } = JSON.parse(event.body)
+  const { email, username, password } = JSON.parse(event.body)
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -12,6 +12,7 @@ export const register = async (event) => {
     TableName: process.env.USER_TABLE,
     Item: {
       id: uuid(),
+      email: email,
       username: username,
       hashedPassword: hashedPassword,
     },

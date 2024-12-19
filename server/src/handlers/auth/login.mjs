@@ -4,12 +4,12 @@ import { bcrypt } from "bcrypt"
 import { db } from "../../util/db.mjs"
 
 export const login = async (event) => {
-  const { username, password } = JSON.parse(event.body)
+  const { email, password } = JSON.parse(event.body)
 
   const params = {
     TableName: process.env.USER_TABLE,
     Key: {
-      username: username,
+      email: email,
     },
   }
 
@@ -17,7 +17,7 @@ export const login = async (event) => {
     const { Item: user } = await db.get(params)
 
     if (user && (await bcrypt.compare(password, user.hashedPassword))) {
-      const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: "1d" })
+      const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1d" })
       return {
         statusCode: 200,
         body: JSON.stringify({ token }),
