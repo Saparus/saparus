@@ -22,7 +22,7 @@ jobs:
         run: |
           cd server
           npm install
-          npm install -g serverless
+          npm install -g serverless@3.38.0
 
       - name: Deploy server to AWS
         run: |
