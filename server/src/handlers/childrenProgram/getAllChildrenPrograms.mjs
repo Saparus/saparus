@@ -7,38 +7,38 @@ export const getAllChildrenPrograms = async (event) => {
 
   try {
     const params = {
-      TableName: process.env.children_program_table,
+      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
     }
 
-    const result = await db.scan(params).promise()
+    const { Item: programs } = await db.scan(params).promise()
 
-    if (!result.Item) {
+    if (!programs) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "Program not found" }),
       }
     }
 
-    const translatedResult = result.Items.map((program) => ({
+    const translatedPrograms = programs.map((program) => ({
       ...program,
       text: program.text[languageToApply],
       title: program.title[languageToApply],
     }))
 
-    translatedResult.sort((a, b) => a.date - b.date)
+    translatedPrograms.sort((a, b) => a.date - b.date)
 
     const startIndex = (page - 1) * limit
-    const paginatedResult = translatedResult.slice(startIndex, startIndex + limit)
+    const paginatedPrograms = translatedPrograms.slice(startIndex, startIndex + limit)
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        articles: paginatedResult,
+        articles: paginatedPrograms,
         pagination: {
           currentPage: page,
-          hasNextPage: startIndex + limit < translatedResult.length,
-          totalArticles: translatedResult.length,
-          totalPages: Math.ceil(translatedResult.length / limit),
+          hasNextPage: startIndex + limit < translatedPrograms.length,
+          totalArticles: translatedPrograms.length,
+          totalPages: Math.ceil(translatedPrograms.length / limit),
         },
       }),
     }

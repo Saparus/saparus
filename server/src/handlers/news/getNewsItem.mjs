@@ -8,25 +8,25 @@ export const getNewsItem = async (event) => {
     const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
     const params = {
-      TableName: process.env.news_table,
+      TableName: process.env.NEWS_TABLE,
       Key: { id },
     }
 
-    const result = await db.get(params).promise()
+    const { Item: newsItem } = await db.get(params).promise()
 
-    if (!result.Item) {
+    if (!newsItem) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "News item not found" }),
       }
     }
 
-    const { title, text } = result.Item
+    const { title, text } = newsItem
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        ...result.Item,
+        ...newsItem,
         title: title[languageToApply],
         text: text[languageToApply],
       }),

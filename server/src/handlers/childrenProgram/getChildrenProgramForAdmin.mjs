@@ -5,13 +5,13 @@ export const getChildrenProgramForAdmin = async (event) => {
     const { id } = event.pathParameters
 
     const params = {
-      TableName: process.env.children_program_table,
+      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
       Key: { id },
     }
 
-    const result = await db.get(params).promise()
+    const { Item: program } = await db.get(params).promise()
 
-    if (!result.Items || result.Items.length === 0) {
+    if (!program) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "No items found" }),
@@ -20,12 +20,13 @@ export const getChildrenProgramForAdmin = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(result.Items),
+      body: JSON.stringify(program),
     }
   } catch (error) {
+    console.error(error)
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: error.message }),
+      body: JSON.stringify({ message: "Internal Server Error" }),
     }
   }
 }

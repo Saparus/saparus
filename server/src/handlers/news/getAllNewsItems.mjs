@@ -7,12 +7,12 @@ export const getAllNewsItems = async (event) => {
 
   try {
     const params = {
-      TableName: process.env.news_table,
+      TableName: process.env.NEWS_TABLE,
     }
 
-    const result = await db.scan(params).promise()
+    const { Items: newsItems } = await db.scan(params).promise()
 
-    const translatedResult = result.Items.map((newsItem) => {
+    const translatedResult = newsItems.map((newsItem) => {
       const tempNewsItem = { ...newsItem }
       tempNewsItem.text = newsItem.text[languageToApply]
       tempNewsItem.title = newsItem.title[languageToApply]

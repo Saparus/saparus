@@ -3,12 +3,12 @@ import { db } from "../../util/db.mjs"
 export const getAllChildrenProgramsForAdmin = async (event) => {
   try {
     const params = {
-      TableName: process.env.children_program_table,
+      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
     }
 
-    const result = await db.scan(params).promise()
+    const { Items: programs } = await db.scan(params).promise()
 
-    if (!result.Items || result.Items.length === 0) {
+    if (!programs || programs.length === 0) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "No items found" }),
@@ -17,7 +17,7 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(result.Items),
+      body: JSON.stringify(programs),
     }
   } catch (error) {
     return {

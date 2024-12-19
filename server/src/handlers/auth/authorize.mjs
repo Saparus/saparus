@@ -11,7 +11,7 @@ export const authorize = async (event) => {
 
     // fetch user from DynamoDB
     const params = {
-      TableName: "users",
+      TableName: process.env.USER_TABLE,
       Key: { id: decoded.id },
     }
 

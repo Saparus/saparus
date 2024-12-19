@@ -7,15 +7,14 @@ export const login = async (event) => {
   const { username, password } = JSON.parse(event.body)
 
   const params = {
-    TableName: process.env.user_table,
+    TableName: process.env.USER_TABLE,
     Key: {
       username: username,
     },
   }
 
   try {
-    const data = await db.get(params)
-    const user = data.Item
+    const { Item: user } = await db.get(params)
 
     if (user && (await bcrypt.compare(password, user.hashedPassword))) {
       const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: "1d" })

@@ -4,11 +4,11 @@ import { summarizeCategoryData } from "../../util/summarizeCategoryData"
 export const getCategories = async (event) => {
   try {
     const params = {
-      TableName: process.env.product_table,
+      TableName: process.env.PRODUCTS_TABLE,
     }
 
-    const result = await db.scan(params).promise()
-    const categories = summarizeCategoryData(result.Items)
+    const { Items: products } = await db.scan(params).promise()
+    const categories = summarizeCategoryData(products)
 
     return {
       statusCode: 200,

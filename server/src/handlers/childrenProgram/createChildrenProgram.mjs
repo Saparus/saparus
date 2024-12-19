@@ -29,14 +29,14 @@ export const createChildrenProgram = async (event) => {
 
     const childrenProgram = {
       id: uuid(),
-      date: new Date().toISOString(),
+      date: Date.now(),
       title,
       text,
       images: uploadedImages,
     }
 
     const params = {
-      TableName: process.env.children_program_table,
+      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
       Item: childrenProgram,
     }
 

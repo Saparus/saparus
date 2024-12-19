@@ -5,7 +5,7 @@ export const deleteProduct = async (event) => {
     const { id } = event.pathParameters
 
     const params = {
-      TableName: process.env.product_table,
+      TableName: process.env.PRODUCTS_TABLE,
       Key: { id },
     }
 

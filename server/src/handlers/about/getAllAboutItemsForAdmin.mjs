@@ -1,16 +1,16 @@
 import { db } from "../../util/db.mjs"
 
-export const getEditAboutItems = async (event) => {
+export const getAllAboutItemsForAdmin = async (event) => {
   const params = {
-    TableName: process.env.about_table,
+    TableName: process.env.ABOUT_TABLE,
   }
 
-  // not implemented
-
   try {
+    const { Items: aboutItems } = await db.scan(params).promise()
+
     return {
       statusCode: 200,
-      body: JSON.stringify("not implemented"),
+      body: JSON.stringify(aboutItems),
     }
   } catch (error) {
     console.error(error)

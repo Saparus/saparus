@@ -5,16 +5,16 @@ export const getAllNewsItemForAdmin = async (event) => {
     const { limit, page } = event.queryStringParameters
 
     const params = {
-      TableName: process.env.news_table,
+      TableName: process.env.NEWS_TABLE,
     }
 
-    const result = await db.scan(params).promise()
+    const { Items: newsItems } = await db.scan(params).promise()
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
-    const paginatedResult = result?.Items?.slice(startIndex, endIndex)
+    const paginatedResult = newsItems.slice(startIndex, endIndex)
 
-    if (!result.Items || result.Items.length === 0) {
+    if (!newsItems || newsItems.length === 0) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "No items found" }),
@@ -27,9 +27,9 @@ export const getAllNewsItemForAdmin = async (event) => {
         news: paginatedResult,
         pagination: {
           currentPage: page,
-          hasNextPage: endIndex < result.Items.length,
-          totalNewsArticles: result.Items.length,
-          totalPages: Math.ceil(result.Items.length / limit),
+          hasNextPage: endIndex < newsItems.length,
+          totalNewsArticles: newsItems.length,
+          totalPages: Math.ceil(newsItems.length / limit),
         },
       }),
     }

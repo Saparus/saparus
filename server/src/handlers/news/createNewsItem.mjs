@@ -36,7 +36,7 @@ export const createNewsItem = async (event) => {
     }
 
     const params = {
-      TableName: process.env.news_table,
+      TableName: process.env.NEWS_TABLE,
       Item: newsItem,
     }
 

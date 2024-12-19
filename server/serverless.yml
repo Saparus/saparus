@@ -66,7 +66,7 @@ functions:
           - "dynamodb:Scan"
         Resource: !GetAtt AboutTable.Arn
 
-  getAboutForAdmin:
+  getAllAboutItemsForAdmin:
     handler: handlers/about/getAllAboutItemsForAdmin
     name: get-about-admin
     events:

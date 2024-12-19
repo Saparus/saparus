@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid"
 import AWS from "aws-sdk"
+
 import { db } from "../../util/db.mjs"
 
 const s3 = new AWS.S3()
@@ -31,7 +32,7 @@ export const editProduct = async (event) => {
     )
 
     const params = {
-      TableName: process.env.product_table,
+      TableName: process.env.PRODUCTS_TABLE,
       Key: { id },
       UpdateExpression:
         "set #name = :name, fixedPrice = :fixedPrice, price = :price, #description = :description, categories = :categories, inStock = :inStock, images = :images",

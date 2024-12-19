@@ -5,13 +5,13 @@ export const getProductForAdmin = async (event) => {
     const { id } = event.pathParameters
 
     const params = {
-      TableName: process.env.product_table,
+      TableName: process.env.PRODUCTS_TABLE,
       Key: { id },
     }
 
-    const result = await db.get(params).promise()
+    const { Item: product } = await db.get(params).promise()
 
-    if (!result.Item) {
+    if (!product) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "Product not found" }),
@@ -20,7 +20,7 @@ export const getProductForAdmin = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(result.Item),
+      body: JSON.stringify(product),
     }
   } catch (error) {
     return {

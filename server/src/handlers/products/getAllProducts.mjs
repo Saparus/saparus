@@ -8,12 +8,12 @@ export const getAllNewsItems = async (event) => {
 
   try {
     const params = {
-      TableName: process.env.product_table,
+      TableName: process.env.PRODUCTS_TABLE,
     }
 
-    const result = await db.scan(params).promise()
+    const { Items: products } = await db.scan(params).promise()
 
-    const translatedResult = result.Items.map((newsItem) => {
+    const translatedProducts = products.map((newsItem) => {
       const tempNewsItem = { ...newsItem }
       tempNewsItem.text = newsItem.text[languageToApply]
       tempNewsItem.title = newsItem.title[languageToApply]
@@ -21,13 +21,11 @@ export const getAllNewsItems = async (event) => {
       return tempNewsItem
     })
 
-    const products = result.Items
-
     if (filter) {
       const parsedFilter = JSON.parse(decodeURIComponent(filter))
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter
 
-      products = filterProducts(products, otherFilters, languageToApply)
+      products = filterProducts(translatedProducts, otherFilters, languageToApply)
 
       if (minPrice || maxPrice) {
         products = products.filter((product) => {

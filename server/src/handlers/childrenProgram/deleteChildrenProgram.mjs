@@ -5,7 +5,7 @@ export const deleteChildrenProgram = async (event) => {
     const { id } = event.pathParameters
 
     const params = {
-      TableName: process.env.children_program_table,
+      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
       Key: { id },
     }
 

@@ -25,7 +25,7 @@ export const editChildrenProgram = async (event) => {
     )
 
     const params = {
-      TableName: process.env.children_program_table,
+      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
       Key: { id },
       UpdateExpression: "set title = :title, text = :text, images = :images",
       ExpressionAttributeValues: {

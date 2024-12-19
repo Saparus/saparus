@@ -5,7 +5,7 @@ export const deleteNewsItem = async (event) => {
     const { id } = event.pathParameters
 
     const params = {
-      TableName: process.env.news_table,
+      TableName: process.env.NEWS_TABLE,
       Key: { id },
     }
 

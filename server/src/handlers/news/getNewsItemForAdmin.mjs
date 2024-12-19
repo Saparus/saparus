@@ -5,13 +5,13 @@ export const getNewsItemForAdmin = async (event) => {
     const { id } = event.pathParameters
 
     const params = {
-      TableName: process.env.news_table,
+      TableName: process.env.NEWS_TABLE,
       Key: { id },
     }
 
-    const result = await db.get(params).promise()
+    const { Item: newsItem } = await db.get(params).promise()
 
-    if (!result.Item) {
+    if (!newsItem) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "No items found" }),
@@ -20,7 +20,7 @@ export const getNewsItemForAdmin = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(result.Item),
+      body: JSON.stringify(newsItem),
     }
   } catch (error) {
     return {

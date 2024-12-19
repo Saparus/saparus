@@ -8,25 +8,25 @@ export const getProduct = async (event) => {
     const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
     const params = {
-      TableName: process.env.product_table,
+      TableName: process.env.PRODUCTS_TABLE,
       Key: { id },
     }
 
-    const result = await db.get(params).promise()
+    const { Item: product } = await db.get(params).promise()
 
-    if (!result.Item) {
+    if (!product) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "Product not found" }),
       }
     }
 
-    const { title, text } = result.Item
+    const { title, text } = product
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        ...result.Item,
+        ...product,
         title: title[languageToApply],
         text: text[languageToApply],
       }),

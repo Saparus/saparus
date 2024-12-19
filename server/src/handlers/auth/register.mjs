@@ -9,7 +9,7 @@ export const register = async (event) => {
   const hashedPassword = await bcrypt.hash(password, 10)
 
   const params = {
-    TableName: process.env.user_table,
+    TableName: process.env.USER_TABLE,
     Item: {
       id: uuid(),
       username: username,
