@@ -83,7 +83,7 @@ functions:
           - "dynamodb:GetItem"
         Resource: !GetAtt AboutTable.Arn
 
-  editAbout:
+  editAllAboutItems:
     handler: handlers/about/editAllAboutItems
     events:
       - http:
@@ -96,25 +96,29 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
+          - "dynamodb:Scan"
+          - "dynamodb:DeleteItem"
           - "dynamodb:PutItem"
-        Resource: !GetAtt AboutTable.Arn
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt AboutTable.Arn
+          - arn:aws:s3:::${self:provider.bucket_name}/*
 
   # Children Program
   createChildrenProgram:
     handler: handlers/childrenProgram/createChildrenProgram
     events:
       - http:
-          path: children-program
+          path: children-program/create
           method: post
-          authorizer:
-            name: verify-token
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-        Resource: !GetAtt childrenProgramTable.Arn
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ChildrenProgramsTable.Arn
+          - arn:aws:s3:::${self:provider.bucket_name}/*
 
   getChildrenProgram:
     handler: handlers/childrenProgram/getChildrenProgram
@@ -132,17 +136,16 @@ functions:
     handler: handlers/childrenProgram/editChildrenProgram
     events:
       - http:
-          path: children-program/{id}
-          method: put
-          authorizer:
-            name: verify-token
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+          path: children-program/edit/{id}
+          method: post
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:PutItem"
-        Resource: !GetAtt childrenProgramTable.Arn
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ChildrenProgramsTable.Arn
+          - arn:aws:s3:::${self:provider.bucket_name}/*
 
   deleteChildrenProgram:
     handler: handlers/childrenProgram/deleteChildrenProgram
@@ -177,17 +180,16 @@ functions:
     handler: handlers/news/createNewsItem
     events:
       - http:
-          path: news
+          path: news/create
           method: post
-          authorizer:
-            name: verify-token
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-        Resource: !GetAtt NewsTable.Arn
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt NewsTable.Arn
+          - arn:aws:s3:::${self:provider.bucket_name}/*
 
   getNewsItem:
     handler: handlers/news/getNewsItem
@@ -205,17 +207,16 @@ functions:
     handler: handlers/news/editNewsItem
     events:
       - http:
-          path: news/{id}
-          method: put
-          authorizer:
-            name: verify-token
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+          path: news/edit/{id}
+          method: post
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:PutItem"
-        Resource: !GetAtt NewsTable.Arn
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt NewsTable.Arn
+          - arn:aws:s3:::${self:provider.bucket_name}/*
 
   deleteNewsItem:
     handler: handlers/news/deleteNewsItem
@@ -254,17 +255,16 @@ functions:
     handler: handlers/products/createProduct
     events:
       - http:
-          path: products
+          path: products/create
           method: post
-          authorizer:
-            name: verify-token
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-        Resource: !GetAtt ProductsTable.Arn
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ProductsTable.Arn
+          - arn:aws:s3:::${self:provider.bucket_name}/*
 
   getProduct:
     handler: handlers/products/getProduct
@@ -282,17 +282,16 @@ functions:
     handler: handlers/products/editProduct
     events:
       - http:
-          path: products/{id}
-          method: put
-          authorizer:
-            name: verify-token
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+          path: products/edit/{id}
+          method: post
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:PutItem"
-        Resource: !GetAtt ProductsTable.Arn
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ProductsTable.Arn
+          - arn:aws:s3:::${self:provider.bucket_name}/*
 
   deleteProduct:
     handler: handlers/products/deleteProduct

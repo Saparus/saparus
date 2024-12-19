@@ -1,8 +1,9 @@
+import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 const LanguageSelector = () => {
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+  const currentLanguage = i18n.language.split("-")[0] // Get the base language code
 
   const availableLanguages = [
     { name: "english", code: "en" },
@@ -14,9 +15,14 @@ const LanguageSelector = () => {
     i18n.changeLanguage(language)
   }
 
+  useEffect(() => {
+    if (!availableLanguages.some((lang) => lang.code === currentLanguage)) {
+      changeLanguage("en")
+    }
+  }, [currentLanguage, availableLanguages])
+
   const handleChange = (event) => {
     const selectedLanguage = event.target.value
-
     changeLanguage(selectedLanguage)
   }
 
