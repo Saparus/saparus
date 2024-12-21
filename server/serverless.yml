@@ -1,4 +1,4 @@
-service: saparus
+service: saparus-backend
 
 frameworkVersion: "3"
 
@@ -69,6 +69,7 @@ functions:
   getAllAboutItemsForAdmin:
     handler: handlers/about/getAllAboutItemsForAdmin
     name: get-about-admin
+    iamRoleStatementsName: get-about-admin-role
     events:
       - http:
           path: about
