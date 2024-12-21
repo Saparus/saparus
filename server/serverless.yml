@@ -7,13 +7,13 @@ provider:
   runtime: nodejs22.x
   region: ${{secrets.AWS_REGION}}
   environment:
-    ABOUT_TABLE: ${self:provider.about_table}
-    CHILDREN_PROGRAMS_TABLE: ${self:provider.children_programs_table}
-    NEWS_TABLE: ${self:provider.news_table}
-    PRODUCTS_TABLE: ${self:provider.products_table}
-    USERS_TABLE: ${self:provider.users_table}
-    JWT_SECRET: ${self:provider.secrets.JWT_SECRET}
-    BUCKET_NAME: ${self:provider.bucket_name}
+    ABOUT_TABLE: ${{secrets.ABOUT_TABLE}}
+    CHILDREN_PROGRAMS_TABLE: ${{secrets.CHILDREN_PROGRAMS_TABLE}}
+    NEWS_TABLE: ${{secrets.NEWS_TABLW}}
+    PRODUCTS_TABLE: ${{secrets.PRODUCTS_TABLE}}
+    USERS_TABLE: ${{secrets.USERS_TABLE}}
+    JWT_SECRET: ${{secrets.secrets.JWT_SECRET}}
+    BUCKET_NAME: ${{secrets.BUCKET_NAME}}
 
 plugins:
   - serverless-iam-roles-per-function
