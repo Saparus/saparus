@@ -102,7 +102,7 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt AboutTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   # Children Program
   createChildrenProgram:
@@ -118,7 +118,7 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getChildrenProgram:
     handler: handlers/childrenProgram/getChildrenProgram
@@ -145,7 +145,7 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteChildrenProgram:
     handler: handlers/childrenProgram/deleteChildrenProgram
@@ -189,7 +189,7 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt NewsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getNewsItem:
     handler: handlers/news/getNewsItem
@@ -216,7 +216,7 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt NewsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteNewsItem:
     handler: handlers/news/deleteNewsItem
@@ -264,7 +264,7 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getProduct:
     handler: handlers/products/getProduct
@@ -295,7 +295,7 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteProduct:
     handler: handlers/products/deleteProduct
@@ -330,7 +330,7 @@ resources:
     AboutTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.about_table}
+        TableName: ${env.ABOUT_TABLE}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -342,7 +342,7 @@ resources:
     ChildrenProgramTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.children_program_table}
+        TableName: ${env.CHILDREN_PROGRAMS_TABLE}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -354,7 +354,7 @@ resources:
     NewsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.news_table}
+        TableName: ${env.NEWS_TABLE}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -366,7 +366,7 @@ resources:
     ProductsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.products_table}
+        TableName: ${env.PRODUCTS_TABLE}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -378,7 +378,7 @@ resources:
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.users_table}
+        TableName: ${env.USERS_TABLE}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
