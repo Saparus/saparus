@@ -1,55 +1,48 @@
 import { v4 as uuid } from "uuid"
-import AWS from "aws-sdk"
 import { db } from "../../util/db.mjs"
-
-const s3 = new AWS.S3()
+import { uploadImage } from "../../util/s3.mjs"
 
 export const createNewsItem = async (event) => {
+  const { title, text, images } = JSON.parse(event.body)
+
+  // Validate input
+  if (!title || !text || !images || !Array.isArray(images)) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+    }
+  }
+
   try {
-    const { title, text, images } = JSON.parse(event.body)
-
-    const uploadedImages = await Promise.all(
-      images.map(async (image, index) => {
-        const imageBuffer = Buffer.from(image, "base64")
-        const key = `news-items/${uuid()}-${index}`
-
-        const uploadParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: key,
-          Body: imageBuffer,
-          ContentType: "image/jpeg", // we will think about webp later
-          ACL: "public-read",
-        }
-
-        await s3.upload(uploadParams).promise()
-
-        return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${key}`
+    const imageUrls = await Promise.all(
+      images.map(async (image) => {
+        const imageBuffer = Buffer.from(image.data, "base64")
+        const imageKey = `news/${uuid()}.jpg`
+        await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
+        return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
       })
     )
 
-    const newsItem = {
-      id: uuid(),
-      date: Date.now(),
-      title,
-      text,
-      images: uploadedImages,
-    }
-
     const params = {
       TableName: process.env.NEWS_TABLE,
-      Item: newsItem,
+      Item: {
+        id: uuid(),
+        title: title,
+        text: text,
+        imageUrls: imageUrls,
+      },
     }
 
-    await db.put(params).promise()
-
+    await db.put(params)
     return {
       statusCode: 201,
-      body: JSON.stringify(newsItem),
+      body: JSON.stringify({ message: "News item created successfully" }),
     }
-  } catch (error) {
+  } catch (err) {
+    console.error(err)
     return {
-      statusCode: 401,
-      body: JSON.stringify({ message: error.message }),
+      statusCode: 500,
+      body: JSON.stringify({ message: "Internal server error" }),
     }
   }
 }

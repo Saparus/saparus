@@ -1,55 +1,51 @@
 import { v4 as uuid } from "uuid"
-import AWS from "aws-sdk"
 import { db } from "../../util/db.mjs"
-
-const s3 = new AWS.S3()
+import { uploadImage } from "../../util/s3.mjs"
 
 export const editNewsItem = async (event) => {
+  const { id } = event.pathParameters
+  const { title, text, images } = JSON.parse(event.body)
+
+  // Validate input
+  if (!title || !text || !images || !Array.isArray(images)) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+    }
+  }
+
   try {
-    const { id } = event.pathParameters
-    const { title, text, images } = JSON.parse(event.body)
-
-    const uploadedImages = await Promise.all(
-      images.map(async (image, index) => {
-        const imageBuffer = Buffer.from(image, "base64")
-        const key = `news-items/${uuid()}-${index}`
-
-        const uploadParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: key,
-          Body: imageBuffer,
-          ContentType: "image/jpeg", // we will think about webp later
-          ACL: "public-read", // make the object publicly readable
-        }
-
-        await s3.upload(uploadParams).promise()
-
-        return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${key}`
+    const imageUrls = await Promise.all(
+      images.map(async (image) => {
+        const imageBuffer = Buffer.from(image.data, "base64")
+        const imageKey = `news/${uuid()}.jpg`
+        await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
+        return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
       })
     )
 
     const params = {
       TableName: process.env.NEWS_TABLE,
       Key: { id },
-      UpdateExpression: "set title = :title, text = :text, images = :images",
+      UpdateExpression: "set title = :title, text = :text, imageUrls = :imageUrls",
       ExpressionAttributeValues: {
         ":title": title,
         ":text": text,
-        ":images": uploadedImages,
+        ":imageUrls": imageUrls,
       },
       ReturnValues: "UPDATED_NEW",
     }
 
-    const result = await db.update(params).promise()
-
+    const result = await db.update(params)
     return {
       statusCode: 200,
       body: JSON.stringify(result.Attributes),
     }
-  } catch (error) {
+  } catch (err) {
+    console.error(err)
     return {
-      statusCode: 401,
-      body: JSON.stringify({ message: error.message }),
+      statusCode: 500,
+      body: JSON.stringify({ message: "Internal server error" }),
     }
   }
 }

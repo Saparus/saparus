@@ -1,5 +1,5 @@
-import { DynamoDBClient } from "@aws-sdk"
-import { DynamoDBDocumentClient } from "@aws-sdk"
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb"
 
 const client = new DynamoDBClient({
   region: "us-west-2",

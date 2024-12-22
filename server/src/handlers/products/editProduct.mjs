@@ -1,33 +1,25 @@
 import { v4 as uuid } from "uuid"
-import AWS from "aws-sdk"
-
 import { db } from "../../util/db.mjs"
-
-const s3 = new AWS.S3()
+import { uploadImage } from "../../util/s3.mjs"
 
 export const editProduct = async (event) => {
+  const { id } = event.pathParameters
+  const { name, description, price, images } = JSON.parse(event.body)
+
+  if (!name || !description || !price || !images || !Array.isArray(images)) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+    }
+  }
+
   try {
-    const { id } = event.pathParameters
-    const { name, fixedPrice, price, description, categories, inStock, images } = JSON.parse(
-      event.body
-    )
-
-    const uploadedImages = await Promise.all(
-      images.map(async (image, index) => {
-        const imageBuffer = Buffer.from(image, "base64")
-        const key = `products/${uuid()}-${index}`
-
-        const uploadParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: key,
-          Body: imageBuffer,
-          ContentType: "image/jpeg", // we will think about webp later
-          ACL: "public-read",
-        }
-
-        await s3.upload(uploadParams).promise()
-
-        return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${key}`
+    const imageUrls = await Promise.all(
+      images.map(async (image) => {
+        const imageBuffer = Buffer.from(image.data, "base64")
+        const imageKey = `products/${uuid()}.jpg`
+        await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
+        return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
       })
     )
 
@@ -35,33 +27,26 @@ export const editProduct = async (event) => {
       TableName: process.env.PRODUCTS_TABLE,
       Key: { id },
       UpdateExpression:
-        "set #name = :name, fixedPrice = :fixedPrice, price = :price, #description = :description, categories = :categories, inStock = :inStock, images = :images",
-      ExpressionAttributeNames: {
-        "#name": "name",
-        "#description": "description",
-      },
+        "set name = :name, description = :description, price = :price, imageUrls = :imageUrls",
       ExpressionAttributeValues: {
         ":name": name,
-        ":fixedPrice": fixedPrice,
-        ":price": price,
         ":description": description,
-        ":categories": categories,
-        ":inStock": inStock,
-        ":images": uploadedImages,
+        ":price": price,
+        ":imageUrls": imageUrls,
       },
       ReturnValues: "UPDATED_NEW",
     }
 
-    const result = await db.update(params).promise()
-
+    const result = await db.update(params)
     return {
       statusCode: 200,
       body: JSON.stringify(result.Attributes),
     }
-  } catch (error) {
+  } catch (err) {
+    console.error(err)
     return {
-      statusCode: 401,
-      body: JSON.stringify({ message: error.message }),
+      statusCode: 500,
+      body: JSON.stringify({ message: "Internal server error" }),
     }
   }
 }
