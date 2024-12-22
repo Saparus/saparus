@@ -46,10 +46,11 @@ export const login = async (event) => {
       }
     }
   } catch (error) {
+    console.log(error)
     return {
       statusCode: 500,
       body: JSON.stringify({
-        message: process.env.MODE === "dev" ? error : "Internal server error",
+        message: "Internal server error",
       }),
     }
   }
