@@ -18,6 +18,12 @@ provider:
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    number: 3
 
 functions:
   # Authentication
