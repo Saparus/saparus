@@ -200,8 +200,8 @@ functions:
 
   getChildrenProgramForAdmin:
     handler: src/handlers/childrenProgram/getChildrenProgramForAdmin.getChildrenProgramForAdmin
-    name: get-children
-    iamRoleStatementsName: get-children-role
+    name: get-children-admin
+    iamRoleStatementsName: get-children-admin-role
     events:
       - http:
           path: children-program/admin/{id}
@@ -218,8 +218,8 @@ functions:
 
   getAllChildrenProgramsForAdmin:
     handler: src/handlers/childrenProgram/getAllChildrenProgramsForAdmin.getAllChildrenProgramsForAdmin
-    name: get-all-children
-    iamRoleStatementsName: get-all-children-role
+    name: get-all-children-admin
+    iamRoleStatementsName: get-all-children-admin-role
     events:
       - http:
           path: children-program/admin
@@ -325,8 +325,8 @@ functions:
 
   getNewsItemForAdmin:
     handler: src/handlers/news/getNewsItemForAdmin.getNewsItemForAdmin
-    name: get-news-item
-    iamRoleStatementsName: get-news-item-role
+    name: get-news-item-admin
+    iamRoleStatementsName: get-news-item-admin-role
     events:
       - http:
           path: news/admin/{id}
@@ -343,8 +343,8 @@ functions:
 
   getAllNewsItemsForAdmin:
     handler: src/handlers/news/getAllNewsItemsForAdmin.getAllNewsItemsForAdmin
-    name: get-all-news-items
-    iamRoleStatementsName: get-all-news-items-role
+    name: get-all-news-items-admin
+    iamRoleStatementsName: get-all-news-items-admin-role
     events:
       - http:
           path: news/admin
@@ -450,8 +450,8 @@ functions:
 
   getProductForAdmin:
     handler: src/handlers/products/getProductForAdmin.getProductForAdmin
-    name: get-product
-    iamRoleStatementsName: get-product-role
+    name: get-product-admin
+    iamRoleStatementsName: get-product-admin-role
     events:
       - http:
           path: products/admin/{id}
@@ -468,8 +468,8 @@ functions:
 
   getAllProductsForAdmin:
     handler: src/handlers/products/getAllProductsForAdmin.getAllProductsForAdmin
-    name: get-all-products
-    iamRoleStatementsName: get-all-products-role
+    name: get-all-products-admin
+    iamRoleStatementsName: get-all-products-admin-role
     events:
       - http:
           path: products/admin
