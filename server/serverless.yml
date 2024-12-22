@@ -24,6 +24,9 @@ custom:
     headers:
       - Content-Type
       - Authorization
+      - Access-Control-Allow-Headers
+      - Access-Control-Allow-Origin
+      - Access-Control-Allow-Methods
 
 functions:
   # Authentication
