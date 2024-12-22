@@ -4,16 +4,16 @@ frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: nodejs22.x
-  region: ${{secrets.AWS_REGION}}
+  runtime: nodejs20.x
+  region: us-west-2
   environment:
-    ABOUT_TABLE: ${self:provider.about_table}
-    CHILDREN_PROGRAMS_TABLE: ${self:provider.children_programs_table}
-    NEWS_TABLE: ${self:provider.news_table}
-    PRODUCTS_TABLE: ${self:provider.products_table}
-    USERS_TABLE: ${self:provider.users_table}
-    JWT_SECRET: ${self:provider.secrets.JWT_SECRET}
-    BUCKET_NAME: ${self:provider.bucket_name}
+    ABOUT_TABLE: AboutTable
+    CHILDREN_PROGRAMS_TABLE: ChildrenProgramsTable
+    NEWS_TABLE: NewsTable
+    PRODUCTS_TABLE: ProductsTable
+    USERS_TABLE: UsersTable
+    JWT_SECRET: ${{secrets.JWT_SECRET}}
+    BUCKET_NAME: ${{secrets.BUCKET_NAME}}
 
 plugins:
   - serverless-iam-roles-per-function
@@ -21,7 +21,8 @@ plugins:
 functions:
   # Authentication
   verify-token:
-    handler: handlers/auth/authorize
+    handler: src/handlers/auth/authorize.authorize
+    name: verify-token
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -29,7 +30,8 @@ functions:
         Resource: !GetAtt UsersTable.Arn
 
   registerUser:
-    handler: handlers/auth/register
+    handler: src/handlers/auth/register.registwr
+    name: register-user
     events:
       - http:
           path: auth/register
@@ -41,7 +43,8 @@ functions:
         Resource: !GetAtt UsersTable.Arn
 
   loginUser:
-    handler: handlers/auth/login
+    handler: src/handlers/auth/login.login
+    name: login-user
     events:
       - http:
           path: auth/login
@@ -54,7 +57,7 @@ functions:
 
   # About
   getAbout:
-    handler: handlers/about/getAllAboutItems
+    handler: src/handlers/about/getAllAboutItems.getAllAboutItems
     name: get-about
     events:
       - http:
@@ -67,8 +70,9 @@ functions:
         Resource: !GetAtt AboutTable.Arn
 
   getAllAboutItemsForAdmin:
-    handler: handlers/about/getAllAboutItemsForAdmin
+    handler: src/handlers/about/getAllAboutItemsForAdmin.getAllAboutItemsForAdmin
     name: get-about-admin
+    iamRoleStatementsName: get-about-admin-role
     events:
       - http:
           path: about
@@ -76,7 +80,7 @@ functions:
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -84,7 +88,8 @@ functions:
         Resource: !GetAtt AboutTable.Arn
 
   editAllAboutItems:
-    handler: handlers/about/editAllAboutItems
+    handler: src/handlers/about/editAllAboutItems.editAllAboutItems
+    name: edit-all-about-items
     events:
       - http:
           path: about
@@ -92,7 +97,7 @@ functions:
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -102,11 +107,13 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt AboutTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   # Children Program
   createChildrenProgram:
-    handler: handlers/childrenProgram/createChildrenProgram
+    handler: src/handlers/childrenProgram/createChildrenProgram.createChildrenProgram
+    name: create-children
+    iamRoleStatementsName: create-children-role
     events:
       - http:
           path: children-program/create
@@ -118,10 +125,12 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getChildrenProgram:
-    handler: handlers/childrenProgram/getChildrenProgram
+    handler: src/handlers/childrenProgram/getChildrenProgram.getChildrenProgram
+    name: get-children
+    iamRoleStatementsName: get-children-role
     events:
       - http:
           path: children-program/{id}
@@ -130,10 +139,12 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
-        Resource: !GetAtt childrenProgramTable.Arn
+        Resource: !GetAtt ChildrenProgramsTable.Arn
 
   editChildrenProgram:
-    handler: handlers/childrenProgram/editChildrenProgram
+    handler: src/handlers/childrenProgram/editChildrenProgram.editChildrenProgram
+    name: edit-children
+    iamRoleStatementsName: edit-children-role
     events:
       - http:
           path: children-program/edit/{id}
@@ -145,10 +156,12 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteChildrenProgram:
-    handler: handlers/childrenProgram/deleteChildrenProgram
+    handler: src/handlers/childrenProgram/deleteChildrenProgram.deleteChildrenProgram
+    name: delete-children-
+    iamRoleStatementsName: delete-children-role
     events:
       - http:
           path: children-program/{id}
@@ -156,15 +169,17 @@ functions:
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - "dynamodb:DeleteItem"
-        Resource: !GetAtt childrenProgramTable.Arn
+        Resource: !GetAtt ChildrenProgramsTable.Arn
 
   getAllChildrenPrograms:
-    handler: handlers/childrenProgram/getAllChildrenPrograms
+    handler: src/handlers/childrenProgram/getAllChildrenPrograms.getAllChildrenPrograms
+    name: get-all-children
+    iamRoleStatementsName: get-all-children-role
     events:
       - http:
           path: children-program
@@ -173,11 +188,13 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:Scan"
-        Resource: !GetAtt childrenProgramTable.Arn
+        Resource: !GetAtt ChildrenProgramsTable.Arn
 
   # News
   createNewsItem:
-    handler: handlers/news/createNewsItem
+    handler: src/handlers/news/createNewsItem.createNewsItem
+    name: create-news-item
+    iamRoleStatementsName: create-news-item-role
     events:
       - http:
           path: news/create
@@ -189,10 +206,12 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt NewsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getNewsItem:
-    handler: handlers/news/getNewsItem
+    handler: src/handlers/news/getNewsItem.getNewsItem
+    name: get-news-item
+    iamRoleStatementsName: get-news-item-role
     events:
       - http:
           path: news/{id}
@@ -204,7 +223,9 @@ functions:
         Resource: !GetAtt NewsTable.Arn
 
   editNewsItem:
-    handler: handlers/news/editNewsItem
+    handler: src/handlers/news/editNewsItem.editNewsItem
+    name: edit-news-item
+    iamRoleStatementsName: edit-news-item-role
     events:
       - http:
           path: news/edit/{id}
@@ -216,10 +237,12 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt NewsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteNewsItem:
-    handler: handlers/news/deleteNewsItem
+    handler: src/handlers/news/deleteNewsItem.deleteNewsItem
+    name: delete-news-item
+    iamRoleStatementsName: delete-news-item-role
     events:
       - http:
           path: news/{id}
@@ -227,7 +250,7 @@ functions:
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -235,7 +258,9 @@ functions:
         Resource: !GetAtt NewsTable.Arn
 
   getAllNewsItems:
-    handler: handlers/news/getAllNewsItems
+    handler: src/handlers/news/getAllNewsItems.getAllNewsItems
+    name: get-all-news-items
+    iamRoleStatementsName: get-all-news-items-role
     events:
       - http:
           path: news
@@ -243,7 +268,7 @@ functions:
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -252,7 +277,9 @@ functions:
 
   # Products
   createProduct:
-    handler: handlers/products/createProduct
+    handler: src/handlers/products/createProduct.createProduct
+    name: create-product
+    iamRoleStatementsName: create-product-role
     events:
       - http:
           path: products/create
@@ -264,10 +291,12 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getProduct:
-    handler: handlers/products/getProduct
+    handler: src/handlers/products/getProduct.getProduct
+    name: get-product
+    iamRoleStatementsName: get-product-role
     events:
       - http:
           path: products/{id}
@@ -279,7 +308,9 @@ functions:
         Resource: !GetAtt ProductsTable.Arn
 
   editProduct:
-    handler: handlers/products/editProduct
+    handler: src/handlers/products/editProduct.editProduct
+    name: edit-product
+    iamRoleStatementsName: edit-product-role
     events:
       - http:
           path: products/edit/{id}
@@ -287,7 +318,7 @@ functions:
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -295,10 +326,12 @@ functions:
           - "s3:PutObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - arn:aws:s3:::${self:provider.bucket_name}/*
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteProduct:
-    handler: handlers/products/deleteProduct
+    handler: src/handlers/products/deleteProduct.deleteProduct
+    name: delete-product
+    iamRoleStatementsName: deletr-product-role
     events:
       - http:
           path: products/{id}
@@ -306,7 +339,7 @@ functions:
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 86400
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -314,7 +347,9 @@ functions:
         Resource: !GetAtt ProductsTable.Arn
 
   getAllProducts:
-    handler: handlers/products/getAllProducts
+    handler: src/handlers/products/getAllProducts.getAllProducts
+    name: get-all-products
+    iamRoleStatementsName: get-all-products-role
     events:
       - http:
           path: products
@@ -330,7 +365,7 @@ resources:
     AboutTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.about_table}
+        TableName: AboutTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -339,10 +374,10 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 
-    ChildrenProgramTable:
+    ChildrenProgramsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.children_program_table}
+        TableName: ChildrenProgramsTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -354,7 +389,7 @@ resources:
     NewsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.news_table}
+        TableName: NewsTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -366,7 +401,7 @@ resources:
     ProductsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.products_table}
+        TableName: ProductsTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -378,7 +413,7 @@ resources:
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.users_table}
+        TableName: UsersTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

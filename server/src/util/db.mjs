@@ -1,4 +1,3 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 
-const client = new DynamoDBClient({})
-export default client
+export const db = new DynamoDBClient({})
