@@ -17,7 +17,7 @@ export const deleteChildrenProgram = async (event) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
       },
       body: JSON.stringify({ message: "Children program deleted successfully" }),
@@ -28,7 +28,7 @@ export const deleteChildrenProgram = async (event) => {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
       },
       body: JSON.stringify({ message: "Internal server error", error }),

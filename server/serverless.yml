@@ -14,6 +14,7 @@ provider:
     USERS_TABLE: UsersTable
     JWT_SECRET: ${{secrets.JWT_SECRET}}
     BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+    CLIENT_URL: "http://localhost:3000"
 
 plugins:
   - serverless-iam-roles-per-function

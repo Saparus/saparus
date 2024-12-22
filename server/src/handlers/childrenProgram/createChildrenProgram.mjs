@@ -13,7 +13,7 @@ export const createChildrenProgram = async (event) => {
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Methods": "OPTIONS,POST",
       },
       body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
     }
@@ -45,8 +45,8 @@ export const createChildrenProgram = async (event) => {
       statusCode: 201,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,POST",
       },
       body: JSON.stringify({ message: "Children program created successfully" }),
     }
@@ -56,8 +56,8 @@ export const createChildrenProgram = async (event) => {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,POST",
       },
       body: JSON.stringify({ message: "Internal server error", error }),
     }

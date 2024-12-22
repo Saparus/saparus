@@ -25,13 +25,15 @@ const HomePageNews = () => {
   if (error) return <div>Error fetching news</div>
 
   const renderLatestNews = () => {
+    if (!news?.articles?.length) return <div>No news articles</div>
+
     return (
       <Link
         to="/news/0"
         className="latest-news"
       >
         <div className="image">
-          {news.articles[0]?.images ? (
+          {news?.articles[0]?.images ? (
             <img
               src={news.articles[0].images?.[0]}
               alt={news.articles[0].title}
@@ -56,23 +58,28 @@ const HomePageNews = () => {
       </Link>
     )
   }
+
+  const renderNews = () => {
+    if (!news?.articles?.length) return
+
+    return news?.articles.slice(1, 4).map((newsItem) => (
+      <NewsItem
+        key={newsItem.id}
+        title={newsItem.title}
+        text={newsItem.text}
+        date={new Date(newsItem.date).toLocaleDateString()}
+        url={`/news/${newsItem.id}`}
+      />
+    ))
+  }
+
   return (
     <section className="home-page-news">
-      <h2>News</h2>
+      {news?.articles?.length ? <h2>News</h2> : ""}
       <div className="news">
         {renderLatestNews()}
-        <div className="news-list">
-          {news.articles.slice(1, 4).map((newsItem) => (
-            <NewsItem
-              key={newsItem.id}
-              title={newsItem.title}
-              text={newsItem.text}
-              date={new Date(newsItem.date).toLocaleDateString()}
-              url={`/news/${newsItem.id}`}
-            />
-          ))}
-        </div>
-        {news.pagination.hasNextPage ? (
+        <div className="news-list">{renderNews()}</div>
+        {news?.pagination.hasNextPage ? (
           <Link
             className="view-more-news-link"
             to="news"

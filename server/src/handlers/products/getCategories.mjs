@@ -18,8 +18,8 @@ export const getCategories = async (event) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
       },
       body: JSON.stringify(categories),
     }
@@ -28,8 +28,8 @@ export const getCategories = async (event) => {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
       },
       body: JSON.stringify({ message: "Error fetching categories" }),
     }
