@@ -1,5 +1,6 @@
 import { uuidv4 as v4 } from "uuid"
-import { bcrypt } from "bcrypt"
+import pkg from "bcrypt"
+const { bcrypt } = pkg
 
 import { db } from "../../util/db.mjs"
 
