@@ -75,7 +75,7 @@ functions:
     iamRoleStatementsName: get-about-admin-role
     events:
       - http:
-          path: about
+          path: about/admin
           method: get
           authorizer:
             name: verify-token
@@ -118,6 +118,10 @@ functions:
       - http:
           path: children-program/create
           method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -149,6 +153,10 @@ functions:
       - http:
           path: children-program/edit/{id}
           method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -190,6 +198,42 @@ functions:
           - "dynamodb:Scan"
         Resource: !GetAtt ChildrenProgramsTable.Arn
 
+  getChildrenProgramForAdmin:
+    handler: src/handlers/childrenProgram/getChildrenProgramForAdmin.getChildrenProgramForAdmin
+    name: get-children
+    iamRoleStatementsName: get-children-role
+    events:
+      - http:
+          path: children-program/admin/{id}
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  getAllChildrenProgramsForAdmin:
+    handler: src/handlers/childrenProgram/getAllChildrenProgramsForAdmin.getAllChildrenProgramsForAdmin
+    name: get-all-children
+    iamRoleStatementsName: get-all-children-role
+    events:
+      - http:
+          path: children-program/admin
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
   # News
   createNewsItem:
     handler: src/handlers/news/createNewsItem.createNewsItem
@@ -199,6 +243,10 @@ functions:
       - http:
           path: news/create
           method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -230,6 +278,10 @@ functions:
       - http:
           path: news/edit/{id}
           method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -265,6 +317,38 @@ functions:
       - http:
           path: news
           method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt NewsTable.Arn
+
+  getNewsItemForAdmin:
+    handler: src/handlers/news/getNewsItemForAdmin.getNewsItemForAdmin
+    name: get-news-item
+    iamRoleStatementsName: get-news-item-role
+    events:
+      - http:
+          path: news/admin/{id}
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt NewsTable.Arn
+
+  getAllNewsItemsForAdmin:
+    handler: src/handlers/news/getAllNewsItemsForAdmin.getAllNewsItemsForAdmin
+    name: get-all-news-items
+    iamRoleStatementsName: get-all-news-items-role
+    events:
+      - http:
+          path: news/admin
+          method: get
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -284,6 +368,10 @@ functions:
       - http:
           path: products/create
           method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -354,6 +442,42 @@ functions:
       - http:
           path: products
           method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ProductsTable.Arn
+
+  getProductForAdmin:
+    handler: src/handlers/products/getProductForAdmin.getProductForAdmin
+    name: get-product
+    iamRoleStatementsName: get-product-role
+    events:
+      - http:
+          path: products/admin/{id}
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ProductsTable.Arn
+
+  getAllProductsForAdmin:
+    handler: src/handlers/products/getAllProductsForAdmin.getAllProductsForAdmin
+    name: get-all-products
+    iamRoleStatementsName: get-all-products-role
+    events:
+      - http:
+          path: products/admin
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
     iamRoleStatements:
       - Effect: "Allow"
         Action:
