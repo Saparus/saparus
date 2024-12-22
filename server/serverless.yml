@@ -18,16 +18,6 @@ provider:
 plugins:
   - serverless-iam-roles-per-function
 
-custom:
-  cors:
-    origin: "http://localhost:3000"
-    headers:
-      - Content-Type
-      - Authorization
-      - Access-Control-Allow-Headers
-      - Access-Control-Allow-Origin
-      - Access-Control-Allow-Methods
-
 functions:
   # Authentication
   verify-token:
@@ -46,7 +36,7 @@ functions:
       - http:
           path: auth/register
           method: post
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -63,7 +53,7 @@ functions:
       - http:
           path: auth/login
           method: post
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -80,7 +70,7 @@ functions:
       - http:
           path: about
           method: get
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -95,7 +85,7 @@ functions:
       - http:
           path: about/admin
           method: get
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -113,7 +103,7 @@ functions:
       - http:
           path: about
           method: put
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -138,7 +128,7 @@ functions:
       - http:
           path: children-program/create
           method: post
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -160,7 +150,7 @@ functions:
       - http:
           path: children-program/{id}
           method: get
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -175,7 +165,7 @@ functions:
       - http:
           path: children-program/edit/{id}
           method: post
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -197,7 +187,7 @@ functions:
       - http:
           path: children-program/{id}
           method: delete
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -216,7 +206,7 @@ functions:
       - http:
           path: children-program
           method: get
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -231,7 +221,7 @@ functions:
       - http:
           path: children-program/admin/{id}
           method: get
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -250,7 +240,7 @@ functions:
       - http:
           path: children-program/admin
           method: get
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -270,7 +260,7 @@ functions:
       - http:
           path: news/create
           method: post
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -292,7 +282,7 @@ functions:
       - http:
           path: news/{id}
           method: get
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -307,7 +297,7 @@ functions:
       - http:
           path: news/edit/{id}
           method: post
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -329,7 +319,7 @@ functions:
       - http:
           path: news/{id}
           method: delete
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -348,7 +338,7 @@ functions:
       - http:
           path: news
           method: get
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -363,7 +353,7 @@ functions:
       - http:
           path: news/admin/{id}
           method: get
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -382,7 +372,7 @@ functions:
       - http:
           path: news/admin
           method: get
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -402,7 +392,7 @@ functions:
       - http:
           path: products/create
           method: post
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -424,7 +414,7 @@ functions:
       - http:
           path: products/{id}
           method: get
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -439,7 +429,7 @@ functions:
       - http:
           path: products/edit/{id}
           method: post
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -461,7 +451,7 @@ functions:
       - http:
           path: products/{id}
           method: delete
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -480,7 +470,7 @@ functions:
       - http:
           path: products
           method: get
-          cors: ${self:custom.cors}
+          cors: false
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -495,7 +485,7 @@ functions:
       - http:
           path: products/admin/{id}
           method: get
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -514,7 +504,7 @@ functions:
       - http:
           path: products/admin
           method: get
-          cors: ${self:custom.cors}
+          cors: false
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
