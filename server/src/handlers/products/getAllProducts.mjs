@@ -1,7 +1,7 @@
 import { ScanCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"
-import { filterProducts } from "../../util/filter"
+import { filterProducts } from "../../util/filterProducts"
 
 export const getAllNewsItems = async (event) => {
   const { language, limit, page } = event.queryStringParameters

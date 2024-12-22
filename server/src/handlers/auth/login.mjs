@@ -32,6 +32,11 @@ export const login = async (event) => {
     if (result.Items.length === 0) {
       return {
         statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        },
         body: JSON.stringify({ message: "Invalid email or password" }),
       }
     }
@@ -43,6 +48,11 @@ export const login = async (event) => {
     if (!validPassword) {
       return {
         statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        },
         body: JSON.stringify({ message: "Invalid email or password" }),
       }
     }
@@ -56,12 +66,22 @@ export const login = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      },
       body: JSON.stringify({ token }),
     }
-  } catch (err) {
+  } catch (error) {
     console.error(err)
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      },
       body: JSON.stringify({ message: "Internal server error" }),
     }
   }

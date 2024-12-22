@@ -30,7 +30,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://qsjnl2lnbk.execute-api.us-west-2.amazonaws.com/dev",
   "eslintConfig": {
     "extends": [
       "react-app",
