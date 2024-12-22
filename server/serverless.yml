@@ -36,11 +36,8 @@ functions:
       - http:
           path: auth/register
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -57,11 +54,8 @@ functions:
       - http:
           path: auth/login
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -78,11 +72,8 @@ functions:
       - http:
           path: about
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -97,11 +88,8 @@ functions:
       - http:
           path: about/admin
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -119,11 +107,8 @@ functions:
       - http:
           path: about
           method: put
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -148,11 +133,8 @@ functions:
       - http:
           path: children-program/create
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -174,11 +156,8 @@ functions:
       - http:
           path: children-program/{id}
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -193,11 +172,8 @@ functions:
       - http:
           path: children-program/edit/{id}
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -219,11 +195,8 @@ functions:
       - http:
           path: children-program/{id}
           method: delete
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -242,11 +215,8 @@ functions:
       - http:
           path: children-program
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -261,11 +231,8 @@ functions:
       - http:
           path: children-program/admin/{id}
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -284,11 +251,8 @@ functions:
       - http:
           path: children-program/admin
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -308,11 +272,8 @@ functions:
       - http:
           path: news/create
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -334,11 +295,8 @@ functions:
       - http:
           path: news/{id}
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -353,11 +311,8 @@ functions:
       - http:
           path: news/edit/{id}
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -379,11 +334,8 @@ functions:
       - http:
           path: news/{id}
           method: delete
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -402,11 +354,8 @@ functions:
       - http:
           path: news
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -421,11 +370,8 @@ functions:
       - http:
           path: news/admin/{id}
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -444,11 +390,8 @@ functions:
       - http:
           path: news/admin
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -468,11 +411,8 @@ functions:
       - http:
           path: products/create
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -494,11 +434,8 @@ functions:
       - http:
           path: products/{id}
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -513,11 +450,8 @@ functions:
       - http:
           path: products/edit/{id}
           method: post
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -539,11 +473,8 @@ functions:
       - http:
           path: products/{id}
           method: delete
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -562,11 +493,8 @@ functions:
       - http:
           path: products
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -581,11 +509,8 @@ functions:
       - http:
           path: products/admin/{id}
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -604,11 +529,8 @@ functions:
       - http:
           path: products/admin
           method: get
-          cors:
-            origin: "*"
-            headers:
-              - Content-Type
-              - Authorization
+          cors: true
+
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
