@@ -1,3 +1,5 @@
+import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 
 export const getNewsItem = async (event) => {
@@ -12,7 +14,8 @@ export const getNewsItem = async (event) => {
       Key: { id },
     }
 
-    const { Item: newsItem } = await db.get(params).promise()
+    const scanCommand = new ScanCommand(params)
+    const { Item: newsItem } = await db.send(scanCommand)
 
     if (!newsItem) {
       return {

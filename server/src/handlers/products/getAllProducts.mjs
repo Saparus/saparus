@@ -1,3 +1,5 @@
+import { ScanCommand } from "@aws-sdk/client-dynamodb"
+
 import { db } from "../../util/db.mjs"
 import { filterProducts } from "../../util/filter"
 
@@ -6,21 +8,22 @@ export const getAllNewsItems = async (event) => {
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
+  const params = {
+    TableName: process.env.PRODUCTS_TABLE,
+  }
+
+  const scanCommand = new ScanCommand(params)
+  const { Items: products } = await db.send(scanCommand)
+
+  const translatedProducts = products.map((newsItem) => {
+    const tempNewsItem = { ...newsItem }
+    tempNewsItem.text = newsItem.text[languageToApply]
+    tempNewsItem.title = newsItem.title[languageToApply]
+
+    return tempNewsItem
+  })
+
   try {
-    const params = {
-      TableName: process.env.PRODUCTS_TABLE,
-    }
-
-    const { Items: products } = await db.scan(params).promise()
-
-    const translatedProducts = products.map((newsItem) => {
-      const tempNewsItem = { ...newsItem }
-      tempNewsItem.text = newsItem.text[languageToApply]
-      tempNewsItem.title = newsItem.title[languageToApply]
-
-      return tempNewsItem
-    })
-
     if (filter) {
       const parsedFilter = JSON.parse(decodeURIComponent(filter))
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter

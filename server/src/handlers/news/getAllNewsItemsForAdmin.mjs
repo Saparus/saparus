@@ -8,7 +8,8 @@ export const getAllNewsItemForAdmin = async (event) => {
       TableName: process.env.NEWS_TABLE,
     }
 
-    const { Items: newsItems } = await db.scan(params).promise()
+    const scanCommand = new ScanCommand(params)
+    const { Items: newsItems } = await db.send(scanCommand)
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit

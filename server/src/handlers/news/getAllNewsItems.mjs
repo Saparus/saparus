@@ -1,3 +1,5 @@
+import { ScanCommand } from "@aws-sdk/client-dynamodb"
+
 import { db } from "../../util/db.mjs"
 
 export const getAllNewsItems = async (event) => {
@@ -10,7 +12,8 @@ export const getAllNewsItems = async (event) => {
       TableName: process.env.NEWS_TABLE,
     }
 
-    const { Items: newsItems } = await db.scan(params).promise()
+    const scanCommand = new ScanCommand(params)
+    const { Items: newsItems } = await db.send(scanCommand)
 
     const translatedResult = newsItems.map((newsItem) => {
       const tempNewsItem = { ...newsItem }

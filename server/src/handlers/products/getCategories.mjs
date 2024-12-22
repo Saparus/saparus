@@ -1,3 +1,5 @@
+import { ScanCommand } from "@aws-sdk/client-dynamodb"
+
 import { db } from "../../util/db.mjs"
 import { summarizeCategoryData } from "../../util/summarizeCategoryData"
 
@@ -7,7 +9,9 @@ export const getCategories = async (event) => {
       TableName: process.env.PRODUCTS_TABLE,
     }
 
-    const { Items: products } = await db.scan(params).promise()
+    const scanCommand = new ScanCommand(params)
+    const { Items: products } = await db.send(scanCommand)
+
     const categories = summarizeCategoryData(products)
 
     return {

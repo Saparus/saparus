@@ -1,11 +1,12 @@
 import { v4 as uuid } from "uuid"
-
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
+import { PutCommand } from "@aws-sdk/lib-dynamodb"
 
 export const createProduct = async (event) => {
   const { name, description, price, images } = JSON.parse(event.body)
 
+  // Validate input
   if (!name || !description || !price || !images || !Array.isArray(images)) {
     return {
       statusCode: 400,
@@ -34,7 +35,8 @@ export const createProduct = async (event) => {
       },
     }
 
-    await db.put(params)
+    const putCommand = new PutCommand(params)
+    await db.send(putCommand)
     return {
       statusCode: 201,
       body: JSON.stringify({ message: "Product created successfully" }),

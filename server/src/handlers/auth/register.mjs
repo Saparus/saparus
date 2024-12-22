@@ -1,12 +1,12 @@
 import { v4 as uuid } from "uuid"
-import pkg from "bcrypt"
-const { bcrypt } = pkg
-
+import bcrypt from "bcrypt"
 import { db } from "../../util/db.mjs"
+import { QueryCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
 
 export const register = async (event) => {
   const { email, username, password } = JSON.parse(event.body)
 
+  // Validate input
   if (!email || !username || !password) {
     return {
       statusCode: 400,
@@ -14,6 +14,7 @@ export const register = async (event) => {
     }
   }
 
+  // Check if user already exists
   const existingUserParams = {
     TableName: process.env.USERS_TABLE,
     IndexName: "EmailIndex",
@@ -23,7 +24,8 @@ export const register = async (event) => {
     },
   }
 
-  const existingUser = await db.scan(existingUserParams).promise()
+  const existingUserCommand = new QueryCommand(existingUserParams)
+  const existingUser = await db.send(existingUserCommand)
   if (existingUser.Items.length > 0) {
     return {
       statusCode: 400,
@@ -34,7 +36,7 @@ export const register = async (event) => {
   const hashedPassword = await bcrypt.hash(password, 10)
 
   const params = {
-    TableName: process.env.USER_TABLE,
+    TableName: process.env.USERS_TABLE,
     Item: {
       id: uuid(),
       email: email,
@@ -43,19 +45,23 @@ export const register = async (event) => {
     },
   }
 
+  const putCommand = new PutCommand(params)
+
   try {
-    await db.put(params).promise()
+    await db.send(putCommand)
     return {
       statusCode: 201,
       body: JSON.stringify({ message: "User created successfully" }),
     }
-  } catch (error) {
-    console.error(error)
-    return {
+  } catch (err) {
+    console.error(err)
+    const response = {
       statusCode: 500,
-      body: JSON.stringify({
-        message: "Internal server error",
-      }),
+      body: JSON.stringify({ message: "Internal server error" }),
     }
+    if (process.env.MODE === "dev") {
+      response.body = JSON.stringify({ message: "Internal server error", error: err.message })
+    }
+    return response
   }
 }

@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid"
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
+import { PutCommand } from "@aws-sdk/lib-dynamodb"
 
 export const createChildrenProgram = async (event) => {
   const { title, description, images } = JSON.parse(event.body)
@@ -33,7 +34,8 @@ export const createChildrenProgram = async (event) => {
       },
     }
 
-    await db.put(params)
+    const putCommand = new PutCommand(params)
+    await db.send(putCommand)
     return {
       statusCode: 201,
       body: JSON.stringify({ message: "Children program created successfully" }),

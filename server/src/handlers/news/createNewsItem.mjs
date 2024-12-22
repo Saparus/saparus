@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid"
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
+import { PutCommand } from "@aws-sdk/lib-dynamodb"
 
 export const createNewsItem = async (event) => {
   const { title, text, images } = JSON.parse(event.body)
@@ -33,7 +34,8 @@ export const createNewsItem = async (event) => {
       },
     }
 
-    await db.put(params)
+    const putCommand = new PutCommand(params)
+    await db.send(putCommand)
     return {
       statusCode: 201,
       body: JSON.stringify({ message: "News item created successfully" }),

@@ -1,12 +1,12 @@
-import { uuidv4 as v4 } from "uuid"
-import pkg from "bcrypt"
-const { bcrypt } = pkg
-
+import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
 import { db } from "../../util/db.mjs"
+import { QueryCommand } from "@aws-sdk/lib-dynamodb"
 
 export const login = async (event) => {
   const { email, password } = JSON.parse(event.body)
 
+  // Validate input
   if (!email || !password) {
     return {
       statusCode: 400,
@@ -14,45 +14,52 @@ export const login = async (event) => {
     }
   }
 
+  // Fetch user from database
   const params = {
-    TableName: process.env.USER_TABLE,
-    Key: {
-      email: email,
+    TableName: process.env.USERS_TABLE,
+    IndexName: "EmailIndex",
+    KeyConditionExpression: "email = :email",
+    ExpressionAttributeValues: {
+      ":email": email,
     },
   }
 
+  const command = new QueryCommand(params)
+
   try {
-    const { Item: user } = await db.get(params)
-
-    if (!user) {
+    const result = await db.send(command)
+    if (result.Items.length === 0) {
       return {
-        statusCode: 401,
-        body: JSON.stringify({ message: "Incorrect email" }),
+        statusCode: 400,
+        body: JSON.stringify({ message: "Invalid email or password" }),
       }
     }
 
-    if (user && (await bcrypt.compare(password, user.hashedPassword))) {
-      const token = jwt.sign({ email: user.email, id: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-      })
+    const user = result.Items[0]
 
+    // Verify password
+    const validPassword = await bcrypt.compare(password, user.hashedPassword)
+    if (!validPassword) {
       return {
-        statusCode: 200,
-        body: JSON.stringify({ token }),
-      }
-    } else {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ message: "Incorrect password" }),
+        statusCode: 400,
+        body: JSON.stringify({ message: "Invalid email or password" }),
       }
     }
-  } catch (error) {
-    console.log(error)
+
+    // Generate JWT
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    })
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ token }),
+    }
+  } catch (err) {
+    console.error(err)
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        message: "Internal server error",
-      }),
+      body: JSON.stringify({ message: "Internal server error" }),
     }
   }
 }

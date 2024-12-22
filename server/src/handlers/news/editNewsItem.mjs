@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid"
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
+import { UpdateCommand } from "@aws-sdk/lib-dynamodb"
 
 export const editNewsItem = async (event) => {
   const { id } = event.pathParameters
@@ -36,7 +37,8 @@ export const editNewsItem = async (event) => {
       ReturnValues: "UPDATED_NEW",
     }
 
-    const result = await db.update(params)
+    const updateCommand = new UpdateCommand(params)
+    const result = await db.send(updateCommand)
     return {
       statusCode: 200,
       body: JSON.stringify(result.Attributes),

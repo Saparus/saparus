@@ -1,11 +1,13 @@
 import { v4 as uuid } from "uuid"
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
+import { UpdateCommand } from "@aws-sdk/lib-dynamodb"
 
 export const editChildrenProgram = async (event) => {
   const { id } = event.pathParameters
   const { title, description, images } = JSON.parse(event.body)
 
+  // Validate input
   if (!title || !description || !images || !Array.isArray(images)) {
     return {
       statusCode: 400,
@@ -35,7 +37,8 @@ export const editChildrenProgram = async (event) => {
       ReturnValues: "UPDATED_NEW",
     }
 
-    const result = await db.update(params)
+    const updateCommand = new UpdateCommand(params)
+    const result = await db.send(updateCommand)
     return {
       statusCode: 200,
       body: JSON.stringify(result.Attributes),
