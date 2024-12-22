@@ -1,13 +1,25 @@
 import { v4 as uuid } from "uuid"
-import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 import { PutCommand } from "@aws-sdk/lib-dynamodb"
 
+import { db } from "../../util/db.mjs"
+
 export const createProduct = async (event) => {
-  const { name, description, price, images } = JSON.parse(event.body)
+  const { name, fixedPrice, price, description, categories, inStock, images } = JSON.parse(
+    event.body
+  )
 
   // Validate input
-  if (!name || !description || !price || !images || !Array.isArray(images)) {
+  if (
+    !name ||
+    !fixedPrice ||
+    !price ||
+    !description ||
+    !categories ||
+    !inStock ||
+    !images ||
+    !Array.isArray(images)
+  ) {
     return {
       statusCode: 400,
       body: JSON.stringify({ message: "Missing required fields or images is not an array" }),

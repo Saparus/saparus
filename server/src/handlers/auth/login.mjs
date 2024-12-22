@@ -48,9 +48,11 @@ export const login = async (event) => {
     }
 
     // Generate JWT
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    })
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET)
+
+    // const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+    //   expiresIn: "30d",
+    // })
 
     return {
       statusCode: 200,
