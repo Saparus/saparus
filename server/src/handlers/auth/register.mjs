@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid"
-import bcrypt from "bcrypt"
+import { bcrypt } from "bcrypt"
 
 import { db } from "../../util/db.mjs"
 
