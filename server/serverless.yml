@@ -21,7 +21,8 @@ plugins:
 functions:
   # Authentication
   verify-token:
-    handler: handlers/auth/authorize
+    handler: src/handlers/auth/authorize
+    name: verify-token
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -29,7 +30,8 @@ functions:
         Resource: !GetAtt UsersTable.Arn
 
   registerUser:
-    handler: handlers/auth/register
+    handler: src/handlers/auth/register
+    name: register-user
     events:
       - http:
           path: auth/register
@@ -41,7 +43,8 @@ functions:
         Resource: !GetAtt UsersTable.Arn
 
   loginUser:
-    handler: handlers/auth/login
+    handler: src/handlers/auth/login
+    name: login-user
     events:
       - http:
           path: auth/login
@@ -54,7 +57,7 @@ functions:
 
   # About
   getAbout:
-    handler: handlers/about/getAllAboutItems
+    handler: src/handlers/about/getAllAboutItems
     name: get-about
     events:
       - http:
@@ -67,7 +70,7 @@ functions:
         Resource: !GetAtt AboutTable.Arn
 
   getAllAboutItemsForAdmin:
-    handler: handlers/about/getAllAboutItemsForAdmin
+    handler: src/handlers/about/getAllAboutItemsForAdmin
     name: get-about-admin
     iamRoleStatementsName: get-about-admin-role
     events:
@@ -85,7 +88,8 @@ functions:
         Resource: !GetAtt AboutTable.Arn
 
   editAllAboutItems:
-    handler: handlers/about/editAllAboutItems
+    handler: src/handlers/about/editAllAboutItems
+    name: edit-all-about-items
     events:
       - http:
           path: about
@@ -107,7 +111,7 @@ functions:
 
   # Children Program
   createChildrenProgram:
-    handler: handlers/childrenProgram/createChildrenProgram
+    handler: src/handlers/childrenProgram/createChildrenProgram
     name: create-children
     iamRoleStatementsName: create-children-role
     events:
@@ -124,7 +128,7 @@ functions:
           - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getChildrenProgram:
-    handler: handlers/childrenProgram/getChildrenProgram
+    handler: src/handlers/childrenProgram/getChildrenProgram
     name: get-children
     iamRoleStatementsName: get-children-role
     events:
@@ -138,7 +142,7 @@ functions:
         Resource: !GetAtt ChildrenProgramsTable.Arn
 
   editChildrenProgram:
-    handler: handlers/childrenProgram/editChildrenProgram
+    handler: src/handlers/childrenProgram/editChildrenProgram
     name: edit-children
     iamRoleStatementsName: edit-children-role
     events:
@@ -155,7 +159,7 @@ functions:
           - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteChildrenProgram:
-    handler: handlers/childrenProgram/deleteChildrenProgram
+    handler: src/handlers/childrenProgram/deleteChildrenProgram
     name: delete-children-
     iamRoleStatementsName: delete-children-role
     events:
@@ -173,7 +177,7 @@ functions:
         Resource: !GetAtt ChildrenProgramsTable.Arn
 
   getAllChildrenPrograms:
-    handler: handlers/childrenProgram/getAllChildrenPrograms
+    handler: src/handlers/childrenProgram/getAllChildrenPrograms
     name: get-all-children
     iamRoleStatementsName: get-all-children-role
     events:
@@ -188,7 +192,7 @@ functions:
 
   # News
   createNewsItem:
-    handler: handlers/news/createNewsItem
+    handler: src/handlers/news/createNewsItem
     name: create-news-item
     iamRoleStatementsName: create-news-item-role
     events:
@@ -205,7 +209,7 @@ functions:
           - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getNewsItem:
-    handler: handlers/news/getNewsItem
+    handler: src/handlers/news/getNewsItem
     name: get-news-item
     iamRoleStatementsName: get-news-item-role
     events:
@@ -219,7 +223,7 @@ functions:
         Resource: !GetAtt NewsTable.Arn
 
   editNewsItem:
-    handler: handlers/news/editNewsItem
+    handler: src/handlers/news/editNewsItem
     name: edit-news-item
     iamRoleStatementsName: edit-news-item-role
     events:
@@ -236,7 +240,7 @@ functions:
           - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteNewsItem:
-    handler: handlers/news/deleteNewsItem
+    handler: src/handlers/news/deleteNewsItem
     name: delete-news-item
     iamRoleStatementsName: delete-news-item-role
     events:
@@ -254,7 +258,7 @@ functions:
         Resource: !GetAtt NewsTable.Arn
 
   getAllNewsItems:
-    handler: handlers/news/getAllNewsItems
+    handler: src/handlers/news/getAllNewsItems
     name: get-all-news-items
     iamRoleStatementsName: get-all-news-items-role
     events:
@@ -273,7 +277,7 @@ functions:
 
   # Products
   createProduct:
-    handler: handlers/products/createProduct
+    handler: src/handlers/products/createProduct
     name: create-product
     iamRoleStatementsName: create-product-role
     events:
@@ -290,7 +294,7 @@ functions:
           - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   getProduct:
-    handler: handlers/products/getProduct
+    handler: src/handlers/products/getProduct
     name: get-product
     iamRoleStatementsName: get-product-role
     events:
@@ -304,7 +308,7 @@ functions:
         Resource: !GetAtt ProductsTable.Arn
 
   editProduct:
-    handler: handlers/products/editProduct
+    handler: src/handlers/products/editProduct
     name: edit-product
     iamRoleStatementsName: edit-product-role
     events:
@@ -325,7 +329,7 @@ functions:
           - arn:aws:s3:::${env.BUCKET_NAME}/*
 
   deleteProduct:
-    handler: handlers/products/deleteProduct
+    handler: src/handlers/products/deleteProduct
     name: delete-product
     iamRoleStatementsName: deletr-product-role
     events:
@@ -343,7 +347,7 @@ functions:
         Resource: !GetAtt ProductsTable.Arn
 
   getAllProducts:
-    handler: handlers/products/getAllProducts
+    handler: src/handlers/products/getAllProducts
     name: get-all-products
     iamRoleStatementsName: get-all-products-role
     events:
