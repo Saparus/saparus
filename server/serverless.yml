@@ -135,7 +135,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
-        Resource: !GetAtt childrenProgramsTable.Arn
+        Resource: !GetAtt ChildrenProgramsTable.Arn
 
   editChildrenProgram:
     handler: handlers/childrenProgram/editChildrenProgram
@@ -170,7 +170,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:DeleteItem"
-        Resource: !GetAtt childrenProgramsTable.Arn
+        Resource: !GetAtt ChildrenProgramsTable.Arn
 
   getAllChildrenPrograms:
     handler: handlers/childrenProgram/getAllChildrenPrograms
@@ -184,7 +184,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:Scan"
-        Resource: !GetAtt childrenProgramsTable.Arn
+        Resource: !GetAtt ChildrenProgramsTable.Arn
 
   # News
   createNewsItem:
