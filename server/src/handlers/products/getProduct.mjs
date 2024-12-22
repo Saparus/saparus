@@ -3,7 +3,7 @@ import { ScanCommand } from "@aws-sdk/client-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getProduct = async (event) => {
-  const { language } = event.queryStringParameters
+  const { language = "en" } = event.queryStringParameters
   const { id } = event.pathParameters
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
@@ -20,6 +20,11 @@ export const getProduct = async (event) => {
     if (!product) {
       return {
         statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        },
         body: JSON.stringify({ message: "Product not found" }),
       }
     }
@@ -28,6 +33,11 @@ export const getProduct = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({
         ...product,
         title: title[languageToApply],
@@ -37,6 +47,11 @@ export const getProduct = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: "Error fetching product" }),
     }
   }

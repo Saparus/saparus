@@ -18,12 +18,22 @@ export const getAllNewsItemForAdmin = async (event) => {
     if (!newsItems || newsItems.length === 0) {
       return {
         statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        },
         body: JSON.stringify({ message: "No items found" }),
       }
     }
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({
         news: paginatedResult,
         pagination: {
@@ -37,6 +47,11 @@ export const getAllNewsItemForAdmin = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: error.message }),
     }
   }

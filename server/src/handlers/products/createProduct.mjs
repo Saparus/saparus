@@ -22,6 +22,11 @@ export const createProduct = async (event) => {
   ) {
     return {
       statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
     }
   }
@@ -51,12 +56,22 @@ export const createProduct = async (event) => {
     await db.send(putCommand)
     return {
       statusCode: 201,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: "Product created successfully" }),
     }
   } catch (err) {
     console.error(err)
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: "Internal server error" }),
     }
   }

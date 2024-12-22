@@ -4,7 +4,7 @@ import ajax, { authHeaders } from "./ajax"
 export const getChildrenProgramArticles = async (language, limit, page) => {
   try {
     const { data } = await ajax.get(
-      `/children/get?language=${language}&limit=${limit}&page=${page}`
+      `/children-program?language=${language}&limit=${limit}&page=${page}`
     )
     return data
   } catch (error) {
@@ -16,7 +16,7 @@ export const getChildrenProgramArticles = async (language, limit, page) => {
 // get a single children program article by id and language
 export const getSingleChildrenProgramArticle = async (id, language) => {
   try {
-    const { data } = await ajax.get(`/children/get/${id}?language=${language}`)
+    const { data } = await ajax.get(`/children-program/${id}?language=${language}`)
     return data
   } catch (error) {
     console.error(`error fetching children program article with id ${id}:`, error)
@@ -30,7 +30,7 @@ export const getEditChildrenProgramArticles = async (limit, page, token) => {
 
   try {
     const { data } = await ajax.get(
-      `/children/getEdit?page=${page}&limit=${limit}`,
+      `/children-program/admin?page=${page}&limit=${limit}`,
       authHeaders(token)
     )
     return data
@@ -43,7 +43,7 @@ export const getEditChildrenProgramArticles = async (limit, page, token) => {
 // fetch a single editable children program article by id (requires token)
 export const getEditSingleChildrenProgramArticle = async (id, token) => {
   try {
-    const { data } = await ajax.get(`/children/getEdit/${id}`, authHeaders(token))
+    const { data } = await ajax.get(`/children-program/admin/${id}`, authHeaders(token))
     return data
   } catch (error) {
     console.error(`error fetching editable children program article with id ${id}:`, error)
@@ -55,7 +55,7 @@ export const getEditSingleChildrenProgramArticle = async (id, token) => {
 export const addChildrenProgramArticle = async (title, date, text, image, token) => {
   try {
     const { data } = await ajax.post(
-      "/children/add",
+      "/children-program",
       { title, text, date, image },
       authHeaders(token)
     )
@@ -69,7 +69,7 @@ export const addChildrenProgramArticle = async (title, date, text, image, token)
 // delete a children program article by id (requires token)
 export const deleteChildrenProgramArticle = async (id, token) => {
   try {
-    const { data } = await ajax.delete(`/children/delete/${id}`, authHeaders(token))
+    const { data } = await ajax.delete(`/children-program/${id}`, authHeaders(token))
     return data
   } catch (error) {
     console.error(`error deleting children program article with id ${id}:`, error)
@@ -81,7 +81,7 @@ export const deleteChildrenProgramArticle = async (id, token) => {
 export const editChildrenProgramArticle = async (id, title, text, images, token) => {
   try {
     const { data } = await ajax.patch(
-      `/news/edit/${id}`,
+      `/children-program/edit/${id}`,
       { title, text, images },
       authHeaders(token)
     )

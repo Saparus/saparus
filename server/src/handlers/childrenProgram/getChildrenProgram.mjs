@@ -4,7 +4,7 @@ import { db } from "../../util/db.mjs"
 
 export const getChildrenProgram = async (event) => {
   const { id } = event.pathParameters
-  const { language } = event.queryStringParameters
+  const { language = "en" } = event.queryStringParameters
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
@@ -20,12 +20,22 @@ export const getChildrenProgram = async (event) => {
     if (!program) {
       return {
         statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        },
         body: JSON.stringify({ message: "Program not found" }),
       }
     }
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({
         ...program,
         title: program.title[languageToApply],
@@ -35,6 +45,11 @@ export const getChildrenProgram = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: "Error fetching program" }),
     }
   }

@@ -1,10 +1,10 @@
 import { ScanCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"
-import { filterProducts } from "../../util/filterProducts"
+import { filterProducts } from "../../util/filterProducts.mjs"
 
 export const getAllNewsItems = async (event) => {
-  const { language, limit, page } = event.queryStringParameters
+  const { language = "en", limit = 10, page = 1 } = event.queryStringParameters
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
@@ -44,6 +44,11 @@ export const getAllNewsItems = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({
         products: paginatedResult,
         pagination: {
@@ -57,6 +62,11 @@ export const getAllNewsItems = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: "Error fetching programs" }),
     }
   }

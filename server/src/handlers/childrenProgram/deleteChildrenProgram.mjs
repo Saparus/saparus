@@ -15,13 +15,23 @@ export const deleteChildrenProgram = async (event) => {
     await db.send(deleteCommand)
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify({ message: "Children program deleted successfully" }),
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Internal server error" }),
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
+      body: JSON.stringify({ message: "Internal server error", error }),
     }
   }
 }

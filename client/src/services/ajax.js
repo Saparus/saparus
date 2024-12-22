@@ -11,12 +11,29 @@ const ajax = axios.create({
   },
 })
 
-ajax.interceptors.request.use(
-  (config) => {
-    return config
+const MAX_RETRIES = 0
+
+ajax.interceptors.response.use(
+  (response) => {
+    return response
   },
   (error) => {
-    return Promise.reject(error)
+    const config = error.config
+    if (!config || !config.retry) {
+      config.retry = 0
+    }
+
+    if (config.retry >= MAX_RETRIES) {
+      return Promise.reject(error)
+    }
+
+    config.retry += 1
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(ajax(config))
+      }, 1000) // Retry delay in milliseconds
+    })
   }
 )
 

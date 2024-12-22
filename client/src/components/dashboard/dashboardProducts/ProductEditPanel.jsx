@@ -27,6 +27,7 @@ const ProductEditPanel = ({ product, onSave }) => {
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
   const [newCategory, setNewCategory] = useState({ key: "", value: "" })
   const [isAbleToSave, setIsAbleToSave] = useState(false)
+
   const [activeFields, setActiveFields] = useState({
     name: false,
     description: false,

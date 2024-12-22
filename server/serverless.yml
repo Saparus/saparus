@@ -106,7 +106,7 @@ functions:
     events:
       - http:
           path: about
-          method: put
+          method: patch
           cors: true
 
           authorizer:
@@ -171,7 +171,7 @@ functions:
     events:
       - http:
           path: children-program/edit/{id}
-          method: post
+          method: patch
           cors: true
 
           authorizer:
@@ -310,7 +310,7 @@ functions:
     events:
       - http:
           path: news/edit/{id}
-          method: post
+          method: patch
           cors: true
 
           authorizer:
@@ -426,6 +426,14 @@ functions:
           - !GetAtt ProductsTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
 
+  getCategories:
+    handler: src/handlers/products/getCategories.getCategories
+    name: get-categories
+    events:
+      - http: products/categories
+          method: get
+          cors: true
+
   getProduct:
     handler: src/handlers/products/getProduct.getProduct
     name: get-product
@@ -449,7 +457,7 @@ functions:
     events:
       - http:
           path: products/edit/{id}
-          method: post
+          method: patch
           cors: true
 
           authorizer:

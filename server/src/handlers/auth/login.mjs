@@ -35,7 +35,7 @@ export const login = async (event) => {
         headers: {
           "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Allow-Origin": "http://localhost:3000",
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
         },
         body: JSON.stringify({ message: "Invalid email or password" }),
       }

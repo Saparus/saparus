@@ -15,24 +15,25 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
       ...prevCredentials,
       [credential]: newValue,
     }))
+
+    setError()
   }
 
   const handleLogIn = async () => {
     if (!credentials.email || !credentials.password) {
-      setError({
-        emailError: !credentials.email ? ["Email is required"] : [],
-        passwordError: !credentials.password ? ["Password is required"] : [],
-      })
+      setError("Please fill in all fields")
       return
     }
 
     try {
       const response = await login(credentials)
 
+      console.log(response)
+
       setAccountInfo(response)
       setIsAuthorized(true)
     } catch (error) {
-      setError(error.response?.data || "Login failed")
+      setError(error?.response?.data?.message || error?.message || "Login failed")
     }
   }
 
@@ -58,20 +59,6 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               placeholder={t("email")}
               type="text"
             />
-            {error?.emailError?.length > 0 ? (
-              <ul className="error-list">
-                {error.emailError.map((emailError) => (
-                  <li
-                    className="error-item"
-                    key={emailError}
-                  >
-                    {emailError}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              ""
-            )}
           </label>
           <label htmlFor="password">
             <input
@@ -84,24 +71,12 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               placeholder={t("password")}
               type="password"
             />
-            {error?.passwordError?.length > 0 ? (
-              <ul className="error-list">
-                {error.passwordError.map((passwordError) => (
-                  <li
-                    className="error-item"
-                    key={passwordError}
-                  >
-                    {passwordError}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              ""
-            )}
           </label>
+          {error?.length > 0 ? <div className="login-error">{error}</div> : ""}
           <button
             onClick={handleLogIn}
             className="submit-code"
+            disabled={!credentials.email || !credentials.password || error}
           >
             {t("enter")}
           </button>

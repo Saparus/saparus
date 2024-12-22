@@ -16,7 +16,7 @@ export const editProduct = async (
 
   try {
     const { data } = await ajax.patch(
-      `/product/edit/${id}`,
+      `/products/edit/${id}`,
       { name, description, images, inStock, fixedPrice, price, categories },
       authHeaders(token)
     )
@@ -30,7 +30,7 @@ export const editProduct = async (
 // get product categories
 export const getCategories = async () => {
   try {
-    const { data } = await ajax.get("/product/categories")
+    const { data } = await ajax.get("/products/categories")
     return data
   } catch (error) {
     console.error("error fetching product categories:", error)
@@ -53,7 +53,7 @@ export const addProduct = async (
 
   try {
     const { data } = await ajax.post(
-      "/product/add",
+      "/products",
       { name, description, images, inStock, fixedPrice, price, categories },
       authHeaders(token)
     )
@@ -69,7 +69,7 @@ export const deleteProduct = async (id, token) => {
   if (!token) throw new Error("token is required")
 
   try {
-    const { data } = await ajax.delete(`/product/delete/${id}`, authHeaders(token))
+    const { data } = await ajax.delete(`/products/${id}`, authHeaders(token))
     return data
   } catch (error) {
     console.error(`error deleting product with id ${id}:`, error)
@@ -83,7 +83,7 @@ export const getProducts = async (filter, language, limit = 20, page = 1) => {
 
   try {
     const { data } = await ajax.get(
-      `/product/get?filter=${filterString}&language=${language}&limit=${limit}&page=${page}`
+      `/product?filter=${filterString}&language=${language}&limit=${limit}&page=${page}`
     )
     return data
   } catch (error) {
@@ -95,7 +95,7 @@ export const getProducts = async (filter, language, limit = 20, page = 1) => {
 // get a single product by id and language
 export const getProduct = async (id, language) => {
   try {
-    const { data } = await ajax.get(`/product/get/${id}?language=${language}`)
+    const { data } = await ajax.get(`/product/${id}?language=${language}`)
     return data
   } catch (error) {
     console.error(`error fetching product with id ${id}:`, error)
@@ -106,7 +106,7 @@ export const getProduct = async (id, language) => {
 // get an editable product by id (requires token)
 export const getEditProduct = async (id, token) => {
   try {
-    const { data } = await ajax.get(`/product/getEdit/${id}`, authHeaders(token))
+    const { data } = await ajax.get(`/product/admin/${id}`, authHeaders(token))
     return data
   } catch (error) {
     console.error(`error fetching editable product with id ${id}:`, error)

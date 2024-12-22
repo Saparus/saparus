@@ -14,18 +14,33 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
     if (!programs || programs.length === 0) {
       return {
         statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        },
         body: JSON.stringify({ message: "No items found" }),
       }
     }
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
       body: JSON.stringify(programs),
     }
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: error.message }),
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+      },
+      body: JSON.stringify({ message: "Internal server error", error }),
     }
   }
 }
