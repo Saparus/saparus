@@ -37,7 +37,6 @@ functions:
           path: auth/register
           method: post
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -55,7 +54,6 @@ functions:
           path: auth/login
           method: post
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -73,7 +71,6 @@ functions:
           path: about
           method: get
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -89,7 +86,6 @@ functions:
           path: about/admin
           method: get
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -108,7 +104,6 @@ functions:
           path: about
           method: patch
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -134,7 +129,6 @@ functions:
           path: children-program/create
           method: post
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -157,7 +151,6 @@ functions:
           path: children-program/{id}
           method: get
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -173,7 +166,6 @@ functions:
           path: children-program/edit/{id}
           method: patch
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -196,7 +188,6 @@ functions:
           path: children-program/{id}
           method: delete
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -216,7 +207,6 @@ functions:
           path: children-program
           method: get
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -232,7 +222,6 @@ functions:
           path: children-program/admin/{id}
           method: get
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -252,7 +241,6 @@ functions:
           path: children-program/admin
           method: get
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -273,7 +261,6 @@ functions:
           path: news/create
           method: post
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -296,7 +283,6 @@ functions:
           path: news/{id}
           method: get
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -312,7 +298,6 @@ functions:
           path: news/edit/{id}
           method: patch
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -335,7 +320,6 @@ functions:
           path: news/{id}
           method: delete
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -355,7 +339,6 @@ functions:
           path: news
           method: get
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -371,7 +354,6 @@ functions:
           path: news/admin/{id}
           method: get
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -391,7 +373,6 @@ functions:
           path: news/admin
           method: get
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -412,7 +393,6 @@ functions:
           path: products/create
           method: post
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -433,7 +413,6 @@ functions:
       - http: products/categories
           method: get
           cors: true
-
   getProduct:
     handler: src/handlers/products/getProduct.getProduct
     name: get-product
@@ -443,7 +422,6 @@ functions:
           path: products/{id}
           method: get
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -459,7 +437,6 @@ functions:
           path: products/edit/{id}
           method: patch
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -482,7 +459,6 @@ functions:
           path: products/{id}
           method: delete
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -502,7 +478,6 @@ functions:
           path: products
           method: get
           cors: true
-
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -518,7 +493,6 @@ functions:
           path: products/admin/{id}
           method: get
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
@@ -538,7 +512,6 @@ functions:
           path: products/admin
           method: get
           cors: true
-
           authorizer:
             name: verify-token
             identitySource: method.request.header.Authorization
