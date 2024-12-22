@@ -48,11 +48,13 @@ export const register = async (event) => {
       statusCode: 201,
       body: JSON.stringify({ message: "User created successfully" }),
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Internal server error" }),
+      body: JSON.stringify({
+        message: process.env.MODE === "dev" ? error : "Internal server error",
+      }),
     }
   }
 }

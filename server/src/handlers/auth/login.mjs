@@ -45,11 +45,12 @@ export const login = async (event) => {
         body: JSON.stringify({ message: "Incorrect password" }),
       }
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Internal server error" }),
+      body: JSON.stringify({
+        message: process.env.MODE === "dev" ? error : "Internal server error",
+      }),
     }
   }
 }
