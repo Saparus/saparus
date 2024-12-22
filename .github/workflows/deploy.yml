@@ -1,18 +1,27 @@
+<<<<<<< HEAD
 name: Deploy
+=======
+name: Deploy Server to AWS
+>>>>>>> 00d144530729ee62935668a8464baaa021458e54
 
 on:
   push:
     branches:
+<<<<<<< HEAD
       - main
   pull_request:
     branches:
       - main
+=======
+      - master # Trigger deployment when pushing to the main branch
+>>>>>>> 00d144530729ee62935668a8464baaa021458e54
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -50,3 +59,27 @@ jobs:
           AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: serverless deploy --stage production
+=======
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+
+      - name: Install server dependencies
+        run: |
+          cd server
+          npm install
+          npm install -g serverless@3.38.0
+
+      - name: Deploy server to AWS
+        run: |
+          cd server
+          serverless deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+>>>>>>> 00d144530729ee62935668a8464baaa021458e54

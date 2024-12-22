@@ -1,83 +1,538 @@
-service: server-service
-org: saparus
-app: saparus-backend
+service: saparus-backend
+
+frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: nodejs22.x
+  runtime: nodejs20.x
   region: us-west-2
   environment:
-    PRODUCTS: productsTable
-    USERS: usersTable
-    JWT_SECRET: ${self:provider.environment.JWT_SECRET}
+    ABOUT_TABLE: AboutTable
+    CHILDREN_PROGRAMS_TABLE: ChildrenProgramsTable
+    NEWS_TABLE: NewsTable
+    PRODUCTS_TABLE: ProductsTable
+    USERS_TABLE: UsersTable
+    JWT_SECRET: ${{secrets.JWT_SECRET}}
+    BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+
+plugins:
+  - serverless-iam-roles-per-function
 
 functions:
-  # products
-  addProduct:
-    handler: products.addProduct
-    events:
-      - http:
-          path: products
-          method: post
+  # Authentication
+  verify-token:
+    handler: src/handlers/auth/authorize.authorize
+    name: verify-token
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt UsersTable.Arn
 
-  getCategories:
-    handler: products.getCategories
-    events:
-      - http:
-          path: products/categories
-          method: get
-
-  getProduct:
-    handler: products.getProduct
-    events:
-      - http:
-          path: products/{id}
-          method: get
-
-  getProducts:
-    handler: products.getProducts
-    events:
-      - http:
-          path: products
-          method: get
-
-  editProduct:
-    handler: products.editProduct
-    events:
-      - http:
-          path: products/{id}
-          method: put
-
-  deleteProduct:
-    handler: products.deleteProduct
-    events:
-      - http:
-          path: products/{id}
-          method: delete
-
-  # authentication
-  register:
-    handler: auth.register
+  registerUser:
+    handler: src/handlers/auth/register.register
+    name: register-user
     events:
       - http:
           path: auth/register
           method: post
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Query"
+          - "dynamodb:PutItem"
+        Resource:
+          - !GetAtt UsersTable.Arn
+          - arn:aws:dynamodb:us-west-2:*:table/UsersTable/index/EmailIndex
 
-  login:
-    handler: auth.login
+  loginUser:
+    handler: src/handlers/auth/login.login
+    name: login-user
     events:
       - http:
           path: auth/login
           method: post
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Query"
+        Resource:
+          - !GetAtt UsersTable.Arn
+          - arn:aws:dynamodb:us-west-2:*:table/UsersTable/index/EmailIndex
+
+  # About
+  getAbout:
+    handler: src/handlers/about/getAllAboutItems.getAllAboutItems
+    name: get-about
+    events:
+      - http:
+          path: about
+          method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt AboutTable.Arn
+
+  getAllAboutItemsForAdmin:
+    handler: src/handlers/about/getAllAboutItemsForAdmin.getAllAboutItemsForAdmin
+    name: get-about-admin
+    iamRoleStatementsName: get-about-admin-role
+    events:
+      - http:
+          path: about/admin
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt AboutTable.Arn
+
+  editAllAboutItems:
+    handler: src/handlers/about/editAllAboutItems.editAllAboutItems
+    name: edit-all-about-items
+    events:
+      - http:
+          path: about
+          method: put
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+          - "dynamodb:DeleteItem"
+          - "dynamodb:PutItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt AboutTable.Arn
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
+
+  # Children Program
+  createChildrenProgram:
+    handler: src/handlers/childrenProgram/createChildrenProgram.createChildrenProgram
+    name: create-children
+    iamRoleStatementsName: create-children-role
+    events:
+      - http:
+          path: children-program/create
+          method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ChildrenProgramsTable.Arn
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
+
+  getChildrenProgram:
+    handler: src/handlers/childrenProgram/getChildrenProgram.getChildrenProgram
+    name: get-children
+    iamRoleStatementsName: get-children-role
+    events:
+      - http:
+          path: children-program/{id}
+          method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  editChildrenProgram:
+    handler: src/handlers/childrenProgram/editChildrenProgram.editChildrenProgram
+    name: edit-children
+    iamRoleStatementsName: edit-children-role
+    events:
+      - http:
+          path: children-program/edit/{id}
+          method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ChildrenProgramsTable.Arn
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
+
+  deleteChildrenProgram:
+    handler: src/handlers/childrenProgram/deleteChildrenProgram.deleteChildrenProgram
+    name: delete-children-
+    iamRoleStatementsName: delete-children-role
+    events:
+      - http:
+          path: children-program/{id}
+          method: delete
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  getAllChildrenPrograms:
+    handler: src/handlers/childrenProgram/getAllChildrenPrograms.getAllChildrenPrograms
+    name: get-all-children
+    iamRoleStatementsName: get-all-children-role
+    events:
+      - http:
+          path: children-program
+          method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  getChildrenProgramForAdmin:
+    handler: src/handlers/childrenProgram/getChildrenProgramForAdmin.getChildrenProgramForAdmin
+    name: get-children-admin
+    iamRoleStatementsName: get-children-admin-role
+    events:
+      - http:
+          path: children-program/admin/{id}
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  getAllChildrenProgramsForAdmin:
+    handler: src/handlers/childrenProgram/getAllChildrenProgramsForAdmin.getAllChildrenProgramsForAdmin
+    name: get-all-children-admin
+    iamRoleStatementsName: get-all-children-admin-role
+    events:
+      - http:
+          path: children-program/admin
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  # News
+  createNewsItem:
+    handler: src/handlers/news/createNewsItem.createNewsItem
+    name: create-news-item
+    iamRoleStatementsName: create-news-item-role
+    events:
+      - http:
+          path: news/create
+          method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt NewsTable.Arn
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
+
+  getNewsItem:
+    handler: src/handlers/news/getNewsItem.getNewsItem
+    name: get-news-item
+    iamRoleStatementsName: get-news-item-role
+    events:
+      - http:
+          path: news/{id}
+          method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt NewsTable.Arn
+
+  editNewsItem:
+    handler: src/handlers/news/editNewsItem.editNewsItem
+    name: edit-news-item
+    iamRoleStatementsName: edit-news-item-role
+    events:
+      - http:
+          path: news/edit/{id}
+          method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt NewsTable.Arn
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
+
+  deleteNewsItem:
+    handler: src/handlers/news/deleteNewsItem.deleteNewsItem
+    name: delete-news-item
+    iamRoleStatementsName: delete-news-item-role
+    events:
+      - http:
+          path: news/{id}
+          method: delete
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt NewsTable.Arn
+
+  getAllNewsItems:
+    handler: src/handlers/news/getAllNewsItems.getAllNewsItems
+    name: get-all-news-items
+    iamRoleStatementsName: get-all-news-items-role
+    events:
+      - http:
+          path: news
+          method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt NewsTable.Arn
+
+  getNewsItemForAdmin:
+    handler: src/handlers/news/getNewsItemForAdmin.getNewsItemForAdmin
+    name: get-news-item-admin
+    iamRoleStatementsName: get-news-item-admin-role
+    events:
+      - http:
+          path: news/admin/{id}
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt NewsTable.Arn
+
+  getAllNewsItemsForAdmin:
+    handler: src/handlers/news/getAllNewsItemsForAdmin.getAllNewsItemsForAdmin
+    name: get-all-news-items-admin
+    iamRoleStatementsName: get-all-news-items-admin-role
+    events:
+      - http:
+          path: news/admin
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt NewsTable.Arn
+
+  # Products
+  createProduct:
+    handler: src/handlers/products/createProduct.createProduct
+    name: create-product
+    iamRoleStatementsName: create-product-role
+    events:
+      - http:
+          path: products/create
+          method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ProductsTable.Arn
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
+
+  getProduct:
+    handler: src/handlers/products/getProduct.getProduct
+    name: get-product
+    iamRoleStatementsName: get-product-role
+    events:
+      - http:
+          path: products/{id}
+          method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ProductsTable.Arn
+
+  editProduct:
+    handler: src/handlers/products/editProduct.editProduct
+    name: edit-product
+    iamRoleStatementsName: edit-product-role
+    events:
+      - http:
+          path: products/edit/{id}
+          method: post
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+        Resource:
+          - !GetAtt ProductsTable.Arn
+          - arn:aws:s3:::${env.BUCKET_NAME}/*
+
+  deleteProduct:
+    handler: src/handlers/products/deleteProduct.deleteProduct
+    name: delete-product
+    iamRoleStatementsName: deletr-product-role
+    events:
+      - http:
+          path: products/{id}
+          method: delete
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt ProductsTable.Arn
+
+  getAllProducts:
+    handler: src/handlers/products/getAllProducts.getAllProducts
+    name: get-all-products
+    iamRoleStatementsName: get-all-products-role
+    events:
+      - http:
+          path: products
+          method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ProductsTable.Arn
+
+  getProductForAdmin:
+    handler: src/handlers/products/getProductForAdmin.getProductForAdmin
+    name: get-product-admin
+    iamRoleStatementsName: get-product-admin-role
+    events:
+      - http:
+          path: products/admin/{id}
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ProductsTable.Arn
+
+  getAllProductsForAdmin:
+    handler: src/handlers/products/getAllProductsForAdmin.getAllProductsForAdmin
+    name: get-all-products-admin
+    iamRoleStatementsName: get-all-products-admin-role
+    events:
+      - http:
+          path: products/admin
+          method: get
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ProductsTable.Arn
 
 resources:
   Resources:
+    AboutTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AboutTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    ChildrenProgramsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ChildrenProgramsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    NewsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: NewsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
     ProductsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: products
+        TableName: ProductsTable
         AttributeDefinitions:
-          - AttributeName: products
+          - AttributeName: id
             AttributeType: S
         KeySchema:
           - AttributeName: id
@@ -87,11 +542,20 @@ resources:
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: users
+        TableName: UsersTable
         AttributeDefinitions:
-          - AttributeName: users
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: email
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: EmailIndex
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
