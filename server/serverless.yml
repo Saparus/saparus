@@ -108,8 +108,8 @@ functions:
   # Children Program
   createChildrenProgram:
     handler: handlers/childrenProgram/createChildrenProgram
-    name: create-children-program
-    iamRoleStatementsName: create-children-program-role
+    name: create-children
+    iamRoleStatementsName: create-children-role
     events:
       - http:
           path: children-program/create
@@ -125,8 +125,8 @@ functions:
 
   getChildrenProgram:
     handler: handlers/childrenProgram/getChildrenProgram
-    name: get-children-program
-    iamRoleStatementsName: get-children-program-role
+    name: get-children
+    iamRoleStatementsName: get-children-role
     events:
       - http:
           path: children-program/{id}
@@ -139,8 +139,8 @@ functions:
 
   editChildrenProgram:
     handler: handlers/childrenProgram/editChildrenProgram
-    name: edit-children-program
-    iamRoleStatementsName: edit-children-program-role
+    name: edit-children
+    iamRoleStatementsName: edit-children-role
     events:
       - http:
           path: children-program/edit/{id}
@@ -156,8 +156,8 @@ functions:
 
   deleteChildrenProgram:
     handler: handlers/childrenProgram/deleteChildrenProgram
-    name: delete-children-program
-    iamRoleStatementsName: delete-children-program-role
+    name: delete-children-
+    iamRoleStatementsName: delete-children-role
     events:
       - http:
           path: children-program/{id}
@@ -174,8 +174,8 @@ functions:
 
   getAllChildrenPrograms:
     handler: handlers/childrenProgram/getAllChildrenPrograms
-    name: get-all-children-programs
-    iamRoleStatementsName: get-all-children-programs-role
+    name: get-all-children
+    iamRoleStatementsName: get-all-children-role
     events:
       - http:
           path: children-program
