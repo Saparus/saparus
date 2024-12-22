@@ -1,7 +1,8 @@
 import { v4 as uuid } from "uuid"
 import bcrypt from "bcrypt"
+import { QueryCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
-import { ScanCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
 
 export const register = async (event) => {
   const { email, username, password } = JSON.parse(event.body)
@@ -24,7 +25,7 @@ export const register = async (event) => {
     },
   }
 
-  const existingUserCommand = new ScanCommand(existingUserParams) // QueryCommand would be faster in app with more users
+  const existingUserCommand = new QueryCommand(existingUserParams)
   const existingUser = await db.send(existingUserCommand)
 
   if (existingUser.Items.length > 0) {

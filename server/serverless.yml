@@ -39,6 +39,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
+          - "dynamodb:Query"
           - "dynamodb:PutItem"
         Resource: !GetAtt UsersTable.Arn
 
@@ -52,7 +53,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:GetItem"
+          - "dynamodb:Query"
         Resource: !GetAtt UsersTable.Arn
 
   # About

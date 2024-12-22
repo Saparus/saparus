@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-import { db } from "../../util/db.mjs"
 import { QueryCommand } from "@aws-sdk/lib-dynamodb"
+
+import { db } from "../../util/db.mjs"
 
 export const login = async (event) => {
   const { email, password } = JSON.parse(event.body)
@@ -25,9 +26,9 @@ export const login = async (event) => {
   }
 
   const command = new QueryCommand(params)
+  const result = await db.send(command)
 
   try {
-    const result = await db.send(command)
     if (result.Items.length === 0) {
       return {
         statusCode: 400,
