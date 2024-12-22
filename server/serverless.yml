@@ -5,7 +5,7 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs20.x
-  region: ${{secrets.AWS_REGION}}
+  region: us-west-2
   environment:
     ABOUT_TABLE: ${{secrets.ABOUT_TABLE}}
     CHILDREN_PROGRAMS_TABLE: ${{secrets.CHILDREN_PROGRAMS_TABLE}}
@@ -108,6 +108,8 @@ functions:
   # Children Program
   createChildrenProgram:
     handler: handlers/childrenProgram/createChildrenProgram
+    name: create-children-program
+    iamRoleStatementsName: create-children-program-role
     events:
       - http:
           path: children-program/create
@@ -123,6 +125,8 @@ functions:
 
   getChildrenProgram:
     handler: handlers/childrenProgram/getChildrenProgram
+    name: get-children-program
+    iamRoleStatementsName: get-children-program-role
     events:
       - http:
           path: children-program/{id}
@@ -135,6 +139,8 @@ functions:
 
   editChildrenProgram:
     handler: handlers/childrenProgram/editChildrenProgram
+    name: edit-children-program
+    iamRoleStatementsName: edit-children-program-role
     events:
       - http:
           path: children-program/edit/{id}
@@ -150,6 +156,8 @@ functions:
 
   deleteChildrenProgram:
     handler: handlers/childrenProgram/deleteChildrenProgram
+    name: delete-children-program
+    iamRoleStatementsName: delete-children-program-role
     events:
       - http:
           path: children-program/{id}
@@ -166,6 +174,8 @@ functions:
 
   getAllChildrenPrograms:
     handler: handlers/childrenProgram/getAllChildrenPrograms
+    name: get-all-children-programs
+    iamRoleStatementsName: get-all-children-programs-role
     events:
       - http:
           path: children-program
@@ -179,6 +189,8 @@ functions:
   # News
   createNewsItem:
     handler: handlers/news/createNewsItem
+    name: create-news-item
+    iamRoleStatementsName: create-news-item-role
     events:
       - http:
           path: news/create
@@ -194,6 +206,8 @@ functions:
 
   getNewsItem:
     handler: handlers/news/getNewsItem
+    name: get-news-item
+    iamRoleStatementsName: get-news-item-role
     events:
       - http:
           path: news/{id}
@@ -206,6 +220,8 @@ functions:
 
   editNewsItem:
     handler: handlers/news/editNewsItem
+    name: edit-news-item
+    iamRoleStatementsName: edit-news-item-role
     events:
       - http:
           path: news/edit/{id}
@@ -221,6 +237,8 @@ functions:
 
   deleteNewsItem:
     handler: handlers/news/deleteNewsItem
+    name: delete-news-item
+    iamRoleStatementsName: delete-news-item-role
     events:
       - http:
           path: news/{id}
@@ -237,6 +255,8 @@ functions:
 
   getAllNewsItems:
     handler: handlers/news/getAllNewsItems
+    name: get-all-news-items
+    iamRoleStatementsName: get-all-news-items-role
     events:
       - http:
           path: news
@@ -254,6 +274,8 @@ functions:
   # Products
   createProduct:
     handler: handlers/products/createProduct
+    name: create-product
+    iamRoleStatementsName: create-product-role
     events:
       - http:
           path: products/create
@@ -269,6 +291,8 @@ functions:
 
   getProduct:
     handler: handlers/products/getProduct
+    name: get-product
+    iamRoleStatementsName: get-product-role
     events:
       - http:
           path: products/{id}
@@ -281,6 +305,8 @@ functions:
 
   editProduct:
     handler: handlers/products/editProduct
+    name: edit-product
+    iamRoleStatementsName: edit-product-role
     events:
       - http:
           path: products/edit/{id}
@@ -300,6 +326,8 @@ functions:
 
   deleteProduct:
     handler: handlers/products/deleteProduct
+    name: delete-product
+    iamRoleStatementsName: deletr-product-role
     events:
       - http:
           path: products/{id}
@@ -316,6 +344,8 @@ functions:
 
   getAllProducts:
     handler: handlers/products/getAllProducts
+    name: get-all-products
+    iamRoleStatementsName: get-all-products-role
     events:
       - http:
           path: products
