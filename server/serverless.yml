@@ -7,11 +7,11 @@ provider:
   runtime: nodejs20.x
   region: us-west-2
   environment:
-    ABOUT_TABLE: about
-    CHILDREN_PROGRAMS_TABLE: childrenPrograms
-    NEWS_TABLE: news
-    PRODUCTS_TABLE: products
-    USERS_TABLE: users
+    ABOUT_TABLE: AboutTable
+    CHILDREN_PROGRAMS_TABLE: ChildrenProgramsTable
+    NEWS_TABLE: NewsTable
+    PRODUCTS_TABLE: ProductsTable
+    USERS_TABLE: UsersTable
     JWT_SECRET: ${{secrets.JWT_SECRET}}
     BUCKET_NAME: ${{secrets.BUCKET_NAME}}
 
@@ -361,7 +361,7 @@ resources:
     AboutTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${env.ABOUT_TABLE}
+        TableName: AboutTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -373,7 +373,7 @@ resources:
     ChildrenProgramsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${env.CHILDREN_PROGRAMS_TABLE}
+        TableName: ChildrenProgramsTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -385,7 +385,7 @@ resources:
     NewsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${env.NEWS_TABLE}
+        TableName: NewsTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -397,7 +397,7 @@ resources:
     ProductsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${env.PRODUCTS_TABLE}
+        TableName: ProductsTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -409,7 +409,7 @@ resources:
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${env.USERS_TABLE}
+        TableName: UsersTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
