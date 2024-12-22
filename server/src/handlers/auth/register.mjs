@@ -6,6 +6,30 @@ import { db } from "../../util/db.mjs"
 export const register = async (event) => {
   const { email, username, password } = JSON.parse(event.body)
 
+  if (!email || !username || !password) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
+
+  const existingUserParams = {
+    TableName: process.env.USERS_TABLE,
+    IndexName: "EmailIndex",
+    KeyConditionExpression: "email = :email",
+    ExpressionAttributeValues: {
+      ":email": email,
+    },
+  }
+
+  const existingUser = await db.scan(existingUserParams).promise()
+  if (existingUser.Items.length > 0) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "User already exists" }),
+    }
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10)
 
   const params = {

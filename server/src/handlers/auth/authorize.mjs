@@ -15,8 +15,9 @@ export const authorize = async (event) => {
       Key: { id: decoded.id },
     }
 
-    const result = await db.get(params).promise()
-    if (!result.Item) throw new Error("Unauthorized: User not found")
+    const { Item: user } = await db.get(params).promise()
+
+    if (!user) throw new Error("Unauthorized: User not found")
 
     // return user id or full user object
     return result.Item // return entire user object if needed
