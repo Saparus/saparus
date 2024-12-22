@@ -410,7 +410,8 @@ functions:
     handler: src/handlers/products/getCategories.getCategories
     name: get-categories
     events:
-      - http: products/categories
+      - http:
+          path: products/categories
           method: get
           cors: true
   getProduct:
