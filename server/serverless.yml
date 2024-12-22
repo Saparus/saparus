@@ -7,11 +7,11 @@ provider:
   runtime: nodejs20.x
   region: us-west-2
   environment:
-    ABOUT_TABLE: ${{secrets.ABOUT_TABLE}}
-    CHILDREN_PROGRAMS_TABLE: ${{secrets.CHILDREN_PROGRAMS_TABLE}}
-    NEWS_TABLE: ${{secrets.NEWS_TABLW}}
-    PRODUCTS_TABLE: ${{secrets.PRODUCTS_TABLE}}
-    USERS_TABLE: ${{secrets.USERS_TABLE}}
+    ABOUT_TABLE: about
+    CHILDREN_PROGRAMS_TABLE: childrenPrograms
+    NEWS_TABLE: news
+    PRODUCTS_TABLE: products
+    USERS_TABLE: users
     JWT_SECRET: ${{secrets.JWT_SECRET}}
     BUCKET_NAME: ${{secrets.BUCKET_NAME}}
 
