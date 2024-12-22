@@ -41,7 +41,9 @@ functions:
         Action:
           - "dynamodb:Query"
           - "dynamodb:PutItem"
-        Resource: !GetAtt UsersTable.Arn
+        Resource:
+          - !GetAtt UsersTable.Arn
+          - arn:aws:dynamodb:us-west-2:*:table/UsersTable/index/EmailIndex
 
   loginUser:
     handler: src/handlers/auth/login.login
@@ -54,7 +56,9 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:Query"
-        Resource: !GetAtt UsersTable.Arn
+        Resource:
+          - !GetAtt UsersTable.Arn
+          - arn:aws:dynamodb:us-west-2:*:table/UsersTable/index/EmailIndex
 
   # About
   getAbout:
