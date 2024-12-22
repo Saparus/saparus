@@ -30,7 +30,7 @@ functions:
         Resource: !GetAtt UsersTable.Arn
 
   registerUser:
-    handler: src/handlers/auth/register.registwr
+    handler: src/handlers/auth/register.register
     name: register-user
     events:
       - http:
