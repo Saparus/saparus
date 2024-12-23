@@ -3,15 +3,16 @@ import { ScanCommand } from "@aws-sdk/client-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getNewsItemForAdmin = async (event) => {
+  const { id } = event.pathParameters
+
+  const params = {
+    TableName: process.env.NEWS_TABLE,
+    Key: { id },
+  }
+
+  const scanCommand = new ScanCommand(params)
+
   try {
-    const { id } = event.pathParameters
-
-    const params = {
-      TableName: process.env.NEWS_TABLE,
-      Key: { id },
-    }
-
-    const scanCommand = new ScanCommand(params)
     const { Item: newsItem } = await db.send(scanCommand)
 
     if (!newsItem) {

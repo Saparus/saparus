@@ -8,7 +8,7 @@ export const editChildrenProgram = async (event) => {
   const { title, description, images } = JSON.parse(event.body)
 
   // Validate input
-  if (!title || !description || !images || !Array.isArray(images)) {
+  if (!id || !title || !description || !images || !Array.isArray(images)) {
     return {
       statusCode: 400,
       headers: {
@@ -16,7 +16,7 @@ export const editChildrenProgram = async (event) => {
         "Access-Control-Allow-Origin": process.env.CLIENT_URL,
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
       },
-      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
   }
 

@@ -5,10 +5,21 @@ import { UpdateCommand } from "@aws-sdk/lib-dynamodb"
 
 export const editProduct = async (event) => {
   const { id } = event.pathParameters
-  const { name, description, price, images } = JSON.parse(event.body)
+  const { name, fixedPrice, price, description, categories, inStock, images } = JSON.parse(
+    event.body
+  )
 
   // Validate input
-  if (!name || !description || !price || !images || !Array.isArray(images)) {
+  if (
+    !id ||
+    !name | !description ||
+    !fixedPrice ||
+    !categories ||
+    !inStock ||
+    !price ||
+    !images ||
+    !Array.isArray(images)
+  ) {
     return {
       statusCode: 400,
       headers: {
@@ -16,9 +27,13 @@ export const editProduct = async (event) => {
         "Access-Control-Allow-Origin": process.env.CLIENT_URL,
         "Access-Control-Allow-Methods": "OPTIONS,PATCH",
       },
-      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
   }
+
+  fixedPrice = Number(fixedPrice)
+  price = Number(price)
+  inStock = Boolean(inStock)
 
   try {
     const imageUrls = await Promise.all(
@@ -34,11 +49,14 @@ export const editProduct = async (event) => {
       TableName: process.env.PRODUCTS_TABLE,
       Key: { id },
       UpdateExpression:
-        "set name = :name, description = :description, price = :price, imageUrls = :imageUrls",
+        "set name = :name, fixedPrice = :fixedPrice, description = :description, price = :price, categories = :categories, inStock = :inStock, imageUrls = :imageUrls",
       ExpressionAttributeValues: {
         ":name": name,
+        ":fixedPrice": fixedPrice,
         ":description": description,
         ":price": price,
+        ":categories": categories,
+        ":inStock": inStock,
         ":imageUrls": imageUrls,
       },
       ReturnValues: "UPDATED_NEW",

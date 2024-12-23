@@ -4,12 +4,13 @@ import { db } from "../../util/db.mjs"
 import { summarizeCategoryData } from "../../util/summarizeCategoryData"
 
 export const getCategories = async (event) => {
-  try {
-    const params = {
-      TableName: process.env.PRODUCTS_TABLE,
-    }
+  const params = {
+    TableName: process.env.PRODUCTS_TABLE,
+  }
 
-    const scanCommand = new ScanCommand(params)
+  const scanCommand = new ScanCommand(params)
+
+  try {
     const { Items: products } = await db.send(scanCommand)
 
     const categories = summarizeCategoryData(products)

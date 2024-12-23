@@ -27,9 +27,13 @@ export const createProduct = async (event) => {
         "Access-Control-Allow-Origin": process.env.CLIENT_URL,
         "Access-Control-Allow-Methods": "OPTIONS,POST",
       },
-      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
   }
+
+  fixedPrice = Number(fixedPrice)
+  price = Number(price)
+  inStock = Boolean(inStock)
 
   try {
     const imageUrls = await Promise.all(

@@ -11,6 +11,11 @@ export const login = async (event) => {
   if (!email || !password) {
     return {
       statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,POST",
+      },
       body: JSON.stringify({ message: "Missing required fields" }),
     }
   }

@@ -3,12 +3,13 @@ import { ScanCommand } from "@aws-sdk/client-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getAllChildrenProgramsForAdmin = async (event) => {
-  try {
-    const params = {
-      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
-    }
+  const params = {
+    TableName: process.env.CHILDREN_PROGRAMS_TABLE,
+  }
 
-    const scanCommand = new ScanCommand(params)
+  const scanCommand = new ScanCommand(params)
+
+  try {
     const { Items: programs } = await db.send(scanCommand)
 
     if (!programs || programs.length === 0) {

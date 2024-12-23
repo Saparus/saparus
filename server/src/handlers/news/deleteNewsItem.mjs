@@ -5,6 +5,18 @@ import { db } from "../../util/db.mjs"
 export const deleteNewsItem = async (event) => {
   const { id } = event.pathParameters
 
+  if (!id) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,PATCH",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
+
   const params = {
     TableName: process.env.NEWS_TABLE,
     Key: { id },

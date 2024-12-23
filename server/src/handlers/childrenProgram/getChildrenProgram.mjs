@@ -4,7 +4,19 @@ import { db } from "../../util/db.mjs"
 
 export const getChildrenProgram = async (event) => {
   const { id } = event.pathParameters
-  const { language = "en" } = event.queryStringParameters
+  const { language } = event.queryStringParameters
+
+  if (!id || !language) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,PATCH",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 

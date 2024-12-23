@@ -5,6 +5,18 @@ import { db } from "../../util/db.mjs"
 export const deleteProduct = async (event) => {
   const { id } = event.pathParameters
 
+  if (!id) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
+
   const params = {
     TableName: process.env.PRODUCTS_TABLE,
     Key: { id },

@@ -35,6 +35,7 @@ export const createNewsItem = async (event) => {
         id: uuid(),
         title: title,
         text: text,
+        date: Date.now(),
         imageUrls: imageUrls,
       },
     }

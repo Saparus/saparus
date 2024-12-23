@@ -3,8 +3,20 @@ import { ScanCommand } from "@aws-sdk/client-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getProduct = async (event) => {
-  const { language = "en" } = event.queryStringParameters
+  const { language } = event.queryStringParameters
   const { id } = event.pathParameters
+
+  if (!language || !id) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
@@ -14,9 +26,10 @@ export const getProduct = async (event) => {
   }
 
   const scanCommand = new ScanCommand(params)
-  const { Item: product } = await db.send(scanCommand)
 
   try {
+    const { Item: product } = await db.send(scanCommand)
+
     if (!product) {
       return {
         statusCode: 404,

@@ -3,15 +3,28 @@ import { ScanCommand } from "@aws-sdk/client-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getProductForAdmin = async (event) => {
-  try {
-    const { id } = event.pathParameters
+  const { id } = event.pathParameters
 
-    const params = {
-      TableName: process.env.PRODUCTS_TABLE,
-      Key: { id },
+  if (!id) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
+  }
 
-    const scanCommand = new ScanCommand(params)
+  const params = {
+    TableName: process.env.PRODUCTS_TABLE,
+    Key: { id },
+  }
+
+  const scanCommand = new ScanCommand(params)
+
+  try {
     const { Item: product } = await db.send(scanCommand)
 
     if (!product) {

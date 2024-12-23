@@ -4,7 +4,19 @@ import { db } from "../../util/db.mjs"
 import { filterProducts } from "../../util/filterProducts.mjs"
 
 export const getAllProducts = async (event) => {
-  const { language = "en", limit = 10, page = 1 } = event.queryStringParameters
+  const { filter, language, limit, page } = event.queryStringParameters
+
+  if (!language || !limit || !page) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 

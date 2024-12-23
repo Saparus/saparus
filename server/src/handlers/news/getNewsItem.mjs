@@ -3,18 +3,31 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getNewsItem = async (event) => {
-  try {
-    const { language = "en" } = event.queryStringParameters
-    const { id } = event.pathParameters
+  const { language } = event.queryStringParameters
+  const { id } = event.pathParameters
 
-    const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
-
-    const params = {
-      TableName: process.env.NEWS_TABLE,
-      Key: { id },
+  if (!id || !language) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
+  }
 
-    const scanCommand = new ScanCommand(params)
+  const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
+
+  const params = {
+    TableName: process.env.NEWS_TABLE,
+    Key: { id },
+  }
+
+  const scanCommand = new ScanCommand(params)
+
+  try {
     const { Item: newsItem } = await db.send(scanCommand)
 
     if (!newsItem) {

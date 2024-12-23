@@ -3,16 +3,29 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getAllChildrenPrograms = async (event) => {
-  const { language = "en", limit = 10, page = 1 } = event.queryStringParameters
+  const { language, limit, page } = event.queryStringParameters
+
+  if (!language || !limit || !page) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,PATCH",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
-  try {
-    const params = {
-      TableName: process.env.CHILDREN_PROGRAMS_TABLE,
-    }
+  const params = {
+    TableName: process.env.CHILDREN_PROGRAMS_TABLE,
+  }
 
-    const scanCommand = new ScanCommand(params)
+  const scanCommand = new ScanCommand(params)
+
+  try {
     const { Items: programs } = await db.send(scanCommand)
 
     if (!programs) {

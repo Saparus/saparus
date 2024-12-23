@@ -1,14 +1,29 @@
+import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 
 export const getAllNewsItemForAdmin = async (event) => {
-  try {
-    const { limit, page } = event.queryStringParameters
+  const { limit, page } = event.queryStringParameters
 
-    const params = {
-      TableName: process.env.NEWS_TABLE,
+  if (!limit || !page) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
+        "Access-Control-Allow-Methods": "OPTIONS,GET",
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
+  }
 
-    const scanCommand = new ScanCommand(params)
+  const params = {
+    TableName: process.env.NEWS_TABLE,
+  }
+
+  const scanCommand = new ScanCommand(params)
+
+  try {
     const { Items: newsItems } = await db.send(scanCommand)
 
     const startIndex = (page - 1) * limit
