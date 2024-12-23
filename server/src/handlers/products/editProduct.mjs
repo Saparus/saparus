@@ -5,27 +5,24 @@ import { UpdateCommand } from "@aws-sdk/lib-dynamodb"
 
 export const editProduct = async (event) => {
   const { id } = event.pathParameters
-  const { name, fixedPrice, price, description, categories, inStock, images } = JSON.parse(
-    event.body
-  )
+  const {
+    name,
+    fixedPrice = true,
+    price,
+    description,
+    categories,
+    inStock = false,
+    images = [],
+  } = JSON.parse(event.body)
 
   // Validate input
-  if (
-    !id ||
-    !name | !description ||
-    !fixedPrice ||
-    !categories ||
-    !inStock ||
-    !price ||
-    !images ||
-    !Array.isArray(images)
-  ) {
+  if (!name || !price || !description) {
     return {
       statusCode: 400,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,PATCH",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST",
       },
       body: JSON.stringify({ message: "Missing required fields" }),
     }

@@ -5,21 +5,18 @@ import { PutCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const createProduct = async (event) => {
-  const { name, fixedPrice, price, description, categories, inStock, images } = JSON.parse(
-    event.body
-  )
+  const {
+    name,
+    fixedPrice = true,
+    price,
+    description,
+    categories,
+    inStock = false,
+    images = [],
+  } = JSON.parse(event.body)
 
   // Validate input
-  if (
-    !name ||
-    !fixedPrice ||
-    !price ||
-    !description ||
-    !categories ||
-    !inStock ||
-    !images ||
-    !Array.isArray(images)
-  ) {
+  if (!name || !price || !description) {
     return {
       statusCode: 400,
       headers: {
@@ -52,6 +49,9 @@ export const createProduct = async (event) => {
         name: name,
         description: description,
         price: price,
+        categories: categories,
+        fixedPrice: fixedPrice,
+        inStock: inStock,
         imageUrls: imageUrls,
       },
     }
