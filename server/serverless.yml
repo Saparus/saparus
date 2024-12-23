@@ -397,7 +397,7 @@ functions:
     iamRoleStatementsName: create-product-role
     events:
       - http:
-          path: products/create
+          path: products
           method: post
           cors: true
           authorizer:

@@ -53,7 +53,7 @@ const AddProductPage = () => {
       queryClient.invalidateQueries(["products", token]) // this will cause refetching
     },
     onError: (error) => {
-      console.log(error.message)
+      console.log(error.response.data.message)
       toast.error(
         t(
           "Something went wrong while adding product, check browser console for more detailed explanation"
