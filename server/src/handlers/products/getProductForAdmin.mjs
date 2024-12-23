@@ -9,9 +9,8 @@ export const getProductForAdmin = async (event) => {
     return {
       statusCode: 400,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "Missing required fields" }),
     }
@@ -31,9 +30,8 @@ export const getProductForAdmin = async (event) => {
       return {
         statusCode: 404,
         headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-          "Access-Control-Allow-Methods": "OPTIONS,GET",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
         },
         body: JSON.stringify({ message: "Product not found" }),
       }
@@ -42,9 +40,8 @@ export const getProductForAdmin = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify(product),
     }
@@ -52,9 +49,8 @@ export const getProductForAdmin = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: error.message }),
     }

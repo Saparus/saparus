@@ -10,9 +10,8 @@ export const getNewsItem = async (event) => {
     return {
       statusCode: 400,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "Missing required fields" }),
     }
@@ -34,9 +33,8 @@ export const getNewsItem = async (event) => {
       return {
         statusCode: 404,
         headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-          "Access-Control-Allow-Methods": "OPTIONS,GET",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
         },
         body: JSON.stringify({ message: "News item not found" }),
       }
@@ -47,9 +45,8 @@ export const getNewsItem = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({
         ...newsItem,
@@ -61,9 +58,8 @@ export const getNewsItem = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "Error fetching news item" }),
     }

@@ -16,9 +16,8 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
       return {
         statusCode: 404,
         headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
         },
         body: JSON.stringify({ message: "No items found" }),
       }
@@ -27,9 +26,8 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify(programs),
     }
@@ -37,9 +35,8 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "Internal server error", error }),
     }

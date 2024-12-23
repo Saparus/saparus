@@ -9,9 +9,8 @@ export const deleteNewsItem = async (event) => {
     return {
       statusCode: 400,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,PATCH",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "Missing required fields" }),
     }
@@ -30,9 +29,8 @@ export const deleteNewsItem = async (event) => {
     return {
       statusCode: 204,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,DELETE",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "News item deleted successfully" }),
     }
@@ -40,9 +38,8 @@ export const deleteNewsItem = async (event) => {
     return {
       statusCode: 401,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,DELETE",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: error.message }),
     }

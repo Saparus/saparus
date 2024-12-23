@@ -19,9 +19,8 @@ export const getNewsItemForAdmin = async (event) => {
       return {
         statusCode: 404,
         headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-          "Access-Control-Allow-Methods": "OPTIONS,GET",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
         },
         body: JSON.stringify({ message: "No items found" }),
       }
@@ -30,9 +29,8 @@ export const getNewsItemForAdmin = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify(newsItem),
     }
@@ -40,9 +38,8 @@ export const getNewsItemForAdmin = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,GET",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: error.message }),
     }

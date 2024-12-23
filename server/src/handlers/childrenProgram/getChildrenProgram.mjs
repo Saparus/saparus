@@ -10,9 +10,8 @@ export const getChildrenProgram = async (event) => {
     return {
       statusCode: 400,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,PATCH",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "Missing required fields" }),
     }
@@ -33,9 +32,8 @@ export const getChildrenProgram = async (event) => {
       return {
         statusCode: 404,
         headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
         },
         body: JSON.stringify({ message: "Program not found" }),
       }
@@ -44,9 +42,8 @@ export const getChildrenProgram = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({
         ...program,
@@ -58,9 +55,8 @@ export const getChildrenProgram = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": process.env.CLIENT_URL,
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH,DELETE",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({ message: "Error fetching program" }),
     }
