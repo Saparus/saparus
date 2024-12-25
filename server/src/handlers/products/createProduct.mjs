@@ -5,21 +5,15 @@ import { PutCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const createProduct = async (event) => {
-  const {
-    name,
-    fixedPrice,
-    price,
-    description,
-    categories,
-    inStock = false,
-    images = [],
-  } = JSON.parse(event.body)
+  const body = JSON.parse(event.body)
 
-  fixedPrice = fixedPrice ? fixedPrice : price !== 0
-  price = price !== undefined ? Number(price) : 0
-  inStock = inStock !== undefined ? Boolean(inStock) : false
-  categories = categories || []
-  images = images || []
+  const name = body.name
+  const fixedPrice = body.fixedPrice ? body.fixedPrice : body.price !== 0
+  const price = body.price !== undefined ? Number(body.price) : 0
+  const description = body.description
+  const categories = body.categories || []
+  const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
+  const images = body.images || []
 
   // Validate input
   if (!name || !description) {
@@ -65,7 +59,7 @@ export const createProduct = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Product created successfully" }),
+      body: JSON.stringify({ message: "Product created successfully", product: { ...params } }),
     }
   } catch (err) {
     console.error(err)
