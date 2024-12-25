@@ -7,7 +7,7 @@ import { db } from "../../util/db.mjs"
 export const createProduct = async (event) => {
   const {
     name,
-    fixedPrice = true,
+    fixedPrice,
     price,
     description,
     categories,
@@ -15,8 +15,14 @@ export const createProduct = async (event) => {
     images = [],
   } = JSON.parse(event.body)
 
+  fixedPrice = fixedPrice ? fixedPrice : price !== 0
+  price = price !== undefined ? Number(price) : 0
+  inStock = inStock !== undefined ? Boolean(inStock) : false
+  categories = categories || []
+  images = images || []
+
   // Validate input
-  if (!name || !price || !description) {
+  if (!name || !description) {
     return {
       statusCode: 400,
       headers: {
@@ -26,10 +32,6 @@ export const createProduct = async (event) => {
       body: JSON.stringify({ message: "Missing required fields" }),
     }
   }
-
-  fixedPrice = Number(fixedPrice)
-  price = Number(price)
-  inStock = Boolean(inStock)
 
   try {
     const imageUrls = await Promise.all(
