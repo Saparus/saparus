@@ -1,7 +1,8 @@
 import { v4 as uuid } from "uuid"
+import { PutItemCommand } from "@aws-sdk/client-dynamodb"
+
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
-import { PutCommand } from "@aws-sdk/lib-dynamodb"
 
 export const createChildrenProgram = async (event) => {
   const { title, description, images } = JSON.parse(event.body)
@@ -39,8 +40,9 @@ export const createChildrenProgram = async (event) => {
       },
     }
 
-    const putCommand = new PutCommand(params)
-    await db.send(putCommand)
+    const putItemCommand = new PutItemCommand(params)
+    await db.send(putItemCommand)
+
     return {
       statusCode: 201,
       headers: {

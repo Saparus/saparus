@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid"
 import bcrypt from "bcrypt"
-import { QueryCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
+import { QueryCommand, PutItemCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"
 
@@ -16,41 +16,39 @@ export const register = async (event) => {
   }
 
   // Check if user already exists
-  const existingUserParams = {
+  const queryParams = {
     TableName: process.env.USERS_TABLE,
     IndexName: "EmailIndex",
     KeyConditionExpression: "email = :email",
     ExpressionAttributeValues: {
-      ":email": email,
+      ":email": { S: email },
     },
   }
 
-  const existingUserCommand = new QueryCommand(existingUserParams)
-  const existingUser = await db.send(existingUserCommand)
-
-  if (existingUser.Items.length > 0) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: "User already exists" }),
-    }
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10)
-
-  const params = {
-    TableName: process.env.USERS_TABLE,
-    Item: {
-      id: uuid(),
-      email: email,
-      username: username,
-      hashedPassword: hashedPassword,
-    },
-  }
-
-  const putCommand = new PutCommand(params)
+  const queryCommand = new QueryCommand(queryParams)
 
   try {
-    await db.send(putCommand)
+    const { Items: existingUsers } = await db.send(queryCommand)
+
+    if (existingUsers.length > 0) {
+      throw new Error("User already exists")
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const params = {
+      TableName: process.env.USERS_TABLE,
+      Item: {
+        id: uuid(),
+        email: email,
+        username: username,
+        hashedPassword: hashedPassword,
+      },
+    }
+
+    const putItemCommand = new PutItemCommand(params)
+    await db.send(putItemCommand)
+
     return {
       statusCode: 201,
       body: JSON.stringify({ message: "User created successfully" }),

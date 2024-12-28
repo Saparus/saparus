@@ -1,5 +1,6 @@
+import { DeleteItemCommand } from "@aws-sdk/client-dynamodb"
+
 import { db } from "../../util/db.mjs"
-import { DeleteCommand } from "@aws-sdk/lib-dynamodb"
 
 export const deleteChildrenProgram = async (event) => {
   const { id } = event.pathParameters
@@ -20,10 +21,10 @@ export const deleteChildrenProgram = async (event) => {
     Key: { id },
   }
 
-  const deleteCommand = new DeleteCommand(params)
+  const deleteItemCommand = new DeleteItemCommand(params)
 
   try {
-    await db.send(deleteCommand)
+    await db.send(deleteItemCommand)
     return {
       statusCode: 200,
       headers: {

@@ -1,4 +1,4 @@
-import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+import { ScanCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"
 

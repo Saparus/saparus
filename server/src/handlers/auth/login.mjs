@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-import { QueryCommand } from "@aws-sdk/lib-dynamodb"
+import { QueryCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"
 
@@ -25,38 +25,25 @@ export const login = async (event) => {
     IndexName: "EmailIndex",
     KeyConditionExpression: "email = :email",
     ExpressionAttributeValues: {
-      ":email": email,
+      ":email": { S: email },
     },
   }
 
-  const command = new QueryCommand(params)
-  const result = await db.send(command)
+  const queryCommand = new QueryCommand(params)
 
   try {
-    if (result.Items.length === 0) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ message: "Invalid email or password" }),
-      }
+    const { Items: users } = await db.send(queryCommand)
+
+    if (users.length === 0) {
+      throw new Error("Invalid email or password")
     }
 
-    const user = result.Items[0]
+    const user = users[0]
 
     // Verify password
-    const validPassword = await bcrypt.compare(password, user.hashedPassword)
+    const validPassword = bcrypt.compare(password, user.hashedPassword)
     if (!validPassword) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ message: "Invalid email or password" }),
-      }
+      throw new Error("Invalid email or password")
     }
 
     // Generate JWT
@@ -75,7 +62,7 @@ export const login = async (event) => {
       body: JSON.stringify({ token }),
     }
   } catch (error) {
-    console.error(err)
+    console.error(error)
     return {
       statusCode: 500,
       headers: {

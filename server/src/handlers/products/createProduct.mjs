@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid"
-import { uploadImage } from "../../util/s3.mjs"
-import { PutCommand } from "@aws-sdk/lib-dynamodb"
+import { PutItemCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"
+import { uploadImage } from "../../util/s3.mjs"
 
 export const createProduct = async (event) => {
   const body = JSON.parse(event.body)
@@ -51,8 +51,9 @@ export const createProduct = async (event) => {
       },
     }
 
-    const putCommand = new PutCommand(params)
-    await db.send(putCommand)
+    const putItemCommand = new PutItemCommand(params)
+    await db.send(putItemCommand)
+
     return {
       statusCode: 201,
       headers: {

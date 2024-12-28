@@ -1,4 +1,4 @@
-import { DeleteCommand } from "@aws-sdk/lib-dynamodb"
+import { DeleteItemCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"
 
@@ -21,10 +21,10 @@ export const deleteNewsItem = async (event) => {
     Key: { id },
   }
 
-  const deleteCommand = new DeleteCommand(params)
+  const deleteItemCommand = new DeleteItemCommand(params)
 
   try {
-    await db.send(deleteCommand)
+    await db.send(deleteItemCommand)
 
     return {
       statusCode: 204,
