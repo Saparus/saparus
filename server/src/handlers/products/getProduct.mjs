@@ -6,6 +6,8 @@ export const getProduct = async (event) => {
   const { language } = event.queryStringParameters
   const { id } = event.pathParameters
 
+  console.log({ id, language })
+
   if (!language || !id) {
     return {
       statusCode: 400,
@@ -29,6 +31,8 @@ export const getProduct = async (event) => {
   try {
     const { Item: product } = await db.send(getItemCommand)
 
+    console.log(product)
+
     if (!product) {
       return {
         statusCode: 404,
@@ -50,8 +54,8 @@ export const getProduct = async (event) => {
       },
       body: JSON.stringify({
         ...product,
-        // name: name[languageToApply],
-        // description: description[languageToApply],
+        name: name[languageToApply],
+        description: description[languageToApply],
       }),
     }
   } catch (error) {
