@@ -6,6 +6,7 @@ import { db } from "../../util/db.mjs"
 export const authorize = async (event, context, callback) => {
   try {
     const token = event.headers?.Authorization?.split(" ")[1]
+
     if (!token) throw new Error("Unauthorized: No token provided")
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -26,7 +27,7 @@ export const authorize = async (event, context, callback) => {
     callback(null, policy)
   } catch (error) {
     console.error(error)
-    callback("Unauthorized")
+    callback(`Unauthorized, error: ${error}`)
   }
 }
 
