@@ -1,9 +1,34 @@
 import { GetCommand } from "@aws-sdk/lib-dynamodb"
 import jwt from "jsonwebtoken"
-
 import { db } from "../../util/db.mjs"
 
-export const authorize = async (event) => {
+const generatePolicy = (user, effect, resource) => {
+  const authResponse = {
+    principalId: user.id || "anonymous",
+  }
+
+  if (effect && resource) {
+    const policyDocument = {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Action: "execute-api:Invoke",
+          Effect: effect,
+          Resource: resource,
+        },
+      ],
+    }
+
+    authResponse.policyDocument = policyDocument
+  }
+
+  authResponse.context = {
+    role: user.role,
+  }
+  return authResponse
+}
+
+export const authorizerFun = async (event, context, callback) => {
   try {
     const token = event.headers?.Authorization?.split(" ")[1]
     if (!token) throw new Error("Unauthorized: No token provided")
@@ -16,15 +41,16 @@ export const authorize = async (event) => {
     }
 
     const getCommand = new GetCommand(params)
-    const result = await db.send(getCommand)
 
-    const user = result.Item
+    const { Item: user } = await db.send(getCommand)
 
     if (!user) throw new Error("Unauthorized: User not found")
 
-    // return user id or full user object
-    return user // return entire user object if needed
+    // Generate policy based on user role
+    const policy = generatePolicy(user, "Allow", event.methodArn)
+    callback(null, policy)
   } catch (error) {
-    throw new Error("Unauthorized: Invalid or expired token")
+    console.error(error)
+    callback("Unauthorized")
   }
 }

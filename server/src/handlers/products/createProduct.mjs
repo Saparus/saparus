@@ -59,7 +59,10 @@ export const createProduct = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Product created successfully", product: { ...params } }),
+      body: JSON.stringify({
+        message: "Product created successfully",
+        product: { ...params.Item },
+      }),
     }
   } catch (err) {
     console.error(err)
