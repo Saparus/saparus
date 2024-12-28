@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 
 import { db } from "../../util/db.mjs"
 
-export const authorizerFun = async (event, context, callback) => {
+export const authorize = async (event, context, callback) => {
   try {
     const token = event.headers?.Authorization?.split(" ")[1]
     if (!token) throw new Error("Unauthorized: No token provided")
