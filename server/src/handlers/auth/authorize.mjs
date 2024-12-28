@@ -11,7 +11,7 @@ export const authorize = async (event, context, callback) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
     const params = {
-      TableName: process.env.USER_TABLE,
+      TableName: process.env.USERS_TABLE,
       Key: { id: decoded.id },
     }
 
