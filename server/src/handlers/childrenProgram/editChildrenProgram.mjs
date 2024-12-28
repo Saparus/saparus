@@ -59,7 +59,7 @@ export const editChildrenProgram = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Internal server error", error }),
+      body: JSON.stringify({ message: "Error updating children program", error }),
     }
   }
 }

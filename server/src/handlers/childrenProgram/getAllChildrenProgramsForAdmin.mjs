@@ -32,13 +32,14 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
       body: JSON.stringify(programs),
     }
   } catch (error) {
+    console.error("Error fetching children programs", error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Internal server error", error }),
+      body: JSON.stringify({ message: "Error fetching children programs", error }),
     }
   }
 }

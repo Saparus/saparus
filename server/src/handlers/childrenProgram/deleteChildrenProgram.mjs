@@ -40,7 +40,7 @@ export const deleteChildrenProgram = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Internal server error", error }),
+      body: JSON.stringify({ message: "Error deleting children program", error }),
     }
   }
 }

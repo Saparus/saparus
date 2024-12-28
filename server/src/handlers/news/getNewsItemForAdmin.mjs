@@ -35,13 +35,14 @@ export const getNewsItemForAdmin = async (event) => {
       body: JSON.stringify(newsItem),
     }
   } catch (error) {
+    console.error("Error fetching news item", error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: error.message }),
+      body: JSON.stringify({ message: "Error fetching news item", error }),
     }
   }
 }

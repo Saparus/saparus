@@ -55,6 +55,7 @@ export const getProduct = async (event) => {
       }),
     }
   } catch (error) {
+    console.error("Error fetching product", error)
     return {
       statusCode: 500,
       headers: {

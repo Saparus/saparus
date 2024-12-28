@@ -66,6 +66,7 @@ export const getAllChildrenPrograms = async (event) => {
       }),
     }
   } catch (error) {
+    console.error("Error fetching program", error)
     return {
       statusCode: 500,
       headers: {

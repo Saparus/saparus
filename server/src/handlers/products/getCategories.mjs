@@ -24,6 +24,7 @@ export const getCategories = async (event) => {
       body: JSON.stringify(categories),
     }
   } catch (error) {
+    console.error("Error fetching categories", error)
     return {
       statusCode: 500,
       headers: {

@@ -70,13 +70,14 @@ export const getAllProducts = async (event) => {
       }),
     }
   } catch (error) {
+    console.error("Error fetching products", error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Error fetching programs" }),
+      body: JSON.stringify({ message: "Error fetching products" }),
     }
   }
 }

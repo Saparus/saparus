@@ -52,13 +52,14 @@ export const getChildrenProgram = async (event) => {
       }),
     }
   } catch (error) {
+    console.log(error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Error fetching program" }),
+      body: JSON.stringify({ message: "Error fetching children program" }),
     }
   }
 }

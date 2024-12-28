@@ -46,13 +46,14 @@ export const getProductForAdmin = async (event) => {
       body: JSON.stringify(product),
     }
   } catch (error) {
+    console.error("Error fetching product", error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: error.message }),
+      body: JSON.stringify({ message: "Error fetching products", error }),
     }
   }
 }

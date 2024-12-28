@@ -57,13 +57,14 @@ export const getAllNewsItemForAdmin = async (event) => {
       }),
     }
   } catch (error) {
+    console.error("Error fetching news items", error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: error.message }),
+      body: JSON.stringify({ message: "Error fetching news items", error }),
     }
   }
 }

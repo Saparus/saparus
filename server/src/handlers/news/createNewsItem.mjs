@@ -49,15 +49,15 @@ export const createNewsItem = async (event) => {
       },
       body: JSON.stringify({ message: "News item created successfully" }),
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Internal server error" }),
+      body: JSON.stringify({ message: "Error creating news item", error }),
     }
   }
 }

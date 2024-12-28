@@ -57,6 +57,7 @@ export const getAllNewsItems = async (event) => {
       }),
     }
   } catch (error) {
+    console.error("Error fetching news items", error)
     return {
       statusCode: 500,
       headers: {

@@ -32,16 +32,17 @@ export const deleteProduct = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "News item deleted successfully" }),
+      body: JSON.stringify({ message: "Product item deleted successfully" }),
     }
   } catch (error) {
+    console.log(error)
     return {
       statusCode: 401,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: error.message }),
+      body: JSON.stringify({ message: "Error deleting product item", error }),
     }
   }
 }

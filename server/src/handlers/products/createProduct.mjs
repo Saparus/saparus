@@ -64,15 +64,15 @@ export const createProduct = async (event) => {
         product: { ...params.Item },
       }),
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.log("Failed to create product", error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Internal server error" }),
+      body: JSON.stringify({ message: "Failed to create product", error }),
     }
   }
 }

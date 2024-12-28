@@ -35,13 +35,14 @@ export const deleteNewsItem = async (event) => {
       body: JSON.stringify({ message: "News item deleted successfully" }),
     }
   } catch (error) {
+    console.error("Error deleting news item", error)
     return {
       statusCode: 401,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: error.message }),
+      body: JSON.stringify({ message: "Error deleting news item", error }),
     }
   }
 }
