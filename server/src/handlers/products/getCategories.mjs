@@ -15,6 +15,17 @@ export const getCategories = async (event) => {
 
     const categories = summarizeCategoryData(products)
 
+    if (!categories || categories.length === 0) {
+      return {
+        statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({ message: "Categories not found" }),
+      }
+    }
+
     return {
       statusCode: 200,
       headers: {

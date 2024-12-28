@@ -40,7 +40,7 @@ export const getProduct = async (event) => {
       }
     }
 
-    const { title, text } = product
+    const { name, description } = product
 
     return {
       statusCode: 200,
@@ -50,8 +50,8 @@ export const getProduct = async (event) => {
       },
       body: JSON.stringify({
         ...product,
-        title: title[languageToApply],
-        text: text[languageToApply],
+        name: name[languageToApply],
+        description: description[languageToApply],
       }),
     }
   } catch (error) {

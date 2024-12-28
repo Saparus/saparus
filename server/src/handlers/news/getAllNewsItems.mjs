@@ -26,6 +26,17 @@ export const getAllNewsItems = async (event) => {
   try {
     const { Items: newsItems } = await db.send(scanCommand)
 
+    if (!newsItems || newsItems.length === 0) {
+      return {
+        statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({ message: "News not found" }),
+      }
+    }
+
     const translatedResult = newsItems.map((newsItem) => {
       const tempNewsItem = { ...newsItem }
       tempNewsItem.text = newsItem.text[languageToApply]

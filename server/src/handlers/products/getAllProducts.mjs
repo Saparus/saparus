@@ -41,6 +41,17 @@ export const getAllProducts = async (event) => {
 
       products = filterProducts(translatedProducts, otherFilters, languageToApply)
 
+      if (products.length === 0) {
+        return {
+          statusCode: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+          },
+          body: JSON.stringify({ message: "Products not found" }),
+        }
+      }
+
       if (minPrice || maxPrice) {
         products = products.filter((product) => {
           const price = product.price

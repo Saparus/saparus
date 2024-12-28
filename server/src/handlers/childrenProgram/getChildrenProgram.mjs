@@ -35,7 +35,7 @@ export const getChildrenProgram = async (event) => {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Credentials": true,
         },
-        body: JSON.stringify({ message: "Program not found" }),
+        body: JSON.stringify({ message: "Children program not found" }),
       }
     }
 

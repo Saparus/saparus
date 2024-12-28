@@ -36,7 +36,7 @@ export const getNewsItem = async (event) => {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Credentials": true,
         },
-        body: JSON.stringify({ message: "News item not found" }),
+        body: JSON.stringify({ message: "News not found" }),
       }
     }
 
