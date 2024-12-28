@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { QueryCommand } from "@aws-sdk/client-dynamodb"
 
 import { db } from "../../util/db.mjs"

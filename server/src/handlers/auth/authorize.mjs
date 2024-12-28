@@ -1,4 +1,4 @@
-import { GetItemCommand } from "@aws-sdk/client-dynamodb"
+import { GetCommand } from "@aws-sdk/lib-dynamodb"
 import jwt from "jsonwebtoken"
 
 import { db } from "../../util/db.mjs"
@@ -15,9 +15,9 @@ export const authorizerFun = async (event, context, callback) => {
       Key: { id: decoded.id },
     }
 
-    const getItemCommand = new GetItemCommand(params)
+    const getCommand = new GetCommand(params)
 
-    const { Item: user } = await db.send(getItemCommand)
+    const { Item: user } = await db.send(getCommand)
 
     if (!user) throw new Error("Unauthorized: User not found")
 
