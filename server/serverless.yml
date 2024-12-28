@@ -33,7 +33,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:GetItem"
+          - "dynamodb:Scan"
         Resource: !GetAtt UsersTable.Arn
 
   registerUser:
