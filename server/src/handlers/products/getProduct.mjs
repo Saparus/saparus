@@ -50,8 +50,8 @@ export const getProduct = async (event) => {
       },
       body: JSON.stringify({
         ...product,
-        name: name[languageToApply],
-        description: description[languageToApply],
+        // name: name[languageToApply],
+        // description: description[languageToApply],
       }),
     }
   } catch (error) {
