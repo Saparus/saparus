@@ -1,10 +1,13 @@
 export const authorize = async (event, context, callback) => {
   try {
     const apiKey = event.queryStringParameters?.api_key
+    console.log("Provided API key:", apiKey)
 
     if (!apiKey) throw new Error("Unauthorized: No API key provided")
 
     const validApiKey = process.env.API_KEY
+    console.log("Expected API key:", validApiKey)
+
     if (apiKey !== validApiKey) throw new Error("Unauthorized: Invalid API key")
 
     // Generate policy to allow access
