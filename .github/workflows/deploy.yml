@@ -29,7 +29,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
           ABOUT_TABLE: ${{ secrets.ABOUT_TABLE }}
           CHILDREN_PROGRAMS_TABLE: ${{ secrets.CHILDREN_PROGRAMS_TABLE }}
           NEWS_TABLE: ${{ secrets.NEWS_TABLE }}
