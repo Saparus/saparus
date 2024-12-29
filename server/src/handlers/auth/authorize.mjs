@@ -1,5 +1,7 @@
 export const authorize = async (event, context, callback) => {
   try {
+    console.log("Event:", JSON.stringify(event))
+
     const apiKey = event.queryStringParameters?.api_key
     console.log("Provided API key:", apiKey)
 
