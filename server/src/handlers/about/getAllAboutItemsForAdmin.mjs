@@ -1,3 +1,4 @@
+import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getAllAboutItemsForAdmin = async (event) => {
@@ -5,8 +6,10 @@ export const getAllAboutItemsForAdmin = async (event) => {
     TableName: process.env.ABOUT_TABLE,
   }
 
+  const scanCommand = ScanCommand(params)
+
   try {
-    const { Items: aboutItems } = await db.scan(params).promise()
+    const { Items: aboutItems } = await db.send(scanCommand)
 
     return {
       statusCode: 200,

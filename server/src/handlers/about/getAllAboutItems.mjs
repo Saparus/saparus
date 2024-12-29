@@ -1,3 +1,4 @@
+import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getAllAboutItems = async (event) => {
@@ -5,12 +6,14 @@ export const getAllAboutItems = async (event) => {
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
-  try {
-    const params = {
-      TableName: process.env.ABOUT_TABLE,
-    }
+  const params = {
+    TableName: process.env.ABOUT_TABLE,
+  }
 
-    const { Items: aboutItems } = await db.scan(params).promise()
+  const scanCommand = ScanCommand(params)
+
+  try {
+    const { Items: aboutItems } = await db.send(scanCommand)
 
     const translatedResult = aboutItems.map((newsItem) => {
       const tempNewsItem = { ...newsItem }
@@ -39,9 +42,10 @@ export const getAllAboutItems = async (event) => {
       }),
     }
   } catch (error) {
+    console.error("Error getting about items", error)
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Error fetching about page" }),
+      body: JSON.stringify({ message: "Error getting about items", error }),
     }
   }
 }
