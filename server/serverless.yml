@@ -43,13 +43,6 @@ functions:
           path: auth/login
           method: post
           cors: true
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "dynamodb:Query"
-        Resource:
-          - !GetAtt UsersTable.Arn
-          - arn:aws:dynamodb:us-west-2:*:table/UsersTable/index/EmailIndex
 
   # About
   getAbout:
