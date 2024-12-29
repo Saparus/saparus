@@ -76,7 +76,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:GetItem"
+          - "dynamodb:Scan"
         Resource: !GetAtt AboutTable.Arn
 
   editAllAboutItems:
@@ -409,6 +409,12 @@ functions:
           path: products/categories
           method: get
           cors: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ProductsTable.Arn
+
   getProduct:
     handler: src/handlers/products/getProduct.getProduct
     name: get-product
