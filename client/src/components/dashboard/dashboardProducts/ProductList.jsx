@@ -11,7 +11,7 @@ import Loading from "../../other/Loading"
 import Product from "./EditProductLink"
 import PageSelect from "../../catalog/PageSelect"
 
-const ProductList = ({ filter, resetFilter, token }) => {
+const ProductList = ({ filter, resetFilter, apiKey }) => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
@@ -31,7 +31,7 @@ const ProductList = ({ filter, resetFilter, token }) => {
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id) => {
-      return await deleteProduct(id, token)
+      return await deleteProduct(id, apiKey)
     },
     onSuccess: () => {
       toast.success("Successfully deleted product")
