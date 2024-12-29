@@ -5,28 +5,25 @@ import { useTranslation } from "react-i18next"
 import { login } from "../../services/authServices"
 
 const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
-  const [credentials, setCredentials] = useState({ email: "", password: "" })
-  const [error, setError] = useState({ emailError: [], passwordError: [] })
+  const [authCode, setAuthCode] = useState("")
+  const [error, setError] = useState()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
-  const handleChangeCredentials = (credential, newValue) => {
-    setCredentials((prevCredentials) => ({
-      ...prevCredentials,
-      [credential]: newValue,
-    }))
+  const handleChangeAuthCode = (newValue) => {
+    setAuthCode(newValue)
 
     setError()
   }
 
   const handleLogIn = async () => {
-    if (!credentials.email || !credentials.password) {
-      setError("Please fill in all fields")
+    if (!authCode) {
+      setError("Please provide your authentication code")
       return
     }
 
     try {
-      const response = await login(credentials)
+      const response = await login(authCode)
 
       console.log(response)
 
@@ -48,35 +45,23 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
         </Link>
         <div className="admin-auth-input">
           <p className="login-title">{t("admin login")}</p>
-          <label htmlFor="name">
+          <label htmlFor="authCode">
             <input
               onChange={(e) => {
-                handleChangeCredentials("email", e.target.value)
+                handleChangeAuthCode(e.target.value)
               }}
-              value={credentials.email}
-              id="name"
-              name="email"
+              value={authCode}
+              id="authCode"
+              name="authCode"
               placeholder={t("email")}
               type="text"
-            />
-          </label>
-          <label htmlFor="password">
-            <input
-              onChange={(e) => {
-                handleChangeCredentials("password", e.target.value)
-              }}
-              value={credentials.username}
-              id="password"
-              name="password"
-              placeholder={t("password")}
-              type="password"
             />
           </label>
           {error?.length > 0 ? <div className="login-error">{error}</div> : ""}
           <button
             onClick={handleLogIn}
             className="submit-code"
-            disabled={!credentials.email || !credentials.password || error}
+            disabled={!authCode || error}
           >
             {t("enter")}
           </button>

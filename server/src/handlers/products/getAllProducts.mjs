@@ -26,16 +26,19 @@ export const getAllProducts = async (event) => {
   const scanCommand = new ScanCommand(params)
   const { Items: products } = await db.send(scanCommand)
 
-  const translatedProducts = products.map((newsItem) => {
-    const tempNewsItem = { ...newsItem }
-    tempNewsItem.text = newsItem.text[languageToApply]
-    tempNewsItem.title = newsItem.title[languageToApply]
+  const translatedProducts = products.map((product) => {
+    const tempNewsItem = { ...product }
+    tempNewsItem.name = product.name[languageToApply]
+    tempNewsItem.description = product.description[languageToApply]
 
     return tempNewsItem
   })
 
   try {
-    if (filter) {
+    const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
+    const isEmptyFilter = Object.keys(parsedFilter).length === 0
+
+    if (filter || isEmptyFilter) {
       const parsedFilter = JSON.parse(decodeURIComponent(filter))
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter
 
