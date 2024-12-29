@@ -27,7 +27,7 @@ export const getEditNewsArticles = async (limit, page, api_key) => {
   if (!api_key) return
 
   try {
-    const { data } = await ajax.get(`/news/admin?page=${page}&limit=${limit}?api_key=${api_key}`)
+    const { data } = await ajax.get(`/news/admin?page=${page}&limit=${limit}&api_key=${api_key}`)
     return data
   } catch (error) {
     console.error("error fetching editable news articles:", error)

@@ -2,7 +2,7 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 
-export const getAllNewsItemForAdmin = async (event) => {
+export const getAllNewsItemsForAdmin = async (event) => {
   const { limit, page } = event.queryStringParameters
 
   if (!limit || !page) {
