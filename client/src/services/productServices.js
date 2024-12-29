@@ -90,9 +90,7 @@ export const getProducts = async (filter, language, limit = 20, page = 1) => {
   const filterString = encodeURIComponent(JSON.stringify(filter)) // serialize and encode the filter object
 
   try {
-    const { data } = await ajax.get(
-      `/products?filter=${filterString}&language=${language}&limit=${limit}&page=${page}`
-    )
+    const { data } = await ajax.get(`/products?&language=${language}&limit=${limit}&page=${page}`)
     return data
   } catch (error) {
     console.error("error fetching products:", error)

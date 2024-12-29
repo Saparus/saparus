@@ -26,13 +26,15 @@ export const getAllProducts = async (event) => {
   const scanCommand = new ScanCommand(params)
   const { Items: products } = await db.send(scanCommand)
 
-  const translatedProducts = products.map((product) => {
-    const tempNewsItem = { ...product }
-    tempNewsItem.name = product.name[languageToApply]
-    tempNewsItem.description = product.description[languageToApply]
+  // const translatedProducts = products.map((product) => {
+  //   const tempNewsItem = { ...product }
+  //   tempNewsItem.name = product.name[languageToApply]
+  //   tempNewsItem.description = product.description[languageToApply]
 
-    return tempNewsItem
-  })
+  //   return tempNewsItem
+  // })
+
+  let productsToSend = []
 
   try {
     const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
@@ -42,19 +44,28 @@ export const getAllProducts = async (event) => {
       const parsedFilter = JSON.parse(decodeURIComponent(filter))
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter
 
-      products = filterProducts(translatedProducts, otherFilters, languageToApply)
+      productsToSend = filterProducts(products, otherFilters, languageToApply)
 
       if (minPrice || maxPrice) {
-        products = products.filter((product) => {
+        productsToSend = productsToSend.filter((product) => {
           const price = product.price
           return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice)
         })
       }
+    } else {
+      productsToSend = products.map((product) => {
+        const tempProductItem = { ...product }
+
+        tempProductItem.name = product.name[languageToApply]
+        tempProductItem.description = product.description[languageToApply]
+
+        return tempProductItem
+      })
     }
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
-    const paginatedResult = products.slice(startIndex, endIndex)
+    const paginatedResult = productsToSend.slice(startIndex, endIndex)
 
     return {
       statusCode: 200,

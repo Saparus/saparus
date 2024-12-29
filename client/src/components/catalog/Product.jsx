@@ -15,10 +15,14 @@ const Product = ({ product }) => {
         to={`/catalog/${id}`}
       >
         <div className="image">
-          <img
-            src={images[0]}
-            alt=""
-          />
+          {images?.length > 0 ? (
+            <img
+              src={images[0]}
+              alt=""
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="information">
           <p className="name">{name}</p>
