@@ -38,7 +38,7 @@ export const getAllProducts = async (event) => {
     const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
     const isEmptyFilter = Object.keys(parsedFilter).length === 0
 
-    if (filter || isEmptyFilter) {
+    if (filter || !isEmptyFilter) {
       const parsedFilter = JSON.parse(decodeURIComponent(filter))
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter
 
