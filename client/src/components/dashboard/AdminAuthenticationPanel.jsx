@@ -53,7 +53,7 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               value={authCode}
               id="authCode"
               name="authCode"
-              placeholder={t("email")}
+              placeholder={t("access key")}
               type="text"
             />
           </label>

@@ -23,22 +23,10 @@ export const getAllAboutItems = async (event) => {
       return tempNewsItem
     })
 
-    translatedResult.sort((a, b) => a.date - b.date)
-
-    const startIndex = (page - 1) * limit
-    const endIndex = startIndex + limit
-    const paginatedResult = translatedResult.slice(startIndex, endIndex)
-
     return {
       statusCode: 200,
       body: JSON.stringify({
-        news: paginatedResult,
-        pagination: {
-          currentPage: page,
-          hasNextPage: endIndex < translatedResult.length,
-          totalNewsArticles: translatedResult.length,
-          totalPages: Math.ceil(translatedResult.length / limit),
-        },
+        aboutItems: translatedResult,
       }),
     }
   } catch (error) {
