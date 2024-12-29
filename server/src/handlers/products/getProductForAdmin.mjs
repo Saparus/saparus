@@ -1,4 +1,4 @@
-import { GetItemCommand } from "@aws-sdk/client-dynamodb"
+import { GetCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 
@@ -21,10 +21,10 @@ export const getProductForAdmin = async (event) => {
     Key: { id },
   }
 
-  const getItemCommand = new GetItemCommand(params)
+  const getCommand = new GetCommand(params)
 
   try {
-    const { Item: product } = await db.send(getItemCommand)
+    const { Item: product } = await db.send(getCommand)
 
     if (!product) {
       return {
