@@ -26,7 +26,7 @@ custom:
 
 functions:
   # Authentication
- verify-api-key:
+  verify-api-key:
     handler: src/handlers/auth/authorize.authorize
     name: verify-api-key
     events:

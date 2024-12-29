@@ -1,5 +1,5 @@
 export const login = async (event) => {
-  const accessKey = event.queryStringParameters?.access_key
+  const { accessKey } = JSON.parse(event.body)
 
   // Validate input
   if (!accessKey) {
