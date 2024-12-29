@@ -1,39 +1,24 @@
-import { GetCommand } from "@aws-sdk/lib-dynamodb"
-import jwt from "jsonwebtoken"
-
-import { db } from "../../util/db.mjs"
-
 export const authorize = async (event, context, callback) => {
   try {
-    const token = event.headers?.Authorization?.split(" ")[1]
+    const apiKey = event.queryStringParameters?.api_key
 
-    if (!token) throw new Error("Unauthorized: No token provided")
+    if (!apiKey) throw new Error("Unauthorized: No API key provided")
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const validApiKey = process.env.API_KEY
+    if (apiKey !== validApiKey) throw new Error("Unauthorized: Invalid API key")
 
-    const params = {
-      TableName: process.env.USERS_TABLE,
-      Key: { id: decoded.id },
-    }
-
-    const getCommand = new GetCommand(params)
-
-    const { Item: user } = await db.send(getCommand)
-
-    if (!user) throw new Error("Unauthorized: User not found")
-
-    // Generate policy based on user role
-    const policy = generatePolicy(user, "Allow", event.methodArn)
+    // Generate policy to allow access
+    const policy = generatePolicy("user", "Allow", event.methodArn)
     callback(null, policy)
   } catch (error) {
-    console.error(error)
-    callback(`Unauthorized, error: ${error}`)
+    console.error("Error:", error)
+    callback("Unauthorized")
   }
 }
 
-const generatePolicy = (user, effect, resource) => {
+const generatePolicy = (principalId, effect, resource) => {
   const authResponse = {
-    principalId: user.id || "anonymous",
+    principalId: principalId,
   }
 
   if (effect && resource) {
@@ -51,8 +36,5 @@ const generatePolicy = (user, effect, resource) => {
     authResponse.policyDocument = policyDocument
   }
 
-  authResponse.context = {
-    role: user.role,
-  }
   return authResponse
 }

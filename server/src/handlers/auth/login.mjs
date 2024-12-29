@@ -1,57 +1,35 @@
-import jwt from "jsonwebtoken"
-import bcrypt from "bcryptjs"
-import { QueryCommand } from "@aws-sdk/client-dynamodb"
-
-import { db } from "../../util/db.mjs"
-
 export const login = async (event) => {
-  const { email, password } = JSON.parse(event.body)
+  const accessKey = event.queryStringParameters?.access_key
 
   // Validate input
-  if (!email || !password) {
+  if (!accessKey) {
     return {
       statusCode: 400,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Missing required fields" }),
+      body: JSON.stringify({ message: "Access key was not provided" }),
     }
   }
-
-  // Fetch user from database
-  const params = {
-    TableName: process.env.USERS_TABLE,
-    IndexName: "EmailIndex",
-    KeyConditionExpression: "email = :email",
-    ExpressionAttributeValues: {
-      ":email": { S: email },
-    },
-  }
-
-  const queryCommand = new QueryCommand(params)
 
   try {
-    const { Items: users } = await db.send(queryCommand)
+    // Validate access key
+    const validAccessKey = process.env.ACCESS_KEY
 
-    if (users.length === 0) {
-      throw new Error("Invalid email or password")
+    if (accessKey !== validAccessKey) {
+      return {
+        statusCode: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({ message: "Invalid access key" }),
+      }
     }
 
-    const user = users[0]
-
-    // Verify password
-    const validPassword = bcrypt.compare(password, user.hashedPassword)
-    if (!validPassword) {
-      throw new Error("Invalid email or password")
-    }
-
-    // Generate JWT
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET)
-
-    // const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
-    //   expiresIn: "30d",
-    // })
+    // Return the API key
+    const apiKey = process.env.API_KEY
 
     return {
       statusCode: 200,
@@ -59,7 +37,7 @@ export const login = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ apiKey }),
     }
   } catch (error) {
     console.error(error)

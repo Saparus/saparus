@@ -11,9 +11,9 @@ provider:
     CHILDREN_PROGRAMS_TABLE: ChildrenProgramsTable
     NEWS_TABLE: NewsTable
     PRODUCTS_TABLE: ProductsTable
-    USERS_TABLE: UsersTable
-    JWT_SECRET: ${{secrets.JWT_SECRET}}
     BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+    API_KEY: ${{secrets.API_KEY}}
+    ACCESS_KEY: ${{secrets.ACCESS_KEY}}
 
 plugins:
   - serverless-iam-roles-per-function
@@ -26,33 +26,14 @@ custom:
 
 functions:
   # Authentication
-  verify-token:
+ verify-api-key:
     handler: src/handlers/auth/authorize.authorize
-    type: TOKEN
-    name: verify-token
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "dynamodb:Scan"
-          - "dynamodb:GetItem"
-        Resource: !GetAtt UsersTable.Arn
-
-  registerUser:
-    handler: src/handlers/auth/register.register
-    name: register-user
+    name: verify-api-key
     events:
       - http:
-          path: auth/register
-          method: post
+          path: verify-api-key
+          method: get
           cors: true
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "dynamodb:Query"
-          - "dynamodb:PutItem"
-        Resource:
-          - !GetAtt UsersTable.Arn
-          - arn:aws:dynamodb:us-west-2:*:table/UsersTable/index/EmailIndex
 
   loginUser:
     handler: src/handlers/auth/login.login
@@ -96,7 +77,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -115,7 +96,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -141,7 +122,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -179,7 +160,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -202,7 +183,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -237,7 +218,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -257,7 +238,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -278,7 +259,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -316,7 +297,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -339,7 +320,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -374,7 +355,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -394,7 +375,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -415,7 +396,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -461,7 +442,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -484,7 +465,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -519,7 +500,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -539,7 +520,7 @@ functions:
           cors: true
           authorizer:
             type: TOKEN
-            name: verify-token
+            name: verify-api-key
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 1800
     iamRoleStatements:
@@ -605,25 +586,4 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-
-    UsersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: UsersTable
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: email
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        GlobalSecondaryIndexes:
-          - IndexName: EmailIndex
-            KeySchema:
-              - AttributeName: email
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
