@@ -12,17 +12,6 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
   try {
     const { Items: programs } = await db.send(scanCommand)
 
-    if (!programs || programs.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ message: "Children programs not found" }),
-      }
-    }
-
     return {
       statusCode: 200,
       headers: {

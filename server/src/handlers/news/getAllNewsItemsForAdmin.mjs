@@ -29,17 +29,6 @@ export const getAllNewsItemForAdmin = async (event) => {
     const endIndex = startIndex + limit
     const paginatedResult = newsItems.slice(startIndex, endIndex)
 
-    if (!newsItems || newsItems.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ message: "News not found" }),
-      }
-    }
-
     return {
       statusCode: 200,
       headers: {
