@@ -24,15 +24,6 @@ const Dashboard = () => {
     if (showToast) toast.success("You've successfully logged out.")
   }
 
-  const checkTokenExpiration = (expirationDate) => {
-    const currentTime = Date.now()
-
-    if (currentTime > expirationDate) {
-      handleLogOut(false)
-      toast.success("Your session has expired, please, log in again")
-    }
-  }
-
   useEffect(() => {
     const savedAccountInfo = localStorage.getItem("accountInfo")
 
@@ -41,8 +32,6 @@ const Dashboard = () => {
     const parsedAccountInfo = JSON.parse(savedAccountInfo)
 
     const currentTime = new Date().getTime()
-
-    checkTokenExpiration(accountInfo?.expirationDate)
 
     if (parsedAccountInfo.expirationDate && parsedAccountInfo.expirationDate < currentTime) {
       localStorage.removeItem("accountInfo")
@@ -73,12 +62,12 @@ const Dashboard = () => {
           isAuthorized={isAuthorized}
           name={accountInfo?.name}
           handleLogOut={handleLogOut}
-          token={accountInfo?.token}
+          apiKey={accountInfo?.apiKey}
         />
       </nav>
       {renderAskAuthenticationPanel()}
       <div className="outlet">
-        <Outlet context={{ isAuthorized, token: accountInfo?.token }} />
+        <Outlet context={{ isAuthorized, apiKey: accountInfo?.apiKey }} />
       </div>
     </div>
   )

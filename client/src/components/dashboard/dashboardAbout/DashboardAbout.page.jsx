@@ -15,7 +15,7 @@ import LanguageSelect from "../LanguageSelect"
 import Map from "../../other/Map"
 
 const DashboardAboutPage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
@@ -25,17 +25,21 @@ const DashboardAboutPage = () => {
 
   const [aboutItemList, setAboutItemList] = useState([])
 
-  const { data, isLoading, error } = useQuery(["about", token], () => getAllEditAboutItems(token), {
-    enabled: !!token,
-  })
+  const { data, isLoading, error } = useQuery(
+    ["about", apiKey],
+    () => getAllEditAboutItems(apiKey),
+    {
+      enabled: !!apiKey,
+    }
+  )
 
   const queryClient = useQueryClient()
 
   const editAboutItemsMutation = useMutation({
-    mutationFn: async () => await editAllAboutItems(aboutItemList, token),
+    mutationFn: async () => await editAllAboutItems(aboutItemList, apiKey),
     onSuccess: () => {
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["about", token]) // it will cause refetching
+      queryClient.invalidateQueries(["about", apiKey]) // it will cause refetching
     },
     onError: (error) => {
       console.log(error)

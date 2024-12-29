@@ -13,7 +13,7 @@ import { deleteChildrenProgramArticle } from "../../../services/childrenProgramS
 import ConfirmDeletionModal from "../ConfirmDeletionModal.jsx"
 import LanguageSelect from "../LanguageSelect.jsx"
 
-const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
+const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
   const navigate = useNavigate()
   // const { title, text, date, images } = article
 
@@ -38,11 +38,11 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
   const deleteMutation = useMutation({
     mutationFn: async () =>
       type === "news"
-        ? await deleteNewsArticle(id, token)
-        : await deleteChildrenProgramArticle(id, token),
+        ? await deleteNewsArticle(id, apiKey)
+        : await deleteChildrenProgramArticle(id, apiKey),
     onSuccess: () => {
       toast.success("Successfully deleted news article")
-      queryClient.invalidateQueries(["news", token]) // this will cause refetching
+      queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
       navigate("../../admin/news")
     },
     onError: (error) => {

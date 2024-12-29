@@ -44,13 +44,13 @@ const ProductEditPanel = ({ product, onSave }) => {
 
   const handleSelectNextImage = () => {
     setCurrentImageIndex((prevState) =>
-      prevState + 1 >= currentProduct.images.length ? 0 : prevState + 1
+      prevState + 1 >= currentProduct.images?.length ? 0 : prevState + 1
     )
   }
 
   const handleSelectPrevImage = () => {
     setCurrentImageIndex((prevState) =>
-      prevState - 1 < 0 ? currentProduct.images.length - 1 : prevState - 1
+      prevState - 1 < 0 ? currentProduct.images?.length - 1 : prevState - 1
     )
   }
 
@@ -203,8 +203,8 @@ const ProductEditPanel = ({ product, onSave }) => {
         product.inStock !== currentProduct.inStock ||
         product.price !== currentProduct.price ||
         product.fixedPrice !== currentProduct.fixedPrice ||
-        product.images.length !== currentProduct.images.length ||
-        product.images.some((image, index) => image !== currentProduct.images[index])
+        product.images?.length !== currentProduct.images?.length ||
+        product.images?.some((image, index) => image !== currentProduct.images?.[index])
       )
     }
 
@@ -214,7 +214,7 @@ const ProductEditPanel = ({ product, onSave }) => {
   const renderImage = () => (
     <div className="product-image-wrapper">
       <div className="dashboard-product-image product-image">
-        {currentProduct.images.length > 1 && (
+        {currentProduct.images?.length > 1 && (
           <>
             <button
               className="change-product-image next"
@@ -277,7 +277,7 @@ const ProductEditPanel = ({ product, onSave }) => {
             <CheckmarkIcon />
           </button>
         </div>
-        {currentProduct.images[currentImageIndex] ? (
+        {currentProduct.images?.[currentImageIndex] ? (
           <img
             src={currentProduct.images[currentImageIndex]}
             alt={""}

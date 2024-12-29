@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import DashboardNewsList from "../dashboardNews/DashboardNewsList"
 
 const DashboardChildrenProgramArticles = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -21,7 +21,7 @@ const DashboardChildrenProgramArticles = () => {
       </div>
 
       <DashboardNewsList
-        token={token}
+        apiKey={apiKey}
         type="children program"
       />
     </div>

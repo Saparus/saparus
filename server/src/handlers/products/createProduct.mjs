@@ -8,7 +8,7 @@ export const createProduct = async (event) => {
   const body = JSON.parse(event.body)
 
   const name = body.name
-  const fixedPrice = body.fixedPrice ? body.fixedPrice : body.price !== 0
+  const fixedPrice = body.fixedPrice ? "true" : "false"
   const price = body.price !== undefined ? Number(body.price) : 0
   const description = body.description
   const categories = body.categories || []

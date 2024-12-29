@@ -27,7 +27,7 @@ const emptyProductData = {
 }
 
 const AddProductPage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -45,12 +45,12 @@ const AddProductPage = () => {
         fixedPrice,
         price,
         categories,
-        token
+        apiKey
       )
     },
     onSuccess: () => {
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["products", token]) // this will cause refetching
+      queryClient.invalidateQueries(["products", apiKey]) // this will cause refetching
     },
     onError: (error) => {
       console.log(error.response.data.message)
@@ -66,7 +66,7 @@ const AddProductPage = () => {
     <ProductEditPanel
       product={emptyProductData}
       onSave={addProductMutation.mutate}
-      token={token}
+      apiKey={apiKey}
     />
   )
 }

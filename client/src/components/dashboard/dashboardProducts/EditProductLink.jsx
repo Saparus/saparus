@@ -48,10 +48,14 @@ const EditProductLink = ({ product, handleDelete }) => {
         to={`./edit/${product.id}`}
       >
         <div className="image">
-          <img
-            src={product.images[0]}
-            alt=""
-          />
+          {product.images?.length > 0 ? (
+            <img
+              src={product.images[0]}
+              alt=""
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="information">
           <p className="name">{product.name}</p>

@@ -11,7 +11,7 @@ import ProductEditPanel from "./ProductEditPanel"
 import Loading from "../../other/Loading"
 
 const EditProductPage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -21,8 +21,8 @@ const EditProductPage = () => {
     data: product,
     isLoading,
     error,
-  } = useQuery(["dashboard-product", id, token], () => getEditProduct(id, token), {
-    enabled: !!token,
+  } = useQuery(["dashboard-product", id, apiKey], () => getEditProduct(id, apiKey), {
+    enabled: !!apiKey,
   })
 
   const queryClient = useQueryClient()
@@ -40,12 +40,12 @@ const EditProductPage = () => {
         price,
         categories,
         id,
-        token
+        apiKey
       )
     },
     onSuccess: () => {
       toast.success(t("Changes saved successfully"))
-      queryClient.invalidateQueries(["products", token]) // this will cause refetching
+      queryClient.invalidateQueries(["products", apiKey]) // this will cause refetching
     },
     onError: (error) => {
       console.log(error.message)

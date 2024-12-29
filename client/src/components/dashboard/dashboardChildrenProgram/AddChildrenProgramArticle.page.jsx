@@ -22,7 +22,7 @@ const emptyNewsArticle = {
 }
 
 const AddChildrenProgramArticle = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const queryClient = useQueryClient()
 
@@ -30,11 +30,11 @@ const AddChildrenProgramArticle = () => {
     mutationFn: async (product) => {
       const { title, text, images, id } = product
 
-      return await addChildrenProgramArticle(title, text, images, id, token)
+      return await addChildrenProgramArticle(title, text, images, id, apiKey)
     },
     onSuccess: () => {
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["news", token]) // this will cause refetching
+      queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
     },
     onError: (error) => {
       console.log(error.message)
@@ -48,7 +48,7 @@ const AddChildrenProgramArticle = () => {
     <EditNewsPanel
       article={emptyNewsArticle}
       onSave={addProductMutation.mutation}
-      token={token}
+      apiKey={apiKey}
       type="children program"
     />
   )

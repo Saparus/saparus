@@ -15,7 +15,7 @@ import EditNewsPanel from "../dashboardNews/EditNewsPanel"
 import Loading from "../../other/Loading"
 
 const EditChildrenProgramArticle = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { id } = useParams()
 
@@ -23,7 +23,7 @@ const EditChildrenProgramArticle = () => {
     data: article,
     isLoading,
     error,
-  } = useQuery(["dashboard-news", id, token], () => getEditChildrenProgramArticles(id, token))
+  } = useQuery(["dashboard-news", id, apiKey], () => getEditChildrenProgramArticles(id, apiKey))
 
   const queryClient = useQueryClient()
 
@@ -31,11 +31,11 @@ const EditChildrenProgramArticle = () => {
     mutationFn: async (product) => {
       const { title, text, images } = product
 
-      return await editChildrenProgramArticle(id, title, text, images, token)
+      return await editChildrenProgramArticle(id, title, text, images, apiKey)
     },
     onSuccess: () => {
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["children-program", token]) // this will cause refetching
+      queryClient.invalidateQueries(["children-program", apiKey]) // this will cause refetching
     },
     onError: (error) => {
       console.log(error.message)
@@ -52,7 +52,7 @@ const EditChildrenProgramArticle = () => {
     <EditNewsPanel
       article={article}
       onSave={editNewsArticleMutation.mutate}
-      token={token}
+      apiKey={apiKey}
       type="children program"
     />
   )

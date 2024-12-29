@@ -12,7 +12,7 @@ import EditNewsPanel from "./EditNewsPanel"
 import Loading from "../../other/Loading"
 
 const EditNewsArticlePage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { id } = useParams()
 
@@ -22,7 +22,7 @@ const EditNewsArticlePage = () => {
     data: article,
     isLoading,
     error,
-  } = useQuery(["dashboard-news", id, token], () => getEditSingleNewsArticle(id, token))
+  } = useQuery(["dashboard-news", id, apiKey], () => getEditSingleNewsArticle(id, apiKey))
 
   const queryClient = useQueryClient()
 
@@ -30,11 +30,11 @@ const EditNewsArticlePage = () => {
     mutationFn: async (product) => {
       const { title, text, images } = product
 
-      return await editNewsArticle(id, title, text, images, token)
+      return await editNewsArticle(id, title, text, images, apiKey)
     },
     onSuccess: () => {
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["news", token]) // this will cause refetching
+      queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
     },
     onError: (error) => {
       console.log(error.message)
@@ -51,7 +51,7 @@ const EditNewsArticlePage = () => {
     <EditNewsPanel
       article={article}
       onSave={editNewsArticleMutation.mutate}
-      token={token}
+      apiKey={apiKey}
     />
   )
 }

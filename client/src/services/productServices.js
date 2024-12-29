@@ -15,7 +15,7 @@ export const editProduct = async (
   if (!api_key) throw new Error("api_key is required")
 
   try {
-    const { data } = await ajax.patch(`/products/edit/${id}&api_key=${api_key}`, {
+    const { data } = await ajax.patch(`/products/edit/${id}?api_key=${api_key}`, {
       name,
       description,
       images,
@@ -90,7 +90,11 @@ export const getProducts = async (filter, language, limit = 20, page = 1) => {
   const filterString = encodeURIComponent(JSON.stringify(filter)) // serialize and encode the filter object
 
   try {
-    const { data } = await ajax.get(`/products?&language=${language}&limit=${limit}&page=${page}`)
+    const { data } = await ajax.get(
+      `/products?${
+        filterString ? "filter=" + filterString : ""
+      }&language=${language}&limit=${limit}&page=${page}`
+    )
     return data
   } catch (error) {
     console.error("error fetching products:", error)

@@ -6,15 +6,16 @@ import { uploadImage } from "../../util/s3.mjs"
 
 export const editProduct = async (event) => {
   const { id } = event.pathParameters
-  const {
-    name,
-    fixedPrice = true,
-    price,
-    description,
-    categories,
-    inStock = false,
-    images = [],
-  } = JSON.parse(event.body)
+
+  const body = JSON.parse(event.body)
+
+  const name = body.name
+  const fixedPrice = body.fixedPrice ? "true" : "false"
+  const price = body.price !== undefined ? Number(body.price) : 0
+  const description = body.description
+  const categories = body.categories || []
+  const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
+  const images = body.images || []
 
   // Validate input
   if (!name || !price || !description) {
@@ -27,10 +28,6 @@ export const editProduct = async (event) => {
       body: JSON.stringify({ message: "Missing required fields" }),
     }
   }
-
-  fixedPrice = Number(fixedPrice)
-  price = Number(price)
-  inStock = Boolean(inStock)
 
   try {
     const imageUrls = await Promise.all(
