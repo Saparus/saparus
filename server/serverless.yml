@@ -11,9 +11,9 @@ provider:
     CHILDREN_PROGRAMS_TABLE: ChildrenProgramsTable
     NEWS_TABLE: NewsTable
     PRODUCTS_TABLE: ProductsTable
-    BUCKET_NAME: ${{secrets.BUCKET_NAME}}
-    API_KEY: ${{secrets.API_KEY}}
-    ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+    BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+    API_KEY: ${{ secrets.API_KEY }}
+    ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
 
 plugins:
   - serverless-iam-roles-per-function
