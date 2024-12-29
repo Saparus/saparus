@@ -29,4 +29,11 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "us-west-2"
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          ABOUT_TABLE: ${{ secrets.ABOUT_TABLE }}
+          CHILDREN_PROGRAMS_TABLE: ${{ secrets.CHILDREN_PROGRAMS_TABLE }}
+          NEWS_TABLE: ${{ secrets.NEWS_TABLE }}
+          PRODUCTS_TABLE: ${{ secrets.PRODUCTS_TABLE }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          API_KEY: ${{ secrets.API_KEY }}
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}

@@ -7,13 +7,14 @@ provider:
   runtime: nodejs20.x
   region: us-west-2
   environment:
-    ABOUT_TABLE: AboutTable
-    CHILDREN_PROGRAMS_TABLE: ChildrenProgramsTable
-    NEWS_TABLE: NewsTable
-    PRODUCTS_TABLE: ProductsTable
-    BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-    API_KEY: ${{ secrets.API_KEY }}
-    ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+    ABOUT_TABLE: ${env:ABOUT_TABLE}
+    CHILDREN_PROGRAMS_TABLE: ${env:CHILDREN_PROGRAMS_TABLE}
+    NEWS_TABLE: ${env:NEWS_TABLE}
+    PRODUCTS_TABLE: ${env:PRODUCTS_TABLE}
+    AWS_REGION: ${env:AWS_REGION}
+    BUCKET_NAME: ${env:BUCKET_NAME}
+    API_KEY: ${env:API_KEY}
+    ACCESS_KEY: ${env:ACCESS_KEY}
 
 plugins:
   - serverless-iam-roles-per-function
