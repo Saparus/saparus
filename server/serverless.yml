@@ -102,7 +102,7 @@ functions:
           - "s3:DeleteObject"
         Resource:
           - !GetAtt AboutTable.Arn
-          - arn:aws:s3:::${env.BUCKET_NAME}/*
+          - arn:aws:s3:::saparus-images/*
 
   # Children Program
   createChildrenProgram:
@@ -127,7 +127,7 @@ functions:
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
-          - arn:aws:s3:::${env.BUCKET_NAME}/*
+          - arn:aws:s3:::saparus-images/*
 
   getChildrenProgram:
     handler: src/handlers/childrenProgram/getChildrenProgram.getChildrenProgram
@@ -166,7 +166,7 @@ functions:
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
-          - arn:aws:s3:::${env.BUCKET_NAME}/*
+          - arn:aws:s3:::saparus-images/*
 
   deleteChildrenProgram:
     handler: src/handlers/childrenProgram/deleteChildrenProgram.deleteChildrenProgram
@@ -266,7 +266,7 @@ functions:
           - "s3:DeleteObject"
         Resource:
           - !GetAtt NewsTable.Arn
-          - arn:aws:s3:::${env.BUCKET_NAME}/*
+          - arn:aws:s3:::saparus-images/*
 
   getNewsItem:
     handler: src/handlers/news/getNewsItem.getNewsItem
@@ -305,7 +305,7 @@ functions:
           - "s3:DeleteObject"
         Resource:
           - !GetAtt NewsTable.Arn
-          - arn:aws:s3:::${env.BUCKET_NAME}/*
+          - arn:aws:s3:::saparus-images/*
 
   deleteNewsItem:
     handler: src/handlers/news/deleteNewsItem.deleteNewsItem
@@ -405,7 +405,7 @@ functions:
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - arn:aws:s3:::${env.BUCKET_NAME}/*
+          - arn:aws:s3:::saparus-images/*
 
   getCategories:
     handler: src/handlers/products/getCategories.getCategories
@@ -458,7 +458,7 @@ functions:
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - arn:aws:s3:::${env.BUCKET_NAME}/*
+          - arn:aws:s3:::saparus-images/*
 
   deleteProduct:
     handler: src/handlers/products/deleteProduct.deleteProduct

@@ -13,8 +13,10 @@ export const uploadImage = async (bucketName, key, body) => {
     ACL: "public-read",
   }
 
+  const putObjectCommand = new PutObjectCommand(params)
+
   try {
-    const data = await s3.send(new PutObjectCommand(params))
+    const data = await s3.send(putObjectCommand)
     return data
   } catch (err) {
     console.error("Error uploading image:", err)
