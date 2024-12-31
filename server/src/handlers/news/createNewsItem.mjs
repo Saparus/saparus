@@ -25,7 +25,7 @@ export const createNewsItem = async (event) => {
           images?.map(async (image) => {
             const buffer = Buffer.from(image, "base64")
 
-            const url = await uploadImage(process.env.imageUploadBucket, buffer)
+            const url = await uploadImage("saparus-images", buffer)
 
             return url
           })
