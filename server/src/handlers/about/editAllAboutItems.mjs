@@ -44,7 +44,7 @@ export const editAllAboutItems = async (event) => {
           id: itemId,
           title: item.title,
           text: item.text,
-          imageUrl: imageUrl,
+          image: imageUrl,
         },
       }
       return db.send(new UpdateCommand(params))

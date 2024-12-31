@@ -38,7 +38,7 @@ export const createChildrenProgram = async (event) => {
         title: title,
         description: description,
         date: Date.now(),
-        imageUrls: imageUrls,
+        images: imageUrls,
       },
     }
 

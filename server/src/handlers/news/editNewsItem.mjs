@@ -35,11 +35,11 @@ export const editNewsItem = async (event) => {
     const params = {
       TableName: process.env.NEWS_TABLE,
       Key: { id },
-      UpdateExpression: "set title = :title, text = :text, imageUrls = :imageUrls",
+      UpdateExpression: "set title = :title, text = :text, images = :images",
       ExpressionAttributeValues: {
         ":title": title,
         ":text": text,
-        ":imageUrls": imageUrls,
+        ":images": imageUrls,
       },
       ReturnValues: "UPDATED_NEW",
     }

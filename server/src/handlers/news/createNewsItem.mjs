@@ -38,7 +38,7 @@ export const createNewsItem = async (event) => {
         title: title,
         text: text,
         date: Date.now(),
-        imageUrls: imageUrls,
+        images: imageUrls,
       },
     }
 

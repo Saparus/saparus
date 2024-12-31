@@ -49,7 +49,7 @@ export const createProduct = async (event) => {
         categories: categories,
         fixedPrice: fixedPrice,
         inStock: inStock,
-        imageUrls: imageUrls,
+        images: imageUrls,
       },
     }
 

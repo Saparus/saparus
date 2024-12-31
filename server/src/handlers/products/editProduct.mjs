@@ -45,7 +45,7 @@ export const editProduct = async (event) => {
       TableName: process.env.PRODUCTS_TABLE,
       Key: { id },
       UpdateExpression:
-        "set #name = :name, fixedPrice = :fixedPrice, description = :description, price = :price, categories = :categories, inStock = :inStock, imageUrls = :imageUrls",
+        "set #name = :name, fixedPrice = :fixedPrice, description = :description, price = :price, categories = :categories, inStock = :inStock, images = :images",
       ExpressionAttributeNames: {
         "#name": "name", // because name is a reserved keyword in DynamoDB
       },
@@ -56,7 +56,7 @@ export const editProduct = async (event) => {
         ":price": price,
         ":categories": categories,
         ":inStock": inStock,
-        ":imageUrls": imageUrls,
+        ":images": imageUrls,
       },
       ReturnValues: "UPDATED_NEW",
     }
