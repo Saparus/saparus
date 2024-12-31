@@ -23,11 +23,12 @@ export const createNewsItem = async (event) => {
     const imageUrls = images
       ? await Promise.all(
           images?.map(async (image) => {
-            const buffer = Buffer.from(image, "base64")
+            const base64Data = image.split(",")[1] // removing the prefix
+            const imageBuffer = Buffer.from(base64Data, "base64")
+            const imageKey = `news/${uuid()}.jpg`
+            await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
 
-            const url = await uploadImage("saparus-images", buffer)
-
-            return url
+            return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
           })
         )
       : []
