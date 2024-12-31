@@ -110,7 +110,7 @@ functions:
     iamRoleStatementsName: create-children-role
     events:
       - http:
-          path: children-program/create
+          path: children-program
           method: post
           cors: true
           authorizer:

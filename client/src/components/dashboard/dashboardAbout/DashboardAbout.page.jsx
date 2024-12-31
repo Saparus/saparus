@@ -42,10 +42,10 @@ const DashboardAboutPage = () => {
       queryClient.invalidateQueries(["about", apiKey]) // it will cause refetching
     },
     onError: (error) => {
-      console.log(error)
-      toast.error(
-        "Something went wrong while saving About page, check browser console for more detailed explanation"
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      console.log(errorMessage)
+      toast.error(errorMessage)
     },
   })
 

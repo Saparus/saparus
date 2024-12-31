@@ -38,12 +38,10 @@ const ProductList = ({ filter, resetFilter, apiKey }) => {
       queryClient.invalidateQueries(["products", filter, currentLanguage, limit, page])
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        t(
-          "Something went wrong while adding product, check browser console for more detailed explanation"
-        )
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      console.log(errorMessage)
+      toast.error(errorMessage)
     },
   })
 

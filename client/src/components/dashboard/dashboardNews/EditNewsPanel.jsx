@@ -46,12 +46,10 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
       navigate("../../admin/news")
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        t(
-          "Something went wrong while deleting news article, check browser console for more detailed explanation"
-        )
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      console.log(errorMessage)
+      toast.error(errorMessage)
     },
   })
 

@@ -13,7 +13,7 @@ const DashboardChildrenProgramArticles = () => {
     <div className="page dashboard-news-page">
       <div className="dashboard-news-buttons">
         <Link
-          to="../../admin/news/add"
+          to="../../admin/children/add"
           className="add-new-article-button"
         >
           {t("Add New Child Program Article")}
