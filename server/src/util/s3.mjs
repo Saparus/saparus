@@ -15,7 +15,6 @@ export const uploadImage = async (bucketName, key, body) => {
     Key: key,
     Body: body,
     ContentType: "image/jpeg",
-    ACL: "public-read",
   }
 
   const putObjectCommand = new PutObjectCommand(params)
