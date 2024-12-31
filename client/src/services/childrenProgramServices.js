@@ -26,8 +26,6 @@ export const getSingleChildrenProgramArticle = async (id, language) => {
 
 // fetch editable children program articles (requires api_key)
 export const getEditChildrenProgramArticles = async (limit, page, api_key) => {
-  if (!api_key) return
-
   try {
     const { data } = await ajax.get(
       `/children-program/admin?page=${page}&limit=${limit}&api_key=${api_key}`

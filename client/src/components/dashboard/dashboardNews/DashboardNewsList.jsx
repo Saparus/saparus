@@ -49,7 +49,7 @@ const DashboardNewsList = ({ apiKey, type = "news" }) => {
     if (isLoading) return <Loading />
     if (error || !data) return <div>{t("Something went wrong")}</div>
 
-    const { news: articles, pagination } = data
+    const { articles, pagination } = data
 
     if (articles?.length === 0) {
       return (
@@ -61,7 +61,7 @@ const DashboardNewsList = ({ apiKey, type = "news" }) => {
       return (
         <>
           <div className="news-article-list">
-            {articles.map((article, index) => (
+            {articles?.map((article, index) => (
               <NewsArticleEdit
                 key={index}
                 title={article.title}

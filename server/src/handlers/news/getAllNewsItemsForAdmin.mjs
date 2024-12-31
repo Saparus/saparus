@@ -36,7 +36,7 @@ export const getAllNewsItemsForAdmin = async (event) => {
         "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({
-        news: paginatedResult,
+        articles: paginatedResult,
         pagination: {
           currentPage: page,
           hasNextPage: endIndex < newsItems.length,

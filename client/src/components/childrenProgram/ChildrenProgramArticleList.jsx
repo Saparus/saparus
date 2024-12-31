@@ -26,6 +26,7 @@ const ChildrenProgramArticleList = () => {
   )
 
   if (isLoading) return <Loading />
+
   if (error || !data) {
     console.log(error)
     return <div>{t("Something went wrong")}</div>
@@ -55,7 +56,7 @@ const ChildrenProgramArticleList = () => {
       return (
         <>
           <div className="news-article-list">
-            {articles.map((article, index) => (
+            {articles?.map((article, index) => (
               <NewsArticle
                 key={index}
                 title={article.title}
