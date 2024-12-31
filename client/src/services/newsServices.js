@@ -47,13 +47,12 @@ export const getEditSingleNewsArticle = async (id, api_key) => {
 }
 
 // add a new news article (requires api_key)
-export const addNewsArticle = async (title, date, text, image, api_key) => {
+export const addNewsArticle = async (title, text, images, api_key) => {
   try {
     const { data } = await ajax.post(`/news/create?api_key=${api_key}`, {
       title,
       text,
-      date,
-      image,
+      images,
     })
     return data
   } catch (error) {

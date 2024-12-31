@@ -64,7 +64,7 @@ export const createProduct = async (event) => {
       },
       body: JSON.stringify({
         message: "Product created successfully",
-        product: { ...params.Item },
+        product: { ...params.Item, images: imageUrls },
       }),
     }
   } catch (error) {

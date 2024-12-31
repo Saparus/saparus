@@ -54,7 +54,7 @@ const AddProductPage = () => {
       toast.success("Changes saved successfully")
       queryClient.invalidateQueries(["products", apiKey]) // this will cause refetching
 
-      navigate(`../../admin/products/${data.product.id}`)
+      if (data.product.id) navigate(`../../admin/products/${data.product.id}`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"

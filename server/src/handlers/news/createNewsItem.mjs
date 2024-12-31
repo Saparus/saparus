@@ -53,7 +53,7 @@ export const createNewsItem = async (event) => {
       },
       body: JSON.stringify({
         message: "News item created successfully",
-        article: { ...params.Item },
+        article: { ...params.Item, images: imageUrls },
       }),
     }
   } catch (error) {

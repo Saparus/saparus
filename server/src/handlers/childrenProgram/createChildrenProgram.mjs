@@ -53,7 +53,7 @@ export const createChildrenProgram = async (event) => {
       },
       body: JSON.stringify({
         message: "Children program created successfully",
-        article: { ...params.Item },
+        article: { ...params.Item, images: imageUrls },
       }),
     }
   } catch (error) {

@@ -49,13 +49,12 @@ export const getEditSingleChildrenProgramArticle = async (id, api_key) => {
 }
 
 // add a new children program article (requires api_key)
-export const addChildrenProgramArticle = async (title, date, text, image, api_key) => {
+export const addChildrenProgramArticle = async (title, text, images, api_key) => {
   try {
     const { data } = await ajax.post(`/children-program?api_key=${api_key}`, {
       title,
       text,
-      date,
-      image,
+      images,
     })
     return data
   } catch (error) {

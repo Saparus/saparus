@@ -30,15 +30,15 @@ const AddChildrenProgramArticle = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (product) => {
-      const { title, text, images, id } = product
+      const { title, text, images } = product
 
-      return await addChildrenProgramArticle(title, text, images, id, apiKey)
+      return await addChildrenProgramArticle(title, text, images, apiKey)
     },
     onSuccess: (data) => {
       toast.success("Changes saved successfully")
       queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
 
-      navigate(`../../admin/children/${data.article.id}`)
+      if (data.article.id) navigate(`../../admin/children/${data.article.id}`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
