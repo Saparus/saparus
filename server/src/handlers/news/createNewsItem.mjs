@@ -23,12 +23,11 @@ export const createNewsItem = async (event) => {
     const imageUrls = images
       ? await Promise.all(
           images?.map(async (image) => {
-            const base64Data = image.split(",")[1] // removing the prefix
-            const imageBuffer = Buffer.from(base64Data, "base64")
-            const imageKey = `news/${uuid()}.jpg`
-            await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
+            const buffer = Buffer.from(image, "base64")
 
-            return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+            const url = await uploadImage(process.env.imageUploadBucket, buffer)
+
+            return url
           })
         )
       : []

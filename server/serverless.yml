@@ -11,7 +11,7 @@ provider:
     CHILDREN_PROGRAMS_TABLE: ${env:CHILDREN_PROGRAMS_TABLE}
     NEWS_TABLE: ${env:NEWS_TABLE}
     PRODUCTS_TABLE: ${env:PRODUCTS_TABLE}
-    BUCKET_NAME: ${env:BUCKET_NAME}
+    BUCKET_NAME: saparus-images
     API_KEY: ${env:API_KEY}
     ACCESS_KEY: ${env:ACCESS_KEY}
 
@@ -546,6 +546,13 @@ resources:
         ResponseType: DEFAULT_4XX
         RestApiId:
           Ref: "ApiGatewayRestApi"
+
+    ImageUploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: "saparus-images"
+        AccessControl: PublicRead
+
     AboutTable:
       Type: AWS::DynamoDB::Table
       Properties:
