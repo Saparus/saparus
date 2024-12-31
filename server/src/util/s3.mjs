@@ -2,6 +2,10 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 
 const s3 = new S3Client({
   region: "us-west-2",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 })
 
 export const uploadImage = async (bucketName, key, body) => {
@@ -18,8 +22,8 @@ export const uploadImage = async (bucketName, key, body) => {
   try {
     const data = await s3.send(putObjectCommand)
     return data
-  } catch (err) {
-    console.error("Error uploading image:", err)
-    throw err
+  } catch (error) {
+    console.error("Error uploading image:", error)
+    throw error
   }
 }
