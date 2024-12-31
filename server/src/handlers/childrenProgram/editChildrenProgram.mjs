@@ -6,10 +6,10 @@ import { uploadImage } from "../../util/s3.mjs"
 
 export const editChildrenProgram = async (event) => {
   const { id } = event.pathParameters
-  const { title, description, images } = JSON.parse(event.body)
+  const { title, text, images } = JSON.parse(event.body)
 
   // Validate input
-  if (!id || !title || !description) {
+  if (!id || !title || !text) {
     return {
       statusCode: 400,
       headers: {
@@ -38,7 +38,7 @@ export const editChildrenProgram = async (event) => {
       UpdateExpression: "set title = :title, description = :description, images = :images",
       ExpressionAttributeValues: {
         ":title": title,
-        ":description": description,
+        ":text": text,
         ":images": imageUrls,
       },
       ReturnValues: "UPDATED_NEW",

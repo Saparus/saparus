@@ -51,7 +51,10 @@ export const createNewsItem = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "News item created successfully" }),
+      body: JSON.stringify({
+        message: "News item created successfully",
+        article: { ...params.Item },
+      }),
     }
   } catch (error) {
     console.error(error)

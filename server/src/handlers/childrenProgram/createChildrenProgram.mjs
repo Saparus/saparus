@@ -5,10 +5,10 @@ import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 
 export const createChildrenProgram = async (event) => {
-  const { title, description, images } = JSON.parse(event.body)
+  const { title, text, images } = JSON.parse(event.body)
 
   // Validate input
-  if (!title || !description) {
+  if (!title || !text) {
     return {
       statusCode: 400,
       headers: {
@@ -36,7 +36,7 @@ export const createChildrenProgram = async (event) => {
       Item: {
         id: uuid(),
         title: title,
-        description: description,
+        text: text,
         date: Date.now(),
         images: imageUrls,
       },
@@ -51,7 +51,10 @@ export const createChildrenProgram = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Children program created successfully" }),
+      body: JSON.stringify({
+        message: "Children program created successfully",
+        article: { ...params.Item },
+      }),
     }
   } catch (error) {
     console.error(error)

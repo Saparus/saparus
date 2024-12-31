@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "react-query"
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
@@ -25,6 +25,8 @@ const emptyNewsArticle = {
 const AddNewsArticlePage = () => {
   const { apiKey } = useOutletContext()
 
+  const navigate = useNavigate()
+
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
   const queryClient = useQueryClient()
@@ -35,9 +37,11 @@ const AddNewsArticlePage = () => {
 
       return await addNewsArticle(title, text, images, id, apiKey)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success(t("Changes saved successfully"))
       queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
+
+      navigate(`../../admin/news/${data.article.id}`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"

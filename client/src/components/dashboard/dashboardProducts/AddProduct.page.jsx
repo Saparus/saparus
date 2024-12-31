@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useNavigate } from "react-router-dom"
 import { useMutation, useQueryClient } from "react-query"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
@@ -29,6 +29,8 @@ const emptyProductData = {
 const AddProductPage = () => {
   const { apiKey } = useOutletContext()
 
+  const navigate = useNavigate()
+
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
   const queryClient = useQueryClient()
@@ -48,9 +50,11 @@ const AddProductPage = () => {
         apiKey
       )
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Changes saved successfully")
       queryClient.invalidateQueries(["products", apiKey]) // this will cause refetching
+
+      navigate(`../../admin/products/${data.product.id}`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"

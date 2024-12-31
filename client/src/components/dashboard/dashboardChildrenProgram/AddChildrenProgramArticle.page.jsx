@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "react-query"
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
 import { addChildrenProgramArticle } from "../../../services/childrenProgramServices"
@@ -24,6 +24,8 @@ const emptyNewsArticle = {
 const AddChildrenProgramArticle = () => {
   const { apiKey } = useOutletContext()
 
+  const navigate = useNavigate()
+
   const queryClient = useQueryClient()
 
   const addProductMutation = useMutation({
@@ -32,9 +34,11 @@ const AddChildrenProgramArticle = () => {
 
       return await addChildrenProgramArticle(title, text, images, id, apiKey)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Changes saved successfully")
       queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
+
+      navigate(`../../admin/children/${data.article.id}`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
