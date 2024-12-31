@@ -7,8 +7,6 @@ provider:
   runtime: nodejs20.x
   region: us-west-2
   environment:
-    # AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
-    # AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
     ABOUT_TABLE: ${env:ABOUT_TABLE}
     CHILDREN_PROGRAMS_TABLE: ${env:CHILDREN_PROGRAMS_TABLE}
     NEWS_TABLE: ${env:NEWS_TABLE}

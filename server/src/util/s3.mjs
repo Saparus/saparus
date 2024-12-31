@@ -5,12 +5,11 @@ const s3 = new S3Client({
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    sessionToken: process.env.AWS_SESSION_TOKEN,
   },
 })
 
 export const uploadImage = async (bucketName, key, body) => {
-  console.log(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY)
-
   const params = {
     Bucket: bucketName,
     Key: key,
