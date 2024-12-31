@@ -50,7 +50,7 @@ const AddNewsArticlePage = () => {
   return (
     <EditNewsPanel
       article={emptyNewsArticle}
-      onSave={addProductMutation.mutation}
+      onSave={addProductMutation.mutate}
       apiKey={apiKey}
     />
   )

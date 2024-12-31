@@ -27,8 +27,8 @@ const EditNewsArticlePage = () => {
   const queryClient = useQueryClient()
 
   const editNewsArticleMutation = useMutation({
-    mutationFn: async (product) => {
-      const { title, text, images } = product
+    mutationFn: async (newsItem) => {
+      const { title, text, images } = newsItem
 
       return await editNewsArticle(id, title, text, images, apiKey)
     },

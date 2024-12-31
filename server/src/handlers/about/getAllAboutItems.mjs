@@ -2,7 +2,7 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getAllAboutItems = async (event) => {
-  const { language, limit, page } = event.queryStringParameters
+  const { language } = event.queryStringParameters
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 

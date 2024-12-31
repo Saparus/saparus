@@ -8,14 +8,14 @@ export const createChildrenProgram = async (event) => {
   const { title, description, images } = JSON.parse(event.body)
 
   // Validate input
-  if (!title || !description || !images || !Array.isArray(images)) {
+  if (!title || !description) {
     return {
       statusCode: 400,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
   }
 

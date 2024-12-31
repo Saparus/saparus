@@ -49,7 +49,7 @@ const DashboardNewsList = ({ apiKey, type = "news" }) => {
     if (isLoading) return <Loading />
     if (error || !data) return <div>{t("Something went wrong")}</div>
 
-    const { articles, pagination } = data
+    const { news: articles, pagination } = data
 
     if (articles?.length === 0) {
       return (

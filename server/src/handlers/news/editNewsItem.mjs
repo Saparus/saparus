@@ -9,7 +9,7 @@ export const editNewsItem = async (event) => {
   const { title, text, images } = JSON.parse(event.body)
 
   // Validate input
-  if (!id || !title || !text || !images || !Array.isArray(images)) {
+  if (!id || !title || !text) {
     return {
       statusCode: 400,
       headers: {

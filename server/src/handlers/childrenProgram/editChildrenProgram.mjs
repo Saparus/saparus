@@ -9,7 +9,7 @@ export const editChildrenProgram = async (event) => {
   const { title, description, images } = JSON.parse(event.body)
 
   // Validate input
-  if (!id || !title || !description || !images || !Array.isArray(images)) {
+  if (!id || !title || !description) {
     return {
       statusCode: 400,
       headers: {

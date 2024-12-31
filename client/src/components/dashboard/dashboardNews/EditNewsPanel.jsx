@@ -247,7 +247,10 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
           setSelectedLanguage={setSelectedLanguage}
         />
         <button
-          onClick={onSave}
+          onClick={() => {
+            onSave(currentArticle)
+          }}
+          type="submit"
           className="confirm-button"
         >
           <CheckmarkIcon />

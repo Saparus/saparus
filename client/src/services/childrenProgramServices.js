@@ -30,7 +30,7 @@ export const getEditChildrenProgramArticles = async (limit, page, api_key) => {
 
   try {
     const { data } = await ajax.get(
-      `/children-program/admin?page=${page}&limit=${limit}?api_key=${api_key}`
+      `/children-program/admin?page=${page}&limit=${limit}&api_key=${api_key}`
     )
     return data
   } catch (error) {

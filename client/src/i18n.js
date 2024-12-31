@@ -15,7 +15,8 @@ i18n
   .init({
     fallbackLng: "en",
     whitelist: languages,
-    debug: process.env.REACT_APP_MODE === "development" ? true : false,
+    // debug: process.env.REACT_APP_MODE === "development" ? true : false,
+    debug: false,
 
     resources: {
       en: {

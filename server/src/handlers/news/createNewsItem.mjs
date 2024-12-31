@@ -8,14 +8,14 @@ export const createNewsItem = async (event) => {
   const { title, text, images } = JSON.parse(event.body)
 
   // Validate input
-  if (!title || !text || !images || !Array.isArray(images)) {
+  if (!title || !text) {
     return {
       statusCode: 400,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Missing required fields or images is not an array" }),
+      body: JSON.stringify({ message: "Missing required fields" }),
     }
   }
 

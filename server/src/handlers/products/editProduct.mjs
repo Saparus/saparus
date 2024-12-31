@@ -18,7 +18,7 @@ export const editProduct = async (event) => {
   const images = body.images || []
 
   // Validate input
-  if (!name || !price || !description) {
+  if (!name || !description) {
     return {
       statusCode: 400,
       headers: {
