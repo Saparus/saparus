@@ -547,12 +547,6 @@ resources:
         RestApiId:
           Ref: "ApiGatewayRestApi"
 
-    ImageUploadBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: "saparus-images"
-        AccessControl: PublicRead
-
     AboutTable:
       Type: AWS::DynamoDB::Table
       Properties:
