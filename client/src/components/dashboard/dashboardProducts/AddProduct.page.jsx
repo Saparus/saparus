@@ -50,17 +50,25 @@ const AddProductPage = () => {
         apiKey
       )
     },
+    onMutate: () => {
+      // showing loading toast when the mutation starts
+      toast.loading("Adding product...")
+    },
     onSuccess: (data) => {
-      toast.success("Changes saved successfully")
+      // updating the toast to success
+      toast.dismiss()
+      toast.success("Successfully added product")
+
       queryClient.invalidateQueries(["products", apiKey]) // this will cause refetching
 
-      if (data.product.id) navigate(`../../admin/products/${data.product.id}`)
+      if (data.product.id) navigate(`../../admin/products/edit/${data.product.id}`)
     },
     onError: (error) => {
-      const errorMessage = error.response.data.message || error.message || "Something went wrong"
-
-      console.log(errorMessage)
+      // updating the toast to error
+      const errorMessage = error.response?.data?.message || error.message || "Something went wrong"
+      toast.dismiss()
       toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 

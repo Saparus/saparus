@@ -37,19 +37,23 @@ const AddNewsArticlePage = () => {
 
       return await addNewsArticle(title, text, images, apiKey)
     },
+    onMutate: () => {
+      toast.loading("Adding news article...")
+    },
     onSuccess: (data) => {
-      toast.success(t("Changes saved successfully"))
       queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
 
-      console.log(data)
+      toast.dismiss()
+      toast.success("Successfully added news article")
 
       if (data.article.id) navigate(`../../admin/news/${data.article.id}`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
-      console.log(errorMessage)
+      toast.dismiss()
       toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 

@@ -1,9 +1,11 @@
 import ajax from "./ajax"
 
 // get news articles based on language, limit, and page
-export const getNewsArticles = async (language, limit, page) => {
+export const getNewsArticles = async (language, limit, page, sorting = "normal") => {
   try {
-    const { data } = await ajax.get(`/news?language=${language}&limit=${limit}&page=${page}`)
+    const { data } = await ajax.get(
+      `/news?language=${language}&limit=${limit}&page=${page}&sorting=${sorting}`
+    )
     return data
   } catch (error) {
     console.error("error fetching news articles:", error)

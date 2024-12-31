@@ -34,8 +34,13 @@ const AddChildrenProgramArticle = () => {
 
       return await addChildrenProgramArticle(title, text, images, apiKey)
     },
+    onMutate: () => {
+      toast.loading("Adding children program...")
+    },
     onSuccess: (data) => {
-      toast.success("Changes saved successfully")
+      toast.dismiss()
+      toast.success("Successfully added children program")
+
       queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
 
       if (data.article.id) navigate(`../../admin/children/${data.article.id}`)
@@ -43,8 +48,9 @@ const AddChildrenProgramArticle = () => {
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
-      console.log(errorMessage)
+      toast.dismiss()
       toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 

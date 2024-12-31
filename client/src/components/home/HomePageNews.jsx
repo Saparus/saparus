@@ -19,7 +19,7 @@ const HomePageNews = () => {
     data: news,
     isLoading,
     error,
-  } = useQuery(["news", currentLanguage], () => getNewsArticles(currentLanguage, 4, 1))
+  } = useQuery(["news", currentLanguage], () => getNewsArticles(currentLanguage, 4, 1, "reverse"))
 
   if (isLoading) return <Loading />
   if (error) return <div>Error fetching news</div>
@@ -32,11 +32,11 @@ const HomePageNews = () => {
         to="/news/0"
         className="latest-news"
       >
-        <div className="image">
+        <div className={`image ${news.articles[0].images?.[0] ? "" : "no-image"}`}>
           {news?.articles[0]?.images ? (
             <img
               src={news.articles[0].images?.[0]}
-              alt={news.articles[0].title}
+              // alt={news.articles[0].title}
             />
           ) : (
             <div className="no-image-image"></div>
