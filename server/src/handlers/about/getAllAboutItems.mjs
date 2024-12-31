@@ -10,7 +10,7 @@ export const getAllAboutItems = async (event) => {
     TableName: process.env.ABOUT_TABLE,
   }
 
-  const scanCommand = ScanCommand(params)
+  const scanCommand = new ScanCommand(params)
 
   try {
     const { Items: aboutItems } = await db.send(scanCommand)

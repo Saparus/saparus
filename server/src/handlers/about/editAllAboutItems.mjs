@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid"
-import { UpdateCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
+import { UpdateCommand, ScanCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
@@ -21,7 +21,10 @@ export const editAllAboutItems = async (event) => {
         TableName: process.env.ABOUT_TABLE,
         Key: { id: item.id },
       }
-      return db.send(new DeleteCommand(deleteParams))
+
+      const deleteCommand = new DeleteCommand(deleteParams)
+
+      return db.send(deleteCommand)
     })
     await Promise.all(deletePromises)
 

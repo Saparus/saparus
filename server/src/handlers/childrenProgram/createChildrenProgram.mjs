@@ -23,9 +23,11 @@ export const createChildrenProgram = async (event) => {
     const imageUrls = images
       ? await Promise.all(
           images?.map(async (image) => {
-            const imageBuffer = Buffer.from(image.data, "base64")
-            const imageKey = `children-programs/${uuid()}.jpg`
+            const base64Data = image.data.split(",")[1] // removing the prefix
+            const imageBuffer = Buffer.from(base64Data, "base64")
+            const imageKey = `news/${uuid()}.jpg`
             await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
+
             return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
           })
         )

@@ -99,6 +99,7 @@ functions:
           - "dynamodb:DeleteItem"
           - "dynamodb:PutItem"
           - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt AboutTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
@@ -123,6 +124,7 @@ functions:
         Action:
           - "dynamodb:PutItem"
           - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
@@ -161,6 +163,7 @@ functions:
         Action:
           - "dynamodb:UpdateItem"
           - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt ChildrenProgramsTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
@@ -260,6 +263,7 @@ functions:
         Action:
           - "dynamodb:PutItem"
           - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt NewsTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
@@ -298,6 +302,7 @@ functions:
         Action:
           - "dynamodb:UpdateItem"
           - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt NewsTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
@@ -397,6 +402,7 @@ functions:
         Action:
           - "dynamodb:PutItem"
           - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
@@ -449,6 +455,7 @@ functions:
         Action:
           - "dynamodb:UpdateItem"
           - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
           - arn:aws:s3:::${env.BUCKET_NAME}/*
