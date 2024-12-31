@@ -51,7 +51,7 @@ export const getAllNewsItems = async (event) => {
         pagination: {
           currentPage: page,
           hasNextPage: endIndex < translatedResult.length,
-          totalNewsArticles: translatedResult.length,
+          totalArticles: translatedResult.length,
           totalPages: Math.ceil(translatedResult.length / limit),
         },
       }),

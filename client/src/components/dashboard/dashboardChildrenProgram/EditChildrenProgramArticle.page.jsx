@@ -3,11 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
 
-// import { getEditProduct } from "../../../data/products"
-// import { editProduct, getEditProduct } from "../../../services/productServices"
-// import { getEditSingleNewsArticle, editNewsArticle } from "../../../services/newsServices"
 import {
-  getEditChildrenProgramArticles,
+  getEditSingleChildrenProgramArticle,
   editChildrenProgramArticle,
 } from "../../../services/childrenProgramServices"
 
@@ -23,7 +20,9 @@ const EditChildrenProgramArticle = () => {
     data: article,
     isLoading,
     error,
-  } = useQuery(["dashboard-news", id, apiKey], () => getEditChildrenProgramArticles(id, apiKey))
+  } = useQuery(["dashboard-news", id, apiKey], () =>
+    getEditSingleChildrenProgramArticle(id, apiKey)
+  )
 
   const queryClient = useQueryClient()
 

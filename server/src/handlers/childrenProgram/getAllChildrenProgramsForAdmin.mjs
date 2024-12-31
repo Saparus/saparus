@@ -39,9 +39,9 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
         articles: paginatedResult,
         pagination: {
           currentPage: page,
-          hasNextPage: startIndex + limit < translatedPrograms.length,
-          totalArticles: translatedPrograms.length,
-          totalPages: Math.ceil(translatedPrograms.length / limit),
+          hasNextPage: endIndex < programs.length,
+          totalArticles: programs.length,
+          totalPages: Math.ceil(programs.length / limit),
         },
       }),
     }

@@ -40,7 +40,7 @@ export const getAllNewsItemsForAdmin = async (event) => {
         pagination: {
           currentPage: page,
           hasNextPage: endIndex < newsItems.length,
-          totalNewsArticles: newsItems.length,
+          totalArticles: newsItems.length,
           totalPages: Math.ceil(newsItems.length / limit),
         },
       }),
