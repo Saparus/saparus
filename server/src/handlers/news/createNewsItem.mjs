@@ -21,7 +21,7 @@ export const createNewsItem = async (event) => {
 
   try {
     const imageUrls = await Promise.all(
-      images.map(async (image) => {
+      images?.map(async (image) => {
         const imageBuffer = Buffer.from(image.data, "base64")
         const imageKey = `news/${uuid()}.jpg`
         await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)

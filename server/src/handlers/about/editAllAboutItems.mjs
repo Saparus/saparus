@@ -31,7 +31,7 @@ export const editAllAboutItems = async (event) => {
       let imageUrl = item.imageUrl // default to existing image URL
 
       // if there's a new image, upload it to S3
-      if (item.image && item.image.data && item.image.name) {
+      if (item?.image && item.image?.data && item.image?.name) {
         const buffer = Buffer.from(item.image.data, "base64") // decode base64 image
         const imageKey = `about-items/${itemId}/${item.image.name}`
         await uploadImage(process.env.BUCKET_NAME, imageKey, buffer)
