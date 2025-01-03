@@ -33,7 +33,7 @@ const EditNewsArticlePage = () => {
       return await editNewsArticle(id, title, text, images, apiKey)
     },
     onMutate: () => {
-      toast.loading("Saving new article...")
+      toast.loading("Saving news article...")
     },
     onSuccess: () => {
       toast.dismiss()

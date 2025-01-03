@@ -256,8 +256,11 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
         />
         <button
           onClick={() => {
+            // if (isLoading) return
+
             onSave(currentArticle)
           }}
+          // disabled={isLoading}
           type="submit"
           className="confirm-button"
         >

@@ -839,6 +839,14 @@
         display: flex;
         transition: background-color $animation_duration $animation;
 
+        &.disabled {
+          opacity: 0.75;
+
+          &:hover {
+            opacity: 0.75;
+          }
+        }
+
         &:hover {
           background-color: $warning-red-active;
         }

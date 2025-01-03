@@ -41,7 +41,7 @@ export const editChildrenProgram = async (event) => {
     const params = {
       TableName: process.env.CHILDREN_PROGRAMS_TABLE,
       Key: { id },
-      UpdateExpression: "set title = :title, description = :description, images = :images",
+      UpdateExpression: "set title = :title, #text = :text, images = :images",
       ExpressionAttributeNames: {
         "#text": "text", // because text is a reserved keyword in DynamoDB
       },
