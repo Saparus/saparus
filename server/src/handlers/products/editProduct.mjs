@@ -29,38 +29,21 @@ export const editProduct = async (event) => {
     }
   }
 
-  console.log(
-    `
-    products table: ${process.env.PRODUCTS_TABLE}
-    news table: ${process.env.NEWS_TABLE}
-    children table: ${process.env.CHILDREN_PROGRAMS_TABLE}
-    about table: ${process.env.ABOUT_TABLE}
-    bucket name: ${process.env.BUCKET_NAME}
-    `
-  )
-
-  images.forEach((image) => {
-    console.log({ type: typeof image, image })
-  })
-
   try {
     const imageUrls = images?.length
       ? await Promise.all(
-          images
-            .filter(
-              (image) =>
-                image &&
-                typeof image === "string" &&
-                (image.startsWith("http://") || image.startsWith("https://"))
-            ) // validate image entries
-            .map(async (image) => {
+          images.map(async (image) => {
+            if (image.startsWith("http://") || image.startsWith("https://")) {
+              return image
+            } else {
               const base64Data = image.split(",")[1] // removing the prefix
               const imageBuffer = Buffer.from(base64Data, "base64")
               const imageKey = `news/${uuid()}.png`
               await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
 
               return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
-            })
+            }
+          })
         )
       : []
 
