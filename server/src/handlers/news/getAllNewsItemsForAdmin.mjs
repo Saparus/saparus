@@ -3,7 +3,7 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getAllNewsItemsForAdmin = async (event) => {
-  const { limit, page, sorting } = event.queryStringParameters
+  const { limit, page } = event.queryStringParameters
 
   if (!limit || !page) {
     return {
@@ -25,7 +25,7 @@ export const getAllNewsItemsForAdmin = async (event) => {
   try {
     const { Items: newsItems } = await db.send(scanCommand)
 
-    newsItems.sort((a, b) => (sorting === "reverse" ? b.date - a.date : a.date - b.date))
+    newsItems.sort((a, b) => b.date - a.date)
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit

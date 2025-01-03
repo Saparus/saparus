@@ -3,7 +3,7 @@ import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getAllNewsItems = async (event) => {
-  const { language, limit, page, sorting } = event.queryStringParameters
+  const { language, limit, page } = event.queryStringParameters
 
   if (!language || !limit || !page) {
     return {
@@ -34,7 +34,7 @@ export const getAllNewsItems = async (event) => {
       return tempNewsItem
     })
 
-    translatedResult.sort((a, b) => (sorting === "reverse" ? b.date - a.date : a.date - b.date))
+    translatedResult.sort((a, b) => a.date - b.date)
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit

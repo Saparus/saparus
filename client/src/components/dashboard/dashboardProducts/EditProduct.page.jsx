@@ -43,15 +43,23 @@ const EditProductPage = () => {
         apiKey
       )
     },
+    onMutate: () => {
+      toast.loading("Saving product changes...")
+    },
     onSuccess: () => {
+      toast.dismiss()
       toast.success(t("Changes saved successfully"))
-      queryClient.invalidateQueries(["products", apiKey]) // this will cause refetching
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("dashboard-product"),
+      })
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
-      console.log(errorMessage)
+      toast.dismiss()
       toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 

@@ -30,16 +30,23 @@ export const editProduct = async (event) => {
   }
 
   try {
-    const imageUrls = images
+    const imageUrls = images?.length
       ? await Promise.all(
-          images?.map(async (image) => {
-            const base64Data = image.split(",")[1] // removing the prefix
-            const imageBuffer = Buffer.from(base64Data, "base64")
-            const imageKey = `news/${uuid()}.png`
-            await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
+          images
+            .filter(
+              (image) =>
+                image &&
+                typeof image === "string" &&
+                (image.startsWith("http://") || image.startsWith("https://"))
+            ) // validate image entries
+            .map(async (image) => {
+              const base64Data = image.split(",")[1] // removing the prefix
+              const imageBuffer = Buffer.from(base64Data, "base64")
+              const imageKey = `news/${uuid()}.png`
+              await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
 
-            return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
-          })
+              return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+            })
         )
       : []
 

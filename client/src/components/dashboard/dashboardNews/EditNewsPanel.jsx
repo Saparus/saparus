@@ -40,16 +40,26 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
       type === "news"
         ? await deleteNewsArticle(id, apiKey)
         : await deleteChildrenProgramArticle(id, apiKey),
+    onMutate: () => {
+      toast.loading(`Deleting ${type} article...`)
+    },
     onSuccess: () => {
-      toast.success("Successfully deleted news article")
-      queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
-      navigate("../../admin/news")
+      toast.dismiss()
+      toast.success(`Successfully deleted ${type} article`)
+
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey.includes(type === "children program" ? "children" : type),
+      })
+
+      navigate(`../../admin/${type === "children program" ? "children" : type}`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
-      console.log(errorMessage)
+      toast.dismiss()
       toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 

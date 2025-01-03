@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
+import { useMutation, useQueryClient } from "react-query"
+import { useOutletContext, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
 import { ReactComponent as ResetIcon } from "../../../assets/icons/spinning-arrow.svg"
@@ -8,16 +11,24 @@ import { ReactComponent as UploadIcon } from "../../../assets/icons/upload.svg"
 import { ReactComponent as CheckmarkIcon } from "../../../assets/icons/checkmark.svg"
 import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 
+import { deleteProduct } from "../../../services/productServices"
+
 import ProductImageSelect from "../../product/ProductImageSelect"
 import ConfirmDeletionModal from "../ConfirmDeletionModal"
 import LanguageSelect from "../LanguageSelect"
 import EditCategoryList from "./EditCategoryList"
 
 const ProductEditPanel = ({ product, onSave }) => {
+  const navigate = useNavigate()
+
+  const { apiKey } = useOutletContext()
+
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
   const { t } = useTranslation("translation", { keyPrefix: "products" })
+
+  const queryClient = useQueryClient()
 
   const descriptionRef = useRef(null)
 
@@ -177,6 +188,32 @@ const ProductEditPanel = ({ product, onSave }) => {
 
     setCurrentImageIndex((prevState) => (prevState > 0 ? prevState - 1 : 0))
   }
+
+  const deleteProductMutation = useMutation({
+    mutationFn: async (id) => {
+      return await deleteProduct(id, apiKey)
+    },
+    onMutate: () => {
+      toast.loading("Deleting product...")
+    },
+    onSuccess: () => {
+      toast.dismiss()
+      toast.success("Successfully deleted product")
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("products"),
+      })
+
+      navigate("../../admin/products")
+    },
+    onError: (error) => {
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      console.log(errorMessage)
+      toast.error(errorMessage)
+    },
+  })
 
   useEffect(() => {
     // fix latter, don't forget
@@ -481,6 +518,9 @@ const ProductEditPanel = ({ product, onSave }) => {
       {isConfirmDeletionModalVisible ? (
         <ConfirmDeletionModal
           onClose={handleCloseConfirmCloseModal}
+          deleteItem={() => {
+            deleteProductMutation.mutate(product.id)
+          }}
           message={t("are you sure you want to delete this product? this action cannot be undone.")}
         />
       ) : (

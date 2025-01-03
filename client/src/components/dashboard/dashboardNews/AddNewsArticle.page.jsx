@@ -41,12 +41,15 @@ const AddNewsArticlePage = () => {
       toast.loading("Adding news article...")
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
-
       toast.dismiss()
       toast.success("Successfully added news article")
 
-      if (data.article.id) navigate(`../../admin/news/${data.article.id}`)
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("news"),
+      })
+
+      // if (data.article.id) navigate(`../../admin/news/${data.article.id}`)
+      navigate(`../../admin/news`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"

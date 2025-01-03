@@ -41,9 +41,12 @@ const AddChildrenProgramArticle = () => {
       toast.dismiss()
       toast.success("Successfully added children program")
 
-      queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("children"),
+      })
 
-      if (data.article.id) navigate(`../../admin/children/${data.article.id}`)
+      // if (data.article.id) navigate(`../../admin/children/${data.article.id}`)
+      if (data.article.id) navigate(`../../admin/children`)
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"

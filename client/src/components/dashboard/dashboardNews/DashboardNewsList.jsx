@@ -64,6 +64,7 @@ const DashboardNewsList = ({ apiKey, type = "news" }) => {
             {articles?.map((article, index) => (
               <NewsArticleEdit
                 key={index}
+                type={type === "children program" ? "children" : type}
                 title={article.title}
                 text={article.text}
                 currentLanguage={currentLanguage}

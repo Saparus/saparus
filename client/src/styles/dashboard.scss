@@ -124,8 +124,23 @@
   .navbar {
     z-index: 9998;
     position: sticky;
-    top: 5.5rem;
+    // top: 5.5rem;
+    top: 0;
     box-shadow: 0 1px 1px #1c1f1f07;
+
+    .go-back-link {
+      position: absolute;
+      left: 1rem;
+      font-weight: bold;
+      font-size: 1.25rem;
+      transform: translateY(2.5%);
+      color: $base-color;
+      transition: opacity $animation_duration $animation;
+
+      &:hover {
+        opacity: 0.75;
+      }
+    }
   }
 
   .dashboard-header {
@@ -133,7 +148,7 @@
     z-index: 8999;
     background-color: $accent_green;
     color: white;
-    height: 2.5rem;
+    height: 3rem;
     text-align: start;
 
     display: flex;

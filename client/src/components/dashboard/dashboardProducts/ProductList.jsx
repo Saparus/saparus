@@ -33,13 +33,21 @@ const ProductList = ({ filter, resetFilter, apiKey }) => {
     mutationFn: async (id) => {
       return await deleteProduct(id, apiKey)
     },
+    onMutate: () => {
+      toast.loading("Deleting product...")
+    },
     onSuccess: () => {
+      toast.dismiss()
       toast.success("Successfully deleted product")
-      queryClient.invalidateQueries(["products", filter, currentLanguage, limit, page])
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("products"),
+      })
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
+      toast.dismiss()
       console.log(errorMessage)
       toast.error(errorMessage)
     },

@@ -19,7 +19,7 @@ const HomePageNews = () => {
     data: news,
     isLoading,
     error,
-  } = useQuery(["news", currentLanguage], () => getNewsArticles(currentLanguage, 4, 1, "reverse"))
+  } = useQuery(["news", currentLanguage], () => getNewsArticles(currentLanguage, 4, 1))
 
   if (isLoading) return <Loading />
   if (error) return <div>Error fetching news</div>

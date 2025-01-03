@@ -32,15 +32,23 @@ const EditNewsArticlePage = () => {
 
       return await editNewsArticle(id, title, text, images, apiKey)
     },
+    onMutate: () => {
+      toast.loading("Saving new article...")
+    },
     onSuccess: () => {
+      toast.dismiss()
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["news", apiKey]) // this will cause refetching
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("news"),
+      })
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
-      console.log(errorMessage)
+      toast.dismiss()
       toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 

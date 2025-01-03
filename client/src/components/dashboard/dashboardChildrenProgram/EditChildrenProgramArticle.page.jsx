@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -12,6 +12,8 @@ import EditNewsPanel from "../dashboardNews/EditNewsPanel"
 import Loading from "../../other/Loading"
 
 const EditChildrenProgramArticle = () => {
+  const navigate = useNavigate()
+
   const { apiKey } = useOutletContext()
 
   const { id } = useParams()
@@ -32,15 +34,25 @@ const EditChildrenProgramArticle = () => {
 
       return await editChildrenProgramArticle(id, title, text, images, apiKey)
     },
+    onMutate: () => {
+      toast.loading("Updating children program...")
+    },
     onSuccess: () => {
+      toast.dismiss()
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["children-program", apiKey]) // this will cause refetching
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("children"),
+      })
+
+      navigate("../../admin/children")
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
-      console.log(errorMessage)
+      toast.dismiss()
       toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 

@@ -44,7 +44,7 @@ export const getAllChildrenPrograms = async (event) => {
       title: program.title[languageToApply],
     }))
 
-    translatedPrograms.sort((a, b) => a.date - b.date)
+    translatedPrograms.sort((a, b) => b.date - a.date)
 
     const startIndex = (page - 1) * limit
     const paginatedPrograms = translatedPrograms.slice(startIndex, startIndex + limit)

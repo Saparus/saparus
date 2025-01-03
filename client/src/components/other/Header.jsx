@@ -7,6 +7,7 @@ import { ReactComponent as Logo } from "../../assets/logo.svg"
 import { ReactComponent as Hamburger } from "../../assets/icons/hamburger.svg"
 
 import LanguageSelector from "./LanguageSelector"
+import DashboardHeader from "../dashboard/DashboardHeader"
 
 const Header = () => {
   const { t } = useTranslation("translation", { keyPrefix: "header" })
@@ -27,8 +28,8 @@ const Header = () => {
 
   useOnClickOutside(navRef, handleCloseDropdownMenu)
 
-  return (
-    <header className="header">
+  const renderUserHeader = () => {
+    return (
       <div className="header-top">
         <Link
           className="logo"
@@ -85,36 +86,48 @@ const Header = () => {
         </button>
         <div className={`nav-bg ${isMenuOpen ? "visible" : "inVisible"}`}></div>
       </div>
+    )
+  }
 
+  const renderContactInformation = () => {
+    return (
+      <div className="header-bottom">
+        <div className="contact_us">
+          <span>{t("Contact Us")}</span>
+          <a href="tel:+995591808457">(+995) 591 80 84 57</a>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://facebook.com/SapaRusLTD"
+          >
+            facebook.com/SapaRusLTD
+          </a>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="mailto:kim.safarov@saparus.ge"
+          >
+            kim.safarov@saparus.ge
+          </a>
+          <a
+            target="blank_"
+            href="https://www.google.com/maps/place/2+Navtlughi+St,+T'bilisi,+Georgia/@41.6853664,44.83921,17.47z/data=!4m6!3m5!1s0x40440c4c97fa6d4f:0xcfa8a1b7aae8b24e!8m2!3d41.6853125!4d44.8413214!16s%2Fg%2F1ydphwmb2?entry=tts&g_ep=EgoyMDI0MDcxNy4wKgBIAVAD"
+          >
+            {t("Georgia, Tbilisi, Navtlughi St. 2")}
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <header className="header">
       {isAdmin ? (
         ""
       ) : (
-        <div className="header-bottom">
-          <div className="contact_us">
-            <span>{t("Contact Us")}</span>
-            <a href="tel:+995591808457">(+995) 591 80 84 57</a>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="https://facebook.com/SapaRusLTD"
-            >
-              facebook.com/SapaRusLTD
-            </a>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="mailto:kim.safarov@saparus.ge"
-            >
-              kim.safarov@saparus.ge
-            </a>
-            <a
-              target="blank_"
-              href="https://www.google.com/maps/place/2+Navtlughi+St,+T'bilisi,+Georgia/@41.6853664,44.83921,17.47z/data=!4m6!3m5!1s0x40440c4c97fa6d4f:0xcfa8a1b7aae8b24e!8m2!3d41.6853125!4d44.8413214!16s%2Fg%2F1ydphwmb2?entry=tts&g_ep=EgoyMDI0MDcxNy4wKgBIAVAD"
-            >
-              {t("Georgia, Tbilisi, Navtlughi St. 2")}
-            </a>
-          </div>
-        </div>
+        <>
+          {renderUserHeader()} {renderContactInformation()}
+        </>
       )}
     </header>
   )
