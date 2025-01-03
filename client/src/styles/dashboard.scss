@@ -178,7 +178,8 @@
       height: 100%;
       display: flex;
 
-      button {
+      // button,
+      .log-out-button {
         background-color: $warning_red;
         color: white;
         font-size: 1rem;
@@ -201,8 +202,8 @@
         color: $text-color;
         display: flex;
         align-items: center;
-        padding-right: 2.75rem;
-        padding-left: 2.75rem;
+        padding-right: 1.75rem;
+        padding-left: 1.75rem;
         transition: background-color $animation_duration $animation,
           color $animation_duration $animation;
         position: relative;
@@ -365,7 +366,8 @@
         flex-direction: column;
         gap: 0.25rem;
 
-        .button {
+        .button,
+        .log-out-button {
           background-color: $warning-red;
           height: 2.25rem;
           width: 2.25rem;
@@ -419,7 +421,8 @@
         flex-direction: column;
         gap: 0.25rem;
 
-        .button {
+        .button,
+        .log-out-button {
           background-color: $warning-red;
           height: 2.25rem;
           width: 2.25rem;
@@ -904,6 +907,52 @@
       width: 100%;
       height: auto;
     }
+  }
+}
+
+.admin-language-select {
+  // color: $base-color;
+  // margin-right: 1.5rem;
+  // background-color: $base-color;
+  color: $text-color;
+  margin-top: 0.25rem;
+
+  div {
+    color: $text-color;
+  }
+
+  .open-select-button {
+    &.open {
+      color: $text-color;
+
+      svg {
+        fill: $base-color;
+      }
+
+      &:hover {
+        color: $base-color;
+
+        svg {
+          fill: $base-color;
+        }
+      }
+    }
+
+    svg {
+      fill: $text-color;
+    }
+
+    &:hover {
+      color: $base-color;
+
+      svg {
+        fill: $base-color;
+      }
+    }
+  }
+
+  .select-options-list {
+    margin-top: 0.5rem;
   }
 }
 

@@ -43,7 +43,7 @@ const Header = () => {
           ref={navRef}
           className={`nav-buttons ${isMenuOpen ? "visible" : "inVisible"}`}
         >
-          <ul>
+          <ul className="nav-links-ul">
             <li>
               <LanguageSelector />
             </li>

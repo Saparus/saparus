@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
+
 import { useOnClickOutside } from "../../hooks/useOnClickOutside"
 
 const ConfirmDeletionModal = ({ deleteItem, message, onClose, isVisible }) => {

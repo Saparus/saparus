@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next"
 import { NavLink, Link } from "react-router-dom"
 
+import LanguageSelector from "../other/LanguageSelector"
+
 const DashboardHeader = ({ name, handleLogOut }) => {
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -15,11 +17,17 @@ const DashboardHeader = ({ name, handleLogOut }) => {
       <h3>{t("Saparus Admin Dashboard")}</h3>
       {/* - <p>{name}</p> */}
       <div className="dashboard-navigation-buttons">
+        <LanguageSelector className="admin-language-select" />
         <NavLink to="products">{t("Products")}</NavLink>
         <NavLink to="news">{t("News")}</NavLink>
         <NavLink to="about">{t("About")}</NavLink>
         <NavLink to="children">{t("Child Program")}</NavLink>
-        <button onClick={handleLogOut}>{t("log out")}</button>
+        <button
+          onClick={handleLogOut}
+          className="log-out-button"
+        >
+          {t("log out")}
+        </button>
       </div>
     </div>
   )

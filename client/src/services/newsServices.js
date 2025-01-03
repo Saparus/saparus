@@ -75,7 +75,11 @@ export const deleteNewsArticle = async (id, api_key) => {
 // edit a news article by id (requires api_key)
 export const editNewsArticle = async (id, title, text, images, api_key) => {
   try {
-    const { data } = await ajax.patch(`/news/${id}?api_key=${api_key}`, { title, text, images })
+    const { data } = await ajax.patch(`/news/edit/${id}?api_key=${api_key}`, {
+      title,
+      text,
+      images,
+    })
     return data
   } catch (error) {
     console.error(`error editing news article with id ${id}:`, error)

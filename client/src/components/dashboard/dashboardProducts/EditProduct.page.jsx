@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -11,6 +11,8 @@ import ProductEditPanel from "./ProductEditPanel"
 import Loading from "../../other/Loading"
 
 const EditProductPage = () => {
+  const navigate = useNavigate()
+
   const { apiKey } = useOutletContext()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
@@ -53,6 +55,8 @@ const EditProductPage = () => {
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("dashboard-product"),
       })
+
+      navigate("../../admin/products")
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
