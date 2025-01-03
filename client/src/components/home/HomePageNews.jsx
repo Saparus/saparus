@@ -60,17 +60,29 @@ const HomePageNews = () => {
   }
 
   const renderNews = () => {
-    if (!news?.articles?.length) return
+    if (!news?.articles?.length || !news?.articles) return
 
-    return news?.articles.slice(1, 4).map((newsItem) => (
-      <NewsItem
-        key={newsItem.id}
-        title={newsItem.title}
-        text={newsItem.text}
-        date={new Date(newsItem.date).toLocaleDateString()}
-        url={`/news/${newsItem.id}`}
-      />
-    ))
+    return (
+      <>
+        <NewsItem
+          key={news.articles[0].id}
+          title={news.articles[0].title}
+          text={news.articles[0].text}
+          date={new Date(news.articles[0].date).toLocaleDateString()}
+          url={`/news/${news.articles[0].id}`}
+          className="first-article"
+        />
+        {news.articles.slice(1, 4).map((newsItem) => (
+          <NewsItem
+            key={newsItem.id}
+            title={newsItem.title}
+            text={newsItem.text}
+            date={new Date(newsItem.date).toLocaleDateString()}
+            url={`/news/${newsItem.id}`}
+          />
+        ))}
+      </>
+    )
   }
 
   return (

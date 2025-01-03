@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom"
 
-const NewsItem = ({ title, text, url, date }) => {
+const NewsItem = ({ title, text, url, date, className }) => {
   return (
     <Link
-      className="news-item"
+      className={`news-item ${className}`}
       to={url}
     >
       <div className="news-title">

@@ -34,7 +34,7 @@ export const getAllNewsItems = async (event) => {
       return tempNewsItem
     })
 
-    translatedResult.sort((a, b) => a.date - b.date)
+    translatedResult.sort((a, b) => b.date - a.date)
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
