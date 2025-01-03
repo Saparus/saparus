@@ -29,6 +29,16 @@ export const editProduct = async (event) => {
     }
   }
 
+  console.log(
+    `
+    products table: ${process.env.PRODUCTS_TABLE}
+    news table: ${process.env.NEWS_TABLE}
+    children table: ${process.env.CHILDREN_TABLE}
+    about table: ${process.env.ABOUT_TABLE}
+    bucket name: ${process.env.BUCKET_NAME}
+    `
+  )
+
   try {
     const imageUrls = images?.length
       ? await Promise.all(
