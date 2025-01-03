@@ -26,14 +26,6 @@ export const getAllProducts = async (event) => {
   const scanCommand = new ScanCommand(params)
   const { Items: products } = await db.send(scanCommand)
 
-  // const translatedProducts = products.map((product) => {
-  //   const tempNewsItem = { ...product }
-  //   tempNewsItem.name = product.name[languageToApply]
-  //   tempNewsItem.description = product.description[languageToApply]
-
-  //   return tempNewsItem
-  // })
-
   let productsToSend = []
 
   try {

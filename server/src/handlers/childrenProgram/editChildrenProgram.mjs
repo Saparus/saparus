@@ -21,15 +21,19 @@ export const editChildrenProgram = async (event) => {
   }
 
   try {
-    const imageUrls = images
+    const imageUrls = images?.length
       ? await Promise.all(
-          images?.map(async (image) => {
-            const base64Data = image.split(",")[1] // removing the prefix
-            const imageBuffer = Buffer.from(base64Data, "base64")
-            const imageKey = `news/${uuid()}.jpg`
-            await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
+          images.map(async (image) => {
+            if (image.startsWith("http://") || image.startsWith("https://")) {
+              return image
+            } else {
+              const base64Data = image.split(",")[1] // removing the prefix
+              const imageBuffer = Buffer.from(base64Data, "base64")
+              const imageKey = `news/${uuid()}.png`
+              await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
 
-            return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+              return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+            }
           })
         )
       : []
@@ -38,6 +42,9 @@ export const editChildrenProgram = async (event) => {
       TableName: process.env.CHILDREN_PROGRAMS_TABLE,
       Key: { id },
       UpdateExpression: "set title = :title, description = :description, images = :images",
+      ExpressionAttributeNames: {
+        "#text": "text", // because text is a reserved keyword in DynamoDB
+      },
       ExpressionAttributeValues: {
         ":title": title,
         ":text": text,
