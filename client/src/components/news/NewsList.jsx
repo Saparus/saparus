@@ -61,7 +61,8 @@ const NewsList = () => {
                 text={article.text}
                 date={new Date(article.date).toLocaleDateString()}
                 image={article.images?.[0]}
-                to={`../news/${article.id}`}
+                id={article.id}
+                type="news"
               />
             ))}
           </div>
