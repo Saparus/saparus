@@ -18,7 +18,7 @@ export const editProduct = async (event) => {
   const images = body.images || []
 
   // Validate input
-  if (!name || !description) {
+  if (!name || !description || !id) {
     return {
       statusCode: 400,
       headers: {
@@ -33,11 +33,15 @@ export const editProduct = async (event) => {
     `
     products table: ${process.env.PRODUCTS_TABLE}
     news table: ${process.env.NEWS_TABLE}
-    children table: ${process.env.CHILDREN_TABLE}
+    children table: ${process.env.CHILDREN_PROGRAMS_TABLE}
     about table: ${process.env.ABOUT_TABLE}
     bucket name: ${process.env.BUCKET_NAME}
     `
   )
+
+  images.forEach((image) => {
+    console.log({ type: typeof image, image })
+  })
 
   try {
     const imageUrls = images?.length
