@@ -431,9 +431,7 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
               required
             />
           </label>
-          {!currentProduct.fixedPrice ? (
-            ""
-          ) : activeFields.price ? (
+          {activeFields.price ? (
             <div className="product-price-wrapper">
               <input
                 type="number"
