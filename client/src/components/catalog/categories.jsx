@@ -55,6 +55,22 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
   }
 
   useEffect(() => {
+    if (data) {
+      const { minPrice, maxPrice } = data
+
+      // check if minPrice or maxPrice are not already set
+      if (minPrice != null && maxPrice != null && !inputValue.minPrice && !inputValue.maxPrice) {
+        setInputValue((prevState) => ({
+          ...prevState,
+          minPrice,
+          maxPrice,
+        }))
+        setDefaultPriceExtremum({ minPrice, maxPrice })
+      }
+    }
+  }, [data])
+
+  useEffect(() => {
     setInputValue((prev) => ({
       ...prev,
       categories: {
@@ -216,8 +232,8 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
         handleMaxPriceChange={handleMaxPriceChange}
         maxPrice={maxPrice}
         minPrice={minPrice}
-        currentMaxPrice={inputValue.maxPrice}
-        currentMinPrice={inputValue.minPrice}
+        currentMaxPrice={inputValue.maxPrice || maxPrice}
+        currentMinPrice={inputValue.minPrice || minPrice}
         t={t}
       />
     )

@@ -1,8 +1,20 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 
 export const getAllAboutItems = async (event) => {
   const { language } = event.queryStringParameters
+
+  if (!language) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
@@ -15,24 +27,30 @@ export const getAllAboutItems = async (event) => {
   try {
     const { Items: aboutItems } = await db.send(scanCommand)
 
-    const translatedResult = aboutItems.map((newsItem) => {
-      const tempNewsItem = { ...newsItem }
-      tempNewsItem.text = newsItem.text[languageToApply]
-      tempNewsItem.title = newsItem.title[languageToApply]
-
-      return tempNewsItem
-    })
+    const translatedAboutItems = aboutItems.map((aboutItem) => ({
+      ...aboutItem,
+      text: aboutItem.text[languageToApply],
+      title: aboutItem.title[languageToApply],
+    }))
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({
-        aboutItems: translatedResult,
+        aboutItems: translatedAboutItems,
       }),
     }
   } catch (error) {
     console.error("Error getting about items", error)
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({ message: "Error getting about items", error }),
     }
   }

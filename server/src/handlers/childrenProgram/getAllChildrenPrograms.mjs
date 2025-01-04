@@ -27,17 +27,6 @@ export const getAllChildrenPrograms = async (event) => {
   try {
     const { Items: programs } = await db.send(scanCommand)
 
-    if (!programs) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ message: "Children programs not found" }),
-      }
-    }
-
     const translatedPrograms = programs.map((program) => ({
       ...program,
       text: program.text[languageToApply],
