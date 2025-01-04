@@ -26,7 +26,7 @@ export const editAllAboutItems = async (event) => {
 
         if (image.startsWith("http://") || image.startsWith("https://")) {
           imageUrl = image
-        } else if (item?.image?.data && item?.image?.name) {
+        } else {
           const base64Data = image.split(",")[1]
           const imageBuffer = Buffer.from(base64Data, "base64")
           const imageKey = `news/${uuid()}.jpg`
