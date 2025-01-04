@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuid } from "uuid"
 import { BatchWriteCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
@@ -20,7 +20,7 @@ export const editAllAboutItems = async (event) => {
     // Prepare put requests for new items
     const putRequests = await Promise.all(
       aboutItems.map(async (item) => {
-        const itemId = uuidv4()
+        const itemId = uuid()
         const image = item.image
         let imageUrl = null
 
@@ -29,7 +29,7 @@ export const editAllAboutItems = async (event) => {
         } else {
           const base64Data = image.split(",")[1]
           const imageBuffer = Buffer.from(base64Data, "base64")
-          const imageKey = `news/${uuid()}.jpg`
+          const imageKey = `about/${itemId()}.jpg`
           await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
 
           imageUrl = `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`

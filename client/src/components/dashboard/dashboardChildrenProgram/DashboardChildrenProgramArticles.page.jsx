@@ -22,7 +22,7 @@ const DashboardChildrenProgramArticles = () => {
 
       <DashboardNewsList
         apiKey={apiKey}
-        type="children program"
+        type="children"
       />
     </div>
   )
