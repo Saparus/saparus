@@ -21,7 +21,8 @@ export const editAllAboutItems = async (event) => {
     const putRequests = await Promise.all(
       aboutItems.map(async (item) => {
         const itemId = uuidv4()
-        let image = item.image
+        const image = item.image
+        let imageUrl = null
 
         if (image.startsWith("http://") || image.startsWith("https://")) {
           imageUrl = image
