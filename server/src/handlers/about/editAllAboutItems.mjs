@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid"
-import { UpdateCommand, ScanCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb"
+import { BatchWriteCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
@@ -7,52 +7,54 @@ import { uploadImage } from "../../util/s3.mjs"
 export const editAllAboutItems = async (event) => {
   const { aboutItems } = JSON.parse(event.body)
 
-  const scanParams = {
-    TableName: process.env.ABOUT_TABLE,
-  }
-
   try {
-    // Scan the table to get all existing items
-    const existingItems = await db.send(new ScanCommand(scanParams))
+    // Prepare delete requests for all existing items
+    const existingItems = await db.send(new ScanCommand({ TableName: process.env.ABOUT_TABLE }))
 
-    // Delete all existing items
-    const deletePromises = existingItems.Items.map((item) => {
-      const deleteParams = {
-        TableName: process.env.ABOUT_TABLE,
+    const deleteRequests = existingItems.Items.map((item) => ({
+      DeleteRequest: {
         Key: { id: item.id },
-      }
+      },
+    }))
 
-      const deleteCommand = new DeleteCommand(deleteParams)
+    // Prepare put requests for new items
+    const putRequests = await Promise.all(
+      aboutItems.map(async (item) => {
+        const itemId = uuidv4()
+        let imageUrl = item.imageUrl
 
-      return db.send(deleteCommand)
-    })
-    await Promise.all(deletePromises)
+        if (item?.image?.data && item?.image?.name) {
+          const buffer = Buffer.from(item.image.data, "base64")
+          const imageKey = `about-items/${itemId}/${item.image.name}`
+          await uploadImage(process.env.BUCKET_NAME, imageKey, buffer)
+          imageUrl = `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+        }
 
-    // Insert new items
-    const insertPromises = aboutItems.map(async (item) => {
-      const itemId = uuidv4()
-      let imageUrl = item.imageUrl // default to existing image URL
+        return {
+          PutRequest: {
+            Item: {
+              id: itemId,
+              title: item.title,
+              text: item.text,
+              image: imageUrl,
+            },
+          },
+        }
+      })
+    )
 
-      // if there's a new image, upload it to S3
-      if (item?.image && item.image?.data && item.image?.name) {
-        const buffer = Buffer.from(item.image.data, "base64") // decode base64 image
-        const imageKey = `about-items/${itemId}/${item.image.name}`
-        await uploadImage(process.env.BUCKET_NAME, imageKey, buffer)
-        imageUrl = `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
-      }
-
-      const params = {
-        TableName: process.env.ABOUT_TABLE,
-        Item: {
-          id: itemId,
-          title: item.title,
-          text: item.text,
-          image: imageUrl,
-        },
-      }
-      return db.send(new UpdateCommand(params))
-    })
-    await Promise.all(insertPromises)
+    // Combine delete and put requests
+    const writeRequests = [...deleteRequests, ...putRequests]
+    while (writeRequests.length) {
+      const batch = writeRequests.splice(0, 10) // BatchWrite limit
+      await db.send(
+        new BatchWriteCommand({
+          RequestItems: {
+            [process.env.ABOUT_TABLE]: batch,
+          },
+        })
+      )
+    }
 
     return {
       statusCode: 200,

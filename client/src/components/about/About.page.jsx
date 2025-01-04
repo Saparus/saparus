@@ -29,7 +29,7 @@ const About = () => {
 
     if (!data || error) return <div>something went wrong</div>
 
-    return data.map((aboutItem) => {
+    return data.aboutItems.map((aboutItem) => {
       const { id, title, text, image } = aboutItem
 
       return (
