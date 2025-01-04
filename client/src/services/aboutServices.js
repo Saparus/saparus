@@ -13,6 +13,11 @@ export const getAllAboutItems = async (language) => {
 
 // get all about items for editing (requires api_key)
 export const getAllEditAboutItems = async (api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.get(`/about/admin?api_key=${api_key}`)
     return data
@@ -24,6 +29,11 @@ export const getAllEditAboutItems = async (api_key) => {
 
 // edit all about items (requires api_ key)
 export const editAllAboutItems = async (aboutItems, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.patch(`/about?api_key=${api_key}`, { aboutItems })
     return data

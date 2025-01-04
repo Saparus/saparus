@@ -57,11 +57,14 @@ const AddChildrenProgramArticle = () => {
     },
   })
 
+  const { isLoading } = addProductMutation
+
   return (
     <EditNewsPanel
       article={emptyNewsArticle}
       onSave={addProductMutation.mutate}
       apiKey={apiKey}
+      isLoading={isLoading}
       type="children program"
     />
   )

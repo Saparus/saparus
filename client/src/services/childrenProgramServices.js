@@ -26,6 +26,11 @@ export const getSingleChildrenProgramArticle = async (id, language) => {
 
 // fetch editable children program articles (requires api_key)
 export const getEditChildrenProgramArticles = async (limit, page, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.get(
       `/children-program/admin?page=${page}&limit=${limit}&api_key=${api_key}`
@@ -39,6 +44,11 @@ export const getEditChildrenProgramArticles = async (limit, page, api_key) => {
 
 // fetch a single editable children program article by id (requires api_key)
 export const getEditSingleChildrenProgramArticle = async (id, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.get(`/children-program/admin/${id}?api_key=${api_key}`)
     return data
@@ -50,6 +60,11 @@ export const getEditSingleChildrenProgramArticle = async (id, api_key) => {
 
 // add a new children program article (requires api_key)
 export const addChildrenProgramArticle = async (title, text, images, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.post(`/children-program?api_key=${api_key}`, {
       title,
@@ -65,6 +80,11 @@ export const addChildrenProgramArticle = async (title, text, images, api_key) =>
 
 // delete a children program article by id (requires api_key)
 export const deleteChildrenProgramArticle = async (id, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.delete(`/children-program/${id}?api_key=${api_key}`)
     return data
@@ -76,6 +96,11 @@ export const deleteChildrenProgramArticle = async (id, api_key) => {
 
 // edit a children program article by id (requires api_key)
 export const editChildrenProgramArticle = async (id, title, text, images, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.patch(`/children-program/edit/${id}?api_key=${api_key}`, {
       title,

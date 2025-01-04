@@ -67,6 +67,8 @@ const EditProductPage = () => {
     },
   })
 
+  const { isLoading: isEditing } = editProductMutation
+
   if (isLoading) return <Loading />
   if (error || !product) return <div>{t("Something went wrong")}</div>
 
@@ -74,6 +76,7 @@ const EditProductPage = () => {
     <ProductEditPanel
       product={product}
       onSave={editProductMutation.mutate}
+      isLoading={isEditing}
     />
   )
 }

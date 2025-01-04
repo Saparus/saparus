@@ -13,7 +13,7 @@ import { deleteChildrenProgramArticle } from "../../../services/childrenProgramS
 import ConfirmDeletionModal from "../ConfirmDeletionModal.jsx"
 import LanguageSelect from "../LanguageSelect.jsx"
 
-const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
+const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoading }) => {
   const navigate = useNavigate()
   // const { title, text, date, images } = article
 
@@ -62,6 +62,8 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
       console.log(errorMessage)
     },
   })
+
+  const { isLoading: isDeleting } = deleteMutation
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
@@ -256,18 +258,23 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news" }) => {
         />
         <button
           onClick={() => {
-            // if (isLoading) return
+            if (isLoading || isDeleting) return
 
             onSave(currentArticle)
           }}
-          // disabled={isLoading}
+          disabled={isLoading || isDeleting}
           type="submit"
           className="confirm-button"
         >
           <CheckmarkIcon />
         </button>
         <button
-          onClick={handleOpenConfirmCloseModal}
+          onClick={() => {
+            if (isLoading || isDeleting) return
+
+            handleOpenConfirmCloseModal()
+          }}
+          disabled={isLoading || isDeleting}
           className="delete-button"
         >
           <TrashIcon />

@@ -18,7 +18,7 @@ import ConfirmDeletionModal from "../ConfirmDeletionModal"
 import LanguageSelect from "../LanguageSelect"
 import EditCategoryList from "./EditCategoryList"
 
-const ProductEditPanel = ({ product, onSave }) => {
+const ProductEditPanel = ({ product, onSave, isLoading }) => {
   const navigate = useNavigate()
 
   const { apiKey } = useOutletContext()
@@ -254,14 +254,22 @@ const ProductEditPanel = ({ product, onSave }) => {
         {currentProduct.images?.length > 1 && (
           <>
             <button
+              disabled={isLoading}
               className="change-product-image next"
-              onClick={() => handleSelectNextImage()}
+              onClick={() => {
+                if (isLoading) return
+                handleSelectNextImage()
+              }}
             >
               <ArrowIcon className="next-arrow" />
             </button>
             <button
+              disabled={isLoading}
               className="change-product-image prev"
-              onClick={() => handleSelectPrevImage()}
+              onClick={() => {
+                if (isLoading) return
+                handleSelectPrevImage()
+              }}
             >
               <ArrowIcon className="prev-arrow" />
             </button>
@@ -284,7 +292,11 @@ const ProductEditPanel = ({ product, onSave }) => {
             <PlusIcon />
           </button> */}
           <button
-            onClick={handleRemoveImage}
+            disabled={isLoading}
+            onClick={() => {
+              if (isLoading) return
+              handleRemoveImage()
+            }}
             className="button trash-button"
           >
             <MinusIcon />
@@ -298,16 +310,21 @@ const ProductEditPanel = ({ product, onSave }) => {
             <TrashIcon />
           </button>
           <button
+            disabled={isLoading}
+            onClick={() => {
+              if (isLoading) return
+              handleReset()
+            }}
             className="button reset-button"
-            onClick={handleReset}
           >
             <ResetIcon />
           </button>
           <button
             className="button save-button"
-            disabled={!isAbleToSave}
+            disabled={!isAbleToSave || isLoading}
             type="submit"
             onClick={() => {
+              if (isLoading) return
               onSave(currentProduct)
             }}
           >
@@ -351,7 +368,11 @@ const ProductEditPanel = ({ product, onSave }) => {
         />
       ) : (
         <button
-          onClick={() => handleFieldEditStart("name")}
+          disabled={isLoading}
+          onClick={() => {
+            if (isLoading) return
+            handleFieldEditStart("name")
+          }}
           className="product-name field-button"
         >
           {currentProduct.name[selectedLanguage] || <p className="placeholder-text">{t("name")}</p>}
@@ -363,8 +384,11 @@ const ProductEditPanel = ({ product, onSave }) => {
       return (
         <div className="product-short-information">
           <button
+            disabled={isLoading}
             onClick={() => {
               setCurrentProduct((prevState) => {
+                if (isLoading) return
+
                 setIsAbleToSave(!prevState.inStock !== product.inStock)
 
                 return {
@@ -388,9 +412,11 @@ const ProductEditPanel = ({ product, onSave }) => {
               type="checkbox"
               id="fixedPrice"
               name="fixedPrice"
-              checked={currentProduct.fixedPrice}
+              checked={Boolean(currentProduct.fixedPrice)}
               onChange={() => {
                 setCurrentProduct((prevState) => {
+                  if (isLoading) return
+
                   setIsAbleToSave(
                     !prevState.fixedPrice !== product.fixedPrice ||
                       product.price !== currentProduct.price
@@ -425,6 +451,7 @@ const ProductEditPanel = ({ product, onSave }) => {
           ) : (
             <button
               className="field-button price-field-button"
+              disabled={isLoading}
               onClick={() => handleFieldEditStart("price")}
             >
               <div className="product-price">
@@ -452,7 +479,11 @@ const ProductEditPanel = ({ product, onSave }) => {
         />
       ) : (
         <button
-          onClick={() => handleFieldEditStart("description")}
+          onClick={() => {
+            if (isLoading) return
+            handleFieldEditStart("description")
+          }}
+          disabled={isLoading}
           className="product-description field-button"
         >
           {currentProduct.description[selectedLanguage] ? (

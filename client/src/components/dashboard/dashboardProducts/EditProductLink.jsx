@@ -69,8 +69,8 @@ const EditProductLink = ({ product, handleDelete }) => {
       </div>
       {isHovering ? (
         <button
-          className="trash-icon-button"
           onClick={handleOpenConfirmCloseModal}
+          className="trash-icon-button"
         >
           <TrashIcon />
         </button>

@@ -56,6 +56,8 @@ const EditChildrenProgramArticle = () => {
     },
   })
 
+  const { isLoading: isEditing } = editNewsArticleMutation
+
   if (isLoading) return <Loading />
   if (error || !article) return <div>Something went wrong</div>
 
@@ -64,6 +66,7 @@ const EditChildrenProgramArticle = () => {
       article={article}
       onSave={editNewsArticleMutation.mutate}
       apiKey={apiKey}
+      isLoading={isEditing}
       type="children program"
     />
   )

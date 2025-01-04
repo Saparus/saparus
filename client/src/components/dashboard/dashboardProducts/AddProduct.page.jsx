@@ -76,10 +76,13 @@ const AddProductPage = () => {
     },
   })
 
+  const { isLoading } = addProductMutation
+
   return (
     <ProductEditPanel
       product={emptyProductData}
       onSave={addProductMutation.mutate}
+      isLoading={isLoading}
       apiKey={apiKey}
     />
   )

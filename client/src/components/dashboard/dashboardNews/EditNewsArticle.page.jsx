@@ -52,6 +52,8 @@ const EditNewsArticlePage = () => {
     },
   })
 
+  const { isLoading: isEditing } = editNewsArticleMutation
+
   if (isLoading) return <Loading />
   if (error || !article) return <div>{t("Something went wrong")}</div>
 
@@ -59,6 +61,7 @@ const EditNewsArticlePage = () => {
     <EditNewsPanel
       article={article}
       onSave={editNewsArticleMutation.mutate}
+      isLoading={isEditing}
       apiKey={apiKey}
     />
   )

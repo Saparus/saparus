@@ -12,7 +12,10 @@ export const editProduct = async (
   id,
   api_key
 ) => {
-  if (!api_key) throw new Error("api_key is required")
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
 
   try {
     const { data } = await ajax.patch(`/products/edit/${id}?api_key=${api_key}`, {
@@ -53,7 +56,10 @@ export const addProduct = async (
   categories,
   api_key
 ) => {
-  if (!api_key) throw new Error("api_key is required")
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
 
   try {
     const { data } = await ajax.post(`/products?api_key=${api_key}`, {
@@ -74,7 +80,10 @@ export const addProduct = async (
 
 // delete a product by id (requires api_key)
 export const deleteProduct = async (id, api_key) => {
-  if (!api_key) throw new Error("api_key is required")
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
 
   try {
     const { data } = await ajax.delete(`/products/${id}?api_key=${api_key}`)
@@ -115,6 +124,11 @@ export const getProduct = async (id, language) => {
 
 // get an editable product by id (requires api_key)
 export const getEditProduct = async (id, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
     const { data } = await ajax.get(`/products/admin/${id}?api_key=${api_key}`)
     return data
