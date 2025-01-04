@@ -36,6 +36,7 @@ export const editAllAboutItems = async (event) => {
               id: itemId,
               title: item.title,
               text: item.text,
+              position: item.position,
               image: imageUrl,
             },
           },

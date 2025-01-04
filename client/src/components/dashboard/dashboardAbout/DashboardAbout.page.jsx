@@ -136,7 +136,7 @@ const DashboardAboutPage = () => {
   const handleAboutItemMoveDown = (id) => {
     const itemToUpdate = aboutItemList.find((item) => item.id === id)
 
-    if (itemToUpdate.position < aboutItemList.length) {
+    if (itemToUpdate.position < aboutItemList.length - 1) {
       const itemToSwap = aboutItemList.find((item) => item.position === itemToUpdate.position + 1)
 
       swapPlaces(id, itemToSwap.id)
