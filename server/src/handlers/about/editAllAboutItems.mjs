@@ -29,7 +29,7 @@ export const editAllAboutItems = async (event) => {
         } else {
           const base64Data = image.split(",")[1]
           const imageBuffer = Buffer.from(base64Data, "base64")
-          const imageKey = `about/${itemId()}.jpg`
+          const imageKey = `about/${uuid}.jpg`
           await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
 
           imageUrl = `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
