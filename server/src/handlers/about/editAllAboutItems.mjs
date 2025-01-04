@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid"
-import { BatchWriteCommand } from "@aws-sdk/lib-dynamodb"
+import { BatchWriteCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
