@@ -21,7 +21,7 @@ const DashboardHeader = ({ name, handleLogOut }) => {
         <NavLink to="products">{t("Products")}</NavLink>
         <NavLink to="news">{t("News")}</NavLink>
         <NavLink to="about">{t("About")}</NavLink>
-        <NavLink to="children">{t("Child Program")}</NavLink>
+        <NavLink to="children">{t("Children Program")}</NavLink>
         <button
           onClick={handleLogOut}
           className="log-out-button"
