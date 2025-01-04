@@ -21,9 +21,11 @@ export const editAllAboutItems = async (event) => {
     const putRequests = await Promise.all(
       aboutItems.map(async (item) => {
         const itemId = uuidv4()
-        let imageUrl = item.imageUrl
+        let image = item.image
 
-        if (item?.image?.data && item?.image?.name) {
+        if (image.startsWith("http://") || image.startsWith("https://")) {
+          imageUrl = image
+        } else if (item?.image?.data && item?.image?.name) {
           const base64Data = image.split(",")[1]
           const imageBuffer = Buffer.from(base64Data, "base64")
           const imageKey = `news/${uuid()}.jpg`
