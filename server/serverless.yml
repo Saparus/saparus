@@ -98,6 +98,7 @@ functions:
           - "dynamodb:Scan"
           - "dynamodb:DeleteItem"
           - "dynamodb:PutItem"
+          - "dynamodb:BatchWriteItem"
           - "s3:PutObject"
           - "s3:DeleteObject"
         Resource:
