@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query"
 import { useOutletContext, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 import { addChildrenProgramArticle } from "../../../services/childrenProgramServices"
 
@@ -22,6 +23,8 @@ const emptyNewsArticle = {
 }
 
 const AddChildrenProgramArticle = () => {
+  const { t } = useTranslation("translation", { keyPrefix: "children program" })
+
   const { apiKey } = useOutletContext()
 
   const navigate = useNavigate()
@@ -35,11 +38,11 @@ const AddChildrenProgramArticle = () => {
       return await addChildrenProgramArticle(title, text, images, apiKey)
     },
     onMutate: () => {
-      toast.loading("Adding children program...")
+      toast.loading(t("Adding children program..."))
     },
     onSuccess: (data) => {
       toast.dismiss()
-      toast.success("Successfully added children program")
+      toast.success(t("Successfully added children program"))
 
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("children"),

@@ -20,6 +20,8 @@ const DashboardAboutPage = () => {
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
 
+  const { t } = useTranslation("translation", { keyPrefix: "products" })
+
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [wasSomethingChanged, setWasSomethingChanged] = useState(false)
 
@@ -211,13 +213,13 @@ const DashboardAboutPage = () => {
           className="change-confirm"
           onClick={handleSave}
         >
-          confirm
+          {t("confirm")}
         </button>
         <button
           className="change-discard"
           onClick={handleDiscard}
         >
-          discard
+          {t("discard")}
         </button>
       </div>
     )
@@ -241,7 +243,7 @@ const DashboardAboutPage = () => {
         className="add-about-item"
         onClick={handleAddNewAboutItem}
       >
-        add
+        {t("add new item")}
       </button>
       {wasSomethingChanged ? renderConfirmChange() : ""}
     </div>

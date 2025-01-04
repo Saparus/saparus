@@ -72,7 +72,13 @@
     "to": "დან",
     "fixed price": "ფიქსირებული ფასი",
     "description": "აღწერა",
-    "name": "სახელი"
+    "name": "სახელი",
+    "confirm": "დადასტურება",
+    "discard": "გაუქმება",
+    "add new item": "ახალი ელემენტის დამატება",
+    "are you sure you want to delete this? this action cannot be undone.": "დარწმუნებული ხართ, რომ გსურთ წაშლა? ეს ქმედება შეუქცევადია.",
+    "no image": "სურათი არ არის",
+    "click here to upload": "ატვირთვისთვის დააწკაპუნეთ აქ"
   },
 
   "news": {
@@ -90,7 +96,11 @@
     "Contact for Information": "დაგვიკავშირდით ინფორმაციისთვის",
     "• in stock": "• ხელმისაწვდომია",
     "• out of stock": "• არ არის ხელმისაწვდომი",
-    "Price on Request": "ფასი მოთხოვნით"
+    "Price on Request": "ფასი მოთხოვნით",
+    "Saving news article...": "სტატიის შენახვა...",
+    "Changes saved successfully": "ცვლილებები წარმატებით შენახულია",
+    "text": "ტექსტი",
+    "title": "სათაური"
   },
 
   "admin": {
@@ -99,12 +109,12 @@
     "News": "სიახლეები",
     "About": "ჩვენ შესახებ",
     "Products": "პროდუქცია",
-    "Child Program": "ბავშვების პროგრამა",
+    "Children Program": "ბავშვების პროგრამა",
     "log out": "გამოსვლა",
     "confirm": "დადასტურება",
     "discard": "გაუქმება",
     "go back": "უკან დაბრუნება",
-    "Something went wrong while adding product, check browser console for more detailed explanation": "პროდუქტის დამატებისას მოხდა შეცდომა , დამატებითი დეტალები იხილეთ ბრაუზერის კონსოლში",
+    "Something went wrong while adding product, check browser console for more detailed explanation": "პროდუქტის დამატებისას მოხდა შეცდომა, დამატებითი დეტალები იხილეთ ბრაუზერის კონსოლში",
     "are you sure you want to delete this product? this action cannot be undone.": "დარწმუნებული ხართ, რომ გსურთ ამ პროდუქტის წაშლა? ეს ქმედება შეუქცევადია.",
     "Price on Request": "ფასი მოთხოვნით",
     "• in stock": "• ხელმისაწვდომია",
@@ -112,7 +122,7 @@
     "click here to reset filters": "ფილტრების გადასატვირთად დააწკაპუნეთ აქ",
     "Products not found": "პროდუქცია ვერ მოიძებნა",
     "Changes saved successfully": "ცვლილებები წარმატებით შენახულია",
-    "Add New Child Program Article": "ბავშვების პროგრამის სტატიის დამატება",
+    "Add New Children Program Article": "ბავშვების პროგრამის სტატიის დამატება",
     "enter": "შესვლა",
     "admin login": "ადმინისტრატორის შესვლა",
     "English": "ინგლისური",
@@ -120,14 +130,37 @@
     "Russian": "რუსული",
     "Admin Dashboard": "ადმინისტრატორის პანელი",
     "password": "პაროლი",
-    "email": "ელ. ფოსტა"
+    "email": "ელ. ფოსტა",
+    "Adding news article...": "სტატიის დამატება...",
+    "Successfully added news article": "სტატია წარმატებით დაემატა",
+    "Add New Article": "ახალი სტატიის დამატება",
+    "Adding product...": "პროდუქტის დამატება...",
+    "Successfully added product": "პროდუქტი წარმატებით დაემატა",
+    "key": "გასაღები",
+    "value": "მნიშვნელობა",
+    "categories": "კატეგორიები",
+    "Saving product changes...": "პროდუქტის ცვლილებების შენახვა...",
+    "Deleting product...": "პროდუქტის წაშლა...",
+    "Successfully deleted product": "პროდუქტი წარმატებით წაიშალა",
+    "price": "ფასი",
+    "name": "სახელი",
+    "description": "აღწერა",
+    "title": "სათაური",
+    "text": "ტექსტი"
+  },
+
+  "children program": {
+    "Adding children program...": "ბავშვების პროგრამის დამატება...",
+    "Successfully added children program": "ბავშვების პროგრამა წარმატებით დაემატა",
+    "Updating children program...": "ბავშვების პროგრამის განახლება...",
+    "Changes saved successfully": "ცვლილებები წარმატებით შენახულია"
   },
 
   "home": {
     "Empowering Smiles With Precision": "ღიმილის გაძლიერება სიზუსტით",
     "Contact Us": "დაგვიკავშირდით",
     "View Catalog": "კატალოგის ნახვა",
-    "Child Program": "ბავშვების პროგრამა"
+    "Children Program": "ბავშვების პროგრამა"
   },
 
   "time": {

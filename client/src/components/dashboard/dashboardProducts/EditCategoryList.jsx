@@ -12,6 +12,8 @@ const EditCategoryList = ({
   handleFieldEditFinish,
   handleFieldEditStart,
 }) => {
+  const { t } = useTranslation("translation", { keyPrefix: "news" })
+
   return (
     <div className="category-list">
       {categories.map((category) =>
@@ -51,7 +53,7 @@ const EditCategoryList = ({
             onChange={(e) => {
               setNewCategory((prevState) => ({ ...prevState, key: e.target.value }))
             }}
-            placeholder="key"
+            placeholder={t("key")}
           />
           <input
             className="category-value"
@@ -59,7 +61,7 @@ const EditCategoryList = ({
             onChange={(e) => {
               setNewCategory((prevState) => ({ ...prevState, value: e.target.value }))
             }}
-            placeholder="value"
+            placeholder={t("value")}
           />
           <button
             onClick={() => {

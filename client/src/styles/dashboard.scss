@@ -435,6 +435,7 @@
             position: absolute;
             visibility: hidden;
             height: fit-content;
+            white-space: nowrap;
           }
 
           svg {
@@ -648,6 +649,7 @@
         width: 100%;
         cursor: pointer;
         opacity: 0;
+        white-space: nowrap;
       }
     }
 
@@ -729,19 +731,19 @@
         width: fit-content;
         border-radius: 0.5rem;
         color: $base-color;
-        width: 10rem;
+        width: 12rem;
         height: 2.5rem;
         display: flex;
         justify-content: center;
         align-items: center;
         transition: background-color $animation $animation_duration;
+        white-space: nowrap;
       }
 
       .image-input {
-        width: 10rem;
+        width: 12rem;
         height: 2.5rem;
         position: absolute;
-        outline: 1px solid red;
         top: 0;
         opacity: 0;
         cursor: pointer;

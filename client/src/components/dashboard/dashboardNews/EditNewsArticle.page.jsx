@@ -33,11 +33,11 @@ const EditNewsArticlePage = () => {
       return await editNewsArticle(id, title, text, images, apiKey)
     },
     onMutate: () => {
-      toast.loading("Saving news article...")
+      toast.loading(t("Saving news article..."))
     },
     onSuccess: () => {
       toast.dismiss()
-      toast.success("Changes saved successfully")
+      toast.success(t("Changes saved successfully"))
 
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("news"),

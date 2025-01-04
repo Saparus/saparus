@@ -38,11 +38,11 @@ const AddNewsArticlePage = () => {
       return await addNewsArticle(title, text, images, apiKey)
     },
     onMutate: () => {
-      toast.loading("Adding news article...")
+      toast.loading(t("Adding news article..."))
     },
     onSuccess: (data) => {
       toast.dismiss()
-      toast.success("Successfully added news article")
+      toast.success(t("Successfully added news article"))
 
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("news"),

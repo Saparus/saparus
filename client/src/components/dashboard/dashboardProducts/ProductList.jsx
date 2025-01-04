@@ -34,11 +34,11 @@ const ProductList = ({ filter, resetFilter, apiKey }) => {
       return await deleteProduct(id, apiKey)
     },
     onMutate: () => {
-      toast.loading("Deleting product...")
+      toast.loading(t("Deleting product..."))
     },
     onSuccess: () => {
       toast.dismiss()
-      toast.success("Successfully deleted product")
+      toast.success(t("Successfully deleted product"))
 
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("products"),

@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 import {
   getEditSingleChildrenProgramArticle,
@@ -12,6 +13,8 @@ import EditNewsPanel from "../dashboardNews/EditNewsPanel"
 import Loading from "../../other/Loading"
 
 const EditChildrenProgramArticle = () => {
+  const { t } = useTranslation("translation", { keyPrefix: "children program" })
+
   const navigate = useNavigate()
 
   const { apiKey } = useOutletContext()
@@ -35,11 +38,11 @@ const EditChildrenProgramArticle = () => {
       return await editChildrenProgramArticle(id, title, text, images, apiKey)
     },
     onMutate: () => {
-      toast.loading("Updating children program...")
+      toast.loading(t("Updating children program..."))
     },
     onSuccess: () => {
       toast.dismiss()
-      toast.success("Changes saved successfully")
+      toast.success(t("Changes saved successfully"))
 
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("children"),

@@ -73,7 +73,7 @@
 
       &:not(:has(img[src]))::after {
         white-space: pre-wrap;
-        content: "No Image \A click here to upload";
+        content: var(--no-image-text, "No Image \A click here to upload");
         text-align: center;
         position: absolute;
         top: 50%;

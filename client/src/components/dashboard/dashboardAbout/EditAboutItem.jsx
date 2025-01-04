@@ -144,7 +144,7 @@ const EditAboutItem = ({
         <textarea
           type="text"
           name="text"
-          placeholder="text"
+          placeholder={t("text")}
           autoFocus={true}
           className="about-information-text"
           onChange={handleInputChange}
@@ -161,7 +161,7 @@ const EditAboutItem = ({
           {text[selectedLanguage] ? (
             <p className="about-information-text">{text[selectedLanguage]}</p>
           ) : (
-            <p className="about-information-text">text</p>
+            <p className="about-information-text">{t("text")}</p>
           )}
         </button>
       )
@@ -211,13 +211,18 @@ const EditAboutItem = ({
         {isConfirmDeletionModalVisible ? (
           <ConfirmDeletionModal
             onClose={handleCloseConfirmCloseModal}
-            message="are you sure you want to delete this? this action cannot be undone."
+            message={t("are you sure you want to delete this? this action cannot be undone.")}
             deleteItem={handleDeleteAboutItem}
           />
         ) : (
           ""
         )}
-        <div className="image">
+        <div
+          className="image"
+          style={{
+            "--no-image-text": `"${t("no image")}\\A${t("click here to upload")}"`,
+          }}
+        >
           <img
             src={image}
             alt=""

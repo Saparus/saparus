@@ -46,7 +46,7 @@ const EditProductPage = () => {
       )
     },
     onMutate: () => {
-      toast.loading("Saving product changes...")
+      toast.loading(t("Saving product changes..."))
     },
     onSuccess: () => {
       toast.dismiss()

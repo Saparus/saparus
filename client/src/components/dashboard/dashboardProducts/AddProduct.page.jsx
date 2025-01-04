@@ -52,12 +52,12 @@ const AddProductPage = () => {
     },
     onMutate: () => {
       // showing loading toast when the mutation starts
-      toast.loading("Adding product...")
+      toast.loading(t("Adding product..."))
     },
     onSuccess: (data) => {
       // updating the toast to success
       toast.dismiss()
-      toast.success("Successfully added product")
+      toast.success(t("Successfully added product"))
 
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("products"),

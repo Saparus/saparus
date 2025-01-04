@@ -41,11 +41,11 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoadin
         ? await deleteNewsArticle(id, apiKey)
         : await deleteChildrenProgramArticle(id, apiKey),
     onMutate: () => {
-      toast.loading(`Deleting ${type} article...`)
+      toast.loading(t(`Deleting ${type} article...`))
     },
     onSuccess: () => {
       toast.dismiss()
-      toast.success(`Successfully deleted ${type} article`)
+      toast.success(t(`Successfully deleted ${type} article`))
 
       queryClient.invalidateQueries({
         predicate: (query) =>
@@ -162,7 +162,7 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoadin
       <input
         type="text"
         name="title"
-        placeholder="title"
+        placeholder={t("title")}
         autoFocus={true}
         className="article-title"
         onChange={handleInputChange}
@@ -176,7 +176,7 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoadin
         onClick={() => handleFieldEditStart("title")}
         className="article-title field-button"
       >
-        {currentArticle.title[selectedLanguage] || <p className="placeholder-text">title</p>}
+        {currentArticle.title[selectedLanguage] || <p className="placeholder-text">{t("title")}</p>}
       </button>
     )
   }
@@ -186,7 +186,7 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoadin
       <textarea
         ref={textRef}
         name="text"
-        placeholder="text"
+        placeholder={t("text")}
         autoFocus={true}
         className="article-text"
         onChange={handleInputChange}
@@ -202,7 +202,7 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoadin
         {currentArticle.text[selectedLanguage] ? (
           <p className="article-text-content">{currentArticle.text[selectedLanguage]}</p>
         ) : (
-          <p className="placeholder-text">text</p>
+          <p className="placeholder-text">{t("text")}</p>
         )}
       </button>
     )
