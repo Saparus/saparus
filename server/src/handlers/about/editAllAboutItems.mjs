@@ -27,7 +27,7 @@ export const editAllAboutItems = async (event) => {
         if (image.startsWith("http://") || image.startsWith("https://")) {
           imageUrl = image.replace(/(\/s|\/m|\/o)\.webp$/, "")
         } else {
-          imageUrl = uploadImage(image, "about")
+          imageUrl = await uploadImage(image, "about")
         }
 
         return {
