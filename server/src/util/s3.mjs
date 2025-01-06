@@ -1,5 +1,5 @@
 import sharp from "sharp"
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { v4 as uuid } from "uuid"
 
 const s3 = new S3Client({
@@ -17,6 +17,8 @@ export const uploadImage = async (image, folder) => {
 
   const imageKeyBase = `${folder}/${uuid()}`
 
+  const cleanImageKeyBase = imageKeyBase.replace(/(\/s|\/m|\/o)\.webp$/, "")
+
   try {
     const originalBuffer = await sharp(imageBuffer).webp().toBuffer()
 
@@ -28,15 +30,15 @@ export const uploadImage = async (image, folder) => {
 
     const uploadPromises = sizes.map(async ({ suffix, height }) => {
       const resizedBuffer = height
-        ? await sharp(originalBuffer).resize({ height }).webp().toBuffer() // Resize based on height
-        : originalBuffer // Use original if no resizing
+        ? await sharp(originalBuffer).resize({ height }).webp().toBuffer()
+        : originalBuffer
 
-      const imageKey = `${imageKeyBase}${suffix}.webp`
+      const imageKey = `${cleanImageKeyBase}${suffix}.webp`
       const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: imageKey,
         Body: resizedBuffer,
-        ContentType: "image/webp", // WebP content type
+        ContentType: "image/webp",
       }
 
       const putObjectCommand = new PutObjectCommand(params)
@@ -47,7 +49,7 @@ export const uploadImage = async (image, folder) => {
 
     const imageUrls = await Promise.all(uploadPromises)
 
-    return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKeyBase}`
+    return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${cleanImageKeyBase}`
   } catch (error) {
     console.error("Error processing or uploading image:", error)
     throw error
@@ -57,11 +59,13 @@ export const uploadImage = async (image, folder) => {
 export const deleteImage = async (imageId, folder) => {
   const imageKeyBase = `${folder}/${imageId}`
 
+  const cleanImageKeyBase = imageKeyBase.replace(/(\/s|\/m|\/o)\.webp$/, "")
+
   const imageVersions = [{ suffix: "/s.webp" }, { suffix: "/m.webp" }, { suffix: "/o.webp" }]
 
   try {
     const deletePromises = imageVersions.map(async ({ suffix }) => {
-      const imageKey = `${imageKeyBase}${suffix}`
+      const imageKey = `${cleanImageKeyBase}${suffix}`
       const deleteParams = {
         Bucket: process.env.BUCKET_NAME,
         Key: imageKey,
