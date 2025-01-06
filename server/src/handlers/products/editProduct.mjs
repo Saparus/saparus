@@ -36,12 +36,7 @@ export const editProduct = async (event) => {
             if (image.startsWith("http://") || image.startsWith("https://")) {
               return image
             } else {
-              const base64Data = image.split(",")[1] // removing the prefix
-              const imageBuffer = Buffer.from(base64Data, "base64")
-              const imageKey = `product/${uuid()}.png`
-              await uploadImage(process.env.BUCKET_NAME, imageKey, imageBuffer)
-
-              return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+              return uploadImage(image, "product")
             }
           })
         )

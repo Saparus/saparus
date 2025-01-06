@@ -36,7 +36,8 @@ const HomePageNews = () => {
           {news?.articles[0]?.images ? (
             <img
               src={news.articles[0].images?.[0]}
-              // alt={news.articles[0].title}
+              alt=""
+              loading="eager"
             />
           ) : (
             <div className="no-image-image"></div>

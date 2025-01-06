@@ -16,6 +16,10 @@
     height: 600px;
     box-shadow: 0 0 10px #9aa8acb4;
 
+    &:last-of-type {
+      background: $primary-color !important;
+    }
+
     .centered {
       height: 100%;
       width: 80%;
@@ -58,6 +62,8 @@
           overflow-x: hidden !important;
           height: 20rem;
           color: $dark-text-color;
+          padding-left: 2px;
+          padding-right: 2px;
 
           &:focus {
             outline: 2px solid black;

@@ -1,4 +1,6 @@
+import sharp from "sharp"
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { v4 as uuid } from "uuid"
 
 const s3 = new S3Client({
   region: "us-west-2",
@@ -9,21 +11,45 @@ const s3 = new S3Client({
   },
 })
 
-export const uploadImage = async (bucketName, key, body) => {
-  const params = {
-    Bucket: bucketName,
-    Key: key,
-    Body: body,
-    ContentType: "image/jpeg",
-  }
+export const uploadImage = async (image, folder) => {
+  const base64Data = image.split(",")[1]
+  const imageBuffer = Buffer.from(base64Data, "base64")
 
-  const putObjectCommand = new PutObjectCommand(params)
+  const imageKeyBase = `${folder}/${uuid()}`
 
   try {
-    const data = await s3.send(putObjectCommand)
-    return data
+    const originalBuffer = await sharp(imageBuffer).webp().toBuffer()
+
+    const sizes = [
+      { suffix: "/s", height: 200 },
+      { suffix: "/m", height: 500 },
+      { suffix: "/o", height: null },
+    ]
+
+    const uploadPromises = sizes.map(async ({ suffix, height }) => {
+      const resizedBuffer = height
+        ? await sharp(originalBuffer).resize({ height }).webp().toBuffer() // Resize based on height
+        : originalBuffer // Use original if no resizing
+
+      const imageKey = `${imageKeyBase}${suffix}.webp`
+      const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: imageKey,
+        Body: resizedBuffer,
+        ContentType: "image/webp", // WebP content type
+      }
+
+      const putObjectCommand = new PutObjectCommand(params)
+      await s3.send(putObjectCommand)
+
+      return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+    })
+
+    const imageUrls = await Promise.all(uploadPromises)
+
+    return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
   } catch (error) {
-    console.error("Error uploading image:", error)
+    console.error("Error processing or uploading image:", error)
     throw error
   }
 }
