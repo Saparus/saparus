@@ -26,13 +26,12 @@ export const getAllNewsItems = async (event) => {
   try {
     const { Items: newsItems } = await db.send(scanCommand)
 
-    const translatedResult = newsItems.map((newsItem) => {
-      const tempNewsItem = { ...newsItem }
-      tempNewsItem.text = newsItem.text[languageToApply]
-      tempNewsItem.title = newsItem.title[languageToApply]
-
-      return tempNewsItem
-    })
+    const translatedResult = newsItems.map((newsItem) => ({
+      ...newsItem,
+      text: newsItem.text[languageToApply],
+      title: newsItem.title[languageToApply],
+      images: newsItem.images.map((image) => image + "/s.webp"),
+    }))
 
     translatedResult.sort((a, b) => b.date - a.date)
 

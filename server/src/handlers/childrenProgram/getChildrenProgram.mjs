@@ -49,6 +49,7 @@ export const getChildrenProgram = async (event) => {
         ...program,
         title: program.title[languageToApply],
         text: program.text[languageToApply],
+        image: program.image + "/o.webp",
       }),
     }
   } catch (error) {

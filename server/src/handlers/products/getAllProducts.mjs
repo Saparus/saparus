@@ -45,14 +45,12 @@ export const getAllProducts = async (event) => {
         })
       }
     } else {
-      productsToSend = products.map((product) => {
-        const tempProductItem = { ...product }
-
-        tempProductItem.name = product.name[languageToApply]
-        tempProductItem.description = product.description[languageToApply]
-
-        return tempProductItem
-      })
+      productsToSend = products.map((product) => ({
+        ...product,
+        name: product.name[languageToApply],
+        description: product.description[languageToApply],
+        images: product.images.map((image) => image + "/s.webp"),
+      }))
     }
 
     const startIndex = (page - 1) * limit

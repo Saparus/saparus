@@ -52,6 +52,7 @@ export const getNewsItem = async (event) => {
         ...newsItem,
         title: title[languageToApply],
         text: text[languageToApply],
+        image: newsItem.image + "/o.webp",
       }),
     }
   } catch (error) {

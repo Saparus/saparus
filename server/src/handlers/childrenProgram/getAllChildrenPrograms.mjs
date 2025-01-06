@@ -31,6 +31,7 @@ export const getAllChildrenPrograms = async (event) => {
       ...program,
       text: program.text[languageToApply],
       title: program.title[languageToApply],
+      images: program.images.map((image) => image + "/m.webp"),
     }))
 
     translatedPrograms.sort((a, b) => b.date - a.date)

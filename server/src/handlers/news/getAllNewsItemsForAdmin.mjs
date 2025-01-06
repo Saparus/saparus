@@ -31,6 +31,11 @@ export const getAllNewsItemsForAdmin = async (event) => {
     const endIndex = startIndex + limit
     const paginatedResult = newsItems.slice(startIndex, endIndex)
 
+    const filteredResult = paginatedResult.map((newsItem) => ({
+      ...newsItem,
+      images: newsItem.images.map((image) => image + "/s.webp"),
+    }))
+
     return {
       statusCode: 200,
       headers: {
@@ -38,7 +43,7 @@ export const getAllNewsItemsForAdmin = async (event) => {
         "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({
-        articles: paginatedResult,
+        articles: filteredResult,
         pagination: {
           currentPage: page,
           hasNextPage: endIndex < newsItems.length,

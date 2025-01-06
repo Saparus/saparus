@@ -32,7 +32,7 @@ export const getNewsItemForAdmin = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(newsItem),
+      body: JSON.stringify({ ...newsItem, image: newsItem.image + "/o.webp" }),
     }
   } catch (error) {
     console.error("Error fetching news item", error)

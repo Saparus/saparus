@@ -29,6 +29,11 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
     const endIndex = startIndex + limit
     const paginatedResult = programs.slice(startIndex, endIndex)
 
+    const filteredPrograms = paginatedResult.map((program) => ({
+      ...program,
+      images: program.images.map((image) => image + "/m.webp"),
+    }))
+
     return {
       statusCode: 200,
       headers: {
@@ -36,7 +41,7 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
         "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({
-        articles: paginatedResult,
+        articles: filteredPrograms,
         pagination: {
           currentPage: page,
           hasNextPage: endIndex < programs.length,

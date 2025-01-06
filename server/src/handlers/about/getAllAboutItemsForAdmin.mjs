@@ -11,13 +11,18 @@ export const getAllAboutItemsForAdmin = async (event) => {
   try {
     const { Items: aboutItems } = await db.send(scanCommand)
 
+    const filteredAboutItems = aboutItems.map((aboutItem) => ({
+      ...aboutItem,
+      image: aboutItem.image + "/m.webp",
+    }))
+
     return {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(aboutItems),
+      body: JSON.stringify(filteredAboutItems),
     }
   } catch (error) {
     console.error(error)

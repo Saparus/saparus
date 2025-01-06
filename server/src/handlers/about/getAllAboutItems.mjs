@@ -31,6 +31,7 @@ export const getAllAboutItems = async (event) => {
       ...aboutItem,
       text: aboutItem.text[languageToApply],
       title: aboutItem.title[languageToApply],
+      image: aboutItem.image + "/m.webp",
     }))
 
     return {
