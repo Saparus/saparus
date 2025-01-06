@@ -47,7 +47,7 @@ export const uploadImage = async (image, folder) => {
 
     const imageUrls = await Promise.all(uploadPromises)
 
-    return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKey}`
+    return `https://${process.env.BUCKET_NAME}.s3.amazonaws.com/${imageKeyBase}`
   } catch (error) {
     console.error("Error processing or uploading image:", error)
     throw error
