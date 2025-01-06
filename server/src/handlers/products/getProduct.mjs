@@ -56,7 +56,7 @@ export const getProduct = async (event) => {
         ...product,
         name: name[languageToApply],
         description: description[languageToApply],
-        images: productToSend.images.map((image) => image + "/o.webp"),
+        images: product.images.map((image) => image + "/o.webp"),
       }),
     }
   } catch (error) {

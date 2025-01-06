@@ -45,7 +45,7 @@ export const getProductForAdmin = async (event) => {
       },
       body: JSON.stringify({
         ...product,
-        images: productToSend.images.map((image) => image + "/o.webp"),
+        images: product.images.map((image) => image + "/o.webp"),
       }),
     }
   } catch (error) {
