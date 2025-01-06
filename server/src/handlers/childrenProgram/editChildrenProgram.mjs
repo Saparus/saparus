@@ -25,7 +25,7 @@ export const editChildrenProgram = async (event) => {
       ? await Promise.all(
           images.map(async (image) => {
             if (image.startsWith("http://") || image.startsWith("https://")) {
-              return image
+              return image.replace(/(\/s|\/m|\/o)\.webp$/, "")
             } else {
               return uploadImage(image, "children-program")
             }
