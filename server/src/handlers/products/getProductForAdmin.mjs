@@ -43,7 +43,10 @@ export const getProductForAdmin = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ ...product, image: product.image + "/o.webp" }),
+      body: JSON.stringify({
+        ...product,
+        images: productToSend.images.map((image) => image + "/o.webp"),
+      }),
     }
   } catch (error) {
     console.error("Error fetching product", error)
