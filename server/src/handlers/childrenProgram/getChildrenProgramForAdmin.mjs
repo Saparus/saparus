@@ -43,7 +43,10 @@ export const getChildrenProgramForAdmin = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ ...program, image: program.image + "/o.webp" }),
+      body: JSON.stringify({
+        ...program,
+        images: newsItem.images.map((image) => image + "/o.webp"),
+      }),
     }
   } catch (error) {
     console.log(error)

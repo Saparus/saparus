@@ -30,7 +30,7 @@ export const getAllNewsItems = async (event) => {
       ...newsItem,
       text: newsItem.text[languageToApply],
       title: newsItem.title[languageToApply],
-      images: newsItem.images.map((image) => image + "/s.webp"),
+      images: newsItem.images.map((image) => image + "/m.webp"),
     }))
 
     translatedResult.sort((a, b) => b.date - a.date)

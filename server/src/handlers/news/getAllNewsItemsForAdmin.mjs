@@ -33,7 +33,7 @@ export const getAllNewsItemsForAdmin = async (event) => {
 
     const filteredResult = paginatedResult.map((newsItem) => ({
       ...newsItem,
-      images: newsItem.images.map((image) => image + "/s.webp"),
+      images: newsItem.images.map((image) => image + "/m.webp"),
     }))
 
     return {

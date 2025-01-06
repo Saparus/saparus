@@ -49,7 +49,7 @@ export const getChildrenProgram = async (event) => {
         ...program,
         title: program.title[languageToApply],
         text: program.text[languageToApply],
-        image: program.image + "/o.webp",
+        images: program.images.map((image) => image + "/o.webp"),
       }),
     }
   } catch (error) {
