@@ -330,6 +330,10 @@
 
 @media screen and (max-width: 960px) {
   .home {
+    .first-article {
+      display: block !important;
+    }
+
     .hero {
       height: 45dvh;
 

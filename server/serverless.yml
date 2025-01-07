@@ -16,6 +16,7 @@ provider:
     ACCESS_KEY: ${env:ACCESS_KEY}
 
 plugins:
+  - serverless-bundle
   - serverless-iam-roles-per-function
   - serverless-prune-plugin
 
@@ -23,6 +24,15 @@ custom:
   prune:
     automatic: true
     number: 3
+   bundle:
+    caching: true                  
+    concurrency: 5                 
+    stats: false                   
+    linting: true                  
+    generateStatsFiles: false      
+    esbuild: false                 
+    disableForkTsChecker: false    
+    packager: npm                  
 
 functions:
   # Authentication
