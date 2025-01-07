@@ -448,13 +448,12 @@ functions:
           method: get
           cors: true
     package:
-    exclude:
+      exclude:
         - "**/**"
       include:
         - src/handlers/products/getProduct.mjs
         - src/util/db.mjs
         - node_modules/@aws-sdk/lib-dynamodb
-      
 
     iamRoleStatements:
       - Effect: "Allow"
