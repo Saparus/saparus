@@ -446,9 +446,11 @@ functions:
           cors: true
     package:
       include:
-        - ./src/handlers/products/getProduct.mjs
-        - ./util/db.mjs
-        - ./node_modules/@aws-sdk/lib-dynamodb
+        - src/handlers/products/getProduct.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+      exclude:
+        - src/**
 
     iamRoleStatements:
       - Effect: "Allow"
