@@ -20,6 +20,9 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-prune-plugin
 
+package:
+  individually: true
+
 custom:
   prune:
     automatic: true
@@ -445,12 +448,13 @@ functions:
           method: get
           cors: true
     package:
+    exclude:
+        - "**/**"
       include:
         - src/handlers/products/getProduct.mjs
         - src/util/db.mjs
         - node_modules/@aws-sdk/lib-dynamodb
-      exclude:
-        - src/**
+      
 
     iamRoleStatements:
       - Effect: "Allow"
