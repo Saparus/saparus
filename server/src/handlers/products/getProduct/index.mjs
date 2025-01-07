@@ -1,12 +1,10 @@
 import { GetCommand } from "@aws-sdk/lib-dynamodb"
 
-import { db } from "../../util/db.mjs"
+import { db } from "../../../util/db.mjs"
 
 export const getProduct = async (event) => {
   const { language } = event.queryStringParameters
   const { id } = event.pathParameters
-
-  console.log({ id, language })
 
   if (!language || !id) {
     return {
