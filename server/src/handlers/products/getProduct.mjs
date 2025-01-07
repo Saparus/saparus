@@ -1,6 +1,6 @@
 import { GetCommand } from "@aws-sdk/lib-dynamodb"
 
-import { db } from "../../../util/db.mjs"
+import { db } from "../../util/db.mjs"
 
 export const getProduct = async (event) => {
   const { language } = event.queryStringParameters

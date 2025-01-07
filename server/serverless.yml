@@ -53,6 +53,9 @@ functions:
           path: auth/login
           method: post
           cors: true
+    package:
+      include:
+        - ./src/handlers/auth/loginUser.mjs
 
   # About
   getAbout:
@@ -433,7 +436,7 @@ functions:
         Resource: !GetAtt ProductsTable.Arn
 
   getProduct:
-    handler: src/handlers/products/getProduct/index.getProduct
+    handler: src/handlers/products/getProduct.getProduct
     name: get-product
     iamRoleStatementsName: get-product-role
     events:
@@ -441,6 +444,12 @@ functions:
           path: products/{id}
           method: get
           cors: true
+    package:
+      include:
+        - ./src/handlers/products/getProduct.mjs
+        - ./util/db.mjs
+        - ./node_modules/@aws-sdk/lib-dynamodb
+
     iamRoleStatements:
       - Effect: "Allow"
         Action:

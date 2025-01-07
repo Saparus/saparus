@@ -1,9 +1,0 @@
-{
-  "name": "get-product-lambda",
-  "version": "1.0.0",
-  "description": "Lambda function to retrieve product details",
-  "main": "index.mjs",
-  "dependencies": {
-    "@aws-sdk/lib-dynamodb": "^3.103.0"
-  }
-}
