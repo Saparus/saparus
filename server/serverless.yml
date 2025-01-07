@@ -526,26 +526,6 @@ functions:
           - "dynamodb:GetItem"
         Resource: !GetAtt ProductsTable.Arn
 
-  getAllProductsForAdmin:
-    handler: src/handlers/products/getAllProductsForAdmin.getAllProductsForAdmin
-    name: get-all-products-admin
-    iamRoleStatementsName: get-all-products-admin-role
-    events:
-      - http:
-          path: products/admin
-          method: get
-          cors: true
-          authorizer:
-            type: TOKEN
-            name: verify-api-key
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 1800
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "dynamodb:Scan"
-        Resource: !GetAtt ProductsTable.Arn
-
 resources:
   Resources:
     GatewayResponseDefault4XX:
