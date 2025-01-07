@@ -433,7 +433,7 @@ functions:
         Resource: !GetAtt ProductsTable.Arn
 
   getProduct:
-    handler: src/handlers/products/getProduct.getProduct
+    handler: src/handlers/products/getProduct/index.getProduct
     name: get-product
     iamRoleStatementsName: get-product-role
     events:
