@@ -1,4 +1,5 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 
 export const getAllAboutItemsForAdmin = async (event) => {
