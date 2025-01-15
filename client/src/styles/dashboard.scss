@@ -59,6 +59,13 @@
         }
       }
 
+      .login-error {
+        color: $warning-red;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-left: 0.25rem;
+      }
+
       .admin-auth-input {
         display: flex;
         flex-direction: column;

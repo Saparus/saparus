@@ -36,3 +36,17 @@ jobs:
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           API_KEY: ${{ secrets.API_KEY }}
           ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+
+      - name: Install Amplify CLI
+        run: npm install -g @aws-amplify/cli
+
+      - name: Deploy React frontend to Amplify
+        run: |
+          cd ../../client
+          npm install
+          amplify init --yes --amplify ${{ secrets.AMPLIFY_CONFIG }}
+          amplify push --yes
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          REACT_APP_SERVER_URL: ${{ secrets.SERVER_URL }}

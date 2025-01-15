@@ -54,7 +54,7 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
               id="authCode"
               name="authCode"
               placeholder={t("access key")}
-              type="text"
+              type="password"
             />
           </label>
           {error?.length > 0 ? <div className="login-error">{error}</div> : ""}

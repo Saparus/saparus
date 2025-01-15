@@ -147,7 +147,8 @@
     "name": "Name",
     "description": "Description",
     "title": "Title",
-    "text": "Text"
+    "text": "Text",
+    "access key": "Access Key"
   },
 
   "children program": {

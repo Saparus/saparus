@@ -142,7 +142,8 @@
     "name": "имя",
     "description": "описание",
     "title": "название",
-    "text": "текст"
+    "text": "текст",
+    "access key": "Access Key"
   },
 
   "children program": {
