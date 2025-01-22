@@ -73,6 +73,7 @@ functions:
         include:
           - src/handlers/categories/getCategories.mjs
           - src/util/db.mjs 
+          - node_modules/@aws-sdk/lib-dynamodb
       iamRoleStatements:
         - Effect: "Allow"
           Action: 
@@ -80,22 +81,23 @@ functions:
           Resource: !GetAtt CategoriesTable.Arn
 
   editCategories: 
-   handler: src/handlers/categories/editCategories.editCategories
-    name: update-categories
-    events:
-      - http:
-          path: categories
-          method: patch
-          cors: true
-          authorizer:
-            type: TOKEN 
-            name: verify-api-key 
-            identitySource: method.request.header.Authorization 
-            resultTtlInSeconds: 1800 
+    handler: src/handlers/categories/editCategories.editCategories
+      name: update-categories
+      events:
+        - http:
+            path: categories
+            method: patch
+            cors: true
+            authorizer:
+              type: TOKEN 
+              name: verify-api-key 
+              identitySource: method.request.header.Authorization 
+              resultTtlInSeconds: 1800 
     package:
       include:
         - src/handlers/categories/updateCategories.mjs
         - src/util/db.mjs 
+        - node_modules/@aws-sdk/lib-dynamodb
     iamRoleStatements:
       - Effect: "Allow"
         Action: 
