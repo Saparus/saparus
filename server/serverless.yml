@@ -72,37 +72,37 @@ functions:
     package:
       include:
         - src/handlers/categories/getCategories.mjs
-        - src/util/db.mjs 
+        - src/util/db.mjs
         - node_modules/@aws-sdk/lib-dynamodb
     iamRoleStatements:
       - Effect: "Allow"
-        Action: 
+        Action:
           - "dynamodb:GetItem"
         Resource: !GetAtt CategoriesTable.Arn
 
-  editCategories: 
+  editCategories:
     handler: src/handlers/categories/editCategories.editCategories
-    name: update-categories
+    name: edit-categories
     events:
       - http:
           path: categories
           method: patch
           cors: true
           authorizer:
-            type: TOKEN 
-            name: verify-api-key 
-            identitySource: method.request.header.Authorization 
-            resultTtlInSeconds: 1800 
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
     package:
       include:
         - src/handlers/categories/updateCategories.mjs
-        - src/util/db.mjs 
+        - src/util/db.mjs
         - node_modules/@aws-sdk/lib-dynamodb
     iamRoleStatements:
       - Effect: "Allow"
-        Action: 
-          - "dynamodb:UpdateItem"
-        Resource: !GetAtt CategoriesTable.Arn 
+        Action:
+          - "dynamodb:PutCommand"
+        Resource: !GetAtt CategoriesTable.Arn
 
   # About
   getAbout:
@@ -566,33 +566,13 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-          - "dynamodb:scan"
+          - "dynamodb:GetCommand"
           - "s3:PutObject"
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - !GetAtt CategoriesTable.Arn 
+          - !GetAtt CategoriesTable.Arn
           - arn:aws:s3:::saparus-images/*
-
-  getCategories:
-    handler: src/handlers/products/getCategories.getCategories
-    name: get-categories
-    events:
-      - http:
-          path: products/categories
-          method: get
-          cors: true
-    package:
-      include:
-        - src/handlers/products/getCategories.mjs
-        - src/util/db.mjs
-        - src/util/summarizeCategoryData.mjs
-        - node_modules/@aws-sdk/lib-dynamodb
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "dynamodb:Scan"
-        Resource: !GetAtt ProductsTable.Arn
 
   getProduct:
     handler: src/handlers/products/getProduct.getProduct
@@ -639,12 +619,12 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:UpdateItem"
-          - "dynamodb:scan"
+          - "dynamodb:GetCommand"
           - "s3:PutObject"
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
-          - !GetAtt CategoriesTable.Arn 
+          - !GetAtt CategoriesTable.Arn
           - arn:aws:s3:::saparus-images/*
 
   deleteProduct:
