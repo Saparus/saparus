@@ -1,6 +1,7 @@
 import { PutCommand } from "@aws-sdk/lib-dynamodb"
 
 import { uploadImage } from "../../util/s3.mjs"
+import { db } from "../../util/db.mjs"
 
 export const editCategories = async (event) => {
   try {

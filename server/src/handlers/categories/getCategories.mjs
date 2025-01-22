@@ -1,5 +1,7 @@
 import { GetCommand } from "@aws-sdk/lib-dynamodb"
 
+import { db } from "../../util/db.mjs"
+
 export const getCategories = async (event) => {
   try {
     const params = {
