@@ -79,6 +79,8 @@ export const createProduct = async (event) => {
       }
     )
 
+    console.log({ productCategories })
+
     const categoryParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
@@ -88,6 +90,8 @@ export const createProduct = async (event) => {
 
     const getCommand = new GetCommand(categoryParams)
     const { Item } = await db.send(getCommand)
+
+    console.log({ Item })
 
     const globalCategories = Item.categories || {}
 
