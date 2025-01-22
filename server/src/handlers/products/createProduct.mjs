@@ -46,6 +46,8 @@ export const createProduct = async (event) => {
       },
     }
 
+    console.log({ categories })
+
     const putCommand = new PutCommand(params)
     await db.send(putCommand)
 
@@ -89,6 +91,8 @@ export const createProduct = async (event) => {
 
     const globalCategories = Item.categories || {}
 
+    console.log({ globalCategories })
+
     Object.entries(globalCategories.categories).forEach(
       ([language, globalCategoriesForLanguage]) => {
         Object.entries(globalCategoriesForLanguage).forEach(
@@ -115,6 +119,8 @@ export const createProduct = async (event) => {
         )
       }
     )
+
+    console.log({ globalCategories })
 
     return {
       statusCode: 201,
