@@ -84,7 +84,7 @@ export const createProduct = async (event) => {
     const categoryParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
-        id: categories,
+        id: "categories",
       },
     }
 
