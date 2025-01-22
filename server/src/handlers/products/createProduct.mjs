@@ -85,32 +85,36 @@ export const createProduct = async (event) => {
     }
 
     const getCommand = new GetCommand(categoryParams)
-    const categoryData = await db.send(getCommand)
+    const { Item: categoryData } = await db.send(getCommand)
 
-    const globalCategories = categoryData.Item || {}
+    const globalCategories = Item.categories || {}
 
-    Object.entries(globalCategories).forEach(([language, globalCategoriesForLanguage]) => {
-      Object.entries(globalCategoriesForLanguage).forEach(([categoryKey, categoryItem], index) => {
-        if (!productCategories.categoryKeys.includes(categoryKey)) {
-          // if a product with a category that does not exist in the global categories list was created, this category will be added to it
-          globalCategories[language][categoryKey] = {
-            [productCategories[index].items.key]: productCategories[index].items.value,
+    Object.entries(globalCategories.categories).forEach(
+      ([language, globalCategoriesForLanguage]) => {
+        Object.entries(globalCategoriesForLanguage).forEach(
+          ([categoryKey, categoryItem], index) => {
+            if (!productCategories.categoryKeys.includes(categoryKey)) {
+              // if a product with a category that does not exist in the global categories list was created, this category will be added to it
+              globalCategories[language][categoryKey] = {
+                [productCategories[index].items.key]: productCategories[index].items.value,
+              }
+            } else {
+              // if a product with a category that exists in the global categories list was created
+              if (
+                !globalCategories[language][categoryKey][productCategories[index].items.key].some(
+                  (item) => item.name === productCategories[index].items.value.name
+                )
+              ) {
+                // if a newly created product has a value that does not exist in the global categories list, it will add this value to it
+                globalCategories[language][categoryKey][productCategories[index].items.key].push(
+                  productCategories[index].items.value
+                )
+              }
+            }
           }
-        } else {
-          // if a product with a category that exists in the global categories list was created
-          if (
-            !globalCategories[language][categoryKey][productCategories[index].items.key].some(
-              (item) => item.name === productCategories[index].items.value.name
-            )
-          ) {
-            // if a newly created product has a value that does not exist in the global categories list, it will add this value to it
-            globalCategories[language][categoryKey][productCategories[index].items.key].push(
-              productCategories[index].items.value
-            )
-          }
-        }
-      })
-    })
+        )
+      }
+    )
 
     return {
       statusCode: 201,

@@ -1,4 +1,5 @@
-import { putItem } from "../../util/db.mjs"
+import { PutCommand } from "@aws-sdk/lib-dynamodb"
+
 import { uploadImage } from "../../util/s3.mjs"
 
 export const editCategories = async (event) => {
@@ -35,7 +36,8 @@ export const editCategories = async (event) => {
       },
     }
 
-    await putItem(params)
+    const putCommand = new PutCommand(params)
+    await db.send(putCommand)
 
     return {
       statusCode: 200,
