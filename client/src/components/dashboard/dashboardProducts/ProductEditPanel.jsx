@@ -36,7 +36,7 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
-  const [newCategory, setNewCategory] = useState({ key: "", value: "" })
+  // const [newCategory, setNewCategory] = useState({ key: "", value: "" })
   const [isAbleToSave, setIsAbleToSave] = useState(false)
 
   const [activeFields, setActiveFields] = useState({
@@ -285,12 +285,6 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
               onChange={handleImageUpload}
             />
           </label>
-          {/* <button
-            className="button plus-button"
-            onClick={() => handleAddEmptyImage()}
-          >
-            <PlusIcon />
-          </button> */}
           <button
             disabled={isLoading}
             onClick={() => {
@@ -498,17 +492,16 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
     const renderCategories = () => {
       const { categories } = currentProduct
 
-      const categoryArray = Object.entries(categories).map(([key, value]) => ({ key, value }))
+      // const categoryArray = Object.entries(categories).map(([key, value]) => ({ key, value }))
 
       return (
         <EditCategoryList
-          categories={categoryArray}
+          categories={categories}
           isActive={activeFields.categories}
-          newCategory={newCategory}
-          setNewCategory={setNewCategory}
           setCurrentProduct={setCurrentProduct}
           handleFieldEditStart={handleFieldEditStart}
           handleFieldEditFinish={handleFieldEditFinish}
+          selectedLanguage={selectedLanguage}
         />
       )
     }

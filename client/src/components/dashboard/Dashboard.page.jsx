@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
 
@@ -6,6 +6,8 @@ import AuthenticationPanel from "./AdminAuthenticationPanel"
 import DashboardHeader from "./DashboardHeader"
 
 const Dashboard = () => {
+  const navigate = useNavigate()
+
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [accountInfo, setAccountInfo] = useState(null)
 
@@ -20,6 +22,8 @@ const Dashboard = () => {
     localStorage.removeItem("accountInfo")
     setAccountInfo(null)
     setIsAuthorized(false)
+
+    navigate("/")
 
     if (showToast) toast.success("You've successfully logged out.")
   }

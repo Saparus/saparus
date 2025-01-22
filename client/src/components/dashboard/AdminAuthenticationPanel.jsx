@@ -44,7 +44,7 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
           {t("go back")}{" "}
         </Link>
         <div className="admin-auth-input">
-          <p className="login-title">{t("admin login")}</p>
+          <h2 className="login-title">{t("admin login")}</h2>
           <label htmlFor="authCode">
             <input
               onChange={(e) => {

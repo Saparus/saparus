@@ -60,6 +60,48 @@ functions:
       include:
         - ./src/handlers/auth/loginUser.mjs
 
+  # Categories
+  getCategories:
+    handler: src/handlers/categories/getCategories.getCategories
+      name: get-categories
+      events:
+        - http:
+            path: categories
+            method: get
+            cors: true
+      package:
+        include:
+          - src/handlers/categories/getCategories.mjs
+          - src/util/db.mjs 
+      iamRoleStatements:
+        - Effect: "Allow"
+          Action: 
+            - "dynamodb:GetItem"
+          Resource: !GetAtt CategoriesTable.Arn
+
+  editCategories: 
+   handler: src/handlers/categories/editCategories.editCategories
+    name: update-categories
+    events:
+      - http:
+          path: categories
+          method: patch
+          cors: true
+          authorizer:
+            type: TOKEN 
+            name: verify-api-key 
+            identitySource: method.request.header.Authorization 
+            resultTtlInSeconds: 1800 
+    package:
+      include:
+        - src/handlers/categories/updateCategories.mjs
+        - src/util/db.mjs 
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: 
+          - "dynamodb:UpdateItem"
+        Resource: !GetAtt CategoriesTable.Arn 
+
   # About
   getAbout:
     handler: src/handlers/about/getAllAboutItems.getAllAboutItems
@@ -522,10 +564,12 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
+          - "dynamodb:scan"
           - "s3:PutObject"
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
+          - !GetAtt CategoriesTable.Arn 
           - arn:aws:s3:::saparus-images/*
 
   getCategories:
@@ -593,10 +637,12 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:UpdateItem"
+          - "dynamodb:scan"
           - "s3:PutObject"
           - "s3:DeleteObject"
         Resource:
           - !GetAtt ProductsTable.Arn
+          - !GetAtt CategoriesTable.Arn 
           - arn:aws:s3:::saparus-images/*
 
   deleteProduct:
@@ -722,6 +768,18 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ProductsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    CategoriesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: CategoriesTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

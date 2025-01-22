@@ -29,7 +29,8 @@
     z-index: 99999;
 
     .admin-auth-panel {
-      width: 18rem;
+      width: 90%;
+      max-width: 350px;
       z-index: 10000;
       position: absolute;
       background-color: white;
@@ -38,7 +39,7 @@
       top: 40vh;
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
-      padding: 0.5rem;
+      padding: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -74,6 +75,7 @@
 
         .login-title {
           color: $primary-color;
+          text-align: center;
           font-weight: 600;
           padding-left: 0.25rem;
           margin-bottom: 0.5rem;
@@ -109,7 +111,8 @@
         }
 
         .submit-code {
-          background-color: $primary-color;
+          margin-top: 0.75rem;
+          background-color: $success_green;
           border-radius: 0.5rem;
           color: $text-color;
           font-family: $main-font;
@@ -121,7 +124,7 @@
           transition: background-color $animation_duration $animation;
 
           &:hover {
-            background-color: $primary-color-active;
+            background-color: $success_green_active;
           }
         }
       }
@@ -970,6 +973,100 @@
 
   .select-options-list {
     margin-top: 0.5rem;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($dark-text-color, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-content {
+    background-color: $base-color;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: $shadow;
+    width: 90%;
+    max-width: 500px;
+    font-family: $main-font;
+
+    h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      text-align: center;
+      color: $dark-text-color;
+    }
+
+    .language-section {
+      margin-bottom: 1rem;
+
+      h3 {
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+        color: $dark-text-color;
+      }
+
+      .category-key,
+      .category-value {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid $gray;
+        border-radius: 4px;
+        font-family: $main-font;
+        color: $dark-text-color;
+
+        &:focus {
+          border-color: $primary-color;
+          outline: none;
+        }
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+
+      .save-button {
+        flex: 1;
+        padding: 0.5rem;
+        background-color: $success_green;
+        color: $text-color;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: $shadow;
+        transition: background-color $animation_duration $animation,
+          box-shadow $animation_duration $animation;
+
+        &:hover {
+          background-color: $success_green_active;
+          box-shadow: $shadow_active;
+        }
+      }
+
+      .cancel-button {
+        flex: 1;
+        padding: 0.5rem;
+        background-color: $warning_red;
+        color: $text-color;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color $animation_duration $animation;
+
+        &:hover {
+          background-color: $warning_red_active;
+        }
+      }
+    }
   }
 }
 

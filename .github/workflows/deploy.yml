@@ -33,6 +33,7 @@ jobs:
           CHILDREN_PROGRAMS_TABLE: ${{ secrets.CHILDREN_PROGRAMS_TABLE }}
           NEWS_TABLE: ${{ secrets.NEWS_TABLE }}
           PRODUCTS_TABLE: ${{ secrets.PRODUCTS_TABLE }}
+          CATEGORIES_TABLE: "CategoriesTable"
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           API_KEY: ${{ secrets.API_KEY }}
           ACCESS_KEY: ${{ secrets.ACCESS_KEY }}

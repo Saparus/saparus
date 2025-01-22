@@ -15,6 +15,7 @@ const DashboardProductListPage = () => {
       <Companies
         setFilter={setFilter}
         selectedCompany={filter?.categories?.company}
+        apiKey={apiKey}
       />
       <div className="dashboard-products">
         <Categories

@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid"
-import { PutCommand } from "@aws-sdk/lib-dynamodb"
+import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
@@ -48,6 +48,69 @@ export const createProduct = async (event) => {
 
     const putCommand = new PutCommand(params)
     await db.send(putCommand)
+
+    const productCategories = Object.entries(categories).reduce(
+      (acc, [language, categoriesForLanguage]) => {
+        Object.entries(categoriesForLanguage).forEach(([categoryKey, categoryItem]) => {
+          Object.entries(categoryItem).forEach(([key, value]) => {
+            if (!acc[categoryKey]) {
+              acc[categoryKey] = {
+                items: [],
+                languages: [],
+                categoryKeys: [],
+              }
+            }
+
+            acc.languages.push(language)
+            acc.categoryKeys.push(categoryKey)
+
+            acc[categoryKey].items.push(key)
+            acc[categoryKey].items.push(value)
+          })
+        })
+        return acc
+      },
+      {
+        languages: [],
+        categoryKeys: [],
+        items: [],
+      }
+    )
+
+    const categoryParams = {
+      TableName: process.env.CATEGORIES_TABLE,
+      Key: {
+        id: categories,
+      },
+    }
+
+    const getCommand = new GetCommand(categoryParams)
+    const categoryData = await db.send(getCommand)
+
+    const globalCategories = categoryData.Item || {}
+
+    Object.entries(globalCategories).forEach(([language, globalCategoriesForLanguage]) => {
+      Object.entries(globalCategoriesForLanguage).forEach(([categoryKey, categoryItem], index) => {
+        if (!productCategories.categoryKeys.includes(categoryKey)) {
+          // if a product with a category that does not exist in the global categories list was created, this category will be added to it
+          globalCategories[language][categoryKey] = {
+            [productCategories[index].items.key]: productCategories[index].items.value,
+          }
+        } else {
+          // if a product with a category that exists in the global categories list was created
+          if (
+            !globalCategories[language][categoryKey][productCategories[index].items.key].some(
+              (item) => item.name === productCategories[index].items.value.name
+            )
+          ) {
+            // if a newly created product has a value that does not exist in the global categories list, it will add this value to it
+            globalCategories[language][categoryKey][productCategories[index].items.key].push(
+              productCategories[index].items.value
+            )
+          }
+        }
+      })
+    })
 
     return {
       statusCode: 201,
