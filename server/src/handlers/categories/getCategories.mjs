@@ -12,9 +12,11 @@ export const getCategories = async (event) => {
     }
 
     const getCommand = new GetCommand(params)
-    const { Item: categories } = await db.send(getCommand)
+    const { Item } = await db.send(getCommand)
 
-    if (!Item) {
+    const categories = Item?.categories
+
+    if (!categories) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "Categories not found" }),
@@ -23,7 +25,7 @@ export const getCategories = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(Item.categories),
+      body: JSON.stringify(categories),
     }
   } catch (error) {
     console.error("Error fetching categories:", error)

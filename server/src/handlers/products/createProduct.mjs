@@ -85,7 +85,7 @@ export const createProduct = async (event) => {
     }
 
     const getCommand = new GetCommand(categoryParams)
-    const { Item: categoryData } = await db.send(getCommand)
+    const { Item } = await db.send(getCommand)
 
     const globalCategories = Item.categories || {}
 
