@@ -51,6 +51,7 @@ export const createProduct = async (event) => {
     const putCommand = new PutCommand(params)
     await db.send(putCommand)
 
+    // Convert input categories to product categories format
     const productCategories = Object.entries(categories || {}).reduce(
       (acc, [language, categoriesForLanguage]) => {
         Object.entries(categoriesForLanguage || {}).forEach(([categoryKey, categoryItem]) => {
@@ -66,8 +67,7 @@ export const createProduct = async (event) => {
             acc.languages.push(language)
             acc.categoryKeys.push(categoryKey)
 
-            acc[categoryKey].items.push(key)
-            acc[categoryKey].items.push(value)
+            acc[categoryKey].items.push({ key, value })
           })
         })
         return acc
@@ -97,32 +97,30 @@ export const createProduct = async (event) => {
 
     console.log(JSON.stringify({ globalCategories }, null, 2))
 
-    Object.entries(globalCategories.categories || {}).forEach(
-      ([language, globalCategoriesForLanguage]) => {
-        Object.entries(globalCategoriesForLanguage || {}).forEach(
-          ([categoryKey, categoryItem], index) => {
-            if (!productCategories.categoryKeys.includes(categoryKey)) {
-              // if a product with a category that does not exist in the global categories list was created, this category will be added to it
-              globalCategories[language][categoryKey] = {
-                [productCategories[index].items.key]: productCategories[index].items.value,
-              }
-            } else {
-              // if a product with a category that exists in the global categories list was created
-              if (
-                !globalCategories[language][categoryKey][productCategories[index].items.key].some(
-                  (item) => item.name === productCategories[index].items.value.name
-                )
-              ) {
-                // if a newly created product has a value that does not exist in the global categories list, it will add this value to it
-                globalCategories[language][categoryKey][productCategories[index].items.key].push(
-                  productCategories[index].items.value
-                )
-              }
-            }
-          }
-        )
+    // Merge product categories into globalCategories
+    Object.entries(categories || {}).forEach(([language, categoriesForLanguage]) => {
+      if (!globalCategories[language]) {
+        globalCategories[language] = {}
       }
-    )
+
+      Object.entries(categoriesForLanguage || {}).forEach(([categoryKey, categoryItem]) => {
+        if (!globalCategories[language][categoryKey]) {
+          globalCategories[language][categoryKey] = {}
+        }
+
+        Object.entries(categoryItem || {}).forEach(([key, value]) => {
+          if (!globalCategories[language][categoryKey][key]) {
+            globalCategories[language][categoryKey][key] = []
+          }
+
+          // Add new value only if it doesn't exist
+          const existingItems = globalCategories[language][categoryKey][key]
+          if (!existingItems.some((item) => item.name === value.name)) {
+            existingItems.push(value)
+          }
+        })
+      })
+    })
 
     console.log(JSON.stringify({ globalCategories }, null, 2))
 
