@@ -102,7 +102,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:PutCommand"
+          - "dynamodb:PutItem"
         Resource: !GetAtt CategoriesTable.Arn
 
   # About
@@ -567,7 +567,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
-          - "dynamodb:GetCommand"
+          - "dynamodb:GetItem"
           - "s3:PutObject"
           - "s3:DeleteObject"
         Resource:
