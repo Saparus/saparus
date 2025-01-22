@@ -46,7 +46,7 @@ export const createProduct = async (event) => {
       },
     }
 
-    console.log({ categories })
+    console.log(JSON.stringify({ categories }, null, 2))
 
     const putCommand = new PutCommand(params)
     await db.send(putCommand)
@@ -79,7 +79,7 @@ export const createProduct = async (event) => {
       }
     )
 
-    console.log({ productCategories })
+    console.log(JSON.stringify({ productCategories }, null, 2))
 
     const categoryParams = {
       TableName: process.env.CATEGORIES_TABLE,
@@ -91,11 +91,11 @@ export const createProduct = async (event) => {
     const getCommand = new GetCommand(categoryParams)
     const { Item } = await db.send(getCommand)
 
-    console.log({ Item })
+    console.log(JSON.stringify({ Item }, null, 2))
 
     const globalCategories = Item.categories || {}
 
-    console.log({ globalCategories })
+    console.log(JSON.stringify({ globalCategories }, null, 2))
 
     Object.entries(globalCategories.categories || {}).forEach(
       ([language, globalCategoriesForLanguage]) => {
@@ -124,7 +124,7 @@ export const createProduct = async (event) => {
       }
     )
 
-    console.log({ globalCategories })
+    console.log(JSON.stringify({ globalCategories }, null, 2))
 
     return {
       statusCode: 201,
