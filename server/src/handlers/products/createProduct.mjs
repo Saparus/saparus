@@ -51,10 +51,10 @@ export const createProduct = async (event) => {
     const putCommand = new PutCommand(params)
     await db.send(putCommand)
 
-    const productCategories = Object.entries(categories).reduce(
+    const productCategories = Object.entries(categories || {}).reduce(
       (acc, [language, categoriesForLanguage]) => {
-        Object.entries(categoriesForLanguage).forEach(([categoryKey, categoryItem]) => {
-          Object.entries(categoryItem).forEach(([key, value]) => {
+        Object.entries(categoriesForLanguage || {}).forEach(([categoryKey, categoryItem]) => {
+          Object.entries(categoryItem || {}).forEach(([key, value]) => {
             if (!acc[categoryKey]) {
               acc[categoryKey] = {
                 items: [],
@@ -97,9 +97,9 @@ export const createProduct = async (event) => {
 
     console.log({ globalCategories })
 
-    Object.entries(globalCategories.categories).forEach(
+    Object.entries(globalCategories.categories || {}).forEach(
       ([language, globalCategoriesForLanguage]) => {
-        Object.entries(globalCategoriesForLanguage).forEach(
+        Object.entries(globalCategoriesForLanguage || {}).forEach(
           ([categoryKey, categoryItem], index) => {
             if (!productCategories.categoryKeys.includes(categoryKey)) {
               // if a product with a category that does not exist in the global categories list was created, this category will be added to it
