@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 
 import { ReactComponent as PlanmecaLogo } from "../../assets/companies/planmeca.svg"
 import { ReactComponent as QuestionMark } from "../../assets/companies/undefined-company.svg"
-import { getCategories, editCategories } from "../../services/categoryServises"
+import { getCategories, editCategories } from "../../services/categoryServices"
 
 const Companies = ({ setFilter, selectedCompany, apiKey }) => {
   const [newCompanyName, setNewCompanyName] = useState("")

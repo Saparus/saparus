@@ -19,6 +19,10 @@ export const getCategories = async (event) => {
     if (!categories) {
       return {
         statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
         body: JSON.stringify({ message: "Categories not found" }),
       }
     }
@@ -32,6 +36,10 @@ export const getCategories = async (event) => {
 
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({ message: "Failed to fetch categories" }),
     }
   }

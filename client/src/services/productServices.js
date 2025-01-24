@@ -34,17 +34,6 @@ export const editProduct = async (
   }
 }
 
-// get product categories
-export const getCategories = async () => {
-  try {
-    const { data } = await ajax.get("/products/categories")
-    return data
-  } catch (error) {
-    console.error("error fetching product categories:", error)
-    throw error
-  }
-}
-
 // add a new product (requires api_key)
 export const addProduct = async (
   name,

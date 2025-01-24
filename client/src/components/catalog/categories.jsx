@@ -5,7 +5,7 @@ import { useQuery } from "react-query"
 
 import { ReactComponent as TrashIcon } from "../../assets/icons/trash.svg"
 
-import { getCategories } from "../../services/productServices"
+import { getCategories } from "../../services/categoryServices"
 
 import PriceSlider from "./PriceSlider"
 import Loading from "../other/Loading"
@@ -29,6 +29,8 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
       setDefaultPriceExtremum({ minPrice, maxPrice })
     },
   })
+
+  console.log(data)
 
   const handleInputChange = (event) => {
     const { name: category, value } = event.target

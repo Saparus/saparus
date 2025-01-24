@@ -2,11 +2,16 @@ import ajax from "./ajax"
 
 // get all categories
 export const getCategories = async () => {
+  console.log("hello?")
+
   try {
-    const { data } = await ajax.get(`/categories`)
+    const data = await ajax.get(`/categories`)
+
+    console.log(data)
+
     return data
   } catch (error) {
-    console.error("error fetching news articles:", error)
+    console.error("error fetching categories:", error)
     throw error
   }
 }

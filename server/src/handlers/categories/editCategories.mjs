@@ -42,6 +42,10 @@ export const editCategories = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({ message: "Categories updated successfully" }),
     }
   } catch (error) {
@@ -49,6 +53,10 @@ export const editCategories = async (event) => {
 
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       body: JSON.stringify({ message: "Failed to update categories" }),
     }
   }
