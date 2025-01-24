@@ -15,7 +15,7 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
 
   const { data, isLoading, error } = useQuery(["companies"], getCompanies)
 
-  const categories = data
+  // const currentLanguage = data
 
   const queryClient = useQueryClient()
 
@@ -38,16 +38,16 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
   const addCategoryMutation = useMutation({
     mutationFn: async (newCompany) => {
       const newCategories = [
-        ...categories,
+        ...data,
         {
           en: {
-            company: [...categories.companies, { name: newCompany.name, image: newCompany.image }],
+            company: [...data, { name: newCompany.name, image: newCompany.image }],
           },
           ru: {
-            company: [...categories.companies, { name: newCompany.name }],
+            company: [...data, { name: newCompany.name }],
           },
           ka: {
-            company: [...categories.companies, { name: newCompany.name }],
+            company: [...data, { name: newCompany.name }],
           },
         },
       ]
@@ -82,8 +82,6 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
     if (isLoading) return
     if (error || !data) return <div>something went wrong</div>
 
-    const { companies } = categories
-
     const renderLogo = (company) => {
       switch (company) {
         case "planmeca":
@@ -93,7 +91,7 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
       }
     }
 
-    return companies.map((company, index) => (
+    return data.map((company, index) => (
       <li
         key={index}
         className={`company ${company.name === selectedCompany ? "selected" : ""}`}

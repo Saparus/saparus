@@ -40,7 +40,7 @@ export const getCompanies = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(companies.en.company), // remove .en.company to return companies in all languages
+      body: JSON.stringify(companies.en.company),
     }
   } catch (error) {
     console.error("Error fetching companies:", error)

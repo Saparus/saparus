@@ -44,7 +44,7 @@ export const summarizeCategoryData = (products, categories) => {
         const subCategoryValues = categoryValues[subCategoryKey]
 
         if (!Array.isArray(subCategoryValues)) {
-          console.log(`Expected subCategoryValues to be an array, but got:`, subCategoryValues)
+          console.error(`Expected subCategoryValues to be an array, but got:`, subCategoryValues)
           return
         }
 

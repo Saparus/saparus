@@ -1,6 +1,11 @@
 import { useState, useRef } from "react"
+import { useQuery } from "react-query"
+import { useTranslation } from "react-i18next"
 
 import { useOnClickOutside } from "../../../hooks/useOnClickOutside"
+import { getCategories } from "../../../services/categoryServices"
+
+import Loading from "../../other/Loading"
 
 const languageNames = { en: "English", ka: "Georgian", ru: "Russian" }
 
@@ -22,6 +27,10 @@ const EditCategoryModal = ({
   )
 
   const modalRef = useRef()
+
+  const { data, isLoading, error } = useQuery(["categories"], getCategories)
+
+  console.log(data?.categories)
 
   useOnClickOutside(modalRef, finishEditing)
 
@@ -52,16 +61,16 @@ const EditCategoryModal = ({
         }
 
         // if it's a company category, handle the image
-        if (key === "company" && image) {
+        if (key.toLowerVase() === "company" && image) {
           acc[language][mainKey] = {
-            [key]: {
+            [key.toLowerVase()]: {
               name: value,
               image: image || "", // Handle the image for the company (on backend, it's handled by uploading the image to S3 and saving the URL in the database)
             },
           }
         } else {
           acc[language][mainKey] = {
-            [key]: {
+            [key.toLowerVase()]: {
               name: value,
             },
           }

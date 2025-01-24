@@ -11,6 +11,10 @@ import PriceSlider from "./PriceSlider"
 import Loading from "../other/Loading"
 
 const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButton = false }) => {
+  const { i18n } = useTranslation()
+
+  const currentLanguage = i18n.language
+
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 
   // const used_categories = ["company", "type", "price"]
@@ -84,6 +88,8 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
     if (isLoading) return <Loading />
     if (error || !data) return <div>something went wrong</div>
 
+    const categories = data.categories[currentLanguage]
+
     const handleOnSelect = (event) => {
       const { name, value } = event.target
 
@@ -106,7 +112,7 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
       }
     }
 
-    const { categories, companies, minPrice, maxPrice } = data
+    const { minPrice, maxPrice } = data
 
     const priceOptions = []
     for (let i = minPrice; i <= maxPrice; i += 100) {
@@ -114,7 +120,8 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
     }
 
     const renderCategorySelect = (key, categoryArray) => {
-      const categoriesToNotTranslate = ["price", "company"]
+      console.log({ key, categoryArray })
+
       return (
         <div
           className="select-holder"
@@ -123,7 +130,7 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
           <select
             id={`select-${key}`}
             className="select category"
-            name={key}
+            name={categoryArray.name}
             value={inputValue.categories?.[key] || ""}
             onChange={handleOnSelect}
           >
@@ -132,17 +139,15 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
               disabled
               value=""
             >
-              {t(key)}
+              {categoryArray.name}
             </option>
             <option value="All">{t("All")}</option>
-            {categoryArray.map((category, index) => (
+            {categoryArray.values.map((category, index) => (
               <option
                 key={index}
                 value={category.name}
               >
-                {categoriesToNotTranslate.includes(key)
-                  ? category.name + ` (${category.amount})`
-                  : t(category.name) + ` (${category.amount})`}
+                {category.name}
               </option>
             ))}
           </select>
@@ -150,43 +155,35 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
       )
     }
 
-    const renderCompanySelect = () => {
-      return (
-        <div className="select-holder">
-          <select
-            id="select-companies"
-            className="select category"
-            name="companies"
-            value={inputValue.categories?.company || selectedCompany || ""}
-            onChange={handleOnSelect}
-          >
-            <option
-              defaultValue
-              disabled
-              value=""
-            >
-              {t("companies")}
-            </option>
-            <option value="All">{t("All")}</option>
-            {companies.map((company, index) => (
-              <option
-                key={index}
-                value={company.name}
-              >
-                {company.name + ` (${company.amount})`}
-              </option>
-            ))}
-          </select>
-        </div>
-      )
-    }
+    // const renderCompanySelect = () => {
+    //   return (
+    //     <div className="select-holder">
+    //       <select
+    //         id="select-companies"
+    //         className="select category"
+    //         name="companies"
+    //         value={inputValue.categories?.company || selectedCompany || ""}
+    //         onChange={handleOnSelect}
+    //       >
+    //         <option
+    //           defaultValue
+    //           disabled
+    //           value=""
+    //         >
+    //           {t("companies")}
+    //         </option>
+    //         <option value="All">{t("All")}</option>
+    //       </select>
+    //     </div>
+    //   )
+    // }
 
     return (
       <>
         {Object.entries(categories).map(([key, categoryArray]) =>
           renderCategorySelect(key, categoryArray)
         )}
-        {renderCompanySelect()}
+        {/* {renderCompanySelect()} */}
       </>
     )
   }
