@@ -3,6 +3,9 @@ export const summarizeCategoryData = (products, categories) => {
   let overallMinPrice = Infinity
   let overallMaxPrice = -Infinity
 
+  console.log("Initial products:", JSON.stringify(products, null, 2))
+  console.log("Initial categories:", JSON.stringify(categories, null, 2))
+
   products.forEach((product) => {
     const { price, fixedPrice } = product
 
@@ -13,6 +16,9 @@ export const summarizeCategoryData = (products, categories) => {
     }
   })
 
+  console.log("Overall min price:", overallMinPrice)
+  console.log("Overall max price:", overallMaxPrice)
+
   // iterate over categories to structure the data
   Object.keys(categories).forEach((language) => {
     const languageCategories = categories[language]
@@ -21,6 +27,9 @@ export const summarizeCategoryData = (products, categories) => {
       categoryData[language] = {}
     }
 
+    console.log(`Processing language: ${language}`)
+    console.log(`Language categories:`, JSON.stringify(languageCategories, null, 2))
+
     Object.keys(languageCategories).forEach((categoryKey) => {
       const categoryValues = languageCategories[categoryKey]
 
@@ -28,14 +37,33 @@ export const summarizeCategoryData = (products, categories) => {
         categoryData[language][categoryKey] = { name: categoryKey, amount: 0, values: [] }
       }
 
-      categoryValues.forEach((value) => {
-        if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
-          categoryData[language][categoryKey].values.push(value)
+      console.log(`Processing category key: ${categoryKey}`)
+      console.log(`Category values:`, JSON.stringify(categoryValues, null, 2))
+
+      Object.keys(categoryValues).forEach((subCategoryKey) => {
+        const subCategoryValues = categoryValues[subCategoryKey]
+
+        if (!Array.isArray(subCategoryValues)) {
+          console.log(`Expected subCategoryValues to be an array, but got:`, subCategoryValues)
+          return
         }
-        categoryData[language][categoryKey].amount += 1
+
+        subCategoryValues.forEach((value) => {
+          if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
+            categoryData[language][categoryKey].values.push(value)
+          }
+          categoryData[language][categoryKey].amount += 1
+        })
+
+        console.log(
+          `Updated category data for ${categoryKey}:`,
+          JSON.stringify(categoryData[language][categoryKey], null, 2)
+        )
       })
     })
   })
+
+  console.log("Final category data:", JSON.stringify(categoryData, null, 2))
 
   return {
     categories: categoryData,

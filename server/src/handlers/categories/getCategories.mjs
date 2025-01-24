@@ -35,10 +35,6 @@ export const getCategories = async (event) => {
     const scanCommand = new ScanCommand(scanParams)
     const { Items: products } = await db.send(scanCommand)
 
-    console.log({ products })
-
-    console.log({ categories })
-
     const summarizedData = summarizeCategoryData(products, categories)
 
     return {
