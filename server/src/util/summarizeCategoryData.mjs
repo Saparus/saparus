@@ -33,13 +33,6 @@ export const summarizeCategoryData = (products, categories) => {
     Object.keys(languageCategories).forEach((categoryKey) => {
       const categoryValues = languageCategories[categoryKey]
 
-      if (!categoryData[language][categoryKey]) {
-        categoryData[language][categoryKey] = { name: categoryKey, amount: 0, values: [] }
-      }
-
-      console.log(`Processing category key: ${categoryKey}`)
-      console.log(`Category values:`, JSON.stringify(categoryValues, null, 2))
-
       Object.keys(categoryValues).forEach((subCategoryKey) => {
         const subCategoryValues = categoryValues[subCategoryKey]
 
@@ -47,6 +40,13 @@ export const summarizeCategoryData = (products, categories) => {
           console.error(`Expected subCategoryValues to be an array, but got:`, subCategoryValues)
           return
         }
+
+        if (!categoryData[language][categoryKey]) {
+          categoryData[language][categoryKey] = { name: subCategoryKey, amount: 0, values: [] }
+        }
+
+        console.log(`Processing sub-category key: ${subCategoryKey}`)
+        console.log(`Sub-category values:`, JSON.stringify(subCategoryValues, null, 2))
 
         subCategoryValues.forEach((value) => {
           if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
