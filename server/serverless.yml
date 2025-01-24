@@ -81,8 +81,9 @@ functions:
         Action:
           - "dynamodb:GetItem"
           - "dynamodb:Scan"
-        Resource: !GetAtt CategoriesTable.Arn
-        Resource: !GetAtt ProductsTable.Arn
+        Resource:
+          - !GetAtt CategoriesTable.Arn
+          - !GetAtt ProductsTable.Arn
 
   getCompanies:
     handler: src/handlers/categories/getCompanies.getCompanies
