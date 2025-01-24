@@ -78,23 +78,29 @@ export const createProduct = async (event) => {
 
       Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
         if (!globalCategories[language][categoryKey]) {
-          globalCategories[language][categoryKey] = []
+          globalCategories[language][categoryKey] = {}
         }
 
-        // check if the category value already exists
-        const exists = globalCategories[language][categoryKey].some(
-          (existingItem) => existingItem.name === categoryValue[categoryKey].name
-        )
+        Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
+          if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
+            globalCategories[language][categoryKey][languageSpecificCategory] = []
+          }
 
-        // add new category value if it doesn't exist
-        if (!exists) {
-          globalCategories[language][categoryKey].push(categoryValue[categoryKey])
-          console.log(
-            `Added new category value: ${JSON.stringify(categoryValue[categoryKey], null, 2)}`
+          // check if the category value already exists
+          const exists = globalCategories[language][categoryKey][languageSpecificCategory].some(
+            (existingItem) => existingItem.name === value.name
           )
-        }
+
+          // add new category value if it doesn't exist and is not null
+          if (!exists && value) {
+            globalCategories[language][categoryKey][languageSpecificCategory].push(value)
+
+            console.log(`Added new category value: ${JSON.stringify(value, null, 2)}`)
+          }
+        })
       })
     })
+
     console.log("Updated global categories:", JSON.stringify(globalCategories, null, 2))
 
     const putParams = {
