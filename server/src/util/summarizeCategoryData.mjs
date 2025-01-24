@@ -1,4 +1,4 @@
-export const summarizeCategoryData = (products) => {
+export const summarizeCategoryData = (products, categories) => {
   const categoryData = {}
   const companyData = {}
   let overallMinPrice = Infinity
@@ -13,41 +13,47 @@ export const summarizeCategoryData = (products) => {
       overallMaxPrice = Math.max(overallMaxPrice, price)
     }
 
-    // adds company to companyData if defined
-    const company = categories.company
-    if (company !== undefined) {
-      if (!companyData[company]) {
-        companyData[company] = { name: company, amount: 0 }
-      }
-      companyData[company].amount += 1 // Increment the count for this company
-    }
+    // iterates over all keys in categories
+    Object.keys(categories).forEach((language) => {
+      const languageCategories = categories[language]
 
-    // iterates over all keys in categories, except for the company key
-    Object.keys(categories).forEach((key) => {
-      if (key !== "company") {
-        const categoryValue = categories[key]
-        if (!categoryData[key]) {
-          categoryData[key] = {}
-        }
+      Object.keys(languageCategories).forEach((categoryKey) => {
+        const categoryValues = languageCategories[categoryKey]
 
-        if (!categoryData[key][categoryValue]) {
-          categoryData[key][categoryValue] = { name: categoryValue, amount: 0 }
-        }
-        categoryData[key][categoryValue].amount += 1
-      }
+        Object.keys(categoryValues).forEach((languageSpecificCategory) => {
+          const value = categoryValues[languageSpecificCategory]
+
+          // adds company to companyData if defined
+          if (categoryKey === "company") {
+            if (!companyData[languageSpecificCategory]) {
+              companyData[languageSpecificCategory] = { name: languageSpecificCategory, amount: 0 }
+            }
+            companyData[languageSpecificCategory].amount += 1
+          } else {
+            // adds other categories to the categoryData
+            if (!categoryData[language]) {
+              categoryData[language] = {}
+            }
+
+            if (!categoryData[language][categoryKey]) {
+              categoryData[language][categoryKey] = { name: categoryKey, amount: 0, values: [] }
+            }
+
+            if (!categoryData[language][categoryKey].values.includes(languageSpecificCategory)) {
+              categoryData[language][categoryKey].values.push(languageSpecificCategory)
+            }
+
+            categoryData[language][categoryKey].amount += 1
+          }
+        })
+      })
     })
-  })
-
-  // converts categoryData and companyData to the array
-  const categoriesArray = {}
-  Object.keys(categoryData).forEach((key) => {
-    categoriesArray[key] = Object.values(categoryData[key])
   })
 
   const companiesArray = Object.values(companyData)
 
   return {
-    categories: categoriesArray,
+    categories: categoryData,
     companies: companiesArray,
     minPrice: overallMinPrice,
     maxPrice: overallMaxPrice,

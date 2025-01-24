@@ -30,8 +30,6 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
     },
   })
 
-  console.log(data)
-
   const handleInputChange = (event) => {
     const { name: category, value } = event.target
     setInputValue((filter) => ({ ...filter, [category]: value }))

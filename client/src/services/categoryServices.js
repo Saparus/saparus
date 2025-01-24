@@ -2,12 +2,8 @@ import ajax from "./ajax"
 
 // get all categories
 export const getCategories = async () => {
-  console.log("hello?")
-
   try {
-    const data = await ajax.get(`/categories`)
-
-    console.log(data)
+    const { data } = await ajax.get(`/categories`)
 
     return data
   } catch (error) {
@@ -29,6 +25,17 @@ export const editCategories = async (categories, api_key, image) => {
     return data
   } catch (error) {
     console.error("Error editing categories:", error)
+    throw error
+  }
+}
+
+export const getCompanies = async () => {
+  try {
+    const { data } = await ajax.get(`/categories/companies`)
+
+    return data
+  } catch (error) {
+    console.error("error fetching categories:", error)
     throw error
   }
 }

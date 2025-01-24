@@ -74,6 +74,28 @@ functions:
       include:
         - src/handlers/categories/getCategories.mjs
         - src/util/db.mjs
+        - src/util/summarizeCategoryData.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+          - "dynamodb:Scan"
+        Resource: !GetAtt CategoriesTable.Arn
+        Resource: !GetAtt ProductsTable.Arn
+
+  getCategories:
+    handler: src/handlers/categories/getCompanies.getCompanies.mjs
+    name: get-companies
+    events:
+      - http:
+          path: categories/companies
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/categories/getCompanies.mjs
+        - src/util/db.mjs
         - node_modules/@aws-sdk/lib-dynamodb
     iamRoleStatements:
       - Effect: "Allow"

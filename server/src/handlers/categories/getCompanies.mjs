@@ -1,9 +1,7 @@
-import { GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
-
+import { GetCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
-import { summarizeCategoryData } from "../../util/summarizeCategoryData.mjs"
 
-export const getCategories = async (event) => {
+export const getCompanies = async (event) => {
   try {
     const params = {
       TableName: process.env.CATEGORIES_TABLE,
@@ -28,14 +26,13 @@ export const getCategories = async (event) => {
       }
     }
 
-    const scanParams = {
-      TableName: process.env.PRODUCTS_TABLE,
-    }
-
-    const scanCommand = new ScanCommand(scanParams)
-    const { Items: products } = await db.send(scanCommand)
-
-    const summarizedData = summarizeCategoryData(products, categories)
+    // extract the company category
+    const companies = {}
+    Object.keys(categories).forEach((language) => {
+      if (categories[language].company) {
+        companies[language] = categories[language].company
+      }
+    })
 
     return {
       statusCode: 200,
@@ -43,10 +40,10 @@ export const getCategories = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(summarizedData),
+      body: JSON.stringify(companies.en.company), // remove .en.company to return companies in all languages
     }
   } catch (error) {
-    console.error("Error fetching categories:", error)
+    console.error("Error fetching companies:", error)
 
     return {
       statusCode: 500,
@@ -54,7 +51,7 @@ export const getCategories = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Failed to fetch categories" }),
+      body: JSON.stringify({ message: "Failed to fetch companies" }),
     }
   }
 }
