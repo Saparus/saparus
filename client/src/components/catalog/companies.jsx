@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 
 import { ReactComponent as PlanmecaLogo } from "../../assets/companies/planmeca.svg"
 import { ReactComponent as QuestionMark } from "../../assets/companies/undefined-company.svg"
-import { getCategories, editCategories } from "../../services/categoryServices"
+import { getCompanies, editCategories } from "../../services/categoryServices"
 
 const Companies = ({ setFilter, selectedCompany, apiKey }) => {
   const [newCompanyName, setNewCompanyName] = useState("")
@@ -13,7 +13,7 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
-  const { data, isLoading, error } = useQuery(["categories"], getCategories)
+  const { data, isLoading, error } = useQuery(["companies"], getCompanies)
 
   const categories = data
 

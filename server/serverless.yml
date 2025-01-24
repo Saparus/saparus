@@ -84,8 +84,8 @@ functions:
         Resource: !GetAtt CategoriesTable.Arn
         Resource: !GetAtt ProductsTable.Arn
 
-  getCategories:
-    handler: src/handlers/categories/getCompanies.getCompanies.mjs
+  getCompanies:
+    handler: src/handlers/categories/getCompanies.getCompanies
     name: get-companies
     events:
       - http:
