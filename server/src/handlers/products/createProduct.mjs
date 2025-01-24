@@ -4,7 +4,10 @@ import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 
 export const createProduct = async (event) => {
+  console.log("Received event:", JSON.stringify(event, null, 2))
+
   const body = JSON.parse(event.body)
+  console.log("Parsed body:", JSON.stringify(body, null, 2))
 
   const name = body.name
   const fixedPrice = body.fixedPrice ? "true" : "false"
@@ -15,6 +18,7 @@ export const createProduct = async (event) => {
   const images = body.images || []
 
   if (!name || !description) {
+    console.log("Validation failed: Missing required fields")
     return {
       statusCode: 400,
       headers: {
@@ -27,8 +31,15 @@ export const createProduct = async (event) => {
 
   try {
     const imageUrls = images
-      ? await Promise.all(images.map(async (image) => uploadImage(image, "product")))
+      ? await Promise.all(
+          images.map(async (image) => {
+            const url = await uploadImage(image, "product")
+            console.log("Uploaded image:", url)
+            return url
+          })
+        )
       : []
+    console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
 
     const params = {
       TableName: process.env.PRODUCTS_TABLE,
@@ -43,10 +54,11 @@ export const createProduct = async (event) => {
         images: imageUrls,
       },
     }
+    console.log("Product params:", JSON.stringify(params, null, 2))
 
     await db.send(new PutCommand(params))
+    console.log("Product stored in PRODUCTS_TABLE")
 
-    // fetch current global categories from the CATEGORIES_TABLE
     const categoryParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
@@ -56,6 +68,7 @@ export const createProduct = async (event) => {
 
     const { Item } = await db.send(new GetCommand(categoryParams))
     const globalCategories = Item?.categories || {}
+    console.log("Fetched global categories:", JSON.stringify(globalCategories, null, 2))
 
     // update global categories with new categories or values from the product
     Object.entries(categories).forEach(([language, languageCategories]) => {
@@ -76,9 +89,13 @@ export const createProduct = async (event) => {
         // add new category value if it doesn't exist
         if (!exists) {
           globalCategories[language][categoryKey].push(categoryValue[categoryKey])
+          console.log(
+            `Added new category value: ${JSON.stringify(categoryValue[categoryKey], null, 2)}`
+          )
         }
       })
     })
+    console.log("Updated global categories:", JSON.stringify(globalCategories, null, 2))
 
     const putParams = {
       TableName: process.env.CATEGORIES_TABLE,
@@ -88,7 +105,8 @@ export const createProduct = async (event) => {
       },
     }
 
-    await db.send(new PutCommand(putParams))
+    await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
+    console.log("Updated global categories stored in CATEGORIES_TABLE")
 
     return {
       statusCode: 201,
