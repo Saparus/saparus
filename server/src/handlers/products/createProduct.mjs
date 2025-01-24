@@ -1,6 +1,5 @@
 import { v4 as uuid } from "uuid"
-import { PutCommand, GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb"
-
+import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 
@@ -11,7 +10,7 @@ export const createProduct = async (event) => {
   const fixedPrice = body.fixedPrice ? "true" : "false"
   const price = body.price !== undefined ? Number(body.price) : 0
   const description = body.description
-  const categories = body.categories || []
+  const categories = body.categories || {}
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
@@ -45,11 +44,9 @@ export const createProduct = async (event) => {
       },
     }
 
-    console.log(JSON.stringify({ categories }, null, 2))
+    await db.send(new PutCommand(params))
 
-    const putCommand = new PutCommand(params)
-    await db.send(putCommand)
-
+    // fetch current global categories from the CATEGORIES_TABLE
     const categoryParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
@@ -57,37 +54,31 @@ export const createProduct = async (event) => {
       },
     }
 
-    const getCommand = new GetCommand(categoryParams)
-    const { Item } = await db.send(getCommand)
-
+    const { Item } = await db.send(new GetCommand(categoryParams))
     const globalCategories = Item?.categories || {}
 
-    console.log(JSON.stringify({ globalCategories }, null, 2))
-
-    // merge product categories into globalCategories
+    // update global categories with new categories or values from the product
     Object.entries(categories).forEach(([language, languageCategories]) => {
       if (!globalCategories[language]) {
         globalCategories[language] = {}
       }
 
-      Object.entries(languageCategories).forEach(([categoryKey, items]) => {
+      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
         if (!globalCategories[language][categoryKey]) {
           globalCategories[language][categoryKey] = []
         }
 
-        items.forEach((item) => {
-          const exists = globalCategories[language][categoryKey].some(
-            (existingItem) => existingItem.name === item.name
-          )
+        // check if the category value already exists
+        const exists = globalCategories[language][categoryKey].some(
+          (existingItem) => existingItem.name === categoryValue[categoryKey].name
+        )
 
-          if (!exists) {
-            globalCategories[language][categoryKey].push(item)
-          }
-        })
+        // add new category value if it doesn't exist
+        if (!exists) {
+          globalCategories[language][categoryKey].push(categoryValue[categoryKey])
+        }
       })
     })
-
-    console.log(JSON.stringify({ updatedGlobalCategories: globalCategories }, null, 2))
 
     const putParams = {
       TableName: process.env.CATEGORIES_TABLE,
@@ -97,8 +88,7 @@ export const createProduct = async (event) => {
       },
     }
 
-    const putCategoriesCommand = new PutCommand(putParams)
-    await db.send(putCategoriesCommand)
+    await db.send(new PutCommand(putParams))
 
     return {
       statusCode: 201,
