@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid"
-import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
+import { PutCommand, GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
@@ -15,7 +15,6 @@ export const createProduct = async (event) => {
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
-  // Validate input
   if (!name || !description) {
     return {
       statusCode: 400,
@@ -29,7 +28,7 @@ export const createProduct = async (event) => {
 
   try {
     const imageUrls = images
-      ? await Promise.all(images?.map(async (image) => uploadImage(image, "product")))
+      ? await Promise.all(images.map(async (image) => uploadImage(image, "product")))
       : []
 
     const params = {
@@ -51,36 +50,6 @@ export const createProduct = async (event) => {
     const putCommand = new PutCommand(params)
     await db.send(putCommand)
 
-    // Convert input categories to product categories format
-    const productCategories = Object.entries(categories || {}).reduce(
-      (acc, [language, categoriesForLanguage]) => {
-        Object.entries(categoriesForLanguage || {}).forEach(([categoryKey, categoryItem]) => {
-          Object.entries(categoryItem || {}).forEach(([key, value]) => {
-            if (!acc[categoryKey]) {
-              acc[categoryKey] = {
-                items: [],
-                languages: [],
-                categoryKeys: [],
-              }
-            }
-
-            acc.languages.push(language)
-            acc.categoryKeys.push(categoryKey)
-
-            acc[categoryKey].items.push({ key, value })
-          })
-        })
-        return acc
-      },
-      {
-        languages: [],
-        categoryKeys: [],
-        items: [],
-      }
-    )
-
-    console.log(JSON.stringify({ productCategories }, null, 2))
-
     const categoryParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
@@ -91,38 +60,45 @@ export const createProduct = async (event) => {
     const getCommand = new GetCommand(categoryParams)
     const { Item } = await db.send(getCommand)
 
-    console.log(JSON.stringify({ Item }, null, 2))
-
-    const globalCategories = Item.categories || {}
+    const globalCategories = Item?.categories || {}
 
     console.log(JSON.stringify({ globalCategories }, null, 2))
 
-    // Merge product categories into globalCategories
-    Object.entries(categories || {}).forEach(([language, categoriesForLanguage]) => {
+    // merge product categories into globalCategories
+    Object.entries(categories).forEach(([language, languageCategories]) => {
       if (!globalCategories[language]) {
         globalCategories[language] = {}
       }
 
-      Object.entries(categoriesForLanguage || {}).forEach(([categoryKey, categoryItem]) => {
+      Object.entries(languageCategories).forEach(([categoryKey, items]) => {
         if (!globalCategories[language][categoryKey]) {
-          globalCategories[language][categoryKey] = {}
+          globalCategories[language][categoryKey] = []
         }
 
-        Object.entries(categoryItem || {}).forEach(([key, value]) => {
-          if (!globalCategories[language][categoryKey][key]) {
-            globalCategories[language][categoryKey][key] = []
-          }
+        items.forEach((item) => {
+          const exists = globalCategories[language][categoryKey].some(
+            (existingItem) => existingItem.name === item.name
+          )
 
-          // Add new value only if it doesn't exist
-          const existingItems = globalCategories[language][categoryKey][key]
-          if (!existingItems.some((item) => item.name === value.name)) {
-            existingItems.push(value)
+          if (!exists) {
+            globalCategories[language][categoryKey].push(item)
           }
         })
       })
     })
 
-    console.log(JSON.stringify({ globalCategories }, null, 2))
+    console.log(JSON.stringify({ updatedGlobalCategories: globalCategories }, null, 2))
+
+    const putParams = {
+      TableName: process.env.CATEGORIES_TABLE,
+      Item: {
+        id: "categories",
+        categories: globalCategories,
+      },
+    }
+
+    const putCategoriesCommand = new PutCommand(putParams)
+    await db.send(putCategoriesCommand)
 
     return {
       statusCode: 201,
