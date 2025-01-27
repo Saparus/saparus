@@ -9,7 +9,7 @@ import { getCompanies, editCategories } from "../../services/categoryServices"
 
 const Companies = ({ setFilter, selectedCompany, apiKey }) => {
   const [newCompanyName, setNewCompanyName] = useState("")
-  const [companyImage, setCompanyImage] = useState("")
+  const [uploadedImage, setUploadedImage] = useState(null)
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -29,7 +29,7 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
       const reader = new FileReader()
       reader.onloadend = () => {
         const newImage = reader.result
-        setCompanyImage(newImage)
+        setUploadedImage(newImage)
       }
       reader.readAsDataURL(file)
     }
@@ -121,18 +121,38 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
 
     return (
       <li className="add-company-button">
+        <div className="circle">
+          {uploadedImage ? (
+            <img
+              src={uploadedImage}
+              alt="Uploaded"
+              className="uploaded-image"
+            />
+          ) : (
+            "+"
+          )}
+        </div>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className="company-image-input"
+        />
         <input
           type="text"
           value={newCompanyName}
           onChange={handleChangeNewCompanyName}
+          placeholder="company"
+          className="company-name-input"
         />
-        <input
-          className="image-input"
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-        />
-        <button onClick={addCategoryMutation.mutate}>add company</button>
+        {uploadedImage && (
+          <button
+            onClick={addCategoryMutation.mutate}
+            className="save-company-button"
+          >
+            {t("add company")}
+          </button>
+        )}
       </li>
     )
   }

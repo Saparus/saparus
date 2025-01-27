@@ -27,8 +27,6 @@ const Product = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  // const product = getProduct(Number(id))
-
   const handleSelectNextImage = () => {
     setCurrentImageIndex((prevState) => {
       if (prevState + 1 >= product.images?.length) return 0
@@ -86,6 +84,8 @@ const Product = () => {
   const renderProductInformation = () => {
     const { id, name, description, images, inStock, fixedPrice, price, categories } = product
 
+    console.log(product)
+
     return (
       <div className="product-information">
         <p className="product-name">{name}</p>
@@ -115,7 +115,7 @@ const Product = () => {
           </p>
         </div>
         <p className="product-description">{description}</p>
-        <CategoryList categories={categories} />
+        <CategoryList categories={categories[currentLanguage]} />
         {images?.length > 1 ? (
           <ProductImageSelect
             images={images}

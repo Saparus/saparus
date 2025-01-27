@@ -39,6 +39,7 @@
           font-size: 0.75rem;
 
           span {
+            white-space: nowrap;
             font-weight: 600;
           }
         }
@@ -204,10 +205,11 @@
       lighten($secondary-color, 20%) 50%,
       lighten($secondary-color, 18.5%) 100%
     );
+    list-style: none;
     display: flex;
-    height: 150px;
-    padding: 20px 1%;
-    gap: 20px;
+    height: 9rem;
+    padding: 1rem 1%;
+    gap: 1rem;
     box-shadow: 0 1px 10px #2b303133;
 
     .company {
@@ -215,7 +217,8 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      width: 7rem;
+      gap: 0.5rem;
       text-align: center;
       user-select: none;
 
@@ -239,6 +242,7 @@
 
           span {
             opacity: 0.8;
+            white-space: nowrap;
           }
         }
       }
@@ -265,19 +269,21 @@
 
         span {
           opacity: 0.9;
+          white-space: nowrap;
         }
       }
 
       .logo {
         border: transparent solid 2px;
-        width: 80px;
-        height: 80px;
+        width: 5rem;
+        height: 5rem;
         border-radius: 50%;
 
         transition: border $animation_duration $animation, opacity $animation_duration $animation;
       }
 
       span {
+        white-space: nowrap;
         font-family: $main-font;
         font-size: smaller;
         color: $base-color;
@@ -432,6 +438,7 @@
           span {
             text-decoration: underline;
             transition: opacity $animation_duration $animation;
+            white-space: nowrap;
 
             &:hover {
               opacity: 0.75;

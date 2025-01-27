@@ -148,7 +148,9 @@
     "description": "Description",
     "title": "Title",
     "text": "Text",
-    "access key": "Access Key"
+    "access key": "Access Key",
+    "add company": "Add Company",
+    "company": "company"
   },
 
   "children program": {

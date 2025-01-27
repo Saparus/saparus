@@ -86,7 +86,10 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
 
   const renderCategories = () => {
     if (isLoading) return <Loading />
-    if (error || !data) return <div>something went wrong</div>
+    if (error || !data) {
+      console.log(error)
+      return <div>something went wrong</div>
+    }
 
     const categories = data.categories[currentLanguage]
 
@@ -121,6 +124,8 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
 
     const renderCategorySelect = (key, categoryArray) => {
       console.log({ key, categoryArray })
+
+      if (categoryArray.amount === 0) return
 
       return (
         <div

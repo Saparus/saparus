@@ -1,6 +1,4 @@
-import { v4 as uuid } from "uuid"
-import { UpdateCommand } from "@aws-sdk/lib-dynamodb"
-
+import { UpdateCommand, GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 
@@ -13,7 +11,7 @@ export const editProduct = async (event) => {
   const fixedPrice = body.fixedPrice ? "true" : "false"
   const price = body.price !== undefined ? Number(body.price) : 0
   const description = body.description
-  const categories = body.categories || []
+  const categories = body.categories || {}
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
@@ -64,6 +62,57 @@ export const editProduct = async (event) => {
 
     const updateCommand = new UpdateCommand(params)
     const result = await db.send(updateCommand)
+
+    // Fetch global categories
+    const categoryParams = {
+      TableName: process.env.CATEGORIES_TABLE,
+      Key: {
+        id: "categories",
+      },
+    }
+
+    const { Item } = await db.send(new GetCommand(categoryParams))
+    const globalCategories = Item?.categories || {}
+
+    // Update global categories with new categories or values from the product
+    Object.entries(categories).forEach(([language, languageCategories]) => {
+      if (!globalCategories[language]) {
+        globalCategories[language] = {}
+      }
+
+      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
+        if (!globalCategories[language][categoryKey]) {
+          globalCategories[language][categoryKey] = {}
+        }
+
+        Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
+          if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
+            globalCategories[language][categoryKey][languageSpecificCategory] = []
+          }
+
+          // Check if the category value already exists
+          const exists = globalCategories[language][categoryKey][languageSpecificCategory].some(
+            (existingItem) => existingItem.name === value.name
+          )
+
+          // Add new category value if it doesn't exist and is not null
+          if (!exists && value) {
+            globalCategories[language][categoryKey][languageSpecificCategory].push(value)
+          }
+        })
+      })
+    })
+
+    // Store updated global categories
+    const putParams = {
+      TableName: process.env.CATEGORIES_TABLE,
+      Item: {
+        id: "categories",
+        categories: globalCategories,
+      },
+    }
+
+    await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
 
     return {
       statusCode: 200,

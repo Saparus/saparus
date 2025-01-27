@@ -7,13 +7,41 @@ export const summarizeCategoryData = (products, categories) => {
   console.log("Initial categories:", JSON.stringify(categories, null, 2))
 
   products.forEach((product) => {
-    const { price, fixedPrice } = product
+    const { price, fixedPrice, categories: productCategories } = product
 
     // updates overall minimum and maximum prices if price is defined
     if (price !== undefined && fixedPrice) {
       overallMinPrice = Math.min(overallMinPrice, price)
       overallMaxPrice = Math.max(overallMaxPrice, price)
     }
+
+    // iterate over product categories to update the amount of products for each category
+    Object.keys(productCategories).forEach((language) => {
+      const languageCategories = productCategories[language]
+
+      if (!categoryData[language]) {
+        categoryData[language] = {}
+      }
+
+      Object.keys(languageCategories).forEach((categoryKey) => {
+        const categoryValues = languageCategories[categoryKey]
+
+        Object.keys(categoryValues).forEach((subCategoryKey) => {
+          const subCategoryValues = categoryValues[subCategoryKey]
+
+          if (!categoryData[language][categoryKey]) {
+            categoryData[language][categoryKey] = { name: subCategoryKey, amount: 0, values: [] }
+          }
+
+          subCategoryValues.forEach((value) => {
+            if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
+              categoryData[language][categoryKey].values.push(value)
+            }
+            categoryData[language][categoryKey].amount += 1
+          })
+        })
+      })
+    })
   })
 
   console.log("Overall min price:", overallMinPrice)
@@ -52,7 +80,6 @@ export const summarizeCategoryData = (products, categories) => {
           if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
             categoryData[language][categoryKey].values.push(value)
           }
-          categoryData[language][categoryKey].amount += 1
         })
 
         console.log(

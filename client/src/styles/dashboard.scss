@@ -2,6 +2,73 @@
   width: 100%;
   position: relative;
 
+  .add-company-button {
+    list-style: none;
+    display: block;
+    width: 7rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+
+    .circle {
+      background-color: $success_green;
+      height: 5rem;
+      width: 5rem;
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: $base-color;
+
+      .uploaded-image {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+
+    .save-company-button {
+      position: absolute;
+      right: -8rem;
+      background-color: $success_green;
+      color: $base-color;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      top: 2rem;
+      cursor: pointer;
+    }
+
+    .company-image-input {
+      background-color: $success_green;
+      height: 5rem;
+      width: 5rem;
+      // position: absolute;
+      // visibility: hidden;
+      opacity: 0;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .company-name-input {
+      max-width: 7rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: $base-color;
+
+      &::placeholder {
+        text-align: center;
+      }
+    }
+  }
+
   .add-new-article-button {
     background-color: $primary-color;
     color: $base-color;
@@ -283,6 +350,7 @@
     cursor: pointer;
     transition: opacity $animation_duration $animation;
   }
+
   .product-name,
   .product-description,
   .about-information-title,

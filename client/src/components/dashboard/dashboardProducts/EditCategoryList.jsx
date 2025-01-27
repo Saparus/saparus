@@ -86,6 +86,8 @@ const EditCategoryList = ({
     })
   }
 
+  console.log({ categoryArray })
+
   return (
     <div className="category-list">
       {categoryArray.map(({ key, value }) => (
@@ -95,6 +97,7 @@ const EditCategoryList = ({
           value={value}
           editCategory={() => setCurrentlyEditing(key)}
           removeCategory={() => removeCategory(key)}
+          selectedLanguage={selectedLanguage}
         />
       ))}
 

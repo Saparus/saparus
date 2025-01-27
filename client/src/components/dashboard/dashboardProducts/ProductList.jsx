@@ -43,6 +43,8 @@ const ProductList = ({ filter, resetFilter, apiKey }) => {
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("products"),
       })
+
+      queryClient.invalidateQueries(["categories"])
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
@@ -82,7 +84,7 @@ const ProductList = ({ filter, resetFilter, apiKey }) => {
             }}
           >
             <h3 className="products-not-found-message">
-              {t("Products not found")}, <span>{t("click here to reset filters")}</span>
+              {t("Products not found")}, <span>{t("click here to add new product")}</span>
             </h3>
           </button>
         </>
