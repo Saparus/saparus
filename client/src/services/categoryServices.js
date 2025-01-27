@@ -13,14 +13,18 @@ export const getCategories = async () => {
 }
 
 // change all categories to the passed categories
-export const editCategories = async (categories, api_key, image) => {
+export const editCategories = async (categories, addedCategory, image, api_key) => {
   if (!api_key) {
     console.error("API key is required")
     return
   }
 
   try {
-    const response = await ajax.post(`/categories?api_key=${api_key}`, { categories })
+    const response = await ajax.post(`/categories?api_key=${api_key}`, {
+      categories,
+      addedCategory,
+      image,
+    })
     const data = await response.json()
     return data
   } catch (error) {

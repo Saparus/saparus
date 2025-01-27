@@ -36,23 +36,22 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
   }
 
   const addCategoryMutation = useMutation({
-    mutationFn: async (newCompany) => {
+    mutationFn: async () => {
       const newCategories = [
-        ...data,
         {
           en: {
-            company: [...data, { name: newCompany.name, image: newCompany.image }],
+            company: [...data.en, { name: newCompanyName }],
           },
           ru: {
-            company: [...data, { name: newCompany.name }],
+            company: [...data.ru, { name: newCompanyName }],
           },
           ka: {
-            company: [...data, { name: newCompany.name }],
+            company: [...data.ka, { name: newCompanyName }],
           },
         },
       ]
 
-      return await editCategories(newCategories, apiKey)
+      return await editCategories(newCategories, newCompanyName, uploadedImage, apiKey)
     },
     onMutate: () => {
       // showing loading toast when the mutation starts
@@ -83,12 +82,14 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
     if (error || !data) return <div>something went wrong</div>
 
     const renderLogo = (company) => {
-      switch (company) {
-        case "planmeca":
-          return <PlanmecaLogo className="logo" />
-        default:
-          return <QuestionMark className="logo undefined-company" />
-      }
+      if (!company.imageURL) return
+
+      return (
+        <img
+          src={company.imageURL}
+          alt={company.name}
+        />
+      )
     }
 
     return data.map((company, index) => (
@@ -142,16 +143,18 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
           type="text"
           value={newCompanyName}
           onChange={handleChangeNewCompanyName}
-          placeholder="company"
+          placeholder={t("company")}
           className="company-name-input"
         />
-        {uploadedImage && (
+        {uploadedImage && newCompanyName ? (
           <button
             onClick={addCategoryMutation.mutate}
             className="save-company-button"
           >
             {t("add company")}
           </button>
+        ) : (
+          ""
         )}
       </li>
     )

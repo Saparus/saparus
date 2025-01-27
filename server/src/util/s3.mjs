@@ -11,7 +11,15 @@ const s3 = new S3Client({
   },
 })
 
-export const uploadImage = async (image, folder) => {
+export const uploadImage = async (
+  image,
+  folder,
+  sizes = [
+    { suffix: "/s", height: 200 },
+    { suffix: "/m", height: 500 },
+    { suffix: "/o", height: null },
+  ]
+) => {
   const base64Data = image.split(",")[1]
   const imageBuffer = Buffer.from(base64Data, "base64")
 
@@ -21,12 +29,6 @@ export const uploadImage = async (image, folder) => {
 
   try {
     const originalBuffer = await sharp(imageBuffer).webp().toBuffer()
-
-    const sizes = [
-      { suffix: "/s", height: 200 },
-      { suffix: "/m", height: 500 },
-      { suffix: "/o", height: null },
-    ]
 
     const uploadPromises = sizes.map(async ({ suffix, height }) => {
       const resizedBuffer = height

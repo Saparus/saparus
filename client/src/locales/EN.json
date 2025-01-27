@@ -150,7 +150,9 @@
     "text": "Text",
     "access key": "Access Key",
     "add company": "Add Company",
-    "company": "company"
+    "company": "company",
+    "Save": "Add",
+    "Cancel": "Cancel"
   },
 
   "children program": {
