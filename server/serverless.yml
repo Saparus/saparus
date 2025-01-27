@@ -110,7 +110,7 @@ functions:
     events:
       - http:
           path: categories
-          method: patch
+          method: post
           cors: true
           authorizer:
             type: TOKEN
