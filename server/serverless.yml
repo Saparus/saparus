@@ -97,6 +97,7 @@ functions:
       include:
         - src/handlers/categories/getCompanies.mjs
         - src/util/db.mjs
+        - src/util/s3.mjs
         - node_modules/@aws-sdk/lib-dynamodb
     iamRoleStatements:
       - Effect: "Allow"
@@ -127,6 +128,8 @@ functions:
         Action:
           - "dynamodb:PutItem"
           - "dynamodb:GetItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
         Resource:
           - !GetAtt CategoriesTable.Arn
           - arn:aws:s3:::saparus-images/*
