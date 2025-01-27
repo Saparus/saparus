@@ -15,8 +15,6 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
 
   const { data, isLoading, error } = useQuery(["companies"], getCompanies)
 
-  console.log(data)
-
   // const currentLanguage = data
 
   const queryClient = useQueryClient()
@@ -86,8 +84,9 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
 
       return (
         <img
-          src={company.imageURL}
-          alt={company.name}
+          src={company.imageURL + "/s.webp"}
+          alt=""
+          className="company-logo"
         />
       )
     }
@@ -111,7 +110,7 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
           }
         }}
       >
-        {renderLogo(company.name)}
+        {renderLogo(company)}
         <span>{company.name}</span>
       </li>
     ))

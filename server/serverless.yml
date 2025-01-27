@@ -65,6 +65,7 @@ functions:
   getCategories:
     handler: src/handlers/categories/getCategories.getCategories
     name: get-categories
+    iamRoleStatementsName: get-categories-role
     events:
       - http:
           path: categories
@@ -88,6 +89,7 @@ functions:
   getCompanies:
     handler: src/handlers/categories/getCompanies.getCompanies
     name: get-companies
+    iamRoleStatementsName: get-companies-role
     events:
       - http:
           path: categories/companies
@@ -108,6 +110,7 @@ functions:
   editCategories:
     handler: src/handlers/categories/editCategories.editCategories
     name: edit-categories
+    iamRoleStatementsName: edit-categories-role
     events:
       - http:
           path: categories
@@ -138,6 +141,7 @@ functions:
   getAbout:
     handler: src/handlers/about/getAllAboutItems.getAllAboutItems
     name: get-about
+    iamRoleStatementsName: get-about-role
     events:
       - http:
           path: about
@@ -182,6 +186,7 @@ functions:
   editAllAboutItems:
     handler: src/handlers/about/editAllAboutItems.editAllAboutItems
     name: edit-all-about-items
+    iamRoleStatementsName: edit-all-about-items-role
     events:
       - http:
           path: about
@@ -575,6 +580,7 @@ functions:
     handler: src/handlers/products/createProduct.createProduct
     name: create-product
     iamRoleStatementsName: create-product-role
+    timeout: 60
     events:
       - http:
           path: products
@@ -627,6 +633,7 @@ functions:
   editProduct:
     handler: src/handlers/products/editProduct.editProduct
     name: edit-product
+    timeout: 60
     iamRoleStatementsName: edit-product-role
     events:
       - http:
@@ -648,8 +655,9 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
+          - "dynamodb:PutItem"
           - "dynamodb:UpdateItem"
-          - "dynamodb:GetCommand"
+          - "dynamodb:GetItem"
           - "s3:PutObject"
           - "s3:DeleteObject"
         Resource:
