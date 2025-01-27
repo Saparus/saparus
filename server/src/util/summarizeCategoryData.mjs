@@ -27,18 +27,20 @@ export const summarizeCategoryData = (products, categories) => {
         const categoryValues = languageCategories[categoryKey]
 
         Object.keys(categoryValues).forEach((subCategoryKey) => {
-          const subCategoryValues = categoryValues[subCategoryKey]
+          const subCategoryValue = categoryValues[subCategoryKey]
 
           if (!categoryData[language][categoryKey]) {
             categoryData[language][categoryKey] = { name: subCategoryKey, amount: 0, values: [] }
           }
 
-          subCategoryValues.forEach((value) => {
-            if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
-              categoryData[language][categoryKey].values.push(value)
-            }
-            categoryData[language][categoryKey].amount += 1
-          })
+          if (
+            !categoryData[language][categoryKey].values.some(
+              (v) => v.name === subCategoryValue.name
+            )
+          ) {
+            categoryData[language][categoryKey].values.push(subCategoryValue)
+          }
+          categoryData[language][categoryKey].amount += 1
         })
       })
     })
@@ -73,19 +75,11 @@ export const summarizeCategoryData = (products, categories) => {
           categoryData[language][categoryKey] = { name: subCategoryKey, amount: 0, values: [] }
         }
 
-        console.log(`Processing sub-category key: ${subCategoryKey}`)
-        console.log(`Sub-category values:`, JSON.stringify(subCategoryValues, null, 2))
-
         subCategoryValues.forEach((value) => {
           if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
             categoryData[language][categoryKey].values.push(value)
           }
         })
-
-        console.log(
-          `Updated category data for ${categoryKey}:`,
-          JSON.stringify(categoryData[language][categoryKey], null, 2)
-        )
       })
     })
   })
