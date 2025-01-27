@@ -75,21 +75,27 @@ export const editCategories = async (event) => {
           )
         )
 
-        const exists = existingCategories[language][categoryKey].some(
-          (existingSubCategory) => existingSubCategory.name === subCategoryValue.name
+        const exists = Object.keys(existingCategories[language][categoryKey]).some(
+          (subCategoryKey) => {
+            return existingCategories[language][categoryKey][subCategoryKey].some(
+              (existingSubCategory) => existingSubCategory.name === subCategoryValue.name
+            )
+          }
         )
 
         if (!exists) {
           console.log(`Adding new sub-category: ${subCategoryValue.name}`)
-          existingCategories[language][categoryKey].push(subCategoryValue)
+          const subCategoryKey = Object.keys(existingCategories[language][categoryKey])[0]
+          existingCategories[language][categoryKey][subCategoryKey].push(subCategoryValue)
         } else {
           console.log(`Updating existing sub-category: ${subCategoryValue.name}`)
-          // Update existing sub-category with new imageURL if it exists
-          existingCategories[language][categoryKey] = existingCategories[language][categoryKey].map(
-            (existingSubCategory) =>
-              existingSubCategory.name === subCategoryValue.name
-                ? { ...existingSubCategory, ...(imageURL && { imageURL }) }
-                : existingSubCategory
+          const subCategoryKey = Object.keys(existingCategories[language][categoryKey])[0]
+          existingCategories[language][categoryKey][subCategoryKey] = existingCategories[language][
+            categoryKey
+          ][subCategoryKey].map((existingSubCategory) =>
+            existingSubCategory.name === subCategoryValue.name
+              ? { ...existingSubCategory, ...(imageURL && { imageURL }) }
+              : existingSubCategory
           )
         }
       })
