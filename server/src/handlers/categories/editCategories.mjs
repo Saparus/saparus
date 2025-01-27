@@ -1,17 +1,20 @@
 import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
-
 import { uploadImage } from "../../util/s3.mjs"
 import { db } from "../../util/db.mjs"
 
 export const editCategories = async (event) => {
   try {
-    const { newCompany, image } = JSON.parse(event.body)
+    const { newCategory, image } = JSON.parse(event.body)
+
+    console.log("Received newCategory:", JSON.stringify(newCategory, null, 2))
+    console.log("Received image:", image ? "Yes" : "No")
 
     let imageURL = null
 
     // Upload image if exists
     if (image) {
       imageURL = await uploadImage(image, "company_images")
+      console.log("Uploaded imageURL:", imageURL)
     }
 
     // Fetch existing categories from the database
@@ -23,48 +26,57 @@ export const editCategories = async (event) => {
     const { Item } = await db.send(new GetCommand(getParams))
     const existingCategories = Item?.categories || {}
 
-    // Update the new company category with the imageURL
-    Object.keys(newCompany).forEach((language) => {
-      if (!newCompany[language] || !newCompany[language].company) {
-        console.error(`Missing company data for language: ${language}`)
+    console.log("Fetched existingCategories:", JSON.stringify(existingCategories, null, 2))
+
+    // Update the new category with the imageURL
+    Object.keys(newCategory || {}).forEach((language) => {
+      if (!newCategory[language]) {
+        console.error(`Missing data for language: ${language}`)
         return
       }
 
-      const companyKey = Object.keys(newCompany[language].company)[0]
-      if (!companyKey) {
-        console.error(`Missing company key for language: ${language}`)
-        return
-      }
+      Object.keys(newCategory[language] || {}).forEach((categoryKey) => {
+        const categoryValue = newCategory[language][categoryKey]
+        const subCategoryKey = Object.keys(categoryValue)[0]
+        const subCategoryValue = categoryValue[subCategoryKey]
 
-      if (imageURL) {
-        newCompany[language].company[companyKey].imageURL = imageURL
-      }
+        console.log(`Processing ${language} - ${categoryKey} - ${subCategoryKey}`)
 
-      if (!existingCategories[language]) {
-        existingCategories[language] = {}
-      }
+        if (imageURL) {
+          subCategoryValue.imageURL = imageURL
+        }
 
-      if (!existingCategories[language].company) {
-        existingCategories[language].company = []
-      }
+        if (!existingCategories[language]) {
+          existingCategories[language] = {}
+        }
 
-      const exists = existingCategories[language].company.some(
-        (existingCompany) => existingCompany.name === newCompany[language].company[companyKey].name
-      )
+        if (!existingCategories[language][categoryKey]) {
+          existingCategories[language][categoryKey] = []
+        }
 
-      if (!exists) {
-        existingCategories[language].company.push(newCompany[language].company[companyKey])
-      } else {
-        // Update existing company with new imageURL if it exists
-        existingCategories[language].company = existingCategories[language].company.map(
-          (existingCompany) =>
-            existingCompany.name === newCompany[language].company[companyKey].name
-              ? { ...existingCompany, ...(imageURL && { imageURL }) }
-              : existingCompany
+        const exists = existingCategories[language][categoryKey].some(
+          (existingSubCategory) => existingSubCategory.name === subCategoryValue.name
         )
-      }
+
+        if (!exists) {
+          console.log(`Adding new sub-category: ${subCategoryValue.name}`)
+          existingCategories[language][categoryKey].push(subCategoryValue)
+        } else {
+          console.log(`Updating existing sub-category: ${subCategoryValue.name}`)
+          // Update existing sub-category with new imageURL if it exists
+          existingCategories[language][categoryKey] = existingCategories[language][categoryKey].map(
+            (existingSubCategory) =>
+              existingSubCategory.name === subCategoryValue.name
+                ? { ...existingSubCategory, ...(imageURL && { imageURL }) }
+                : existingSubCategory
+          )
+        }
+      })
     })
 
+    console.log("Updated categories:", JSON.stringify(existingCategories, null, 2))
+
+    // Save updated categories to the database
     const params = {
       TableName: process.env.CATEGORIES_TABLE,
       Item: {
@@ -75,6 +87,8 @@ export const editCategories = async (event) => {
 
     const putCommand = new PutCommand(params)
     await db.send(putCommand)
+
+    console.log("Categories updated successfully")
 
     return {
       statusCode: 200,
