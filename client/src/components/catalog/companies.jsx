@@ -41,13 +41,13 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
     mutationFn: async () => {
       const newCompany = {
         en: {
-          company: { name: newCompanyName },
-        },
-        ru: {
-          company: { name: newCompanyName },
+          company: { company: { name: newCompanyName } },
         },
         ka: {
-          company: { name: newCompanyName },
+          company: { კომპანია: { name: newCompanyName } },
+        },
+        ru: {
+          company: { компания: { name: newCompanyName } },
         },
       }
 

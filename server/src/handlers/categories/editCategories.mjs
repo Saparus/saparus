@@ -25,8 +25,9 @@ export const editCategories = async (event) => {
 
     // Update the new company category with the imageURL
     Object.keys(newCompany).forEach((language) => {
+      const companyKey = Object.keys(newCompany[language].company)[0]
       if (imageURL) {
-        newCompany[language].company.imageURL = imageURL
+        newCompany[language].company[companyKey].imageURL = imageURL
       }
 
       if (!existingCategories[language]) {
@@ -38,16 +39,16 @@ export const editCategories = async (event) => {
       }
 
       const exists = existingCategories[language].company.some(
-        (existingCompany) => existingCompany.name === newCompany[language].company.name
+        (existingCompany) => existingCompany.name === newCompany[language].company[companyKey].name
       )
 
       if (!exists) {
-        existingCategories[language].company.push(newCompany[language].company)
+        existingCategories[language].company.push(newCompany[language].company[companyKey])
       } else {
         // Update existing company with new imageURL if it exists
         existingCategories[language].company = existingCategories[language].company.map(
           (existingCompany) =>
-            existingCompany.name === newCompany[language].company.name
+            existingCompany.name === newCompany[language].company[companyKey].name
               ? { ...existingCompany, ...(imageURL && { imageURL }) }
               : existingCompany
         )
