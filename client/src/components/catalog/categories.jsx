@@ -91,12 +91,14 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
       return <div>something went wrong</div>
     }
 
-    const categories = data.categories[currentLanguage]
+    const categories = transformCategories(data.categories)
 
     const handleOnSelect = (event) => {
       const { name, value } = event.target
 
-      if (name === "companies") {
+      console.log({ name, value })
+
+      if (name === "company") {
         setInputValue((prev) => ({
           ...prev,
           categories: {
@@ -122,10 +124,10 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
       priceOptions.push(i)
     }
 
-    const renderCategorySelect = (key, categoryArray) => {
-      console.log({ key, categoryArray })
+    const renderCategorySelect = (category) => {
+      const { key, subKeys, values, amount } = category
 
-      if (categoryArray.amount === 0) return
+      if (amount === 0) return
 
       return (
         <div
@@ -135,7 +137,7 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
           <select
             id={`select-${key}`}
             className="select category"
-            name={categoryArray.name}
+            name={key}
             value={inputValue.categories?.[key] || ""}
             onChange={handleOnSelect}
           >
@@ -144,15 +146,15 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
               disabled
               value=""
             >
-              {categoryArray.name}
+              {subKeys[currentLanguage]}
             </option>
             <option value="All">{t("All")}</option>
-            {categoryArray.values.map((category, index) => (
+            {values.map((category) => (
               <option
-                key={index}
-                value={category.name}
+                key={category[currentLanguage]}
+                value={category.en}
               >
-                {category.name}
+                {category[currentLanguage]}
               </option>
             ))}
           </select>
@@ -160,34 +162,9 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
       )
     }
 
-    // const renderCompanySelect = () => {
-    //   return (
-    //     <div className="select-holder">
-    //       <select
-    //         id="select-companies"
-    //         className="select category"
-    //         name="companies"
-    //         value={inputValue.categories?.company || selectedCompany || ""}
-    //         onChange={handleOnSelect}
-    //       >
-    //         <option
-    //           defaultValue
-    //           disabled
-    //           value=""
-    //         >
-    //           {t("companies")}
-    //         </option>
-    //         <option value="All">{t("All")}</option>
-    //       </select>
-    //     </div>
-    //   )
-    // }
-
     return (
       <>
-        {Object.entries(categories).map(([key, categoryArray]) =>
-          renderCategorySelect(key, categoryArray)
-        )}
+        {categories.map((category) => renderCategorySelect(category))}
         {/* {renderCompanySelect()} */}
       </>
     )
@@ -296,3 +273,37 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
 }
 
 export default Categories
+
+const transformCategories = (input) => {
+  const languages = Object.keys(input)
+  const result = []
+
+  languages.forEach((lang) => {
+    const categories = input[lang]
+    Object.keys(categories).forEach((categoryKey) => {
+      const category = categories[categoryKey]
+      let existingCategory = result.find((item) => item.key === categoryKey)
+
+      if (!existingCategory) {
+        existingCategory = {
+          key: categoryKey,
+          subKeys: {},
+          values: [],
+          amount: category.amount,
+        }
+        result.push(existingCategory)
+      }
+
+      existingCategory.subKeys[lang] = category.name
+
+      category.values.forEach((value, index) => {
+        if (!existingCategory.values[index]) {
+          existingCategory.values[index] = {}
+        }
+        existingCategory.values[index][lang] = value.name
+      })
+    })
+  })
+
+  return result
+}

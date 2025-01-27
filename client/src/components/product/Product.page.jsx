@@ -84,8 +84,6 @@ const Product = () => {
   const renderProductInformation = () => {
     const { id, name, description, images, inStock, fixedPrice, price, categories } = product
 
-    console.log(product)
-
     return (
       <div className="product-information">
         <p className="product-name">{name}</p>

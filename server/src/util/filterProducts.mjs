@@ -29,9 +29,12 @@ export const filterProducts = (products, filter, language = "en") => {
 
       if (key === "categories") {
         const categoryMatches = Object.keys(filter[key]).every((categoryKey) => {
-          if (filter[key][categoryKey] === "") {
+          const categorySubKey = Object.keys(filter[key][categoryKey])?.[0]
+
+          if (filter?.[key]?.[categoryKey]?.[categorySubKey]) {
             return true
           }
+
           const match = categories[categoryKey] === filter[key][categoryKey]
           console.log(`Checking category ${categoryKey}:`, match)
           return match

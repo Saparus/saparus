@@ -36,8 +36,6 @@ const EditProductLink = ({ product, handleDelete }) => {
     setIsConfirmDeletionModalVisible(false)
   }
 
-  console.log(product.images[0])
-
   return (
     <Link
       to={`./edit/${product.id}`}

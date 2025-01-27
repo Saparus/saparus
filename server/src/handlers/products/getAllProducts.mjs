@@ -1,7 +1,6 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
-import { filterProducts } from "../../util/filterProducts.mjs"
 
 export const getAllProducts = async (event) => {
   const { filter, language, limit, page } = event.queryStringParameters
@@ -21,42 +20,28 @@ export const getAllProducts = async (event) => {
 
   const params = {
     TableName: process.env.PRODUCTS_TABLE,
+    FilterExpression: "#price BETWEEN :minPrice AND :maxPrice AND #type = :type",
+    ExpressionAttributeNames: {
+      "#price": "price",
+      "#type": `categories.${languageToApply}.type.${Object.keys(categories?.type || {})[0]}`,
+    },
+    ExpressionAttributeValues: {
+      ":minPrice": minPrice,
+      ":maxPrice": maxPrice,
+      ":type": categories?.type[Object.keys(categories?.type || {})[0]],
+    },
+    Limit: limit,
+    ExclusiveStartKey: page > 1 ? { id: `page-${page - 1}` } : undefined,
   }
 
-  const scanCommand = new ScanCommand(params)
-  const { Items: products } = await db.send(scanCommand)
-
-  let productsToSend = []
-
   try {
-    const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
-    const isEmptyFilter = Object.keys(parsedFilter).length === 0
+    const scanCommand = new ScanCommand(params)
+    const { Items: products } = await db.send(scanCommand)
 
-    if (filter || !isEmptyFilter) {
-      const parsedFilter = JSON.parse(decodeURIComponent(filter))
-      const { minPrice, maxPrice, ...otherFilters } = parsedFilter
-
-      productsToSend = filterProducts(products, otherFilters, languageToApply)
-
-      if (minPrice || maxPrice) {
-        productsToSend = productsToSend.filter((product) => {
-          const price = product.price
-          return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice)
-        })
-      }
-    } else {
-      productsToSend = products.map((product) => ({
-        ...product,
-        name: product.name[languageToApply],
-        description: product.description[languageToApply],
-      }))
-    }
-
-    const startIndex = (page - 1) * limit
-    const endIndex = startIndex + limit
-    const paginatedResult = productsToSend.slice(startIndex, endIndex).map((productToSend) => ({
-      ...productToSend,
-      images: productToSend.images.map((image) => image + "/s.webp"),
+    const paginatedResult = products.map((product) => ({
+      ...product,
+      name: product.name[languageToApply],
+      description: product.description[languageToApply],
     }))
 
     return {
@@ -69,9 +54,8 @@ export const getAllProducts = async (event) => {
         products: paginatedResult,
         pagination: {
           currentPage: page,
-          hasNextPage: endIndex < products.length,
-          totalProducts: products.length,
-          totalPages: Math.ceil(products.length / limit),
+          hasNextPage: !!LastEvaluatedKey,
+          totalProducts: paginatedResult.length,
         },
       }),
     }
@@ -83,7 +67,7 @@ export const getAllProducts = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Error fetching products" }),
+      body: JSON.stringify({ message: "Error fetching products", error }),
     }
   }
 }

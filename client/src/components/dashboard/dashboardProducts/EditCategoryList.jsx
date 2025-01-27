@@ -24,8 +24,6 @@ const EditCategoryList = ({
   )
 
   const handleAddOrEditCategory = (newCategories) => {
-    console.log("New Categories:", newCategories)
-
     setCurrentProduct((prevState) => {
       const mergeCategories = (prevCategories, newCategories) => {
         return Object.keys(newCategories).reduce(
@@ -60,8 +58,6 @@ const EditCategoryList = ({
 
       const mergedCategories = mergeCategories(prevState.categories, newCategories)
 
-      console.log("Merged Categories:", mergedCategories)
-
       return {
         ...prevState,
         categories: mergedCategories,
@@ -85,8 +81,6 @@ const EditCategoryList = ({
       }
     })
   }
-
-  console.log({ categoryArray })
 
   return (
     <div className="category-list">
