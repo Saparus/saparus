@@ -127,7 +127,9 @@ functions:
         Action:
           - "dynamodb:PutItem"
           - "dynamodb:GetItem"
-        Resource: !GetAtt CategoriesTable.Arn
+        Resource:
+          - !GetAtt CategoriesTable.Arn
+          - arn:aws:s3:::saparus-images/*
 
   # About
   getAbout:
