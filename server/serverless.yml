@@ -126,6 +126,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:PutItem"
+          - "dynamodb:GetItem"
         Resource: !GetAtt CategoriesTable.Arn
 
   # About

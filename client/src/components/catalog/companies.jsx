@@ -39,19 +39,17 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
 
   const addCategoryMutation = useMutation({
     mutationFn: async () => {
-      const newCompany = [
-        {
-          en: {
-            company: [...data.en, { name: newCompanyName }],
-          },
-          ru: {
-            company: [...data.ru, { name: newCompanyName }],
-          },
-          ka: {
-            company: [...data.ka, { name: newCompanyName }],
-          },
+      const newCompany = {
+        en: {
+          company: { name: newCompanyName },
         },
-      ]
+        ru: {
+          company: { name: newCompanyName },
+        },
+        ka: {
+          company: { name: newCompanyName },
+        },
+      }
 
       return await editCategories(newCompany, uploadedImage, apiKey)
     },

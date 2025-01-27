@@ -5,13 +5,13 @@ import { db } from "../../util/db.mjs"
 
 export const editCategories = async (event) => {
   try {
-    const { categories, image } = JSON.parse(event.body)
+    const { newCompany, image } = JSON.parse(event.body)
 
     let imageURL = null
 
     // Upload image if exists
     if (image) {
-      imageURL = await uploadImage(image, "company_images", { suffix: "", height: 200 })
+      imageURL = await uploadImage(image, "company_images")
     }
 
     // Fetch existing categories from the database
@@ -23,45 +23,35 @@ export const editCategories = async (event) => {
     const { Item } = await db.send(new GetCommand(getParams))
     const existingCategories = Item?.categories || {}
 
-    const newCategory = { name: addedCategory }
-    if (imageURL) {
-      newCategory.imageURL = imageURL
-    }
+    // Update the new company category with the imageURL
+    Object.keys(newCompany).forEach((language) => {
+      if (imageURL) {
+        newCompany[language].company.imageURL = imageURL
+      }
 
-    // Update the new categories with the imageURL
-    const newCategories = {
-      en: {
-        company: [...(existingCategories.en?.company || []), newCategory],
-      },
-      ru: {
-        company: [...(existingCategories.ru?.company || []), newCategory],
-      },
-      ka: {
-        company: [...(existingCategories.ka?.company || []), newCategory],
-      },
-    }
-
-    // Merge new categories with existing categories
-    Object.keys(newCategories).forEach((language) => {
       if (!existingCategories[language]) {
         existingCategories[language] = {}
       }
 
-      Object.keys(newCategories[language]).forEach((categoryKey) => {
-        if (!existingCategories[language][categoryKey]) {
-          existingCategories[language][categoryKey] = []
-        }
+      if (!existingCategories[language].company) {
+        existingCategories[language].company = []
+      }
 
-        newCategories[language][categoryKey].forEach((newCategory) => {
-          const exists = existingCategories[language][categoryKey].some(
-            (existingCategory) => existingCategory.name === newCategory.name
-          )
+      const exists = existingCategories[language].company.some(
+        (existingCompany) => existingCompany.name === newCompany[language].company.name
+      )
 
-          if (!exists) {
-            existingCategories[language][categoryKey].push(newCategory)
-          }
-        })
-      })
+      if (!exists) {
+        existingCategories[language].company.push(newCompany[language].company)
+      } else {
+        // Update existing company with new imageURL if it exists
+        existingCategories[language].company = existingCategories[language].company.map(
+          (existingCompany) =>
+            existingCompany.name === newCompany[language].company.name
+              ? { ...existingCompany, ...(imageURL && { imageURL }) }
+              : existingCompany
+        )
+      }
     })
 
     // Save updated categories to the database
