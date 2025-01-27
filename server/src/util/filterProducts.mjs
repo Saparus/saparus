@@ -1,12 +1,19 @@
 export const filterProducts = (products, filter, language = "en") => {
+  console.log("Initial Products:", JSON.stringify(products, null, 2))
+  console.log("Filter:", JSON.stringify(filter, null, 2))
+  console.log("Language:", language)
+
   const translatedProducts = products.map((product) => {
     const { name, description } = product
 
-    return {
+    const translatedProduct = {
       ...product,
       name: name[language],
       description: description[language],
     }
+
+    console.log("Translated Product:", JSON.stringify(translatedProduct, null, 2))
+    return translatedProduct
   })
 
   const filteredProducts = translatedProducts.filter((item) => {
@@ -14,26 +21,33 @@ export const filterProducts = (products, filter, language = "en") => {
 
     const matchesFilter = Object.keys(filter).every((key) => {
       if (key === "name" || key === "description") {
-        return (
-          name.toLowerCase().includes(filter[key].toLowerCase()) ||
-          description.toLowerCase().includes(filter[key].toLowerCase())
-        )
+        const nameMatches = name.toLowerCase().includes(filter[key].toLowerCase())
+        const descriptionMatches = description.toLowerCase().includes(filter[key].toLowerCase())
+        console.log(`Checking ${key}:`, { nameMatches, descriptionMatches })
+        return nameMatches || descriptionMatches
       }
 
       if (key === "categories") {
-        return Object.keys(filter[key]).every((categoryKey) => {
+        const categoryMatches = Object.keys(filter[key]).every((categoryKey) => {
           if (filter[key][categoryKey] === "") {
             return true
           }
-          return categories[categoryKey] === filter[key][categoryKey]
+          const match = categories[categoryKey] === filter[key][categoryKey]
+          console.log(`Checking category ${categoryKey}:`, match)
+          return match
         })
+        return categoryMatches
       }
 
-      return rest[key] === filter[key]
+      const restMatches = rest[key] === filter[key]
+      console.log(`Checking ${key}:`, restMatches)
+      return restMatches
     })
 
+    console.log("Matches Filter:", matchesFilter)
     return matchesFilter
   })
 
+  console.log("Filtered Products:", JSON.stringify(filteredProducts, null, 2))
   return filteredProducts
 }

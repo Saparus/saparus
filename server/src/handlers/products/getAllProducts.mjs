@@ -54,12 +54,10 @@ export const getAllProducts = async (event) => {
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
-    const paginatedResult = productsToSend
-      .slice(startIndex, endIndex)
-      .map((productToSend) => ({
-        ...productToSend,
-        images: productToSend.images.map((image) => image + "/s.webp"),
-      }))
+    const paginatedResult = productsToSend.slice(startIndex, endIndex).map((productToSend) => ({
+      ...productToSend,
+      images: productToSend.images.map((image) => image + "/s.webp"),
+    }))
 
     return {
       statusCode: 200,
