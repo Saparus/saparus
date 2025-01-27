@@ -25,7 +25,17 @@ export const editCategories = async (event) => {
 
     // Update the new company category with the imageURL
     Object.keys(newCompany).forEach((language) => {
+      if (!newCompany[language] || !newCompany[language].company) {
+        console.error(`Missing company data for language: ${language}`)
+        return
+      }
+
       const companyKey = Object.keys(newCompany[language].company)[0]
+      if (!companyKey) {
+        console.error(`Missing company key for language: ${language}`)
+        return
+      }
+
       if (imageURL) {
         newCompany[language].company[companyKey].imageURL = imageURL
       }
@@ -55,7 +65,6 @@ export const editCategories = async (event) => {
       }
     })
 
-    // Save updated categories to the database
     const params = {
       TableName: process.env.CATEGORIES_TABLE,
       Item: {
