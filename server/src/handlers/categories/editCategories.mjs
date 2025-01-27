@@ -59,6 +59,17 @@ export const editCategories = async (event) => {
           console.log(`Initialized category in existingCategories: ${categoryKey}`)
         }
 
+        console.log({ language, categoryKey }, null, 2)
+        console.log({ existingCategories }, null, 2)
+        console.log({ "existingCategories[language]": existingCategories[language] }, null, 2)
+        console.log(
+          {
+            "existingCategories[language][categoryKey]": existingCategories[language][categoryKey],
+          },
+          null,
+          2
+        )
+
         const exists = existingCategories[language][categoryKey].some(
           (existingSubCategory) => existingSubCategory.name === subCategoryValue.name
         )
