@@ -21,7 +21,7 @@ export const editCategories = async (newCategory, image, api_key) => {
 
   try {
     const response = await ajax.post(`/categories?api_key=${api_key}`, {
-      category: newCategory,
+      newCategory,
       image,
     })
     const data = await response.json()

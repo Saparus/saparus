@@ -30,12 +30,14 @@ export const editCategories = async (event) => {
 
     // Update the new category with the imageURL
     Object.keys(newCategory || {}).forEach((language) => {
+      console.log(`Processing language: ${language}`)
       if (!newCategory[language]) {
         console.error(`Missing data for language: ${language}`)
         return
       }
 
       Object.keys(newCategory[language] || {}).forEach((categoryKey) => {
+        console.log(`Processing category: ${categoryKey}`)
         const categoryValue = newCategory[language][categoryKey]
         const subCategoryKey = Object.keys(categoryValue)[0]
         const subCategoryValue = categoryValue[subCategoryKey]
@@ -44,14 +46,17 @@ export const editCategories = async (event) => {
 
         if (imageURL) {
           subCategoryValue.imageURL = imageURL
+          console.log(`Added imageURL to sub-category: ${subCategoryValue.name}`)
         }
 
         if (!existingCategories[language]) {
           existingCategories[language] = {}
+          console.log(`Initialized language in existingCategories: ${language}`)
         }
 
         if (!existingCategories[language][categoryKey]) {
           existingCategories[language][categoryKey] = []
+          console.log(`Initialized category in existingCategories: ${categoryKey}`)
         }
 
         const exists = existingCategories[language][categoryKey].some(
