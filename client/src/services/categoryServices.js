@@ -13,7 +13,7 @@ export const getCategories = async () => {
 }
 
 // change all categories to the passed categories
-export const editCategories = async (categories, addedCategory, image, api_key) => {
+export const editCategories = async (newCategory, image, api_key) => {
   if (!api_key) {
     console.error("API key is required")
     return
@@ -21,8 +21,7 @@ export const editCategories = async (categories, addedCategory, image, api_key) 
 
   try {
     const response = await ajax.post(`/categories?api_key=${api_key}`, {
-      categories,
-      addedCategory,
+      category: newCategory,
       image,
     })
     const data = await response.json()

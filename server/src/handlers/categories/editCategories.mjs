@@ -5,7 +5,7 @@ import { db } from "../../util/db.mjs"
 
 export const editCategories = async (event) => {
   try {
-    const { categories, addedCategory, image } = JSON.parse(event.body)
+    const { categories, image } = JSON.parse(event.body)
 
     let imageURL = null
 

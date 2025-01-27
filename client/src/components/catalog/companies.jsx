@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 
 import { ReactComponent as PlanmecaLogo } from "../../assets/companies/planmeca.svg"
 import { ReactComponent as QuestionMark } from "../../assets/companies/undefined-company.svg"
-import { getCompanies, editCategories } from "../../services/categoryServices"
+import { getCompanies, getCategories, editCategories } from "../../services/categoryServices"
 
 const Companies = ({ setFilter, selectedCompany, apiKey }) => {
   const [newCompanyName, setNewCompanyName] = useState("")
@@ -14,6 +14,8 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
   const { data, isLoading, error } = useQuery(["companies"], getCompanies)
+
+  console.log(data)
 
   // const currentLanguage = data
 
@@ -37,7 +39,7 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
 
   const addCategoryMutation = useMutation({
     mutationFn: async () => {
-      const newCategories = [
+      const newCompany = [
         {
           en: {
             company: [...data.en, { name: newCompanyName }],
@@ -51,7 +53,7 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
         },
       ]
 
-      return await editCategories(newCategories, newCompanyName, uploadedImage, apiKey)
+      return await editCategories(newCompany, uploadedImage, apiKey)
     },
     onMutate: () => {
       // showing loading toast when the mutation starts
