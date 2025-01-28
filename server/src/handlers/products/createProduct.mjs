@@ -75,6 +75,10 @@ export const createProduct = async (event) => {
     if (categories.en.company) {
       const image = categories.en.company.image
 
+      console.log(categories.en.company)
+
+      if (!image) return
+
       imageURL = await uploadImage(image, "company_images")
 
       console.log("image URL:", imageURL)
