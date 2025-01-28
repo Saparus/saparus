@@ -17,7 +17,7 @@ const Product = ({ product }) => {
         <div className="image">
           {images?.length > 0 ? (
             <img
-              src={images[0]}
+              src={images[0] + "/s.webp"}
               alt=""
             />
           ) : (

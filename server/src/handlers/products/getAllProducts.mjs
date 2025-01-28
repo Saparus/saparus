@@ -17,7 +17,7 @@ export const getAllProducts = async (event) => {
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
   const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
-  const { minPrice, maxPrice, categories } = parsedFilter
+  const { minPrice, maxPrice, categories, name } = parsedFilter
 
   let filterExpression = []
   let expressionAttributeNames = {}
@@ -34,12 +34,20 @@ export const getAllProducts = async (event) => {
   }
 
   if (categories && Object.keys(categories).length > 0) {
-    const categoryKey = Object.keys(categories.type || {})[0]
-    if (categoryKey) {
-      filterExpression.push("#type = :type")
-      expressionAttributeNames[`#type`] = `categories.${languageToApply}.type.${categoryKey}`
-      expressionAttributeValues[":type"] = categories.type[categoryKey]
-    }
+    Object.keys(categories).forEach((key) => {
+      const categoryValue = categories[key]
+      if (categoryValue !== "") {
+        filterExpression.push(`#${key} = :${key}`)
+        expressionAttributeNames[`#${key}`] = `categories.${languageToApply}.${key}`
+        expressionAttributeValues[`:${key}`] = categoryValue
+      }
+    })
+  }
+
+  if (name) {
+    filterExpression.push("contains(#name, :name)")
+    expressionAttributeNames["#name"] = `name.${languageToApply}`
+    expressionAttributeValues[":name"] = name
   }
 
   const params = {

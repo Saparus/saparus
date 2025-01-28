@@ -70,7 +70,7 @@ const Product = () => {
 
           {product.images?.[currentImageIndex] ? (
             <img
-              src={product.images[currentImageIndex]}
+              src={product.images[currentImageIndex] + "/o.webp"}
               alt={product.name}
             />
           ) : (

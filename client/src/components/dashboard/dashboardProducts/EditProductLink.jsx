@@ -50,7 +50,7 @@ const EditProductLink = ({ product, handleDelete }) => {
         <div className="image">
           {product.images?.length > 0 ? (
             <img
-              src={product.images[0]}
+              src={product.images[0] + "/s.webp"}
               alt=""
             />
           ) : (
