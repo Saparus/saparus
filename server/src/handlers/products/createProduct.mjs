@@ -72,10 +72,10 @@ export const createProduct = async (event) => {
     const globalCategories = Item?.categories || {}
     console.log("Fetched global categories:", JSON.stringify(globalCategories, null, 2))
 
-    if (categories.en.company) {
-      const image = categories.en.company.image
+    if (categories.en.company.company) {
+      const image = categories.en.company.company.image
 
-      console.log(categories.en.company)
+      console.log(categories.en.company.company)
 
       if (!image) return
 
