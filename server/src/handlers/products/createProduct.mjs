@@ -17,6 +17,8 @@ export const createProduct = async (event) => {
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
+  let imageURL = ""
+
   if (!name || !description) {
     console.log("Validation failed: Missing required fields")
     return {
@@ -70,39 +72,48 @@ export const createProduct = async (event) => {
     const globalCategories = Item?.categories || {}
     console.log("Fetched global categories:", JSON.stringify(globalCategories, null, 2))
 
+    if (categories.en.company) {
+      const image = categories.en.company.image
+
+      imageURL = await uploadImage(image, "company_images")
+
+      console.log("image URL:", imageURL)
+    }
+
     // update global categories with new categories or values from the product
     Object.entries(categories).forEach(([language, languageCategories]) => {
       if (!globalCategories[language]) {
         globalCategories[language] = {}
       }
 
-      Object.entries(languageCategories).forEach(async ([categoryKey, categoryValue]) => {
+      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
         if (!globalCategories[language][categoryKey]) {
           globalCategories[language][categoryKey] = {}
         }
 
-        Object.entries(categoryValue).forEach(async ([languageSpecificCategory, value]) => {
+        Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
           if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
             globalCategories[language][categoryKey][languageSpecificCategory] = []
           }
 
           // check if the category value already exists
           const exists = globalCategories[language][categoryKey][languageSpecificCategory].some(
-            (existingItem) => existingItem.name === value.name
+            (existingItem) => {
+              existingItem.name === value.name
+              if (categoryKey === "company") {
+                existingItem.imageURL === imageURL
+              }
+            }
           )
 
           // add new category value if it doesn't exist and is not null
           if (!exists && value) {
-            if (categoryKey === "company" && images.length > 0) {
-              const newImage = await uploadImage(images[0], "company_images", [
-                { suffix: "/s", height: 200 },
-              ])
-
-              value.imageURL = newImage
-              delete value.image
-            }
-
             globalCategories[language][categoryKey][languageSpecificCategory].push(value)
+
+            if (categoryKey === "company" && imageURL) {
+              delete value.image
+              value.imageURL = imageURL
+            }
 
             console.log(`Added new category value: ${JSON.stringify(value, null, 2)}`)
           }

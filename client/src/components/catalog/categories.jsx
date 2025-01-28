@@ -147,9 +147,9 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
               {subKeys[currentLanguage]}
             </option>
             <option value="All">{t("All")}</option>
-            {values.map((category) => (
+            {values.map((category, index) => (
               <option
-                key={category[currentLanguage]}
+                key={`${category[currentLanguage]}-${index}`}
                 value={category.en}
               >
                 {category[currentLanguage]}

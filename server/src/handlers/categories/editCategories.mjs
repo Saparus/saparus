@@ -1,6 +1,10 @@
 import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
+import AWS from "aws-sdk"
+
 import { uploadImage } from "../../util/s3.mjs"
 import { db } from "../../util/db.mjs"
+
+const lambda = new AWS.Lambda()
 
 export const editCategories = async (event) => {
   try {
