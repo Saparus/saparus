@@ -50,10 +50,8 @@ export const getAllProducts = async (event) => {
     Object.keys(categories).forEach((key) => {
       const categoryValue = categories[key]
       if (categoryValue !== "") {
-        // Use a simple placeholder for the top-level attribute
         expressionAttributeNames["#categories"] = "categories"
-        // Access the nested attribute directly in the FilterExpression
-        filterExpression.push(`#categories-en-${key}-${key}-name = :${key}`)
+        filterExpression.push(`#categories_en_${key}_${key}_name = :${key}`)
         expressionAttributeValues[`:${key}`] = categoryValue
       }
     })
@@ -61,10 +59,8 @@ export const getAllProducts = async (event) => {
 
   if (name) {
     console.log("Adding name filter:", name)
-    // Use a simple placeholder for the top-level attribute
     expressionAttributeNames["#searchName"] = "name"
-    // Access the nested attribute directly in the FilterExpression
-    filterExpression.push(`contains(#name-${languageToApply}, :name)`)
+    filterExpression.push(`contains(#name_${languageToApply}, :name)`)
     expressionAttributeValues[":name"] = name
   }
 
@@ -79,7 +75,7 @@ export const getAllProducts = async (event) => {
       filterExpression.length > 0 ? { "#price": "price", ...expressionAttributeNames } : undefined,
     ExpressionAttributeValues: filterExpression.length > 0 ? expressionAttributeValues : undefined,
     Limit: parseInt(limit),
-    ExclusiveStartKey: page > 1 ? { id: `page-${page - 1}` } : undefined,
+    ExclusiveStartKey: page > 1 ? { id: `page_${page - 1}` } : undefined,
   }
 
   console.log("DynamoDB ScanCommand params:", JSON.stringify(params, null, 2))
