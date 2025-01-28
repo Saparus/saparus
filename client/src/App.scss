@@ -43,10 +43,20 @@ a {
 }
 
 .company {
+  transition: opacity $animation_duration $animation;
+
   &.selected {
     .company-logo {
       border: 2px solid $base-color;
     }
+  }
+
+  span {
+    font-weight: 500;
+  }
+
+  &:hover {
+    opacity: 0.85;
   }
 
   .company-logo {

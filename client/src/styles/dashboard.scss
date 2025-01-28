@@ -374,6 +374,9 @@
         .category-item-text {
           display: flex;
           gap: 0.25rem;
+          box-shadow: $shadow;
+          transition: box-shadow $animation_duration $animation,
+            background-color $animation_duration $animation;
 
           .category-type-key {
             opacity: 0.75;
@@ -1080,6 +1083,11 @@
       top: 0;
       opacity: 0;
       cursor: pointer;
+
+      &:hover + .image-input-button {
+        background-color: $success-green-active;
+        box-shadow: $shadow-active;
+      }
     }
 
     .image-input-button {
@@ -1092,21 +1100,22 @@
 
       object-fit: cover;
       border-radius: 0.5rem;
-      background-color: $primary-color;
+      background-color: $success-green;
       color: $base-color;
       margin-bottom: 1rem;
       display: flex;
       justify-content: center;
       align-items: center;
       pointer-events: none;
-      transition: 300ms $animation $animation_duration;
+      transition: background-color $animation $animation_duration,
+        box-shadow $animation $animation_duration;
       box-shadow: $shadow;
 
-      &:hover {
-        background-color: $primary-color-active;
-        background-color: red !important;
-        box-shadow: $shadow-active;
-      }
+      // &:hover {
+      //   background-color: $success-green-active;
+      //   background-color: red !important;
+      //   box-shadow: $shadow-active;
+      // }
     }
 
     .categories-modal-image {

@@ -70,8 +70,8 @@ const Product = () => {
 
           {product.images?.[currentImageIndex] ? (
             <img
-              src={product.images[currentImageIndex] + "/o.webp"}
-              alt={product.name}
+              src={product.images[currentImageIndex]}
+              alt=""
             />
           ) : (
             <div className="image-not-found-message">{t("Image not found")}</div>
