@@ -30,6 +30,18 @@
   font-family: $main-font;
 }
 
+a {
+  color: $primary-color;
+
+  &:hover {
+    color: $primary-color-active;
+  }
+
+  &:visited {
+    color: $primary-color;
+  }
+}
+
 .company {
   &.selected {
     .company-logo {

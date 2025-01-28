@@ -61,7 +61,7 @@ const EditCategoryModal = ({
     if (!field || !value || onlyForSuggestions) return
 
     // if a key is selected, update the corresponding key in other languages and clear values
-    if (field === "key") {
+    if (field === "key" && !onlyForSuggestions) {
       let keyToApply
 
       const entries = Object.entries(currentCategories?.[language] || {})
@@ -87,7 +87,7 @@ const EditCategoryModal = ({
     }
 
     // if a value is selected, update the corresponding value in other languages
-    if (field === "value") {
+    if (field === "value" && !onlyForSuggestions) {
       let selectedCategoryKey
 
       const entries = Object.entries(currentCategories?.[language] || {})

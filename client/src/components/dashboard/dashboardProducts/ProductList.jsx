@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useTranslation } from "react-i18next"
 import { useState, useEffect } from "react"
@@ -76,17 +76,12 @@ const ProductList = ({ filter, resetFilter, apiKey }) => {
     if (products.length === 0) {
       return (
         <>
-          <button
-            className="reset-filters"
-            onClick={(e) => {
-              resetFilter(e)
-              goToPage(1)
-            }}
-          >
+          <div className="reset-filters">
             <h3 className="products-not-found-message">
-              {t("Products not found")}, <span>{t("click here to add new product")}</span>
+              {t("Products not found")},{" "}
+              <Link to="../../admin/products/add">{t("click here to add new product")}</Link>
             </h3>
-          </button>
+          </div>
         </>
       )
     } else {

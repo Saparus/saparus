@@ -19,6 +19,18 @@ export const createProduct = async (event) => {
 
   let imageURL = ""
 
+  if (categories.en.company.company) {
+    const image = categories.en.company.company.image
+
+    console.log(categories.en.company.company)
+
+    if (!image) return
+
+    imageURL = await uploadImage(image, "company_images")
+
+    console.log("image URL:", imageURL)
+  }
+
   if (!name || !description) {
     console.log("Validation failed: Missing required fields")
     return {
@@ -41,7 +53,19 @@ export const createProduct = async (event) => {
           })
         )
       : []
+
     console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
+
+    Object.entries(categories).map((language, category) => {
+      Object.entries(category).map((categoryKey, categoryValue) => {
+        Object.entries(categoryValue).map((languageSpecificCategory, value) => {
+          if (categoryKey === "company") {
+            value.imageURL = imageURL
+            delete value.image
+          }
+        })
+      })
+    })
 
     const params = {
       TableName: process.env.PRODUCTS_TABLE,
@@ -71,18 +95,6 @@ export const createProduct = async (event) => {
     const { Item } = await db.send(new GetCommand(categoryParams))
     const globalCategories = Item?.categories || {}
     console.log("Fetched global categories:", JSON.stringify(globalCategories, null, 2))
-
-    if (categories.en.company.company) {
-      const image = categories.en.company.company.image
-
-      console.log(categories.en.company.company)
-
-      if (!image) return
-
-      imageURL = await uploadImage(image, "company_images")
-
-      console.log("image URL:", imageURL)
-    }
 
     // update global categories with new categories or values from the product
     Object.entries(categories).forEach(([language, languageCategories]) => {

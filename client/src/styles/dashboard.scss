@@ -1092,12 +1092,21 @@
 
       object-fit: cover;
       border-radius: 0.5rem;
-      background-color: $base-color;
+      background-color: $primary-color;
+      color: $base-color;
       margin-bottom: 1rem;
       display: flex;
       justify-content: center;
       align-items: center;
       pointer-events: none;
+      transition: 300ms $animation $animation_duration;
+      box-shadow: $shadow;
+
+      &:hover {
+        background-color: $primary-color-active;
+        background-color: red !important;
+        box-shadow: $shadow-active;
+      }
     }
 
     .categories-modal-image {
