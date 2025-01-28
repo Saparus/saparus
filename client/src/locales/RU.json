@@ -1,6 +1,7 @@
 {
   "company": "компания",
   "type": "тип",
+  "accessory": "аксессуар",
   "dental units": "стоматологические установки",
   "accessories": "аксессуары",
   "equipment": "оборудование",
@@ -143,9 +144,14 @@
     "description": "описание",
     "title": "название",
     "text": "текст",
-    "access key": "Access Key",
-    "add company": "Add Company",
-    "company": "company"
+    "access key": "ключ доступа",
+    "add company": "добавить компанию",
+    "company": "компания",
+    "Save": "сохранить",
+    "Cancel": "отменить",
+    "Edit Categories": "редактировать категории",
+    "Adding company": "добавление компании",
+    "click here to add new product": "нажмите здесь, чтобы добавить новый продукт"
   },
 
   "children program": {

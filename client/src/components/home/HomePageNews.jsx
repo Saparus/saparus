@@ -29,7 +29,7 @@ const HomePageNews = () => {
 
     return (
       <Link
-        to="/news/0"
+        to={`/news/${news.articles[0].id}`}
         className="latest-news"
       >
         <div className={`image ${news.articles[0].images?.[0] ? "" : "no-image"}`}>

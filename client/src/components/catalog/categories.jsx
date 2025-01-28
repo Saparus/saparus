@@ -230,7 +230,7 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
           onChange={handleInputChange}
           placeholder={t("search by name")}
         />
-        {renderCategories()}
+        <div className="categories-list-select">{renderCategories()}</div>
       </div>
       {renderPriceRanges()}
 

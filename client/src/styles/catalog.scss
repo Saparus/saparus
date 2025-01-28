@@ -179,6 +179,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    .categories-list-select {
+      flex-direction: column;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
   }
 
   .select-list {
@@ -289,6 +296,9 @@
         color: $base-color;
       }
     }
+  }
+
+  .categories-list-select {
   }
 
   .products-categories,
@@ -481,7 +491,14 @@
         gap: 0.5rem;
 
         .categories-main-part {
-          flex-direction: row;
+          flex-direction: column;
+
+          .categories-list-select {
+            flex-direction: column;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+          }
         }
 
         .utils {

@@ -1,6 +1,7 @@
 {
   "company": "კომპანია",
   "type": "ტიპი",
+  "accessory": "აქსესუარი",
   "dental units": "სტომატოლოგიური აპარატურა",
   "accessories": "აქსესუარები",
   "equipment": "აღჭურვილობა",
@@ -147,9 +148,14 @@
     "description": "აღწერა",
     "title": "სათაური",
     "text": "ტექსტი",
-    "access key": "Access Key",
-    "add company": "Add Company",
-    "company": "company"
+    "access key": "წვდომის გასაღები",
+    "add company": "კომპანიის დამატება",
+    "company": "კომპანია",
+    "Save": "დამატება",
+    "Cancel": "გაუქმება",
+    "Edit Categories": "კატეგორიების რედაქტირება",
+    "Adding company": "კომპანიის დამატება",
+    "click here to add new product": "ახალი პროდუქტის დასამატებლად დააწკაპუნეთ აქ"
   },
 
   "children program": {
