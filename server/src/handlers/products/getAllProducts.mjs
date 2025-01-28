@@ -1,15 +1,12 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
+import { filterProducts } from "../../util/filterProducts.mjs"
 
 export const getAllProducts = async (event) => {
-  console.log("Received event:", JSON.stringify(event, null, 2))
-
   const { filter, language, limit, page } = event.queryStringParameters
-  console.log("Parsed query parameters:", { filter, language, limit, page })
 
   if (!language || !limit || !page) {
-    console.error("Missing required fields: language, limit, or page")
     return {
       statusCode: 400,
       headers: {
@@ -21,77 +18,46 @@ export const getAllProducts = async (event) => {
   }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
-  console.log("Language to apply:", languageToApply)
-
-  const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
-  console.log("Parsed filter:", parsedFilter)
-
-  const { minPrice, maxPrice, categories, name } = parsedFilter
-  console.log("Extracted filter values:", { minPrice, maxPrice, categories, name })
-
-  let filterExpression = []
-  let expressionAttributeNames = {}
-  let expressionAttributeValues = {}
-
-  if (minPrice !== undefined) {
-    console.log("Adding minPrice filter:", minPrice)
-    filterExpression.push("#price >= :minPrice")
-    expressionAttributeValues[":minPrice"] = minPrice
-  }
-
-  if (maxPrice !== undefined) {
-    console.log("Adding maxPrice filter:", maxPrice)
-    filterExpression.push("#price <= :maxPrice")
-    expressionAttributeValues[":maxPrice"] = maxPrice
-  }
-
-  if (categories && Object.keys(categories).length > 0) {
-    console.log("Adding categories filter:", categories)
-    Object.keys(categories).forEach((key) => {
-      const categoryValue = categories[key]
-      if (categoryValue !== "") {
-        expressionAttributeNames["#categories"] = "categories"
-        filterExpression.push(`#categories_en_${key}_${key}_name = :${key}`)
-        expressionAttributeValues[`:${key}`] = categoryValue
-      }
-    })
-  }
-
-  if (name) {
-    console.log("Adding name filter:", name)
-    expressionAttributeNames["#searchName"] = "name"
-    filterExpression.push(`contains(#name_${languageToApply}, :name)`)
-    expressionAttributeValues[":name"] = name
-  }
-
-  console.log("Final filterExpression:", filterExpression.join(" AND "))
-  console.log("Final expressionAttributeNames:", expressionAttributeNames)
-  console.log("Final expressionAttributeValues:", expressionAttributeValues)
 
   const params = {
     TableName: process.env.PRODUCTS_TABLE,
-    FilterExpression: filterExpression.length > 0 ? filterExpression.join(" AND ") : undefined,
-    ExpressionAttributeNames:
-      filterExpression.length > 0 ? { "#price": "price", ...expressionAttributeNames } : undefined,
-    ExpressionAttributeValues: filterExpression.length > 0 ? expressionAttributeValues : undefined,
-    Limit: parseInt(limit),
-    ExclusiveStartKey: page > 1 ? { id: `page_${page - 1}` } : undefined,
   }
 
-  console.log("DynamoDB ScanCommand params:", JSON.stringify(params, null, 2))
+  const scanCommand = new ScanCommand(params)
+  const { Items: products } = await db.send(scanCommand)
+
+  let productsToSend = []
 
   try {
-    const { Items: products, LastEvaluatedKey } = await db.send(new ScanCommand(params))
-    console.log("ScanCommand result - Items:", products)
-    console.log("ScanCommand result - LastEvaluatedKey:", LastEvaluatedKey)
+    const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
+    const isEmptyFilter = Object.keys(parsedFilter).length === 0
 
-    const paginatedResult = products.map((product) => ({
-      ...product,
-      name: product.name[languageToApply],
-      description: product.description[languageToApply],
+    if (filter || !isEmptyFilter) {
+      const parsedFilter = JSON.parse(decodeURIComponent(filter))
+      const { minPrice, maxPrice, ...otherFilters } = parsedFilter
+
+      productsToSend = filterProducts(products, otherFilters, languageToApply)
+
+      if (minPrice || maxPrice) {
+        productsToSend = productsToSend.filter((product) => {
+          const price = product.price
+          return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice)
+        })
+      }
+    } else {
+      productsToSend = products.map((product) => ({
+        ...product,
+        name: product.name[languageToApply],
+        description: product.description[languageToApply],
+      }))
+    }
+
+    const startIndex = (page - 1) * limit
+    const endIndex = startIndex + limit
+    const paginatedResult = productsToSend.slice(startIndex, endIndex).map((productToSend) => ({
+      ...productToSend,
+      images: productToSend.images.map((image) => image + "/s.webp"),
     }))
-
-    console.log("Paginated result:", paginatedResult)
 
     return {
       statusCode: 200,
@@ -103,20 +69,21 @@ export const getAllProducts = async (event) => {
         products: paginatedResult,
         pagination: {
           currentPage: page,
-          hasNextPage: !!LastEvaluatedKey,
-          totalProducts: paginatedResult.length,
+          hasNextPage: endIndex < products.length,
+          totalProducts: products.length,
+          totalPages: Math.ceil(products.length / limit),
         },
       }),
     }
   } catch (error) {
-    console.error("Error fetching products:", error)
+    console.error("Error fetching products", error)
     return {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Error fetching products", error: error.message }),
+      body: JSON.stringify({ message: "Error fetching products" }),
     }
   }
 }

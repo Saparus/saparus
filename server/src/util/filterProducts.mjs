@@ -3,51 +3,72 @@ export const filterProducts = (products, filter, language = "en") => {
   console.log("Filter:", JSON.stringify(filter, null, 2))
   console.log("Language:", language)
 
+  // Translate products to the specified language
   const translatedProducts = products.map((product) => {
-    const { name, description } = product
+    const { name, description, categories } = product
 
-    const translatedProduct = {
+    // Flatten the categories structure for easier filtering
+    const translatedCategories = {}
+    if (categories && categories[language]) {
+      Object.keys(categories[language]).forEach((categoryKey) => {
+        const category = categories[language][categoryKey]
+        Object.keys(category).forEach((subKey) => {
+          translatedCategories[categoryKey] = category[subKey].name
+        })
+      })
+    }
+
+    return {
       ...product,
       name: name[language],
       description: description[language],
+      categories: translatedCategories, // Use flattened categories
     }
-
-    console.log("Translated Product:", JSON.stringify(translatedProduct, null, 2))
-    return translatedProduct
   })
 
-  const filteredProducts = translatedProducts.filter((item) => {
-    const { name, description, categories, ...rest } = item
+  console.log("Translated Products:", JSON.stringify(translatedProducts, null, 2))
 
+  // Filter products based on the filter criteria
+  const filteredProducts = translatedProducts.filter((item) => {
+    const { name, description, categories, price, ...rest } = item
+
+    // Check if the product matches all filter criteria
     const matchesFilter = Object.keys(filter).every((key) => {
-      if (key === "name" || key === "description") {
-        const nameMatches = name.toLowerCase().includes(filter[key].toLowerCase())
-        const descriptionMatches = description.toLowerCase().includes(filter[key].toLowerCase())
-        console.log(`Checking ${key}:`, { nameMatches, descriptionMatches })
-        return nameMatches || descriptionMatches
+      if (key === "name") {
+        // Filter by name (case-insensitive)
+        return name.toLowerCase().includes(filter[key].toLowerCase())
+      }
+
+      if (key === "description") {
+        // Filter by description (case-insensitive)
+        return description.toLowerCase().includes(filter[key].toLowerCase())
       }
 
       if (key === "categories") {
-        const categoryMatches = Object.keys(filter[key]).every((categoryKey) => {
-          const categorySubKey = Object.keys(filter[key][categoryKey])?.[0]
-
-          if (filter?.[key]?.[categoryKey]?.[categorySubKey]) {
-            return true
-          }
-
-          const match = categories[categoryKey] === filter[key][categoryKey]
-          console.log(`Checking category ${categoryKey}:`, match)
-          return match
+        // Filter by categories
+        const categoryFilters = filter[key]
+        return Object.keys(categoryFilters).every((categoryKey) => {
+          const expectedValue = categoryFilters[categoryKey]
+          const actualValue = categories[categoryKey]
+          return actualValue === expectedValue
         })
-        return categoryMatches
       }
 
-      const restMatches = rest[key] === filter[key]
-      console.log(`Checking ${key}:`, restMatches)
-      return restMatches
+      if (key === "minPrice") {
+        // Filter by minimum price
+        return price >= filter[key]
+      }
+
+      if (key === "maxPrice") {
+        // Filter by maximum price
+        return price <= filter[key]
+      }
+
+      // Filter by other fields (e.g., brand, inStock, etc.)
+      return rest[key] === filter[key]
     })
 
-    console.log("Matches Filter:", matchesFilter)
+    console.log("Product Matches Filter:", matchesFilter, item)
     return matchesFilter
   })
 
