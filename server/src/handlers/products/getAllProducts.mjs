@@ -1,3 +1,7 @@
+import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+
+import { db } from "../../util/db.mjs"
+
 export const getAllProducts = async (event) => {
   console.log("Received event:", JSON.stringify(event, null, 2))
 
