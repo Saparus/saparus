@@ -1,7 +1,3 @@
-import { ScanCommand } from "@aws-sdk/lib-dynamodb"
-
-import { db } from "../../util/db.mjs"
-
 export const getAllProducts = async (event) => {
   console.log("Received event:", JSON.stringify(event, null, 2))
 
@@ -50,10 +46,10 @@ export const getAllProducts = async (event) => {
     Object.keys(categories).forEach((key) => {
       const categoryValue = categories[key]
       if (categoryValue !== "") {
+        // Use a simple placeholder for the top-level attribute
+        expressionAttributeNames["#categories"] = "categories"
+        // Access the nested attribute directly in the FilterExpression
         filterExpression.push(`#categories.en.${key}.${key}.name = :${key}`)
-        expressionAttributeNames[
-          `#categories.en.${key}.${key}.name`
-        ] = `categories.en.${key}.${key}.name`
         expressionAttributeValues[`:${key}`] = categoryValue
       }
     })
@@ -61,8 +57,10 @@ export const getAllProducts = async (event) => {
 
   if (name) {
     console.log("Adding name filter:", name)
-    filterExpression.push(`contains(#name.${languageToApply}, :name)`)
+    // Use a simple placeholder for the top-level attribute
     expressionAttributeNames["#name"] = "name"
+    // Access the nested attribute directly in the FilterExpression
+    filterExpression.push(`contains(#name.${languageToApply}, :name)`)
     expressionAttributeValues[":name"] = name
   }
 
