@@ -3,6 +3,8 @@ export const filterProducts = (products, filter, language = "en") => {
   console.log("Filter:", JSON.stringify(filter, null, 2))
   console.log("Language:", language)
 
+  const appliedFilter = cleanFilter(filter)
+
   const translatedProducts = products.map((product) => {
     const { name, description, categories } = product
 
@@ -29,17 +31,17 @@ export const filterProducts = (products, filter, language = "en") => {
   const filteredProducts = translatedProducts.filter((item) => {
     const { name, description, categories, price, ...rest } = item
 
-    const matchesFilter = Object.keys(filter).every((key) => {
+    const matchesFilter = Object.keys(appliedFilter).every((key) => {
       if (key === "name") {
-        return name.toLowerCase().includes(filter[key].toLowerCase())
+        return name.toLowerCase().includes(appliedFilter[key].toLowerCase())
       }
 
       if (key === "description") {
-        return description.toLowerCase().includes(filter[key].toLowerCase())
+        return description.toLowerCase().includes(appliedFilter[key].toLowerCase())
       }
 
       if (key === "categories") {
-        const categoryFilters = filter[key]
+        const categoryFilters = appliedFilter[key]
         return Object.keys(categoryFilters).every((categoryKey) => {
           const expectedValue = categoryFilters[categoryKey]
           const actualValue = categories[categoryKey]
@@ -48,14 +50,14 @@ export const filterProducts = (products, filter, language = "en") => {
       }
 
       if (key === "minPrice") {
-        return price >= filter[key]
+        return price >= appliedFilter[key]
       }
 
       if (key === "maxPrice") {
-        return price <= filter[key]
+        return price <= appliedFilter[key]
       }
 
-      return rest[key] === filter[key]
+      return rest[key] === appliedFilter[key]
     })
 
     console.log("Product Matches Filter:", matchesFilter, item)
@@ -64,4 +66,26 @@ export const filterProducts = (products, filter, language = "en") => {
 
   console.log("Filtered Products:", JSON.stringify(filteredProducts, null, 2))
   return filteredProducts
+}
+
+const cleanFilter = (obj) => {
+  return Object.keys(obj).reduce((acc, key) => {
+    const value = obj[key]
+    if (
+      value === null ||
+      value === "" ||
+      (typeof value === "object" && Object.keys(value).length === 0)
+    ) {
+      return acc
+    }
+    if (typeof value === "object" && !Array.isArray(value)) {
+      const cleaned = cleanFilter(value)
+      if (Object.keys(cleaned).length > 0) {
+        acc[key] = cleaned
+      }
+    } else {
+      acc[key] = value
+    }
+    return acc
+  }, {})
 }
