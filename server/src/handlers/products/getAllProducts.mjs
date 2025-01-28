@@ -1,4 +1,5 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 
 export const getAllProducts = async (event) => {
@@ -38,7 +39,7 @@ export const getAllProducts = async (event) => {
       const categoryValue = categories[key]
       if (categoryValue !== "") {
         filterExpression.push(`#${key} = :${key}`)
-        expressionAttributeNames[`#${key}`] = `categories.${languageToApply}.${key}`
+        expressionAttributeNames[`#${key}`] = `categories.en.${key}.name`
         expressionAttributeValues[`:${key}`] = categoryValue
       }
     })
