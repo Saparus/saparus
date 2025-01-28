@@ -1,5 +1,4 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
-
 import { db } from "../../util/db.mjs"
 
 export const getAllProducts = async (event) => {
@@ -17,23 +16,39 @@ export const getAllProducts = async (event) => {
   }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
-
   const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
   const { minPrice, maxPrice, categories } = parsedFilter
 
+  let filterExpression = []
+  let expressionAttributeNames = {}
+  let expressionAttributeValues = {}
+
+  if (minPrice !== undefined) {
+    filterExpression.push("#price >= :minPrice")
+    expressionAttributeValues[":minPrice"] = minPrice
+  }
+
+  if (maxPrice !== undefined) {
+    filterExpression.push("#price <= :maxPrice")
+    expressionAttributeValues[":maxPrice"] = maxPrice
+  }
+
+  if (categories && Object.keys(categories).length > 0) {
+    const categoryKey = Object.keys(categories.type || {})[0]
+    if (categoryKey) {
+      filterExpression.push("#type = :type")
+      expressionAttributeNames[`#type`] = `categories.${languageToApply}.type.${categoryKey}`
+      expressionAttributeValues[":type"] = categories.type[categoryKey]
+    }
+  }
+
   const params = {
     TableName: process.env.PRODUCTS_TABLE,
-    FilterExpression: "#price BETWEEN :minPrice AND :maxPrice AND #type = :type",
-    ExpressionAttributeNames: {
-      "#price": "price",
-      "#type": `categories.${languageToApply}.type.${Object.keys(categories?.type || {})[0]}`,
-    },
-    ExpressionAttributeValues: {
-      ":minPrice": minPrice,
-      ":maxPrice": maxPrice,
-      ":type": categories?.type[Object.keys(categories?.type || {})[0]],
-    },
-    Limit: limit,
+    FilterExpression: filterExpression.length > 0 ? filterExpression.join(" AND ") : undefined,
+    ExpressionAttributeNames:
+      filterExpression.length > 0 ? { "#price": "price", ...expressionAttributeNames } : undefined,
+    ExpressionAttributeValues: filterExpression.length > 0 ? expressionAttributeValues : undefined,
+    Limit: parseInt(limit),
     ExclusiveStartKey: page > 1 ? { id: `page-${page - 1}` } : undefined,
   }
 
