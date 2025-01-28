@@ -76,12 +76,12 @@ export const createProduct = async (event) => {
         globalCategories[language] = {}
       }
 
-      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
+      Object.entries(languageCategories).forEach(async ([categoryKey, categoryValue]) => {
         if (!globalCategories[language][categoryKey]) {
           globalCategories[language][categoryKey] = {}
         }
 
-        Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
+        Object.entries(categoryValue).forEach(async ([languageSpecificCategory, value]) => {
           if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
             globalCategories[language][categoryKey][languageSpecificCategory] = []
           }
@@ -93,6 +93,15 @@ export const createProduct = async (event) => {
 
           // add new category value if it doesn't exist and is not null
           if (!exists && value) {
+            if (categoryKey === "company" && images.length > 0) {
+              const newImage = await uploadImage(images[0], "company_images", [
+                { suffix: "/s", height: 200 },
+              ])
+
+              value.imageURL = newImage
+              delete value.image
+            }
+
             globalCategories[language][categoryKey][languageSpecificCategory].push(value)
 
             console.log(`Added new category value: ${JSON.stringify(value, null, 2)}`)

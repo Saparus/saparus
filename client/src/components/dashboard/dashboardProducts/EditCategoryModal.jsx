@@ -27,6 +27,7 @@ const EditCategoryModal = ({
       return acc
     }, {})
   )
+  const [companyImage, selectedCompanyImage] = useState("")
 
   const modalRef = useRef()
 
@@ -35,6 +36,18 @@ const EditCategoryModal = ({
   const currentCategories = data?.categories
 
   useOnClickOutside(modalRef, finishEditing)
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const newImage = reader.result
+        selectedCompanyImage(newImage)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleInputChange = (language, field, value, onlyForSuggestions = false) => {
     setNewCategories((prevState) => ({
@@ -183,7 +196,7 @@ const EditCategoryModal = ({
     const mainKey = editingCategory || newCategories.en.key
 
     const updatedCategories = languages.reduce((acc, language) => {
-      const { key, value, image } = newCategories?.[language]
+      const { key, value } = newCategories?.[language]
 
       if (key && value) {
         if (!acc?.[language]) {
@@ -195,11 +208,11 @@ const EditCategoryModal = ({
         }
 
         // if it's a company category, handle the image
-        if (key.toLowerCase() === "company" && image) {
+        if (key.toLowerCase() === "company" && companyImage) {
           acc[language][mainKey] = {
             [key.toLowerCase()]: {
               name: value,
-              image: image || "", // handle the image for the company (on backend, it's handled by uploading the image to S3 and saving the URL in the database)
+              image: companyImage || "", // handle the image for the company (on backend, it's handled by uploading the image to S3 and saving the URL in the database)
             },
           }
         } else {
@@ -224,13 +237,35 @@ const EditCategoryModal = ({
         className="modal-content"
         ref={modalRef}
       >
-        <h2>Edit Categories</h2>
+        <h2>{t("Edit Categories")}</h2>
+        {newCategories.en.key === "company" ? (
+          <>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="categories-modal-upload-image"
+            />
+            <div className="image-input-button">{t("upload image")}</div>
+            {companyImage ? (
+              <img
+                className="categories-modal-image"
+                src={companyImage}
+                alt=""
+              />
+            ) : (
+              ""
+            )}
+          </>
+        ) : (
+          ""
+        )}
         {languages.map((language) => (
           <div
             key={language}
             className="language-section"
           >
-            <h3>{languageNames[language]}</h3>
+            <h3>{t(languageNames[language])}</h3>
             <input
               className="category-key"
               placeholder="category"

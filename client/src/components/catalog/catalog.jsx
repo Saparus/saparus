@@ -7,8 +7,6 @@ import Products from "./ProductList"
 const Catalog = () => {
   const [filter, setFilter] = useState({})
 
-  console.log(filter)
-
   return (
     <div className="page catalog">
       <Companies
@@ -18,7 +16,6 @@ const Catalog = () => {
       <div className="products-categories">
         <Categories
           selectedCompany={filter?.categories?.company}
-          filter={filter}
           setFilter={setFilter}
         />
         <Products

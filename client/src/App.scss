@@ -30,12 +30,21 @@
   font-family: $main-font;
 }
 
-.company-logo {
-  object-fit: cover;
-  height: 5rem;
-  width: 5rem;
-  cursor: pointer;
-  border-radius: 50%;
+.company {
+  &.selected {
+    .company-logo {
+      border: 2px solid $base-color;
+    }
+  }
+
+  .company-logo {
+    object-fit: cover;
+    height: 5rem;
+    width: 5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid transparent;
+  }
 }
 
 .Toastify__toast--success {

@@ -21,6 +21,7 @@ const DashboardProductListPage = () => {
         <Categories
           setFilter={setFilter}
           showAddNewProductButton={true}
+          selectedCompany={filter?.categories?.company}
         />
         <ProductList
           filter={filter}

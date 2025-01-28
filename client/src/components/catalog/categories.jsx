@@ -10,7 +10,7 @@ import { getCategories } from "../../services/categoryServices"
 import PriceSlider from "./PriceSlider"
 import Loading from "../other/Loading"
 
-const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButton = false }) => {
+const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = false }) => {
   const { i18n } = useTranslation()
 
   const currentLanguage = i18n.language
@@ -95,8 +95,6 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
 
     const handleOnSelect = (event) => {
       const { name, value } = event.target
-
-      console.log({ name, value })
 
       if (name === "company") {
         setInputValue((prev) => ({

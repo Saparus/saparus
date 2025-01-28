@@ -7,15 +7,13 @@ import { ReactComponent as PlanmecaLogo } from "../../assets/companies/planmeca.
 import { ReactComponent as QuestionMark } from "../../assets/companies/undefined-company.svg"
 import { getCompanies, getCategories, editCategories } from "../../services/categoryServices"
 
-const Companies = ({ setFilter, selectedCompany, apiKey }) => {
+const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
   const [newCompanyName, setNewCompanyName] = useState("")
   const [uploadedImage, setUploadedImage] = useState(null)
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
   const { data, isLoading, error } = useQuery(["companies"], getCompanies)
-
-  // const currentLanguage = data
 
   const queryClient = useQueryClient()
 
@@ -69,8 +67,8 @@ const Companies = ({ setFilter, selectedCompany, apiKey }) => {
       const errorMessage = error.response?.data?.message || error.message || "Something went wrong"
 
       toast.dismiss()
-      toast.error(errorMessage)
-      console.log(errorMessage)
+      // toast.error(errorMessage)
+      // console.error(errorMessage)
     },
   })
 

@@ -56,7 +56,7 @@ export const getAllProducts = async (event) => {
     const endIndex = startIndex + limit
     const paginatedResult = productsToSend.slice(startIndex, endIndex).map((productToSend) => ({
       ...productToSend,
-      images: productToSend.images.map((image) => image + "/s.webp"),
+      images: productToSend.images.map((image) => image),
     }))
 
     return {

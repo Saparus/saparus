@@ -152,7 +152,8 @@
     "add company": "Add Company",
     "company": "company",
     "Save": "Add",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Edit Categories": "Edit Categories"
   },
 
   "children program": {
