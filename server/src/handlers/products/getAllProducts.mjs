@@ -53,7 +53,7 @@ export const getAllProducts = async (event) => {
         // Use a simple placeholder for the top-level attribute
         expressionAttributeNames["#categories"] = "categories"
         // Access the nested attribute directly in the FilterExpression
-        filterExpression.push(`#categories.en.${key}.${key}.name = :${key}`)
+        filterExpression.push(`#categories-en-${key}-${key}-name = :${key}`)
         expressionAttributeValues[`:${key}`] = categoryValue
       }
     })
@@ -62,9 +62,9 @@ export const getAllProducts = async (event) => {
   if (name) {
     console.log("Adding name filter:", name)
     // Use a simple placeholder for the top-level attribute
-    expressionAttributeNames["#name"] = "name"
+    expressionAttributeNames["#searchName"] = "name"
     // Access the nested attribute directly in the FilterExpression
-    filterExpression.push(`contains(#name.${languageToApply}, :name)`)
+    filterExpression.push(`contains(#name-${languageToApply}, :name)`)
     expressionAttributeValues[":name"] = name
   }
 
