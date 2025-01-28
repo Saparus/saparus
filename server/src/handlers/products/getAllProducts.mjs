@@ -18,6 +18,9 @@ export const getAllProducts = async (event) => {
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
+  const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
+  const { minPrice, maxPrice, categories } = parsedFilter
+
   const params = {
     TableName: process.env.PRODUCTS_TABLE,
     FilterExpression: "#price BETWEEN :minPrice AND :maxPrice AND #type = :type",
@@ -35,8 +38,7 @@ export const getAllProducts = async (event) => {
   }
 
   try {
-    const scanCommand = new ScanCommand(params)
-    const { Items: products } = await db.send(scanCommand)
+    const { Items: products, LastEvaluatedKey } = await db.send(new ScanCommand(params))
 
     const paginatedResult = products.map((product) => ({
       ...product,
