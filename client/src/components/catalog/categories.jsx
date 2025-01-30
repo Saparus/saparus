@@ -123,9 +123,9 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
     }
 
     const renderCategorySelect = (category) => {
-      const { key, subKeys, values, amount } = category
+      const { key, subKeys, values } = category
 
-      if (amount === 0) return
+      // if (values.some((value) => value.amount !== 0)) return
 
       return (
         <div
@@ -147,14 +147,19 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
               {subKeys[currentLanguage]}
             </option>
             <option value="All">{t("All")}</option>
-            {values.map((category, index) => (
-              <option
-                key={`${category[currentLanguage]}-${index}`}
-                value={category.en}
-              >
-                {category[currentLanguage]}
-              </option>
-            ))}
+            {values.map((category, index) => {
+              if (category?.[currentLanguage]?.amount === 0 || !category?.[currentLanguage]?.name)
+                return
+
+              return (
+                <option
+                  key={`${category?.[currentLanguage]}-${index}`}
+                  value={category?.[currentLanguage]?.name}
+                >
+                  {category?.[currentLanguage]?.name}
+                </option>
+              )
+            })}
           </select>
         </div>
       )
@@ -272,7 +277,7 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
 
 export default Categories
 
-const transformCategories = (input) => {
+export const transformCategories = (input) => {
   const languages = Object.keys(input)
   const result = []
 
@@ -287,7 +292,6 @@ const transformCategories = (input) => {
           key: categoryKey,
           subKeys: {},
           values: [],
-          amount: category.amount,
         }
         result.push(existingCategory)
       }
@@ -298,7 +302,7 @@ const transformCategories = (input) => {
         if (!existingCategory.values[index]) {
           existingCategory.values[index] = {}
         }
-        existingCategory.values[index][lang] = value.name
+        existingCategory.values[index][lang] = { name: value.name, amount: value.amount }
       })
     })
   })

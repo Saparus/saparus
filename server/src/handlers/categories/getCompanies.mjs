@@ -1,4 +1,5 @@
 import { GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 import { summarizeCategoryData } from "../../util/summarizeCategoryData.mjs"
 

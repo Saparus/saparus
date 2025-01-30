@@ -154,9 +154,10 @@
     "Save": "Add",
     "Cancel": "Cancel",
     "Edit Categories": "Edit Categories",
-    "Adding company": "Adding Company",
+    "Adding company": "Saving Company...",
     "click here to add new product": "Click Here to Add New Product",
-    "upload image": "Upload Image"
+    "upload image": "Upload Image",
+    "edit": "edit"
   },
 
   "children program": {

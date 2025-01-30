@@ -1,4 +1,5 @@
 import { ReactComponent as XMarkIcon } from "../../../assets/icons/xmark.svg"
+import { ReactComponent as PenIcon } from "../../../assets/icons/pen.svg"
 
 export const CategoryItem = ({ value, removeCategory, editCategory }) => {
   const valueToShow = Object.values(value || {})?.find((value) => value?.name)?.name
@@ -17,7 +18,9 @@ export const CategoryItem = ({ value, removeCategory, editCategory }) => {
       <button onClick={removeCategory}>
         <XMarkIcon className="icon" />
       </button>
-      <button onClick={editCategory}>edit</button>
+      <button onClick={editCategory}>
+        <PenIcon className="icon edit-icon" />
+      </button>
     </div>
   )
 }

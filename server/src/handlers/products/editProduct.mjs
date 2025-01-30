@@ -46,7 +46,12 @@ export const editProduct = async (event) => {
       const image = categories.en.company.company.image
 
       if (image) {
-        imageURL = await uploadImage(image, "company_images")
+        imageURL = await uploadImage(
+          image,
+          "company_images",
+          undefined,
+          categories.en.company.company.name
+        )
       }
     }
 

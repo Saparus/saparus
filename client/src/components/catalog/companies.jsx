@@ -11,16 +11,48 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
   const [newCompanyName, setNewCompanyName] = useState("")
   const [uploadedImage, setUploadedImage] = useState(null)
 
+  const [editCompanyName, setEditCompanyName] = useState("")
+  const [editCompanyImage, setEditCompanyImage] = useState("")
+
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
-  const { data, isLoading, error } = useQuery(["companies"], getCompanies)
+  const currentLanguage = useTranslation().i18n.language
 
-  console.log(data)
+  const { data, isLoading, error } = useQuery(["companies"], getCompanies)
 
   const queryClient = useQueryClient()
 
   const handleChangeNewCompanyName = (e) => {
     setNewCompanyName(e.target.value)
+  }
+
+  const handleDiscardImage = (e) => {
+    e.preventDefault()
+
+    setEditCompanyName("")
+    setEditCompanyImage("")
+  }
+
+  const handleEditImageUpload = (e, company) => {
+    e.preventDefault()
+
+    const fileInput = document.createElement("input")
+    fileInput.type = "file"
+    fileInput.accept = "image/*"
+
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = () => {
+          setEditCompanyName(company.name)
+          setEditCompanyImage(reader.result)
+        }
+        reader.readAsDataURL(file)
+      }
+    })
+
+    fileInput.click()
   }
 
   const handleImageUpload = (e) => {
@@ -36,20 +68,20 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
   }
 
   const addCategoryMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({ name, image }) => {
       const newCompany = {
         en: {
-          company: { company: { name: newCompanyName } },
+          company: { company: { name } },
         },
         ka: {
-          company: { კომპანია: { name: newCompanyName } },
+          company: { კომპანია: { name } },
         },
         ru: {
-          company: { компания: { name: newCompanyName } },
+          company: { компания: { name } },
         },
       }
 
-      return await editCategories(newCompany, uploadedImage, apiKey)
+      return await editCategories(newCompany, image, apiKey)
     },
     onMutate: () => {
       // showing loading toast when the mutation starts
@@ -69,51 +101,90 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
       const errorMessage = error.response?.data?.message || error.message || "Something went wrong"
 
       toast.dismiss()
-      // toast.error(errorMessage)
-      // console.error(errorMessage)
+      toast.error(errorMessage)
+      console.error(errorMessage)
     },
   })
 
   const renderCompanies = () => {
     // if (isLoading) return <Loading />
     if (isLoading) return
-    if (error || !data) return <div>something went wrong</div>
+    if (error || !data?.[currentLanguage]) return <div>something went wrong</div>
+
+    const companies = data[currentLanguage]
 
     const renderLogo = (company) => {
       if (!company.imageURL) return
 
       return (
         <img
-          src={company.imageURL + "/s.webp"}
+          src={company.name === editCompanyName ? editCompanyImage : company.imageURL + "/s.webp"}
           alt=""
           className="company-logo"
         />
       )
     }
 
-    return data.map((company, index) => (
-      <li
-        key={index}
-        className={`company ${company.name === selectedCompany ? "selected" : ""}`}
-        onClick={() => {
-          if (company.name !== selectedCompany) {
-            setFilter((prevState) => ({
-              ...prevState,
-              categories: { ...prevState.categories, company: company.name },
-            }))
-          } else {
-            setFilter((prevState) => {
-              const { categories, ...newState } = prevState
+    return companies?.map((company, index) => {
+      if (company.amount === 0) return
 
-              return newState
-            })
-          }
-        }}
-      >
-        {renderLogo(company)}
-        <span>{company.name}</span>
-      </li>
-    ))
+      return (
+        <li
+          key={index}
+          className={`company ${company.name === selectedCompany ? "selected" : ""}`}
+          onClick={() => {
+            if (company.name !== selectedCompany) {
+              setFilter((prevState) => ({
+                ...prevState,
+                categories: { ...prevState.categories, company: company.name },
+              }))
+            } else {
+              setFilter((prevState) => {
+                const { categories, ...newState } = prevState
+
+                return newState
+              })
+            }
+          }}
+        >
+          <>
+            {renderLogo(company)}
+            {apiKey ? (
+              editCompanyName && editCompanyImage ? (
+                <div className="save-company-buttons">
+                  <button
+                    onClick={() => {
+                      addCategoryMutation.mutate(editCompanyName, editCompanyImage)
+                    }}
+                    className="save-company-button"
+                  >
+                    save
+                  </button>
+                  <button
+                    onClick={handleDiscardImage}
+                    className="discard-company-button"
+                  >
+                    discard
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="edit-company-button"
+                  onClick={(e) => {
+                    handleEditImageUpload(e, company)
+                  }}
+                >
+                  {t("edit")}
+                </button>
+              )
+            ) : (
+              ""
+            )}
+          </>
+          <span>{company.name}</span>
+        </li>
+      )
+    })
   }
 
   const renderAddCompanyButton = () => {
@@ -147,7 +218,9 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
         />
         {uploadedImage && newCompanyName ? (
           <button
-            onClick={addCategoryMutation.mutate}
+            onClick={() => {
+              addCategoryMutation.mutate(newCompanyName, uploadedImage)
+            }}
             className="save-company-button"
           >
             {t("add company")}

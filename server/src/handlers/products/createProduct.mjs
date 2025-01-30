@@ -40,7 +40,7 @@ export const createProduct = async (event) => {
 
       if (!image) return
 
-      imageURL = await uploadImage(image, "company_images")
+      imageURL = await uploadImage(image, "company_images", undefined, name)
 
       console.log("image URL:", imageURL)
     }
@@ -70,6 +70,8 @@ export const createProduct = async (event) => {
       })
     })
 
+    console.log("Updated categories:", JSON.stringify(categories, null, 2))
+
     const params = {
       TableName: process.env.PRODUCTS_TABLE,
       Item: {
@@ -83,6 +85,7 @@ export const createProduct = async (event) => {
         images: imageUrls,
       },
     }
+
     console.log("Product params:", JSON.stringify(params, null, 2))
 
     await db.send(new PutCommand(params))

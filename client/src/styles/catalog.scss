@@ -228,6 +228,81 @@
       gap: 0.5rem;
       text-align: center;
       user-select: none;
+      position: relative;
+      display: inline-block;
+
+      .company-logo {
+        &:hover + .edit-company-button {
+          display: block;
+        }
+      }
+
+      .company-logo {
+        &:hover + .save-company-buttons {
+          display: flex;
+        }
+      }
+
+      .edit-company-button {
+        position: absolute;
+        background-color: #edf6fab9;
+        padding: 0 0.5rem;
+        border-radius: 50%;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        height: 5rem;
+        width: 5rem;
+        top: 0rem;
+        left: 1rem;
+        display: none;
+
+        &:hover {
+          display: block;
+        }
+      }
+
+      .save-company-buttons {
+        display: none;
+        position: absolute;
+
+        padding: 0 0.5rem;
+        border-radius: 50%;
+        font-size: 0.85rem;
+        cursor: pointer;
+        height: 5rem;
+        width: 5rem;
+        top: 0rem;
+        left: 1rem;
+        flex-direction: column;
+
+        &:hover {
+          display: flex;
+        }
+      }
+
+      .save-company-button,
+      .discard-company-button {
+        width: 4rem;
+        flex: 1;
+        cursor: pointer;
+        font-weight: 600;
+        background-color: $base-color;
+
+        &:hover {
+          opacity: 0.85;
+        }
+      }
+
+      .save-company-button {
+        border-radius: 50% 50% 0 0;
+        padding-top: 0.5rem;
+      }
+
+      .discard-company-button {
+        border-radius: 0 0 50% 50%;
+        padding-bottom: 0.5rem;
+      }
 
       .undefined-company {
         background-color: $secondary-color;

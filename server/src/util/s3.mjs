@@ -18,12 +18,13 @@ export const uploadImage = async (
     { suffix: "/s", height: 200 },
     { suffix: "/m", height: 500 },
     { suffix: "/o", height: null },
-  ]
+  ],
+  name
 ) => {
   const base64Data = image.split(",")[1]
   const imageBuffer = Buffer.from(base64Data, "base64")
 
-  const imageKeyBase = `${folder}/${uuid()}`
+  const imageKeyBase = `${folder}/${name || uuid()}`
 
   const cleanImageKeyBase = imageKeyBase.replace(/(\/s|\/m|\/o)\.webp$/, "")
 
