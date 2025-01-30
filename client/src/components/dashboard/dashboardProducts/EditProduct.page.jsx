@@ -64,6 +64,10 @@ const EditProductPage = () => {
         predicate: (query) => query.queryKey.includes("categories"),
       })
 
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("companies"),
+      })
+
       navigate("../../admin/products")
     },
     onError: (error) => {

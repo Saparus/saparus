@@ -61,8 +61,8 @@ export const createProduct = async (event) => {
     console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
 
     Object.keys(categories).map((language) => {
-      categories[language].company.company.en.imageURL = imageURL
-      delete categories[language].company.company.en.image
+      categories[language].company.company.imageURL = imageURL
+      delete categories[language].company.company.image
     })
 
     console.log("Updated categories:", JSON.stringify(categories, null, 2))

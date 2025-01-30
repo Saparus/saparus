@@ -60,11 +60,19 @@ const AddProductPage = () => {
       toast.success(t("Successfully added product"))
 
       queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("dashboard-products"),
+      })
+
+      queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("products"),
       })
 
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("categories"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("companies"),
       })
 
       // if (data.product.id) navigate(`../../admin/products/edit/${data.product.id}`)
