@@ -1,7 +1,6 @@
-import { GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
+import { GetCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
-import { summarizeCategoryData } from "../../util/summarizeCategoryData.mjs"
 
 export const getCompanies = async (event) => {
   try {
@@ -28,35 +27,13 @@ export const getCompanies = async (event) => {
       }
     }
 
-    const companies = {
-      categories: {},
-    }
-
+    // extract the company category
+    const companies = {}
     Object.keys(categories).forEach((language) => {
-      companies.categories[language] = categories[language].company
-    })
-
-    console.log("Companies:", JSON.stringify(companies, null, 2))
-
-    if (!companies) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ message: "Categories not found" }),
+      if (categories[language].company) {
+        companies[language] = categories[language].company
       }
-    }
-
-    const scanParams = {
-      TableName: process.env.PRODUCTS_TABLE,
-    }
-
-    const scanCommand = new ScanCommand(scanParams)
-    const { Items: products } = await db.send(scanCommand)
-
-    const summarizedData = summarizeCategoryData(products, { categories: companies })
+    })
 
     return {
       statusCode: 200,
@@ -64,10 +41,10 @@ export const getCompanies = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(summarizedData),
+      body: JSON.stringify(companies.en.company),
     }
   } catch (error) {
-    console.error("Error fetching categories:", error)
+    console.error("Error fetching companies:", error)
 
     return {
       statusCode: 500,
@@ -75,7 +52,7 @@ export const getCompanies = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Failed to fetch categories" }),
+      body: JSON.stringify({ message: "Failed to fetch companies" }),
     }
   }
 }
