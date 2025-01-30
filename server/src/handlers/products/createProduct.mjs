@@ -63,14 +63,17 @@ export const createProduct = async (event) => {
     Object.entries(categories).map((language, category) => {
       Object.entries(category).map((categoryKey, categoryValue) => {
         Object.entries(categoryValue).map((languageSpecificCategory, value) => {
+          console.log("categoryKey:", JSON.stringify(categoryKey, null, 2))
+          console.log("imageURL:", JSON.stringify(imageURL, null, 2))
+
           if (categoryKey === "company" && imageURL) {
             value.imageURL = imageURL
             delete value.image
 
             console.log("Value:", JSON.stringify(value, null, 2))
-          }
 
-          categories[language][categoryKey][languageSpecificCategory] = value
+            categories[language][categoryKey][languageSpecificCategory] = value
+          }
         })
       })
     })
