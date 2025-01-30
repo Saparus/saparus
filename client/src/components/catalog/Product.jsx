@@ -42,9 +42,6 @@ const Product = ({ product }) => {
           <p className={`price ${fixedPrice ? "fixed-price" : "unfixed-price"}`}>
             {fixedPrice ? price + "$" : t("Price on Request")}
           </p>
-          {/* ) : (
-            <p className="price">&nbsp;</p>
-          )} */}
           <Phone className="cart" />
           <span className="go-to-contacts-text">
             {product.inStock ? (

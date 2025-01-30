@@ -1,16 +1,18 @@
 import { GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
+import { summarizeCategoryData } from "../../util/summarizeCategoryData.mjs"
 
 export const getCompanies = async (event) => {
   try {
-    const categoryParams = {
+    const params = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
         id: "categories",
       },
     }
 
-    const getCommand = new GetCommand(categoryParams)
+    const getCommand = new GetCommand(params)
     const { Item } = await db.send(getCommand)
 
     const categories = Item?.categories
@@ -26,32 +28,35 @@ export const getCompanies = async (event) => {
       }
     }
 
-    const productParams = {
+    const companies = {
+      categories: {},
+    }
+
+    Object.keys(categories).forEach((language) => {
+      companies.categories[language] = categories[language].company
+    })
+
+    console.log("Companies:", JSON.stringify(companies, null, 2))
+
+    if (!companies) {
+      return {
+        statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({ message: "Categories not found" }),
+      }
+    }
+
+    const scanParams = {
       TableName: process.env.PRODUCTS_TABLE,
     }
 
-    const scanCommand = new ScanCommand(productParams)
+    const scanCommand = new ScanCommand(scanParams)
     const { Items: products } = await db.send(scanCommand)
 
-    const companiesWithProducts = new Set()
-    products.forEach((product) => {
-      const company = product.categories?.en?.company?.company?.name
-      if (company) {
-        companiesWithProducts.add(company)
-      }
-    })
-
-    const companies = {}
-    Object.keys(categories).forEach((language) => {
-      if (categories[language].company) {
-        companies[language] = []
-        categories[language].company.company.forEach((company) => {
-          if (companiesWithProducts.has(company.name)) {
-            companies[language].push(company)
-          }
-        })
-      }
-    })
+    const summarizedData = summarizeCategoryData(products, { categories: companies })
 
     return {
       statusCode: 200,
@@ -59,10 +64,10 @@ export const getCompanies = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(companies),
+      body: JSON.stringify(summarizedData),
     }
   } catch (error) {
-    console.error("Error fetching companies:", error)
+    console.error("Error fetching categories:", error)
 
     return {
       statusCode: 500,
@@ -70,7 +75,7 @@ export const getCompanies = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Failed to fetch companies" }),
+      body: JSON.stringify({ message: "Failed to fetch categories" }),
     }
   }
 }
