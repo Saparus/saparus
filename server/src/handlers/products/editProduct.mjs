@@ -42,7 +42,7 @@ export const editProduct = async (event) => {
 
     let imageURL = ""
 
-    if (categories?.en?.company?.company?.image) {
+    if (categories?.en?.company?.company?.image && categories?.en?.company?.company?.name) {
       const image = categories.en.company.company.image
 
       if (image) {

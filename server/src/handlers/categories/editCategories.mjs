@@ -13,8 +13,13 @@ export const editCategories = async (event) => {
     let imageURL = null
 
     // Upload image if exists
-    if (image) {
-      imageURL = await uploadImage(image, "company_images")
+    if (image && newCategory?.en?.company?.company?.name) {
+      imageURL = await uploadImage(
+        image,
+        "company_images",
+        undefined,
+        newCategory.en.company.company.name
+      )
       console.log("Uploaded imageURL:", imageURL)
     }
 

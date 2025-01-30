@@ -125,7 +125,10 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
     const renderCategorySelect = (category) => {
       const { key, subKeys, values } = category
 
-      // if (values.some((value) => value.amount !== 0)) return
+      // check if all amounts are 0
+      if (values.every((category) => category?.[currentLanguage]?.amount === 0)) {
+        return null
+      }
 
       return (
         <div
@@ -149,11 +152,11 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
             <option value="All">{t("All")}</option>
             {values.map((category, index) => {
               if (category?.[currentLanguage]?.amount === 0 || !category?.[currentLanguage]?.name)
-                return
+                return null
 
               return (
                 <option
-                  key={`${category?.[currentLanguage]}-${index}`}
+                  key={`${category?.[currentLanguage]?.name}-${index}`}
                   value={category?.[currentLanguage]?.name}
                 >
                   {category?.[currentLanguage]?.name}

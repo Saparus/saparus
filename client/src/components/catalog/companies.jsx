@@ -118,7 +118,7 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
 
       return (
         <img
-          src={company.name === editCompanyName ? editCompanyImage : company.imageURL + "/s.webp"}
+          src={company.name === editCompanyName ? editCompanyImage : company.name + "/s.webp"}
           alt=""
           className="company-logo"
         />

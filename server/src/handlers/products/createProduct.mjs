@@ -33,14 +33,17 @@ export const createProduct = async (event) => {
   try {
     let imageURL = ""
 
-    if (categories?.en?.company?.company?.image) {
+    if (categories?.en?.company?.company?.image && categories?.en?.company?.company?.name) {
       const image = categories.en.company.company.image
-
-      console.log(categories.en.company.company)
 
       if (!image) return
 
-      imageURL = await uploadImage(image, "company_images", undefined, name)
+      imageURL = await uploadImage(
+        image,
+        "company_images",
+        undefined,
+        categories.en.company.company.name
+      )
 
       console.log("image URL:", imageURL)
     }
