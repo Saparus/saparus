@@ -26,7 +26,7 @@ export const createProduct = async (event) => {
   }
 
   try {
-    let imageURL = ""
+    let imageURL
 
     // Upload company image if present
     if (categories?.en?.company?.company?.image && categories?.en?.company?.company?.name) {

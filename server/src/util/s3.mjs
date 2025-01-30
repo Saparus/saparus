@@ -21,6 +21,8 @@ export const uploadImage = async (
   ],
   name
 ) => {
+  if (!image) return
+
   const base64Data = image.split(",")[1]
   const imageBuffer = Buffer.from(base64Data, "base64")
 
