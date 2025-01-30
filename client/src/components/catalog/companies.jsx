@@ -15,6 +15,8 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
 
   const { data, isLoading, error } = useQuery(["companies"], getCompanies)
 
+  console.log(data)
+
   const queryClient = useQueryClient()
 
   const handleChangeNewCompanyName = (e) => {

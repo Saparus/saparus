@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid"
 import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 
@@ -10,26 +11,12 @@ export const createProduct = async (event) => {
   console.log("Parsed body:", JSON.stringify(body, null, 2))
 
   const name = body.name
-  const fixedPrice = body.fixedPrice ? "true" : "false"
+  const fixedPrice = body.fixedPrice ? true : false
   const price = body.price !== undefined ? Number(body.price) : 0
   const description = body.description
   const categories = body.categories || {}
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
-
-  let imageURL = ""
-
-  if (categories.en.company.company) {
-    const image = categories.en.company.company.image
-
-    console.log(categories.en.company.company)
-
-    if (!image) return
-
-    imageURL = await uploadImage(image, "company_images")
-
-    console.log("image URL:", imageURL)
-  }
 
   if (!name || !description) {
     console.log("Validation failed: Missing required fields")
@@ -44,6 +31,20 @@ export const createProduct = async (event) => {
   }
 
   try {
+    let imageURL = ""
+
+    if (categories?.en?.company?.company?.image) {
+      const image = categories.en.company.company.image
+
+      console.log(categories.en.company.company)
+
+      if (!image) return
+
+      imageURL = await uploadImage(image, "company_images")
+
+      console.log("image URL:", imageURL)
+    }
+
     const imageUrls = images
       ? await Promise.all(
           images.map(async (image) => {
@@ -62,6 +63,8 @@ export const createProduct = async (event) => {
           if (categoryKey === "company") {
             value.imageURL = imageURL
             delete value.image
+
+            categories[language][categoryKey][languageSpecificCategory] = value
           }
         })
       })

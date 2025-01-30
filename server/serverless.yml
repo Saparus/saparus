@@ -105,7 +105,10 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
-        Resource: !GetAtt CategoriesTable.Arn
+          - "dynamodb:Scan"
+        Resource:
+          - !GetAtt CategoriesTable.Arn
+          - !GetAtt ProductsTable.Arn
 
   editCategories:
     handler: src/handlers/categories/editCategories.editCategories

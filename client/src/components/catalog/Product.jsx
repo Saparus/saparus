@@ -39,14 +39,12 @@ const Product = ({ product }) => {
         to="/about"
       >
         <div className="shop">
-          {/* STC */}
-          {price !== 0 ? (
-            <p className={`price ${fixedPrice ? "fixed-price" : "unfixed-price"}`}>
-              {fixedPrice ? price + "$" : t("Price on Request")}
-            </p>
-          ) : (
+          <p className={`price ${fixedPrice ? "fixed-price" : "unfixed-price"}`}>
+            {fixedPrice ? price + "$" : t("Price on Request")}
+          </p>
+          {/* ) : (
             <p className="price">&nbsp;</p>
-          )}
+          )} */}
           <Phone className="cart" />
           <span className="go-to-contacts-text">
             {product.inStock ? (

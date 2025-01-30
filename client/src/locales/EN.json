@@ -163,7 +163,9 @@
     "Adding children program...": "Adding Children Program...",
     "Successfully added children program": "Successfully Added Children Program",
     "Updating children program...": "Updating Children Program...",
-    "Changes saved successfully": "Changes Saved Successfully"
+    "Changes saved successfully": "Changes Saved Successfully",
+    "click here to reset filters": "Click Here to Reset Filters",
+    "Products not found": "Products Not Found"
   },
 
   "home": {

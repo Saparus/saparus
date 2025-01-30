@@ -158,7 +158,9 @@
     "Adding children program...": "Добавление детской программы...",
     "Successfully added children program": "Детская программа успешно добавлена",
     "Updating children program...": "Обновление детской программы...",
-    "Changes saved successfully": "Изменения успешно сохранены"
+    "Changes saved successfully": "Изменения успешно сохранены",
+    "click here to reset filters": "нажмите здесь для сброса фильтров",
+    "Products not found": "Продукты не найдены"
   },
 
   "home": {

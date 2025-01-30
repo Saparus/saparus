@@ -162,7 +162,9 @@
     "Adding children program...": "ბავშვების პროგრამის დამატება...",
     "Successfully added children program": "ბავშვების პროგრამა წარმატებით დაემატა",
     "Updating children program...": "ბავშვების პროგრამის განახლება...",
-    "Changes saved successfully": "ცვლილებები წარმატებით შენახულია"
+    "Changes saved successfully": "ცვლილებები წარმატებით შენახულია",
+    "click here to reset filters": "ფილტრების გადასატვირთად დააწკაპუნეთ აქ",
+    "Products not found": "პროდუქცია ვერ მოიძებნა"
   },
 
   "home": {

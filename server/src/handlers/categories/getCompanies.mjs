@@ -1,16 +1,16 @@
-import { GetCommand } from "@aws-sdk/lib-dynamodb"
+import { GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getCompanies = async (event) => {
   try {
-    const params = {
+    const categoryParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
         id: "categories",
       },
     }
 
-    const getCommand = new GetCommand(params)
+    const getCommand = new GetCommand(categoryParams)
     const { Item } = await db.send(getCommand)
 
     const categories = Item?.categories
@@ -26,11 +26,30 @@ export const getCompanies = async (event) => {
       }
     }
 
-    // extract the company category
+    const productParams = {
+      TableName: process.env.PRODUCTS_TABLE,
+    }
+
+    const scanCommand = new ScanCommand(productParams)
+    const { Items: products } = await db.send(scanCommand)
+
+    const companiesWithProducts = new Set()
+    products.forEach((product) => {
+      const company = product.categories?.en?.company?.company?.name
+      if (company) {
+        companiesWithProducts.add(company)
+      }
+    })
+
     const companies = {}
     Object.keys(categories).forEach((language) => {
       if (categories[language].company) {
-        companies[language] = categories[language].company
+        companies[language] = []
+        categories[language].company.company.forEach((company) => {
+          if (companiesWithProducts.has(company.name)) {
+            companies[language].push(company)
+          }
+        })
       }
     })
 
@@ -40,7 +59,7 @@ export const getCompanies = async (event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify(companies.en.company),
+      body: JSON.stringify(companies),
     }
   } catch (error) {
     console.error("Error fetching companies:", error)

@@ -1,4 +1,5 @@
 import { UpdateCommand, GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 
@@ -8,14 +9,13 @@ export const editProduct = async (event) => {
   const body = JSON.parse(event.body)
 
   const name = body.name
-  const fixedPrice = body.fixedPrice ? "true" : "false"
+  const fixedPrice = body.fixedPrice ? true : false
   const price = body.price !== undefined ? Number(body.price) : 0
   const description = body.description
   const categories = body.categories || {}
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
-  // Validate input
   if (!name || !description || !id) {
     return {
       statusCode: 400,
@@ -39,6 +39,29 @@ export const editProduct = async (event) => {
           })
         )
       : []
+
+    let imageURL = ""
+
+    if (categories?.en?.company?.company?.image) {
+      const image = categories.en.company.company.image
+
+      if (image) {
+        imageURL = await uploadImage(image, "company_images")
+      }
+    }
+
+    Object.entries(categories).forEach(([language, languageCategories]) => {
+      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
+        Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
+          if (categoryKey === "company") {
+            value.imageURL = imageURL
+            delete value.image
+
+            categories[language][categoryKey][languageSpecificCategory] = value
+          }
+        })
+      })
+    })
 
     const params = {
       TableName: process.env.PRODUCTS_TABLE,
@@ -74,7 +97,6 @@ export const editProduct = async (event) => {
     const { Item } = await db.send(new GetCommand(categoryParams))
     const globalCategories = Item?.categories || {}
 
-    // Update global categories with new categories or values from the product
     Object.entries(categories).forEach(([language, languageCategories]) => {
       if (!globalCategories[language]) {
         globalCategories[language] = {}
@@ -90,14 +112,17 @@ export const editProduct = async (event) => {
             globalCategories[language][categoryKey][languageSpecificCategory] = []
           }
 
-          // Check if the category value already exists
           const exists = globalCategories[language][categoryKey][languageSpecificCategory].some(
             (existingItem) => existingItem.name === value.name
           )
 
-          // Add new category value if it doesn't exist and is not null
           if (!exists && value) {
             globalCategories[language][categoryKey][languageSpecificCategory].push(value)
+
+            if (categoryKey === "company" && imageURL) {
+              delete value.image
+              value.imageURL = imageURL
+            }
           }
         })
       })
