@@ -9,13 +9,11 @@ export const summarizeCategoryData = (products, categories) => {
   products.forEach((product) => {
     const { price, fixedPrice, categories: productCategories } = product
 
-    // updates overall minimum and maximum prices if price is defined
     if (price !== undefined && fixedPrice) {
       overallMinPrice = Math.min(overallMinPrice, price)
       overallMaxPrice = Math.max(overallMaxPrice, price)
     }
 
-    // iterate over product categories to update the amount of products for each category
     Object.keys(productCategories).forEach((language) => {
       const languageCategories = productCategories[language]
 
@@ -24,23 +22,28 @@ export const summarizeCategoryData = (products, categories) => {
       }
 
       Object.keys(languageCategories).forEach((categoryKey) => {
+        if (!categories[language] || !categories[language][categoryKey]) {
+          return
+        }
+
         const categoryValues = languageCategories[categoryKey]
 
         Object.keys(categoryValues).forEach((subCategoryKey) => {
           const subCategoryValue = categoryValues[subCategoryKey]
 
           if (!categoryData[language][categoryKey]) {
-            categoryData[language][categoryKey] = { name: subCategoryKey, amount: 0, values: [] }
+            categoryData[language][categoryKey] = { name: subCategoryKey, values: [] }
           }
 
-          if (
-            !categoryData[language][categoryKey].values.some(
-              (v) => v.name === subCategoryValue.name
-            )
-          ) {
-            categoryData[language][categoryKey].values.push(subCategoryValue)
+          const existingValue = categoryData[language][categoryKey].values.find(
+            (v) => v.name === subCategoryValue.name
+          )
+
+          if (existingValue) {
+            existingValue.amount = (existingValue.amount || 0) + 1
+          } else {
+            categoryData[language][categoryKey].values.push({ ...subCategoryValue, amount: 1 })
           }
-          categoryData[language][categoryKey].amount += 1
         })
       })
     })
@@ -49,7 +52,7 @@ export const summarizeCategoryData = (products, categories) => {
   console.log("Overall min price:", overallMinPrice)
   console.log("Overall max price:", overallMaxPrice)
 
-  // iterate over categories to structure the data
+  // Iterate over categories to structure the data
   Object.keys(categories).forEach((language) => {
     const languageCategories = categories[language]
 
@@ -72,12 +75,16 @@ export const summarizeCategoryData = (products, categories) => {
         }
 
         if (!categoryData[language][categoryKey]) {
-          categoryData[language][categoryKey] = { name: subCategoryKey, amount: 0, values: [] }
+          categoryData[language][categoryKey] = { name: subCategoryKey, values: [] }
         }
 
         subCategoryValues.forEach((value) => {
-          if (!categoryData[language][categoryKey].values.some((v) => v.name === value.name)) {
-            categoryData[language][categoryKey].values.push(value)
+          const existingValue = categoryData[language][categoryKey].values.find(
+            (v) => v.name === value.name
+          )
+
+          if (!existingValue) {
+            categoryData[language][categoryKey].values.push({ ...value, amount: 0 })
           }
         })
       })

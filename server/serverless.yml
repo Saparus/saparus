@@ -101,6 +101,7 @@ functions:
         - src/util/db.mjs
         - src/util/s3.mjs
         - node_modules/@aws-sdk/lib-dynamodb
+        - src/util/summarizeCategoryData.mjs
     iamRoleStatements:
       - Effect: "Allow"
         Action:
