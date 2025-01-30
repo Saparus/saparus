@@ -2,6 +2,7 @@ import { UpdateCommand, GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
+import { updateGlobalCategories } from "../../util/updateGlobalCategories.mjs"
 
 export const editProduct = async (event) => {
   const { id } = event.pathParameters
@@ -55,16 +56,10 @@ export const editProduct = async (event) => {
       }
     }
 
-    Object.entries(categories).forEach(([language, languageCategories]) => {
-      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
-        Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
-          if (categoryKey === "company") {
-            value.imageURL = imageURL
-            delete value.image
-
-            categories[language][categoryKey][languageSpecificCategory] = value
-          }
-        })
+    Object.keys(categories).forEach((language) => {
+      Object.keys(categories[language].company).forEach((languageSpecificCompany) => {
+        categories[language].company[languageSpecificCompany].imageURL = imageURL
+        delete categories[language].company.company.image
       })
     })
 
@@ -92,57 +87,7 @@ export const editProduct = async (event) => {
     const result = await db.send(updateCommand)
 
     // Fetch global categories
-    const categoryParams = {
-      TableName: process.env.CATEGORIES_TABLE,
-      Key: {
-        id: "categories",
-      },
-    }
-
-    const { Item } = await db.send(new GetCommand(categoryParams))
-    const globalCategories = Item?.categories || {}
-
-    Object.entries(categories).forEach(([language, languageCategories]) => {
-      if (!globalCategories[language]) {
-        globalCategories[language] = {}
-      }
-
-      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
-        if (!globalCategories[language][categoryKey]) {
-          globalCategories[language][categoryKey] = {}
-        }
-
-        Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
-          if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
-            globalCategories[language][categoryKey][languageSpecificCategory] = []
-          }
-
-          const exists = globalCategories[language][categoryKey][languageSpecificCategory].some(
-            (existingItem) => existingItem.name === value.name
-          )
-
-          if (!exists && value) {
-            globalCategories[language][categoryKey][languageSpecificCategory].push(value)
-
-            if (categoryKey === "company" && imageURL) {
-              delete value.image
-              value.imageURL = imageURL
-            }
-          }
-        })
-      })
-    })
-
-    // Store updated global categories
-    const putParams = {
-      TableName: process.env.CATEGORIES_TABLE,
-      Item: {
-        id: "categories",
-        categories: globalCategories,
-      },
-    }
-
-    await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
+    updateGlobalCategories(categories, imageURL)
 
     return {
       statusCode: 200,

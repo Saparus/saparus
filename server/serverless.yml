@@ -600,6 +600,7 @@ functions:
         - src/handlers/products/createProduct.mjs
         - src/util/db.mjs
         - src/util/s3.mjs
+        - src/util/updateGlobalCategories.mjs
         - node_modules/@aws-sdk/lib-dynamodb
         - node_modules/uuid
     iamRoleStatements:
@@ -654,6 +655,7 @@ functions:
         - src/handlers/products/editProduct.mjs
         - src/util/db.mjs
         - src/util/s3.mjs
+        - src/util/updateGlobalCategories.mjs
         - node_modules/@aws-sdk/lib-dynamodb
         - node_modules/uuid
     iamRoleStatements:
