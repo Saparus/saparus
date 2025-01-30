@@ -60,22 +60,9 @@ export const createProduct = async (event) => {
 
     console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
 
-    Object.entries(categories).map((language, category) => {
-      Object.entries(category).map((categoryKey, categoryValue) => {
-        Object.entries(categoryValue).map((languageSpecificCategory, value) => {
-          console.log("categoryKey:", JSON.stringify(categoryKey, null, 2))
-          console.log("imageURL:", JSON.stringify(imageURL, null, 2))
-
-          if (categoryKey === "company" && imageURL) {
-            value.imageURL = imageURL
-            delete value.image
-
-            console.log("Value:", JSON.stringify(value, null, 2))
-
-            categories[language][categoryKey][languageSpecificCategory] = value
-          }
-        })
-      })
+    Object.keys(categories).map((language) => {
+      categories[language].company.company.en.imageURL = imageURL
+      delete categories[language].company.company.en.image
     })
 
     console.log("Updated categories:", JSON.stringify(categories, null, 2))
@@ -128,13 +115,11 @@ export const createProduct = async (event) => {
 
           // check if the category value already exists
           const exists = globalCategories[language][categoryKey][languageSpecificCategory].some(
-            (existingItem) => {
-              existingItem.name === value.name
-              if (categoryKey === "company") {
-                existingItem.imageURL === imageURL
-              }
-            }
+            (existingItem) => existingItem.name === value.name
           )
+
+          console.log("existingItem", JSON.stringify(existingItem, null, 2))
+          console.log("value", JSON.stringify(value, null, 2))
 
           // add new category value if it doesn't exist and is not null
           if (!exists && value) {
