@@ -40,19 +40,17 @@ export const createProduct = async (event) => {
       console.log("Company image URL:", imageURL)
     }
 
-    // Upload product images
-    const imageUrls = await Promise.all(
-      images.map(async (image) => {
-        try {
-          const url = await uploadImage(image, "product")
-          console.log("Uploaded image:", url)
-          return url
-        } catch (error) {
-          console.error("Failed to upload image:", error)
-          return null // or handle the error as needed
-        }
-      })
-    ).then((urls) => urls.filter((url) => url !== null)) // Filter out failed uploads
+    const imageUrls = images?.length
+      ? await Promise.all(
+          images.map(async (image) => {
+            if (image.startsWith("http://") || image.startsWith("https://")) {
+              return image.replace(/(\/s|\/m|\/o)\.webp$/, "")
+            } else {
+              return uploadImage(image, "product")
+            }
+          })
+        )
+      : []
 
     console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
 
@@ -60,8 +58,11 @@ export const createProduct = async (event) => {
       if (!categories[language].company) return
 
       Object.keys(categories[language].company).forEach((languageSpecificCompany) => {
-        categories[language].company[languageSpecificCompany].imageURL = imageURL
         delete categories[language].company[languageSpecificCompany].image
+
+        if (!imageURL) return
+
+        categories[language].company[languageSpecificCompany].imageURL = imageURL
       })
     })
 

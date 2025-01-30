@@ -60,8 +60,11 @@ export const editProduct = async (event) => {
       if (!categories[language].company) return
 
       Object.keys(categories[language].company).forEach((languageSpecificCompany) => {
-        categories[language].company[languageSpecificCompany].imageURL = imageURL
         delete categories[language].company[languageSpecificCompany].image
+
+        if (!imageURL) return
+
+        categories[language].company[languageSpecificCompany].imageURL = imageURL
       })
     })
 

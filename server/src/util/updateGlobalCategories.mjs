@@ -35,6 +35,9 @@ export const updateGlobalCategories = async (categories, imageURL) => {
 
           if (categoryKey === "company" && imageURL) {
             delete value.image
+
+            if (!imageURL) return
+
             value.imageURL = imageURL
           }
         }
