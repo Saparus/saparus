@@ -44,7 +44,13 @@ const ProductList = ({ filter, resetFilter, apiKey }) => {
         predicate: (query) => query.queryKey.includes("products"),
       })
 
-      queryClient.invalidateQueries(["categories"])
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("categories"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("companies"),
+      })
     },
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
