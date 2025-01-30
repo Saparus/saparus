@@ -153,6 +153,8 @@
     "company": "company",
     "Save": "Add",
     "Cancel": "Cancel",
+    "save": "Add",
+    "cancel": "Cancel",
     "Edit Categories": "Edit Categories",
     "Adding company": "Saving Company...",
     "click here to add new product": "Click Here to Add New Product",

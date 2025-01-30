@@ -153,9 +153,13 @@
     "company": "კომპანია",
     "Save": "დამატება",
     "Cancel": "გაუქმება",
+    "save": "დამატება",
+    "cancel": "გაუქმება",
     "Edit Categories": "კატეგორიების რედაქტირება",
-    "Adding company": "კომპანიის დამატება",
-    "click here to add new product": "ახალი პროდუქტის დასამატებლად დააწკაპუნეთ აქ"
+    "Adding company": "კომპანიის შენახვა...",
+    "click here to add new product": "ახალი პროდუქტის დამატებისთვის დააწკაპუნეთ აქ",
+    "upload image": "სურათის ატვირთვა",
+    "edit": "რედაქტირება"
   },
 
   "children program": {

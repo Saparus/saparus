@@ -149,9 +149,13 @@
     "company": "компания",
     "Save": "сохранить",
     "Cancel": "отменить",
-    "Edit Categories": "редактировать категории",
-    "Adding company": "добавление компании",
-    "click here to add new product": "нажмите здесь, чтобы добавить новый продукт"
+    "save": "Добавить",
+    "cancel": "Отменить",
+    "Edit Categories": "Редактировать категории",
+    "Adding company": "Сохранение компании...",
+    "click here to add new product": "Нажмите здесь, чтобы добавить новый продукт",
+    "upload image": "Загрузить изображение",
+    "edit": "редактировать"
   },
 
   "children program": {
