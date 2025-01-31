@@ -33,6 +33,12 @@ export const editNewsItem = async (event) => {
         )
       : []
 
+    if (!title.ka) title.ka = title.en
+    if (!title.ru) title.ru = title.en
+
+    if (!text.ka) text.ka = text.en
+    if (!text.ru) text.ru = text.en
+
     const params = {
       TableName: process.env.NEWS_TABLE,
       Key: { id },

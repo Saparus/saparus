@@ -16,7 +16,7 @@
     height: 600px;
     box-shadow: 0 0 10px #9aa8acb4;
 
-    &:last-of-type {
+    &:last-of-type:nth-child(odd) {
       background: $primary-color !important;
     }
 

@@ -149,7 +149,7 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
         >
           <>
             {renderLogo(company)}
-            {apiKey ? (
+            {/* {apiKey ? (
               editCompanyName && editCompanyImage ? (
                 <div className="save-company-buttons">
                   <button
@@ -179,7 +179,7 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
               )
             ) : (
               ""
-            )}
+            )} */}
           </>
           <span>{company.name}</span>
         </li>
@@ -187,56 +187,7 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
     })
   }
 
-  const renderAddCompanyButton = () => {
-    if (!apiKey) return
-
-    return (
-      <li className="add-company-button">
-        <div className="circle">
-          {uploadedImage ? (
-            <img
-              src={uploadedImage}
-              alt="Uploaded"
-              className="uploaded-image"
-            />
-          ) : (
-            "+"
-          )}
-        </div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="company-image-input"
-        />
-        <input
-          type="text"
-          value={newCompanyName}
-          onChange={handleChangeNewCompanyName}
-          placeholder={t("company")}
-          className="company-name-input"
-        />
-        {uploadedImage && newCompanyName ? (
-          <button
-            onClick={() => {
-              addCategoryMutation.mutate(newCompanyName, uploadedImage)
-            }}
-            className="save-company-button"
-          >
-            {t("add company")}
-          </button>
-        ) : (
-          ""
-        )}
-      </li>
-    )
-  }
-
-  return (
-    <ul className="companies">
-      {renderCompanies()} {renderAddCompanyButton()}
-    </ul>
-  )
+  return <ul className="companies">{renderCompanies()}</ul>
 }
 
 export default Companies

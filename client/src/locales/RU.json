@@ -79,7 +79,11 @@
     "add new item": "добавить новый элемент",
     "are you sure you want to delete this? this action cannot be undone.": "Вы уверены, что хотите удалить это? Это действие необратимо.",
     "no image": "нет изображения",
-    "click here to upload": "нажмите здесь для загрузки"
+    "click here to upload": "нажмите здесь для загрузки",
+    "Successfully deleted product": "Продукт успешно удален",
+    "Successfully deleted products": "Продукты успешно удалены",
+    "Deleting product...": "Удаление продукта...",
+    "text": "текст"
   },
 
   "news": {
@@ -155,7 +159,8 @@
     "Adding company": "Сохранение компании...",
     "click here to add new product": "Нажмите здесь, чтобы добавить новый продукт",
     "upload image": "Загрузить изображение",
-    "edit": "редактировать"
+    "edit": "редактировать",
+    "Adding company...": "Добавление компании..."
   },
 
   "children program": {

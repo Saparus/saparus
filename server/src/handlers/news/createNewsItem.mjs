@@ -24,6 +24,12 @@ export const createNewsItem = async (event) => {
       ? await Promise.all(images?.map(async (image) => uploadImage(image, "news")))
       : []
 
+    if (!title.ka) title.ka = title.en
+    if (!title.ru) title.ru = title.en
+
+    if (!text.ka) text.ka = text.en
+    if (!text.ru) text.ru = text.en
+
     const params = {
       TableName: process.env.NEWS_TABLE,
       Item: {

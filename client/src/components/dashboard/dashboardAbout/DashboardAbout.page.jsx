@@ -46,6 +46,8 @@ const DashboardAboutPage = () => {
     onError: (error) => {
       const errorMessage = error.response.data.message || error.message || "Something went wrong"
 
+      queryClient.invalidateQueries(["about", apiKey])
+
       console.log(errorMessage)
       toast.error(errorMessage)
     },
@@ -108,17 +110,20 @@ const DashboardAboutPage = () => {
     const index1 = itemList.findIndex((item) => item.id === id1)
     const index2 = itemList.findIndex((item) => item.id === id2)
 
-    let temp = { ...itemList[index1] }
+    if (index1 === -1 || index2 === -1) {
+      console.error("One or both items not found in the list.")
+      return
+    }
 
+    // Swap positions
+    const tempPosition = itemList[index1].position
     itemList[index1].position = itemList[index2].position
-    itemList[index2].position = temp.position
+    itemList[index2].position = tempPosition
 
-    temp = itemList[index1]
-
-    itemList[index1] = structuredClone(itemList[index2])
-    itemList[index2] = structuredClone(temp)
-
-    itemList.sort((a, b) => a.position - b.position)
+    // Swap the items
+    const tempItem = itemList[index1]
+    itemList[index1] = itemList[index2]
+    itemList[index2] = tempItem
 
     setAboutItemList(itemList)
   }
@@ -126,7 +131,7 @@ const DashboardAboutPage = () => {
   const handleAboutItemMoveUp = (id) => {
     const itemToUpdate = aboutItemList.find((item) => item.id === id)
 
-    if (itemToUpdate.position > 0) {
+    if (itemToUpdate.position >= 0) {
       const itemToSwap = aboutItemList.find((item) => item.position === itemToUpdate.position - 1)
 
       if (!itemToSwap) return
@@ -138,8 +143,10 @@ const DashboardAboutPage = () => {
   const handleAboutItemMoveDown = (id) => {
     const itemToUpdate = aboutItemList.find((item) => item.id === id)
 
-    if (itemToUpdate.position < aboutItemList.length - 1) {
+    if (itemToUpdate.position <= aboutItemList.length) {
       const itemToSwap = aboutItemList.find((item) => item.position === itemToUpdate.position + 1)
+
+      if (!itemToSwap) return
 
       swapPlaces(id, itemToSwap.id)
     }
@@ -179,7 +186,9 @@ const DashboardAboutPage = () => {
 
     if (!data || !aboutItemList || error) return <div>something went wrong</div>
 
-    return aboutItemList.map((aboutItem) => {
+    const sortedAboutItemList = [...aboutItemList].sort((a, b) => a.position - b.position)
+
+    return sortedAboutItemList.map((aboutItem) => {
       return (
         <EditAboutItem
           key={aboutItem.id}
@@ -201,6 +210,7 @@ const DashboardAboutPage = () => {
             handleChange()
             handleDeleteAboutItem(aboutItem.id)
           }}
+          aboutItemList={aboutItemList}
         />
       )
     })

@@ -33,14 +33,35 @@ export const getAllProducts = async (event) => {
     const isEmptyFilter = Object.keys(parsedFilter).length === 0
 
     if (filter || !isEmptyFilter) {
-      const parsedFilter = JSON.parse(decodeURIComponent(filter))
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter
 
-      productsToSend = filterProducts(products, otherFilters, languageToApply)
+      const cleanedCategories = categories ? removeEmptyValues(categories) : {}
 
+      productsToSend = filterProducts(
+        products,
+        { ...otherFilters, categories: cleanedCategories },
+        languageToApply
+      )
+
+      // if (minPrice || maxPrice) {
+      //   productsToSend = productsToSend.filter((product) => {
+      //     const price = product.price
+      //     return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice)
+      //   })
+      // }
       if (minPrice || maxPrice) {
+        // find the maximum price among all products
+        const maxPossiblePrice = Math.max(...products.map((product) => product.price || 0))
+
         productsToSend = productsToSend.filter((product) => {
           const price = product.price
+
+          // include products without a fixed price if minPrice is 0 and maxPrice is the maximum possible price
+          if (price === null || price === undefined || price === 0 || price === "") {
+            return minPrice === 0 && maxPrice === maxPossiblePrice
+          }
+
+          // apply price range filtering
           return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice)
         })
       }
@@ -86,4 +107,12 @@ export const getAllProducts = async (event) => {
       body: JSON.stringify({ message: "Error fetching products" }),
     }
   }
+}
+
+const removeEmptyValues = (obj) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([_, value]) => value !== "" && value !== null && value !== undefined
+    )
+  )
 }

@@ -55,6 +55,14 @@ export const createProduct = async (event) => {
     console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
 
     Object.keys(categories).forEach((language) => {
+      Object.entries(categories[language]).forEach(([key, languageSpecificCategory]) => {
+        if (language === "en") return
+
+        if (!languageSpecificCategory.name)
+          categories[language][key][Object.keys(languageSpecificCategory)[0]].name =
+            categories.en[key][key].name
+      })
+
       if (!categories[language].company) return
 
       Object.keys(categories[language].company).forEach((languageSpecificCompany) => {
@@ -68,7 +76,12 @@ export const createProduct = async (event) => {
 
     console.log("Updated categories:", JSON.stringify(categories, null, 2))
 
-    // Prepare product item for DynamoDB
+    if (!name.ka) name.ka = name.en
+    if (!name.ru) name.ru = name.en
+
+    if (!description.ka) description.ka = name.en
+    if (!description.ru) description.ru = name.en
+
     const productItem = {
       id: uuid(),
       name,

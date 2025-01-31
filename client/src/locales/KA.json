@@ -79,7 +79,11 @@
     "add new item": "ახალი ელემენტის დამატება",
     "are you sure you want to delete this? this action cannot be undone.": "დარწმუნებული ხართ, რომ გსურთ წაშლა? ეს ქმედება შეუქცევადია.",
     "no image": "სურათი არ არის",
-    "click here to upload": "ატვირთვისთვის დააწკაპუნეთ აქ"
+    "click here to upload": "ატვირთვისთვის დააწკაპუნეთ აქ",
+    "Successfully deleted product": "პროდუქტი წარმატებით წაიშალა",
+    "Successfully deleted products": "პროდუქტები წარმატებით წაიშალა",
+    "Deleting product...": "პროდუქტის წაშლა...",
+    "text": "ტექსტი"
   },
 
   "news": {
@@ -159,7 +163,8 @@
     "Adding company": "კომპანიის შენახვა...",
     "click here to add new product": "ახალი პროდუქტის დამატებისთვის დააწკაპუნეთ აქ",
     "upload image": "სურათის ატვირთვა",
-    "edit": "რედაქტირება"
+    "edit": "რედაქტირება",
+    "Adding company...": "კომპანიის დამატება..."
   },
 
   "children program": {

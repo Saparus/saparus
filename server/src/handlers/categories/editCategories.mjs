@@ -23,6 +23,8 @@ export const editCategories = async (event) => {
       console.log("Uploaded imageURL:", imageURL)
     }
 
+    // HERE
+
     // Fetch existing categories from the database
     const getParams = {
       TableName: process.env.CATEGORIES_TABLE,
@@ -49,6 +51,11 @@ export const editCategories = async (event) => {
         const subCategoryValue = categoryValue[subCategoryKey]
 
         console.log(`Processing ${language} - ${categoryKey} - ${subCategoryKey}`)
+
+        if (!subCategoryValue.name && newCategory.en?.[categoryKey]?.[subCategoryKey]?.name) {
+          subCategoryValue.name = newCategory.en[categoryKey][subCategoryKey].name
+          console.log(`Using English name as default for ${language}: ${subCategoryValue.name}`)
+        }
 
         if (imageURL) {
           subCategoryValue.imageURL = imageURL

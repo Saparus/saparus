@@ -17,6 +17,7 @@ const EditAboutItem = ({
   handleAboutItemMoveUp,
   handleAboutItemMoveDown,
   handleDeleteAboutItem,
+  aboutItemList,
 }) => {
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 
@@ -131,7 +132,9 @@ const EditAboutItem = ({
           onClick={() => handleFieldEditStart("title")}
         >
           {title[selectedLanguage] ? (
-            <h2 className="about-information-title">{title[selectedLanguage]}</h2>
+            <h2 className="about-information-title">
+              {title[selectedLanguage] + " - " + aboutItem.position}
+            </h2>
           ) : (
             <h2 className="about-information-title">{t("title")}</h2>
           )}
@@ -179,6 +182,8 @@ const EditAboutItem = ({
     setCurrentItem(structuredClone(aboutItem))
   }, [aboutItem])
 
+  console.log(aboutItem.title.en, aboutItemList.length, aboutItem.position)
+
   return (
     <div
       ref={DashboardAboutItemRef}
@@ -187,14 +192,15 @@ const EditAboutItem = ({
       <div className="centered">
         <div className="about-item-options">
           <button
-            onClick={handleAboutItemMoveUp}
-            disabled={aboutItem.position === 0}
+            onClick={() => handleAboutItemMoveUp(aboutItem.id)}
+            disabled={aboutItem.position === 1}
             className="move-about-item move-up"
           >
             <ArrowIcon className="icon" />
           </button>
           <button
-            onClick={handleAboutItemMoveDown}
+            onClick={() => handleAboutItemMoveDown(aboutItem.id)}
+            disabled={aboutItem.position === aboutItemList.length}
             className="move-about-item move-down"
           >
             <ArrowIcon className="icon" />

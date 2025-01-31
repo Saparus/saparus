@@ -119,17 +119,9 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
       if (category === "price" && value[0] === "0") {
         if (
           product.name.en === value ||
-          product.name.ka === value ||
-          product.name.ru === value ||
           product.description.en === value ||
-          product.description.ka === value ||
-          product.description.ru === value ||
           currentProduct.name.en === "" ||
-          currentProduct.name.ka === "" ||
-          currentProduct.name.ru === "" ||
           currentProduct.description.en === "" ||
-          currentProduct.description.ka === "" ||
-          currentProduct.description.ru === "" ||
           prevState.fixedPrice === product.fixedPrice ||
           !product.price === currentProduct.price ||
           prevState.inStock === product.inStock ||
