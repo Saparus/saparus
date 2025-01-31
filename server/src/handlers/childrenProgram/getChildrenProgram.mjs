@@ -39,7 +39,7 @@ export const getChildrenProgram = async (event) => {
       }
     }
 
-    const { title, text } = newsItem
+    const { title, text } = program
 
     return {
       statusCode: 200,

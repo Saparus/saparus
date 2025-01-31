@@ -3,8 +3,8 @@ import { GetCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "../../util/db.mjs"
 
 export const getNewsItem = async (event) => {
-  const { language } = event.queryStringParameters
   const { id } = event.pathParameters
+  const { language } = event.queryStringParameters
 
   if (!id || !language) {
     return {

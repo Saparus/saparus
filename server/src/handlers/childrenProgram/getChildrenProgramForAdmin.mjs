@@ -45,7 +45,7 @@ export const getChildrenProgramForAdmin = async (event) => {
       },
       body: JSON.stringify({
         ...program,
-        images: newsItem.images.map((image) => image + "/o.webp"),
+        images: program.images.map((image) => image + "/o.webp"),
       }),
     }
   } catch (error) {
