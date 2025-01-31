@@ -226,7 +226,7 @@ const EditAboutItem = ({
         <div
           className="image"
           style={{
-            "--no-image-text": `"${t("no image")}\\A${t("click here to upload")}"`,
+            "--no-image-text": `"${t("no image")}\n${t("click here to upload")}"`,
           }}
         >
           <img
