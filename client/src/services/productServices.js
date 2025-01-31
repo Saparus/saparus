@@ -13,11 +13,12 @@ export const editProduct = async (
   api_key
 ) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
   try {
+    const translatedCategories = ensureCategoryTranslations(categories)
+
     const { data } = await ajax.patch(`/products/edit/${id}?api_key=${api_key}`, {
       name,
       description,
@@ -25,8 +26,9 @@ export const editProduct = async (
       inStock,
       fixedPrice,
       price,
-      categories,
+      categories: translatedCategories,
     })
+
     return data
   } catch (error) {
     console.error(`error editing product with id ${id}:`, error)
@@ -46,9 +48,10 @@ export const addProduct = async (
   api_key
 ) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
+
+  const translatedCategories = ensureCategoryTranslations(categories)
 
   try {
     const { data } = await ajax.post(`/products?api_key=${api_key}`, {
@@ -58,8 +61,9 @@ export const addProduct = async (
       inStock,
       fixedPrice,
       price,
-      categories,
+      categories: translatedCategories,
     })
+
     return data
   } catch (error) {
     console.error("error adding product:", error)
@@ -125,4 +129,23 @@ export const getEditProduct = async (id, api_key) => {
     console.error(`error fetching editable product with id ${id}:`, error)
     throw error
   }
+}
+
+const ensureCategoryTranslations = (categories) => {
+  const languages = ["en", "ka", "ru"]
+  const englishCategories = categories["en"] || {}
+
+  languages.forEach((lang) => {
+    if (!categories[lang]) {
+      categories[lang] = {}
+    }
+
+    Object.keys(englishCategories).forEach((categoryKey) => {
+      if (!categories[lang][categoryKey]) {
+        categories[lang][categoryKey] = { ...englishCategories[categoryKey] }
+      }
+    })
+  })
+
+  return categories
 }

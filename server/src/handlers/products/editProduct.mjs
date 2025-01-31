@@ -17,7 +17,7 @@ export const editProduct = async (event) => {
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
-  if (!name || !id) {
+  if (!name || !description || !id) {
     return {
       statusCode: 400,
       headers: {
@@ -29,6 +29,18 @@ export const editProduct = async (event) => {
   }
 
   try {
+    const imageUrls = images?.length
+      ? await Promise.all(
+          images.map(async (image) => {
+            if (image.startsWith("http://") || image.startsWith("https://")) {
+              return image.replace(/(\/s|\/m|\/o)\.webp$/, "")
+            } else {
+              return uploadImage(image, "product")
+            }
+          })
+        )
+      : []
+
     let imageURL
 
     if (categories?.en?.company?.company?.image && categories?.en?.company?.company?.name) {
@@ -44,36 +56,7 @@ export const editProduct = async (event) => {
       }
     }
 
-    const imageUrls = images?.length
-      ? await Promise.all(
-          images.map(async (image) => {
-            if (image.startsWith("http://") || image.startsWith("https://")) {
-              return image.replace(/(\/s|\/m|\/o)\.webp$/, "")
-            } else {
-              return uploadImage(image, "product")
-            }
-          })
-        )
-      : []
-
-    const usedLanguages = Object.keys(categories)
-
-    if (!usedLanguages.includes("en")) categories.en = {}
-    if (!usedLanguages.includes("ka")) categories.ka = {}
-    if (!usedLanguages.includes("ru")) categories.ru = {}
-
     Object.keys(categories).forEach((language) => {
-      Object.entries(categories[language]).forEach(([key, languageSpecificCategory]) => {
-        if (language === "en") return
-
-        if (!languageSpecificCategory.name) {
-          categories[language][key] = {}
-          categories[language][key][Object.keys(languageSpecificCategory)[0]] = {}
-          categories[language][key][Object.keys(languageSpecificCategory)[0]].name =
-            categories.en[key][key].name
-        }
-      })
-
       if (!categories[language].company) return
 
       Object.keys(categories[language].company).forEach((languageSpecificCompany) => {
@@ -88,8 +71,8 @@ export const editProduct = async (event) => {
     if (!name.ka) name.ka = name.en
     if (!name.ru) name.ru = name.en
 
-    if (!description.ka) description.ka = name.en
-    if (!description.ru) description.ru = name.en
+    if (!description.ka && description.en) description.ka = name.en
+    if (!description.ru && description.en) description.ru = name.en
 
     const params = {
       TableName: process.env.PRODUCTS_TABLE,
@@ -114,10 +97,11 @@ export const editProduct = async (event) => {
     const updateCommand = new UpdateCommand(params)
     const result = await db.send(updateCommand)
 
+    // Fetch global categories
     updateGlobalCategories(categories, imageURL)
 
     return {
-      statusCode: 201,
+      statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
