@@ -79,8 +79,8 @@ export const createProduct = async (event) => {
     if (!name.ka) name.ka = name.en
     if (!name.ru) name.ru = name.en
 
-    if (!description.ka) description.ka = name.en
-    if (!description.ru) description.ru = name.en
+    if (!description.ka && description.en) description.ka = name.en
+    if (!description.ru && description.en) description.ru = name.en
 
     const productItem = {
       id: uuid(),

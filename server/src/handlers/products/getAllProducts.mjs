@@ -35,7 +35,7 @@ export const getAllProducts = async (event) => {
     if (filter || !isEmptyFilter) {
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter
 
-      const cleanedCategories = categories ? removeEmptyValues(categories) : {}
+      const cleanedCategories = filter.categories ? removeEmptyValues(filter.categories) : {}
 
       productsToSend = filterProducts(
         products,

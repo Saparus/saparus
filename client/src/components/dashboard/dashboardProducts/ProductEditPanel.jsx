@@ -119,9 +119,7 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
       if (category === "price" && value[0] === "0") {
         if (
           product.name.en === value ||
-          product.description.en === value ||
           currentProduct.name.en === "" ||
-          currentProduct.description.en === "" ||
           prevState.fixedPrice === product.fixedPrice ||
           !product.price === currentProduct.price ||
           prevState.inStock === product.inStock ||
@@ -210,14 +208,7 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
   useEffect(() => {
     // fix latter, don't forget
     const hasProductChanged = () => {
-      if (
-        currentProduct.name.en === "" ||
-        currentProduct.name.ka === "" ||
-        currentProduct.name.ru === "" ||
-        currentProduct.description.en === "" ||
-        currentProduct.description.ka === "" ||
-        currentProduct.description.ru === ""
-      ) {
+      if (currentProduct.name.en === "") {
         return false
       }
 

@@ -30,11 +30,11 @@ export const editAllAboutItems = async (event) => {
           imageUrl = await uploadImage(image, "about")
         }
 
-        if (!title.ka) title.ka = title.en
-        if (!title.ru) title.ru = title.en
+        if (!item.title.ka && item.title.en) item.title.ka = item.title.en
+        if (!item.title.ru && item.title.en) item.title.ru = item.title.en
 
-        if (!text.ka) text.ka = text.en
-        if (!text.ru) text.ru = text.en
+        if (!item.text.ka && item.text.en) item.text.ka = item.text.en
+        if (!item.text.ru && item.text.en) item.text.ru = item.text.en
 
         return {
           PutRequest: {
