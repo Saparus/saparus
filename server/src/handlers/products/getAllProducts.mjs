@@ -1,4 +1,5 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
+
 import { db } from "../../util/db.mjs"
 import { filterProducts } from "../../util/filterProducts.mjs"
 
@@ -127,30 +128,4 @@ export const getAllProducts = async (event) => {
       body: JSON.stringify({ message: "Error fetching products" }),
     }
   }
-}
-
-// Recursively remove empty values from an object
-const removeEmptyValues = (obj) => {
-  if (typeof obj !== "object" || obj === null) {
-    return obj
-  }
-
-  const cleanedObj = {}
-
-  for (const [key, value] of Object.entries(obj)) {
-    if (value === "" || value === null || value === undefined) {
-      continue
-    }
-
-    if (typeof value === "object" && !Array.isArray(value)) {
-      const cleanedValue = removeEmptyValues(value)
-      if (Object.keys(cleanedValue).length > 0) {
-        cleanedObj[key] = cleanedValue
-      }
-    } else {
-      cleanedObj[key] = value
-    }
-  }
-
-  return cleanedObj
 }

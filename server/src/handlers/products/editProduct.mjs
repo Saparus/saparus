@@ -17,7 +17,7 @@ export const editProduct = async (event) => {
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
-  if (!name || !description || !id) {
+  if (!name || !id) {
     return {
       statusCode: 400,
       headers: {

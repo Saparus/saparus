@@ -13,7 +13,7 @@ export const createProduct = async (event) => {
 
   const { name, fixedPrice, price, description, categories = {}, inStock, images = [] } = body
 
-  if (!name || !description) {
+  if (!name) {
     console.log("Validation failed: Missing required fields")
     return {
       statusCode: 400,
@@ -56,9 +56,15 @@ export const createProduct = async (event) => {
 
     const usedLanguages = Object.keys(categories)
 
+    console.log("usedLanguages:", JSON.stringify(usedLanguages, null, 2))
+    console.log("categories before adding languages:", JSON.stringify(categories, null, 2))
+
     if (!usedLanguages.includes("en")) categories.en = {}
     if (!usedLanguages.includes("ka")) categories.ka = {}
     if (!usedLanguages.includes("ru")) categories.ru = {}
+
+    console.log("categories after adding languages:", JSON.stringify(categories, null, 2))
+    console.log("usedLanguages:", JSON.stringify(usedLanguages, null, 2))
 
     Object.keys(categories).forEach((language) => {
       Object.entries(categories[language]).forEach(([key, languageSpecificCategory]) => {
@@ -71,6 +77,8 @@ export const createProduct = async (event) => {
             categories.en[key][key].name
         }
       })
+
+      console.log("categories after filling:", JSON.stringify(categories, null, 2))
 
       if (!categories[language].company) return
 
@@ -85,11 +93,19 @@ export const createProduct = async (event) => {
 
     console.log("Updated categories:", JSON.stringify(categories, null, 2))
 
+    console.log("product name before adding:", JSON.stringify(name, null, 2))
+
     if (!name.ka) name.ka = name.en
     if (!name.ru) name.ru = name.en
 
+    console.log("product name after adding:", JSON.stringify(name, null, 2))
+
+    console.log("product description before adding", JSON.stringify(name, null, 2))
+
     if (!description.ka && description.en) description.ka = name.en
     if (!description.ru && description.en) description.ru = name.en
+
+    console.log("product description after adding", JSON.stringify(name, null, 2))
 
     const productItem = {
       id: uuid(),
@@ -102,6 +118,8 @@ export const createProduct = async (event) => {
       images: imageUrls,
     }
 
+    console.log("adding product item:", JSON.stringify(productItem, null, 2))
+
     const params = {
       TableName: process.env.PRODUCTS_TABLE,
       Item: productItem,
@@ -112,6 +130,11 @@ export const createProduct = async (event) => {
     // Store product in DynamoDB
     await db.send(new PutCommand(params))
     console.log("Product stored in PRODUCTS_TABLE")
+
+    console.log(
+      "adding categories to global table, categories:",
+      JSON.stringify(categories, null, 2)
+    )
 
     // Update global categories
     await updateGlobalCategories(categories, imageURL)
