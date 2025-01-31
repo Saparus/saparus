@@ -1,5 +1,4 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb"
-
 import { db } from "../../util/db.mjs"
 import { filterProducts } from "../../util/filterProducts.mjs"
 
@@ -47,9 +46,13 @@ export const getAllProducts = async (event) => {
         JSON.stringify({ minPrice, maxPrice, otherFilters }, null, 2)
       )
 
-      const cleanedCategories = filter.categories ? removeEmptyValues(filter.categories) : {}
+      // Clean the categories filter recursively
+      const cleanedCategories = otherFilters.categories
+        ? removeEmptyValues(otherFilters.categories)
+        : {}
       console.log("Cleaned categories:", JSON.stringify(cleanedCategories, null, 2))
 
+      // Apply the filter to products
       productsToSend = filterProducts(
         products,
         { ...otherFilters, categories: cleanedCategories },
@@ -58,6 +61,7 @@ export const getAllProducts = async (event) => {
 
       console.log("Products after filtering:", JSON.stringify(productsToSend, null, 2))
 
+      // Apply price filtering if minPrice or maxPrice is provided
       if (minPrice || maxPrice) {
         const maxPossiblePrice = Math.max(...products.map((product) => product.price || 0))
         console.log("Max possible price:", maxPossiblePrice)
@@ -75,6 +79,7 @@ export const getAllProducts = async (event) => {
         console.log("Products after price filtering:", JSON.stringify(productsToSend, null, 2))
       }
     } else {
+      // If no filter is provided, just map the products with the selected language
       productsToSend = products.map((product) => ({
         ...product,
         name: product.name[languageToApply],
@@ -83,6 +88,7 @@ export const getAllProducts = async (event) => {
       console.log("Products mapped with language fields:", JSON.stringify(productsToSend, null, 2))
     }
 
+    // Paginate the results
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
     console.log("Pagination indices:", { startIndex, endIndex })
@@ -104,9 +110,9 @@ export const getAllProducts = async (event) => {
         products: paginatedResult,
         pagination: {
           currentPage: page,
-          hasNextPage: endIndex < products.length,
-          totalProducts: products.length,
-          totalPages: Math.ceil(products.length / limit),
+          hasNextPage: endIndex < productsToSend.length,
+          totalProducts: productsToSend.length,
+          totalPages: Math.ceil(productsToSend.length / limit),
         },
       }),
     }
@@ -123,10 +129,28 @@ export const getAllProducts = async (event) => {
   }
 }
 
+// Recursively remove empty values from an object
 const removeEmptyValues = (obj) => {
-  return Object.fromEntries(
-    Object.entries(obj).filter(
-      ([_, value]) => value !== "" && value !== null && value !== undefined
-    )
-  )
+  if (typeof obj !== "object" || obj === null) {
+    return obj
+  }
+
+  const cleanedObj = {}
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (value === "" || value === null || value === undefined) {
+      continue
+    }
+
+    if (typeof value === "object" && !Array.isArray(value)) {
+      const cleanedValue = removeEmptyValues(value)
+      if (Object.keys(cleanedValue).length > 0) {
+        cleanedObj[key] = cleanedValue
+      }
+    } else {
+      cleanedObj[key] = value
+    }
+  }
+
+  return cleanedObj
 }

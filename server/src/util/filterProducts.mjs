@@ -11,10 +11,11 @@ export const filterProducts = (products, filter, language = "en") => {
 
     console.log("Processing product:", JSON.stringify(product, null, 2))
 
+    // Translate categories based on the selected language
     const translatedCategories = {}
-    if (categories && categories.en) {
-      Object.keys(categories.en).forEach((categoryKey) => {
-        const category = categories.en[categoryKey]
+    if (categories && categories[language]) {
+      Object.keys(categories[language]).forEach((categoryKey) => {
+        const category = categories[language][categoryKey]
         Object.keys(category).forEach((subKey) => {
           translatedCategories[categoryKey] = category[subKey].name
         })
@@ -54,7 +55,8 @@ export const filterProducts = (products, filter, language = "en") => {
         const categoryFilters = appliedFilter[key]
         return Object.keys(categoryFilters).every((categoryKey) => {
           const expectedValue = categoryFilters[categoryKey]
-          const actualValue = categories[categoryKey]
+          // Look up the category value in the English part of the categories object
+          const actualValue = item.categories.en?.[categoryKey]?.[categoryKey]?.name
           return actualValue === expectedValue
         })
       }
