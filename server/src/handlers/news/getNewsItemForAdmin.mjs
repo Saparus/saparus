@@ -5,6 +5,17 @@ import { db } from "../../util/db.mjs"
 export const getNewsItemForAdmin = async (event) => {
   const { id } = event.pathParameters
 
+  if (!id) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({ message: "Missing required fields" }),
+    }
+  }
+
   const params = {
     TableName: process.env.NEWS_TABLE,
     Key: { id },

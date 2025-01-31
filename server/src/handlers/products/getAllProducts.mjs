@@ -4,9 +4,12 @@ import { db } from "../../util/db.mjs"
 import { filterProducts } from "../../util/filterProducts.mjs"
 
 export const getAllProducts = async (event) => {
+  console.log("Received event:", JSON.stringify(event, null, 2))
+
   const { filter, language, limit, page } = event.queryStringParameters
 
   if (!language || !limit || !page) {
+    console.log("Missing required fields in query parameters")
     return {
       statusCode: 400,
       headers: {
@@ -18,24 +21,34 @@ export const getAllProducts = async (event) => {
   }
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
+  console.log("Using language:", languageToApply)
 
   const params = {
     TableName: process.env.PRODUCTS_TABLE,
   }
 
+  console.log("DynamoDB scan params:", JSON.stringify(params, null, 2))
   const scanCommand = new ScanCommand(params)
   const { Items: products } = await db.send(scanCommand)
+  console.log("Fetched products:", JSON.stringify(products, null, 2))
 
   let productsToSend = []
 
   try {
     const parsedFilter = filter ? JSON.parse(decodeURIComponent(filter)) : {}
+    console.log("Parsed filter:", JSON.stringify(parsedFilter, null, 2))
+
     const isEmptyFilter = Object.keys(parsedFilter).length === 0
 
     if (filter || !isEmptyFilter) {
       const { minPrice, maxPrice, ...otherFilters } = parsedFilter
+      console.log(
+        "Extracted filter values:",
+        JSON.stringify({ minPrice, maxPrice, otherFilters }, null, 2)
+      )
 
       const cleanedCategories = filter.categories ? removeEmptyValues(filter.categories) : {}
+      console.log("Cleaned categories:", JSON.stringify(cleanedCategories, null, 2))
 
       productsToSend = filterProducts(
         products,
@@ -43,27 +56,23 @@ export const getAllProducts = async (event) => {
         languageToApply
       )
 
-      // if (minPrice || maxPrice) {
-      //   productsToSend = productsToSend.filter((product) => {
-      //     const price = product.price
-      //     return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice)
-      //   })
-      // }
+      console.log("Products after filtering:", JSON.stringify(productsToSend, null, 2))
+
       if (minPrice || maxPrice) {
-        // find the maximum price among all products
         const maxPossiblePrice = Math.max(...products.map((product) => product.price || 0))
+        console.log("Max possible price:", maxPossiblePrice)
 
         productsToSend = productsToSend.filter((product) => {
           const price = product.price
 
-          // include products without a fixed price if minPrice is 0 and maxPrice is the maximum possible price
           if (price === null || price === undefined || price === 0 || price === "") {
             return minPrice === 0 && maxPrice === maxPossiblePrice
           }
 
-          // apply price range filtering
           return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice)
         })
+
+        console.log("Products after price filtering:", JSON.stringify(productsToSend, null, 2))
       }
     } else {
       productsToSend = products.map((product) => ({
@@ -71,14 +80,19 @@ export const getAllProducts = async (event) => {
         name: product.name[languageToApply],
         description: product.description[languageToApply],
       }))
+      console.log("Products mapped with language fields:", JSON.stringify(productsToSend, null, 2))
     }
 
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
+    console.log("Pagination indices:", { startIndex, endIndex })
+
     const paginatedResult = productsToSend.slice(startIndex, endIndex).map((productToSend) => ({
       ...productToSend,
       images: productToSend.images.map((image) => image),
     }))
+
+    console.log("Paginated result:", JSON.stringify(paginatedResult, null, 2))
 
     return {
       statusCode: 200,

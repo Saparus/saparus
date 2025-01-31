@@ -9,7 +9,8 @@ export const summarizeCategoryData = (products, categories) => {
   products.forEach((product) => {
     const { price, fixedPrice, categories: productCategories } = product
 
-    if (price !== undefined && fixedPrice) {
+    // if (price !== undefined && fixedPrice) {
+    if (price !== undefined) {
       overallMinPrice = Math.min(overallMinPrice, price)
       overallMaxPrice = Math.max(overallMaxPrice, price)
     }

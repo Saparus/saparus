@@ -25,6 +25,8 @@ export const getAllChildrenProgramsForAdmin = async (event) => {
   try {
     const { Items: programs } = await db.send(scanCommand)
 
+    programs.sort((a, b) => b.date - a.date)
+
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
     const paginatedResult = programs.slice(startIndex, endIndex)

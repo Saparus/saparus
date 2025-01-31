@@ -19,14 +19,13 @@ export const getNewsItem = async (event) => {
 
   const languageToApply = ["en", "ka", "ru"].includes(language) ? language : "en"
 
-  const params = {
-    TableName: process.env.NEWS_TABLE,
-    Key: { id },
-  }
-
-  const getCommand = new GetCommand(params)
-
   try {
+    const params = {
+      TableName: process.env.NEWS_TABLE,
+      Key: { id },
+    }
+
+    const getCommand = new GetCommand(params)
     const { Item: newsItem } = await db.send(getCommand)
 
     if (!newsItem) {

@@ -27,7 +27,6 @@ export const getSingleChildrenProgramArticle = async (id, language) => {
 // fetch editable children program articles (requires api_key)
 export const getEditChildrenProgramArticles = async (limit, page, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -45,7 +44,6 @@ export const getEditChildrenProgramArticles = async (limit, page, api_key) => {
 // fetch a single editable children program article by id (requires api_key)
 export const getEditSingleChildrenProgramArticle = async (id, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -61,7 +59,6 @@ export const getEditSingleChildrenProgramArticle = async (id, api_key) => {
 // add a new children program article (requires api_key)
 export const addChildrenProgramArticle = async (title, text, images, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -81,7 +78,6 @@ export const addChildrenProgramArticle = async (title, text, images, api_key) =>
 // delete a children program article by id (requires api_key)
 export const deleteChildrenProgramArticle = async (id, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -97,7 +93,6 @@ export const deleteChildrenProgramArticle = async (id, api_key) => {
 // edit a children program article by id (requires api_key)
 export const editChildrenProgramArticle = async (id, title, text, images, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 

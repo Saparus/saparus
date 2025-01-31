@@ -25,7 +25,6 @@ export const getSingleNewsArticle = async (id, language) => {
 // fetch editable news articles (requires api_key)
 export const getEditNewsArticles = async (limit, page, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -41,7 +40,6 @@ export const getEditNewsArticles = async (limit, page, api_key) => {
 // fetch a single editable news article by id (requires api_key)
 export const getEditSingleNewsArticle = async (id, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -57,7 +55,6 @@ export const getEditSingleNewsArticle = async (id, api_key) => {
 // add a new news article (requires api_key)
 export const addNewsArticle = async (title, text, images, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -77,7 +74,6 @@ export const addNewsArticle = async (title, text, images, api_key) => {
 // delete a news article by id (requires api_key)
 export const deleteNewsArticle = async (id, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 
@@ -93,7 +89,6 @@ export const deleteNewsArticle = async (id, api_key) => {
 // edit a news article by id (requires api_key)
 export const editNewsArticle = async (id, title, text, images, api_key) => {
   if (!api_key) {
-    console.error("api_key is required")
     return
   }
 

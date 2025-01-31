@@ -56,13 +56,22 @@ export const editProduct = async (event) => {
         )
       : []
 
+    const usedLanguages = Object.keys(categories)
+
+    if (!usedLanguages.includes("en")) categories.en = {}
+    if (!usedLanguages.includes("ka")) categories.ka = {}
+    if (!usedLanguages.includes("ru")) categories.ru = {}
+
     Object.keys(categories).forEach((language) => {
       Object.entries(categories[language]).forEach(([key, languageSpecificCategory]) => {
         if (language === "en") return
 
-        if (!languageSpecificCategory.name)
+        if (!languageSpecificCategory.name) {
+          categories[language][key] = {}
+          categories[language][key][Object.keys(languageSpecificCategory)[0]] = {}
           categories[language][key][Object.keys(languageSpecificCategory)[0]].name =
             categories.en[key][key].name
+        }
       })
 
       if (!categories[language].company) return

@@ -39,6 +39,8 @@ export const getChildrenProgram = async (event) => {
       }
     }
 
+    const { title, text } = newsItem
+
     return {
       statusCode: 200,
       headers: {
@@ -47,8 +49,8 @@ export const getChildrenProgram = async (event) => {
       },
       body: JSON.stringify({
         ...program,
-        title: program.title[languageToApply],
-        text: program.text[languageToApply],
+        title: title[languageToApply],
+        text: text[languageToApply],
         images: program.images.map((image) => image + "/o.webp"),
       }),
     }

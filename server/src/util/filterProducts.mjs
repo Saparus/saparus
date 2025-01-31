@@ -4,9 +4,12 @@ export const filterProducts = (products, filter, language = "en") => {
   console.log("Language:", language)
 
   const appliedFilter = cleanFilter(filter)
+  console.log("Applied Filter:", JSON.stringify(appliedFilter, null, 2))
 
   const translatedProducts = products.map((product) => {
     const { name, description, categories } = product
+
+    console.log("Processing product:", JSON.stringify(product, null, 2))
 
     const translatedCategories = {}
     if (categories && categories.en) {
@@ -18,20 +21,27 @@ export const filterProducts = (products, filter, language = "en") => {
       })
     }
 
-    return {
+    const translatedProduct = {
       ...product,
       name: name[language],
       description: description[language],
       categories: translatedCategories,
     }
+
+    console.log("Translated Product:", JSON.stringify(translatedProduct, null, 2))
+    return translatedProduct
   })
 
   console.log("Translated Products:", JSON.stringify(translatedProducts, null, 2))
 
   const filteredProducts = translatedProducts.filter((item) => {
+    console.log("Evaluating product for filtering:", JSON.stringify(item, null, 2))
+
     const { name, description, categories, price, ...rest } = item
 
     const matchesFilter = Object.keys(appliedFilter).every((key) => {
+      console.log("Checking filter key:", key, "with value:", appliedFilter[key])
+
       if (key === "name") {
         return name.toLowerCase().includes(appliedFilter[key].toLowerCase())
       }
@@ -69,8 +79,12 @@ export const filterProducts = (products, filter, language = "en") => {
 }
 
 const cleanFilter = (obj) => {
+  console.log("Cleaning filter object:", JSON.stringify(obj, null, 2))
+
   return Object.keys(obj).reduce((acc, key) => {
     const value = obj[key]
+    console.log("Checking filter key:", key, "with value:", value)
+
     if (
       value === null ||
       value === "" ||
@@ -86,6 +100,8 @@ const cleanFilter = (obj) => {
     } else {
       acc[key] = value
     }
+
+    console.log("Updated cleaned filter:", JSON.stringify(acc, null, 2))
     return acc
   }, {})
 }
