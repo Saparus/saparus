@@ -30,16 +30,28 @@ export const updateGlobalCategories = async (categories, imageURL) => {
           (existingItem) => existingItem.name === value.name
         )
 
+        if (!exists && value && imageURL) {
+          delete value.image
+
+          value.imageURL = imageURL
+        }
+
+        if (exists && categoryKey === "company" && value && !value.imageURL && imageURL) {
+          delete value.image
+
+          value.imageURL = imageURL
+        }
+
         if (!exists && value) {
           globalCategories[language][categoryKey][languageSpecificCategory].push(value)
 
-          if (categoryKey === "company" && imageURL) {
-            delete value.image
+          // if (categoryKey === "company" && imageURL) {
+          //   delete value.image
 
-            if (!imageURL) return
+          //   if (!imageURL) return
 
-            value.imageURL = imageURL
-          }
+          //   value.imageURL = imageURL
+          // }
         }
       })
     })

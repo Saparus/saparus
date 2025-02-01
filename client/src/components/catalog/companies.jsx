@@ -109,16 +109,22 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
   const renderCompanies = () => {
     // if (isLoading) return <Loading />
     if (isLoading) return
-    if (error || !data?.[currentLanguage]) return <div>something went wrong</div>
+    if (error) return <div>something went wrong</div>
+    if (!data?.[currentLanguage]) return
 
     const companies = data[currentLanguage]
 
     const renderLogo = (company) => {
-      if (!company.imageURL) return
+      // if (!company.imageURL) return
 
       return (
         <img
-          src={company.name === editCompanyName ? editCompanyImage : company.imageURL + "/s.webp"}
+          src={
+            company.name === editCompanyName
+              ? editCompanyImage
+              : company.imageURL + "/s.webp" ||
+                `https://saparus-images.s3.amazonaws.com/company_images/${company.name}/s.webp`
+          }
           alt=""
           className="company-logo"
         />

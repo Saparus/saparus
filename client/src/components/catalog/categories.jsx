@@ -130,6 +130,8 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
         return null
       }
 
+      if (!Object.keys(subKeys).includes(currentLanguage)) return
+
       return (
         <div
           className="select-holder"
