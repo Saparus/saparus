@@ -141,8 +141,11 @@ const ensureCategoryTranslations = (categories) => {
     }
 
     Object.keys(englishCategories).forEach((categoryKey) => {
-      if (!categories[lang][categoryKey]) {
-        categories[lang][categoryKey] = { ...englishCategories[categoryKey] }
+      // if (!categories[lang][categoryKey]) {
+      //   categories[lang][categoryKey] = { ...englishCategories[categoryKey] }
+      // }
+      if (!categories[lang][categoryKey].name) {
+        categories[lang][categoryKey].name = englishCategories[categoryKey].name
       }
     })
   })
