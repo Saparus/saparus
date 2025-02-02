@@ -8,21 +8,11 @@ export const filterProducts = (products, filter, language = "en") => {
   const translatedProducts = products.map((product) => {
     const { name, description, categories } = product
 
-    const translatedCategories = {}
-    if (categories && categories.en) {
-      Object.keys(categories.en).forEach((categoryKey) => {
-        const category = categories.en[categoryKey]
-        Object.keys(category).forEach((subKey) => {
-          translatedCategories[categoryKey] = category[subKey].name
-        })
-      })
-    }
-
     return {
       ...product,
       name: name[language],
       description: description[language],
-      categories: translatedCategories,
+      categories: categories,
     }
   })
 
@@ -42,10 +32,23 @@ export const filterProducts = (products, filter, language = "en") => {
 
       if (key === "categories") {
         const categoryFilters = appliedFilter[key]
+
         return Object.keys(categoryFilters).every((categoryKey) => {
           const expectedValue = categoryFilters[categoryKey]
-          const actualValue = categories[categoryKey]
-          return actualValue === expectedValue
+          const actualValues = []
+
+          Object.values(categories).forEach((languageSpecificCategories) => {
+            Object.values(languageSpecificCategories).forEach((category) => {
+              Object.values(category).forEach((value) => {
+                actualValues.push(value)
+              })
+            })
+          })
+
+          console.log("expectedValue:", JSON.stringify(expectedValue, null, 2))
+          console.log("actualValues:", JSON.stringify(actualValues, null, 2))
+
+          return actualValues.includes(expectedValue)
         })
       }
 
@@ -61,6 +64,7 @@ export const filterProducts = (products, filter, language = "en") => {
     })
 
     console.log("Product Matches Filter:", matchesFilter, item)
+
     return matchesFilter
   })
 

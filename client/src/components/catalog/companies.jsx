@@ -124,8 +124,7 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
           src={
             company.name === editCompanyName
               ? editCompanyImage
-              : company.imageURL + "/s.webp" ||
-                `https://saparus-images.s3.amazonaws.com/company_images/${company.name}/s.webp`
+              : `https://saparus-images.s3.amazonaws.com/company_images/${company.name}/s.webp`
           }
           alt=""
           className="company-logo"

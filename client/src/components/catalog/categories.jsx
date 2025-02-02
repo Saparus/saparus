@@ -84,6 +84,10 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
     }))
   }, [selectedCompany])
 
+  useEffect(() => {
+    setFilter({})
+  }, [currentLanguage])
+
   const renderCategories = () => {
     if (isLoading) return <Loading />
     if (error || !data) {
