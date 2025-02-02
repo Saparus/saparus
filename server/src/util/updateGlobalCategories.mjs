@@ -16,56 +16,25 @@ export const updateGlobalCategories = async (categories, imageURL) => {
 
     console.log("imageURL:", JSON.stringify(imageURL, null, 2))
     console.log("categories:", JSON.stringify(categories, null, 2))
-    console.log("globalCategories before update:", JSON.stringify(globalCategories, null, 2))
+    console.log("globalCategories before:", JSON.stringify(globalCategories, null, 2))
 
-    // iterate through each language in the passed categories object
-    Object.entries(categories).forEach(([language, languageCategories]) => {
-      // ensure globalCategories has an object for the current language
-      if (!globalCategories[language]) {
-        globalCategories[language] = {}
-      }
+    Object.entries(categories).forEach(([language, languageSpecificCategories]) => {
+      if (!globalCategories[language]) globalCategories[language] = {}
 
-      // iterate through each main category key for the language
-      Object.entries(languageCategories).forEach(([mainKey, mainValue]) => {
-        // ensure globalCategories has an object for the main category key
-        if (!globalCategories[language][mainKey]) {
-          globalCategories[language][mainKey] = {}
-        }
+      Object.entries(languageSpecificCategories).forEach(([mainKey, category]) => {
+        if (!globalCategories[language][mainKey]) globalCategories[language][mainKey] = {}
 
-        // iterate through each language-specific subkey in the main category
-        Object.entries(mainValue).forEach(([subKey, value]) => {
-          // ensure globalCategories has an array for this subkey
-          if (!globalCategories[language][mainKey][subKey]) {
-            globalCategories[language][mainKey][subKey] = []
-          }
+        Object.entries(category).forEach(([subKey, value]) => {
+          if (!globalCategories[language][mainKey][subKey])
+            globalCategories[language][mainKey][subKey] = value
 
-          // if the value does not have a valid name, skip it
-          if (!value?.name) return
-
-          // check if an entry with the same name already exists
-          const existingIndex = globalCategories[language][mainKey][subKey].findIndex(
-            (item) => item.name === value.name
-          )
-
-          if (existingIndex === -1) {
-            // add new entry if it does not exist
-            console.log(`adding (${JSON.stringify(value)}) to globalCategories`)
-            globalCategories[language][mainKey][subKey].push(value)
-          } else if (mainKey === "company" && imageURL) {
-            // if the company entry exists and imageURL is provided, update its imageURL
-            console.log(`updating imageURL (${imageURL}) for ${value.name} company`)
-            globalCategories[language][mainKey][subKey][existingIndex].imageURL = imageURL
-          }
+          if (mainKey === "company" && imageURL)
+            globalCategories[language][mainKey][subKey].imageURL = imageURL
         })
-
-        // if main key is 'company' and imageURL is provided, update/add imageURL at the main category level
-        if (mainKey === "company" && imageURL) {
-          globalCategories[language][mainKey].imageURL = imageURL
-        }
       })
     })
 
-    console.log("globalCategories after update:", JSON.stringify(globalCategories, null, 2))
+    console.log("globalCategories after:", JSON.stringify(globalCategories, null, 2))
 
     // params to update the categories item in dynamodb
     const putParams = {
