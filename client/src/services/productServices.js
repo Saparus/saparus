@@ -144,7 +144,9 @@ const ensureCategoryTranslations = (categories) => {
       // if (!categories[lang][categoryKey]) {
       //   categories[lang][categoryKey] = { ...englishCategories[categoryKey] }
       // }
-      if (!categories[lang][categoryKey].name) {
+      if (!categories?.[lang]?.[categoryKey]?.name) {
+        categories[lang] = categories[lang] || {}
+        categories[lang][categoryKey] = categories[lang][categoryKey] || {}
         categories[lang][categoryKey].name = englishCategories[categoryKey].name
       }
     })

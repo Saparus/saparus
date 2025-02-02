@@ -9,8 +9,17 @@ export const updateGlobalCategories = async (categories, imageURL) => {
   }
 
   try {
+    const putParams = {
+      TableName: process.env.CATEGORIES_TABLE,
+      Item: { id, categories: globalCategories },
+    }
+
     const { Item } = await db.send(new GetCommand(categoryParams))
     const globalCategories = Item?.categories || {}
+
+    console.log("imageURL:", JSON.stringify(imageURL, null, 2))
+    console.log("categories:", JSON.stringify(categories, null, 2))
+    console.log("globalCategories before adding space:", JSON.stringify(globalCategories, null, 2))
 
     Object.entries(categories).forEach(([language, languageCategories]) => {
       if (!globalCategories[language]) {
@@ -27,36 +36,14 @@ export const updateGlobalCategories = async (categories, imageURL) => {
             globalCategories[language][categoryKey][languageSpecificCategory] = []
           }
 
-          const existingEntries = globalCategories[language][categoryKey][languageSpecificCategory]
-          const existingNames = new Set(existingEntries.map((item) => item.name))
-
-          values.forEach((value) => {
-            if (!value || !value.name) return
-
-            if (!existingNames.has(value.name)) {
-              const newValue = { ...value }
-              if (imageURL) {
-                delete newValue.image
-                newValue.imageURL = imageURL
-              }
-              existingEntries.push(newValue)
-              existingNames.add(newValue.name)
-            } else if (categoryKey === "company" && imageURL) {
-              const existingValue = existingEntries.find((item) => item.name === value.name)
-              if (existingValue && !existingValue.imageURL) {
-                delete existingValue.image
-                existingValue.imageURL = imageURL
-              }
-            }
-          })
+          console.log(
+            "globalCategories after adding space:",
+            JSON.stringify(globalCategories, null, 2)
+          )
+          console.log("values:", JSON.stringify(values, null, 2))
         })
       })
     })
-
-    const putParams = {
-      TableName: process.env.CATEGORIES_TABLE,
-      Item: { id, categories: globalCategories },
-    }
 
     await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
   } catch (error) {
