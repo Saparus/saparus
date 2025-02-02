@@ -3,6 +3,7 @@ import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
 import { db } from "./db.mjs"
 
 export const updateGlobalCategories = async (categories, imageURL) => {
+  // params to get the current categories item from dynamodb
   const categoryParams = {
     TableName: process.env.CATEGORIES_TABLE,
     Key: { id: "categories" },
@@ -16,17 +17,23 @@ export const updateGlobalCategories = async (categories, imageURL) => {
     console.log("categories:", JSON.stringify(categories, null, 2))
     console.log("globalCategories before adding space:", JSON.stringify(globalCategories, null, 2))
 
-    Object.entries(categories).forEach(([language, languageCategories]) => {
+    // if the passed object has a 'categories' property, use that
+    const inputCategories = categories.categories ? categories.categories : categories
+
+    Object.entries(inputCategories).forEach(([language, languageCategories]) => {
+      // ensure globalCategories has an object for the current language
       if (!globalCategories[language]) {
         globalCategories[language] = {}
       }
 
       Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
+        // ensure globalCategories has an object for the current main category key
         if (!globalCategories[language][categoryKey]) {
           globalCategories[language][categoryKey] = {}
         }
 
         Object.entries(categoryValue).forEach(([languageSpecificCategory, values]) => {
+          // ensure globalCategories has an array for the specific language category key
           if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
             globalCategories[language][categoryKey][languageSpecificCategory] = []
           }
@@ -41,15 +48,15 @@ export const updateGlobalCategories = async (categories, imageURL) => {
             ].findIndex((item) => item.name === value.name)
 
             if (existingIndex === -1) {
-              // if the category doesn't exist, add it
-              console.log(`adding (${value}) to global categories`)
+              // adding new category if it does not exist
+              console.log(`adding (${JSON.stringify(value)}) to global categories`)
               globalCategories[language][categoryKey][languageSpecificCategory].push(value)
-            } else if (categoryKey === "company" && value.imageURL) {
-              // if the company exists, update its imageURL
-              console.log(`adding (${imageURL}) to ${value.name} company`)
+            } else if (categoryKey === "company" && imageURL) {
+              // if the company exists, update its imageURL with the provided imageURL
+              console.log(`updating imageURL (${imageURL}) for ${value.name} company`)
               globalCategories[language][categoryKey][languageSpecificCategory][
                 existingIndex
-              ].imageURL = value.imageURL
+              ].imageURL = imageURL
             }
           })
 
@@ -58,6 +65,10 @@ export const updateGlobalCategories = async (categories, imageURL) => {
             JSON.stringify(globalCategories, null, 2)
           )
         })
+
+        if (categoryKey === "company" && imageURL) {
+          globalCategories[language][categoryKey].imageURL = imageURL
+        }
       })
     })
 
@@ -68,7 +79,7 @@ export const updateGlobalCategories = async (categories, imageURL) => {
 
     await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
   } catch (error) {
-    console.error("Error updating global categories:", error)
+    console.error("error updating global categories:", error)
     throw error
   }
 }
