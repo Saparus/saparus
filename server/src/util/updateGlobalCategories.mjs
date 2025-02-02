@@ -36,7 +36,9 @@ export const updateGlobalCategories = async (categories, imageURL) => {
           Object.values(values).forEach((value) => {
             if (!value?.name) return
 
-            const existingIndex = existingEntries.findIndex((item) => item.name === value.name)
+            const existingIndex = globalCategories[language][categoryKey][
+              languageSpecificCategory
+            ].findIndex((item) => item.name === value.name)
 
             if (existingIndex === -1) {
               // if the category doesn't exist, add it

@@ -143,7 +143,12 @@ const ensureCategoryTranslations = (categories) => {
     Object.keys(englishCategories).forEach((categoryKey) => {
       const subCategory = Object.keys(englishCategories[categoryKey])[0]
 
-      if (!categories?.[language]?.[categoryKey]?.[subCategory]?.name) {
+      const languageSpecificSubcategory = Object.keys(categories[language])[0]
+
+      if (languageSpecificSubcategory) {
+        categories[language][categoryKey][languageSpecificSubcategory] =
+          englishCategories[categoryKey][subCategory]
+      } else if (!categories?.[language]?.[categoryKey]?.[subCategory]?.name) {
         categories[language] = categories[language] || {}
 
         categories[language][categoryKey] = categories[language][categoryKey] || {}
