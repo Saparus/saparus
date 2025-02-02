@@ -52,6 +52,7 @@ export const updateGlobalCategories = async (categories, imageURL) => {
             "globalCategories after adding space:",
             JSON.stringify(globalCategories, null, 2)
           )
+
           console.log("values:", JSON.stringify(values, null, 2))
         })
       })
