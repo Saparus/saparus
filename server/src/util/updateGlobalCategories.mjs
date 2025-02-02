@@ -31,7 +31,9 @@ export const updateGlobalCategories = async (categories, imageURL) => {
             globalCategories[language][categoryKey][languageSpecificCategory] = []
           }
 
-          values.forEach((value) => {
+          console.log("values:", JSON.stringify(values, null, 2))
+
+          Object.values(values).forEach((value) => {
             if (!value?.name) return
 
             const existingEntries =
@@ -52,8 +54,6 @@ export const updateGlobalCategories = async (categories, imageURL) => {
             "globalCategories after adding space:",
             JSON.stringify(globalCategories, null, 2)
           )
-
-          console.log("values:", JSON.stringify(values, null, 2))
         })
       })
     })
