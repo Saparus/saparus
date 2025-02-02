@@ -8,59 +8,59 @@ export const updateGlobalCategories = async (categories, imageURL) => {
     Key: { id: "categories" },
   }
 
-  const { Item } = await db.send(new GetCommand(categoryParams))
-  const globalCategories = Item?.categories || {}
+  try {
+    const { Item } = await db.send(new GetCommand(categoryParams))
+    const globalCategories = Item?.categories || {}
 
-  Object.entries(categories).forEach(([language, languageCategories]) => {
-    if (!globalCategories[language]) {
-      globalCategories[language] = {}
-    }
-
-    Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
-      if (!globalCategories[language][categoryKey]) {
-        globalCategories[language][categoryKey] = {}
+    Object.entries(categories).forEach(([language, languageCategories]) => {
+      if (!globalCategories[language]) {
+        globalCategories[language] = {}
       }
 
-      Object.entries(categoryValue).forEach(([languageSpecificCategory, value]) => {
-        if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
-          globalCategories[language][categoryKey][languageSpecificCategory] = []
+      Object.entries(languageCategories).forEach(([categoryKey, categoryValue]) => {
+        if (!globalCategories[language][categoryKey]) {
+          globalCategories[language][categoryKey] = {}
         }
 
-        const exists = globalCategories[language][categoryKey][languageSpecificCategory].some(
-          (existingItem) => existingItem.name === value.name
-        )
+        Object.entries(categoryValue).forEach(([languageSpecificCategory, values]) => {
+          if (!globalCategories[language][categoryKey][languageSpecificCategory]) {
+            globalCategories[language][categoryKey][languageSpecificCategory] = []
+          }
 
-        if (!exists && value && imageURL) {
-          delete value.image
+          const existingEntries = globalCategories[language][categoryKey][languageSpecificCategory]
+          const existingNames = new Set(existingEntries.map((item) => item.name))
 
-          value.imageURL = imageURL
-        }
+          values.forEach((value) => {
+            if (!value || !value.name) return
 
-        if (exists && categoryKey === "company" && value && !value.imageURL && imageURL) {
-          delete value.image
-
-          value.imageURL = imageURL
-        }
-
-        if (!exists && value) {
-          globalCategories[language][categoryKey][languageSpecificCategory].push(value)
-
-          // if (categoryKey === "company" && imageURL) {
-          //   delete value.image
-
-          //   if (!imageURL) return
-
-          //   value.imageURL = imageURL
-          // }
-        }
+            if (!existingNames.has(value.name)) {
+              const newValue = { ...value }
+              if (imageURL) {
+                delete newValue.image
+                newValue.imageURL = imageURL
+              }
+              existingEntries.push(newValue)
+              existingNames.add(newValue.name)
+            } else if (categoryKey === "company" && imageURL) {
+              const existingValue = existingEntries.find((item) => item.name === value.name)
+              if (existingValue && !existingValue.imageURL) {
+                delete existingValue.image
+                existingValue.imageURL = imageURL
+              }
+            }
+          })
+        })
       })
     })
-  })
 
-  const putParams = {
-    TableName: process.env.CATEGORIES_TABLE,
-    Item: { id: "categories", categories: globalCategories },
+    const putParams = {
+      TableName: process.env.CATEGORIES_TABLE,
+      Item: { id, categories: globalCategories },
+    }
+
+    await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
+  } catch (error) {
+    console.error("Error updating global categories:", error)
+    throw error
   }
-
-  await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
 }

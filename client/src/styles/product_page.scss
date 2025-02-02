@@ -561,6 +561,19 @@
         width: calc(100% - 2rem);
         height: auto;
         margin: auto;
+
+        .image-not-found-message {
+          max-width: 100%;
+        }
+
+        // img {
+        //   height: auto;
+        //   width: auto;
+        //   min-height: auto;
+        //   min-width: auto;
+        //   max-height: auto;
+        //   max-width: auto;
+        // }
       }
     }
   }
