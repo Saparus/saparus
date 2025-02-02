@@ -9,11 +9,6 @@ export const updateGlobalCategories = async (categories, imageURL) => {
   }
 
   try {
-    const putParams = {
-      TableName: process.env.CATEGORIES_TABLE,
-      Item: { id, categories: globalCategories },
-    }
-
     const { Item } = await db.send(new GetCommand(categoryParams))
     const globalCategories = Item?.categories || {}
 
@@ -44,6 +39,11 @@ export const updateGlobalCategories = async (categories, imageURL) => {
         })
       })
     })
+
+    const putParams = {
+      TableName: process.env.CATEGORIES_TABLE,
+      Item: { id: "categories", categories: globalCategories },
+    }
 
     await db.send(new PutCommand(putParams, { removeUndefinedValues: true }))
   } catch (error) {
