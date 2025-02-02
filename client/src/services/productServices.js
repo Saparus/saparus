@@ -135,19 +135,24 @@ const ensureCategoryTranslations = (categories) => {
   const languages = ["en", "ka", "ru"]
   const englishCategories = categories["en"] || {}
 
-  languages.forEach((lang) => {
-    if (!categories[lang]) {
-      categories[lang] = {}
+  languages.forEach((language) => {
+    if (!categories[language]) {
+      categories[language] = {}
     }
 
     Object.keys(englishCategories).forEach((categoryKey) => {
-      // if (!categories[lang][categoryKey]) {
-      //   categories[lang][categoryKey] = { ...englishCategories[categoryKey] }
-      // }
-      if (!categories?.[lang]?.[categoryKey]?.name) {
-        categories[lang] = categories[lang] || {}
-        categories[lang][categoryKey] = categories[lang][categoryKey] || {}
-        categories[lang][categoryKey].name = englishCategories[categoryKey].name
+      const subCategory = Object.keys(englishCategories[categoryKey])[0]
+
+      if (!categories?.[language]?.[categoryKey]?.[subCategory]?.name) {
+        categories[language] = categories[language] || {}
+
+        categories[language][categoryKey] = categories[language][categoryKey] || {}
+
+        categories[language][categoryKey][subCategory] =
+          categories[language][categoryKey][subCategory] || {}
+
+        categories[language][categoryKey][subCategory].name =
+          englishCategories[categoryKey][subCategory].name
       }
     })
   })

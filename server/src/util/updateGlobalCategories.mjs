@@ -31,6 +31,23 @@ export const updateGlobalCategories = async (categories, imageURL) => {
             globalCategories[language][categoryKey][languageSpecificCategory] = []
           }
 
+          values.forEach((value) => {
+            if (!value?.name) return
+
+            const existingEntries =
+              globalCategories[language][categoryKey][languageSpecificCategory]
+
+            const existingIndex = existingEntries.findIndex((item) => item.name === value.name)
+
+            if (existingIndex === -1) {
+              // if the category doesn't exist, add it
+              existingEntries.push(value)
+            } else if (categoryKey === "company" && value.imageURL) {
+              // if the company exists, update its imageURL
+              existingEntries[existingIndex].imageURL = value.imageURL
+            }
+          })
+
           console.log(
             "globalCategories after adding space:",
             JSON.stringify(globalCategories, null, 2)
