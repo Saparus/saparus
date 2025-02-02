@@ -11,9 +11,7 @@ const HomePageNews = () => {
   const { t } = useTranslation("translation", { keyPrefix: "time" })
   const { i18n } = useTranslation()
 
-  const languages = ["en", "ka", "ru"]
-
-  const currentLanguage = languages.includes(i18n.language) ? i18n.language : "en"
+  const currentLanguage = i18n.language.split("-")[0]
 
   const {
     data: news,

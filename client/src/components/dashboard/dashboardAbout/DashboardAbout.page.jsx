@@ -18,7 +18,8 @@ const DashboardAboutPage = () => {
   const { apiKey } = useOutletContext()
 
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 

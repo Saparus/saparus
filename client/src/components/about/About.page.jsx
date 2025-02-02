@@ -11,7 +11,8 @@ import Map from "../other/Map"
 const About = () => {
   const { t } = useTranslation("translation", { keyPrefix: "about us" })
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { data, isLoading, error } = useQuery(["about", currentLanguage], () =>
     getAllAboutItems(currentLanguage)

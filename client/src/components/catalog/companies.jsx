@@ -16,7 +16,9 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
-  const currentLanguage = useTranslation().i18n.language
+  const { i18n } = useTranslation()
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { data, isLoading, error } = useQuery(["companies"], getCompanies)
 

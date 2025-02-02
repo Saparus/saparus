@@ -12,7 +12,8 @@ import PageSelect from "./PageSelect"
 
 const ProductList = ({ filter, resetFilter }) => {
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { t } = useTranslation("translation", { keyPrefix: "children program" })
 

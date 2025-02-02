@@ -21,7 +21,8 @@ const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoadin
 
   const { id } = useParams()
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const textRef = useRef(null)
 
