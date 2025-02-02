@@ -38,9 +38,11 @@ export const filterProducts = (products, filter, language = "en") => {
           const actualValues = []
 
           Object.values(categories).forEach((languageSpecificCategories) => {
-            Object.values(languageSpecificCategories).forEach((category) => {
+            Object.Entries(languageSpecificCategories).forEach(([mainKey, category]) => {
+              if (mainKey !== categoryKey) return
+
               Object.values(category).forEach((value) => {
-                actualValues.push(value)
+                actualValues.push(value.name)
               })
             })
           })
