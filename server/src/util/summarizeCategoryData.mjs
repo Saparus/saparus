@@ -3,6 +3,9 @@ export const summarizeCategoryData = (products, categories) => {
 
   const languages = ["en", "ka", "ru"]
 
+  console.log("categories:", JSON.stringify(categories, null, 2))
+  console.log("products:", JSON.stringify(products, null, 2))
+
   let overallMinPrice = Infinity
   let overallMaxPrice = -Infinity
 
