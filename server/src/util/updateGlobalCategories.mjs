@@ -18,20 +18,26 @@ export const updateGlobalCategories = async (categories, imageURL) => {
     console.log("categories:", JSON.stringify(categories, null, 2))
     console.log("globalCategories before:", JSON.stringify(globalCategories, null, 2))
 
-    Object.entries(categories).forEach(([language, languageSpecificCategories]) => {
-      if (!globalCategories[language]) globalCategories[language] = {}
+    categories.forEach((category) => {
+      if (globalCategories.find((globalCategory) => globalCategory.key === category.key)) {
+        if (!globalCategories.value.en.includes(category.value.en)) {
+          const languages = Object.keys(globalCategories)
 
-      Object.entries(languageSpecificCategories).forEach(([mainKey, category]) => {
-        if (!globalCategories[language][mainKey]) globalCategories[language][mainKey] = {}
+          languages.forEach((language) => {
+            globalCategories.value?.[language].push(globalCategories.value?.[language])
+          })
+        }
+      }
 
-        Object.entries(category).forEach(([subKey, value]) => {
-          if (!globalCategories[language][mainKey][subKey])
-            globalCategories[language][mainKey][subKey] = value
+      if (globalCategories.find((globalCategory) => globalCategory.key !== category.key)) {
+        const languages = Object.keys(globalCategories)
 
-          if (mainKey === "company" && imageURL)
-            globalCategories[language][mainKey][subKey].imageURL = imageURL
-        })
-      })
+        const newValue = languages.map((language) => ({
+          [language]: [...globalCategories.value, category.value],
+        }))
+
+        globalCategories.push({ ...category, value: newValue })
+      }
     })
 
     console.log("globalCategories after:", JSON.stringify(globalCategories, null, 2))

@@ -28,14 +28,13 @@ export const createProduct = async (event) => {
   try {
     let imageURL
 
-    // Upload company image if present
-    if (categories?.en?.company?.company?.image && categories?.en?.company?.company?.name) {
+    if (categories.find((category) => category.key === "company")?.image) {
       const image = categories.en.company.company.image
       imageURL = await uploadImage(
         image,
         "company_images",
         undefined,
-        categories.en.company.company.name
+        categories.find((category) => category.key === "company")
       )
       console.log("Company image URL:", imageURL)
     }
@@ -54,19 +53,17 @@ export const createProduct = async (event) => {
 
     console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
 
-    Object.keys(categories).forEach((language) => {
-      if (!categories[language].company) return
-
-      Object.keys(categories[language].company).forEach((languageSpecificCompany) => {
-        delete categories[language].company[languageSpecificCompany].image
-
-        if (!imageURL) return
-
-        categories[language].company[languageSpecificCompany].imageURL = imageURL
-      })
-    })
-
     console.log("Updated categories:", JSON.stringify(categories, null, 2))
+
+    categories.forEach((category) => {
+      const { name, value } = category
+
+      if (!name.ka) name.ka = name.en
+      if (!name.ru) name.ru = name.en
+
+      if (!value.ka) value.ka = value.en
+      if (!value.ru) value.ru = value.en
+    })
 
     if (!name.ka) name.ka = name.en
     if (!name.ru) name.ru = name.en
@@ -74,7 +71,6 @@ export const createProduct = async (event) => {
     if (!description.ka && description.en) description.ka = name.en
     if (!description.ru && description.en) description.ru = name.en
 
-    // Prepare product item for DynamoDB
     const productItem = {
       id: uuid(),
       name,
@@ -93,11 +89,9 @@ export const createProduct = async (event) => {
 
     console.log("Product params:", JSON.stringify(params, null, 2))
 
-    // Store product in DynamoDB
     await db.send(new PutCommand(params))
     console.log("Product stored in PRODUCTS_TABLE")
 
-    // Update global categories
     await updateGlobalCategories(categories, imageURL)
 
     return {

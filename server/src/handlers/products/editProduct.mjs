@@ -43,29 +43,24 @@ export const editProduct = async (event) => {
 
     let imageURL
 
-    if (categories?.en?.company?.company?.image && categories?.en?.company?.company?.name) {
+    if (categories.find((category) => category.key === "company")?.image) {
       const image = categories.en.company.company.image
-
-      if (image) {
-        imageURL = await uploadImage(
-          image,
-          "company_images",
-          undefined,
-          categories.en.company.company.name
-        )
-      }
+      imageURL = await uploadImage(
+        image,
+        "company_images",
+        undefined,
+        categories.find((category) => category.key === "company")
+      )
     }
 
-    Object.keys(categories).forEach((language) => {
-      if (!categories[language].company) return
+    categories.forEach((category) => {
+      const { name, value } = category
 
-      Object.keys(categories[language].company).forEach((languageSpecificCompany) => {
-        delete categories[language].company[languageSpecificCompany].image
+      if (!name.ka) name.ka = name.en
+      if (!name.ru) name.ru = name.en
 
-        if (!imageURL) return
-
-        categories[language].company[languageSpecificCompany].imageURL = imageURL
-      })
+      if (!value.ka) value.ka = value.en
+      if (!value.ru) value.ru = value.en
     })
 
     if (!name.ka) name.ka = name.en

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
@@ -16,53 +16,14 @@ const EditCategoryList = ({
 }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
 
-  const categoryArray = Object.entries(categories?.[selectedLanguage] || {}).map(
-    ([key, value]) => ({
-      key,
-      value,
-    })
-  )
-
-  const handleAddOrEditCategory = (newCategories) => {
-    setCurrentProduct((prevState) => {
-      const mergeCategories = (prevCategories, newCategories) => {
-        return Object.keys(newCategories).reduce(
-          (acc, language) => {
-            acc[language] = {
-              ...prevCategories[language],
-              ...Object.keys(newCategories[language]).reduce((catAcc, key) => {
-                if (Object.values(prevState.categories?.[language]?.[key] || {}).length >= 1) {
-                  const [firstKey] = Object.keys(prevState.categories?.[language]?.[key] || {})
-                  const { [firstKey]: deletedValue, ...remainingCategories } =
-                    prevState.categories[language][key]
-
-                  catAcc[key] = {
-                    // ...remainingCategories,
-                    ...newCategories[language][key],
-                  }
-                } else {
-                  catAcc[key] = {
-                    ...prevCategories[language]?.[key],
-                    ...newCategories[language][key],
-                  }
-                }
-
-                return catAcc
-              }, {}),
-            }
-            return acc
-          },
-          { ...prevCategories }
-        )
-      }
-
-      const mergedCategories = mergeCategories(prevState.categories, newCategories)
-
-      return {
-        ...prevState,
-        categories: mergedCategories,
-      }
-    })
+  const handleAddCategory = (newCategory) => {
+    setCurrentProduct((prevState) => ({
+      ...prevState,
+      categories: {
+        ...prevState.categories.filter((category) => category.key !== newCategory.key),
+        ...newCategory,
+      },
+    }))
   }
 
   const removeCategory = (key) => {
@@ -84,13 +45,13 @@ const EditCategoryList = ({
 
   return (
     <div className="category-list">
-      {categoryArray.map(({ key, value }) => (
+      {categories.names.map((name, index) => (
         <CategoryItem
-          key={`${selectedLanguage}-${key}`}
-          type={key}
-          value={value}
-          editCategory={() => setCurrentlyEditing(key)}
-          removeCategory={() => removeCategory(key)}
+          key={`${selectedLanguage}-${name}`}
+          type={name}
+          value={categories.values[index]}
+          editCategory={() => setCurrentlyEditing(name)}
+          removeCategory={() => removeCategory(name)}
           selectedLanguage={selectedLanguage}
         />
       ))}
@@ -111,7 +72,7 @@ const EditCategoryList = ({
             categories={categories}
             finishEditing={() => setCurrentlyEditing(false)}
             selectedLanguage={selectedLanguage}
-            handleAddOrEditCategory={handleAddOrEditCategory}
+            handleAddCategory={handleAddCategory}
             removeCategory={removeCategory}
             editingCategory={currentlyEditing === true ? "" : currentlyEditing}
           />,

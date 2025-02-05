@@ -5,12 +5,11 @@ const CategoryList = ({ categories }) => {
 
   return (
     <div className="category-list">
-      {Object.entries(categories).map(([categoryKey, categoryValue]) => (
+      {/* {Object.entries(categories).map(([categoryKey, categoryValue]) => (
         <div
           key={categoryKey}
           className="category-item"
         >
-          {/* <h4>{categoryKey}</h4> */}
           {Object.entries(categoryValue).map(([subCategoryKey, subCategoryValue]) => (
             <div
               key={subCategoryKey}
@@ -19,6 +18,14 @@ const CategoryList = ({ categories }) => {
               <strong>{subCategoryKey}</strong> | {subCategoryValue.name}
             </div>
           ))}
+        </div>
+      ))} */}
+      {categories.names((name, index) => (
+        <div
+          key={name}
+          className="category-item"
+        >
+          <strong>{name}</strong> | {categories.value[index]}
         </div>
       ))}
     </div>

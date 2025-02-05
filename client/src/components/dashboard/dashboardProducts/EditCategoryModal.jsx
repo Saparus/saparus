@@ -3,7 +3,7 @@ import { useQuery } from "react-query"
 import { useTranslation } from "react-i18next"
 
 import { useOnClickOutside } from "../../../hooks/useOnClickOutside"
-import { getCategories } from "../../../services/categoryServices"
+import { editCategories, getCategories } from "../../../services/categoryServices"
 
 import Loading from "../../other/Loading"
 
@@ -13,27 +13,26 @@ const EditCategoryModal = ({
   languages,
   categories,
   finishEditing,
-  handleAddOrEditCategory,
+  handleAddCategory,
   editingCategory,
 }) => {
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
-  const [newCategories, setNewCategories] = useState(() =>
-    languages.reduce((acc, language) => {
-      acc[language] = {
-        key: Object.keys(categories?.[language]?.[editingCategory] || {})?.[0] || "",
-        value: Object.values(categories?.[language]?.[editingCategory] || {})?.[0]?.name || "",
-      }
-      return acc
-    }, {})
+  const [newCategory, setNewCategory] = useState(
+    categories.find((category) => category.key === editingCategory) || {
+      key: null,
+      names: { en: null, ka: null, ru: null },
+      values: { en: null, ka: null, ru: null },
+    }
   )
+
   const [companyImage, selectedCompanyImage] = useState("")
 
   const modalRef = useRef()
 
   const { data, isLoading, error } = useQuery(["categories"], getCategories)
 
-  const currentCategories = data?.categories
+  const allCategories = data?.categories
 
   useOnClickOutside(modalRef, finishEditing)
 
@@ -49,185 +48,42 @@ const EditCategoryModal = ({
     }
   }
 
-  const handleInputChange = (language, field, value, onlyForSuggestions = false) => {
-    setNewCategories((prevState) => ({
-      ...prevState,
-      [language]: {
-        ...prevState?.[language],
-        [field]: value,
-      },
-    }))
+  const handleInputChange = (language, key, value, onlyForSuggestions = false) => {
+    if (!key || !value || onlyForSuggestions) return
 
-    if (!field || !value || onlyForSuggestions) return
-
-    // if a key is selected, update the corresponding key in other languages and clear values
-    if (field === "key" && !onlyForSuggestions) {
-      let keyToApply
-
-      const entries = Object.entries(currentCategories?.[language] || {})
-      keyToApply = entries.find(([key, val]) => val.name === value)?.[0]
-
-      languages.forEach((lang) => {
-        if (lang !== language) {
-          const entries = Object.entries(currentCategories?.[lang] || {})
-          const foundEntry = entries.find(([key, val]) => key === keyToApply)
-          const correspondingKey = foundEntry?.[0]
-          if (correspondingKey) {
-            setNewCategories((prevState) => ({
-              ...prevState,
-              [lang]: {
-                ...prevState[lang],
-                key: currentCategories[lang][correspondingKey].name,
-                value: "",
-              },
-            }))
-          }
-        }
-      })
-    }
-
-    // if a value is selected, update the corresponding value in other languages
-    if (field === "value" && !onlyForSuggestions) {
-      let selectedCategoryKey
-
-      const entries = Object.entries(currentCategories?.[language] || {})
-      selectedCategoryKey = entries.find(([key, val]) =>
-        val.values.some(({ name }) => name === value)
-      )?.[0]
-
-      const indexOfValue = currentCategories?.[language]?.[selectedCategoryKey]?.values?.findIndex(
-        (item) => item.name === value
-      )
-
-      if (selectedCategoryKey) {
-        languages.forEach((lang) => {
-          if (lang !== language) {
-            const correspondingValue =
-              currentCategories?.[lang]?.[selectedCategoryKey]?.values[indexOfValue]
-            if (correspondingValue) {
-              setNewCategories((prevState) => ({
-                ...prevState,
-                [lang]: {
-                  ...prevState[lang],
-                  value: correspondingValue?.name,
-                },
-              }))
-            }
-          }
-        })
-      }
+    if (key === "name") {
+      setNewCategory((prevState) => ({
+        key: prevState.key,
+        name: { ...prevState.name, [language]: value },
+        value: prevState.value,
+      }))
+    } else if (key === "value") {
+      setNewCategory((prevState) => ({
+        key: prevState.key,
+        name: prevState.name,
+        value: { ...prevState.value, [language]: value },
+      }))
     }
   }
 
-  const handleSuggestionClick = (language, field, value) => {
-    setNewCategories((prevState) => ({
-      ...prevState,
-      [language]: {
-        ...prevState[language],
-        [field]: value,
-      },
-    }))
-
-    // If a key is selected, update the corresponding key and value in other languages
-    if (field === "key") {
-      languages.forEach((lang) => {
-        if (lang !== language) {
-          const entries = Object.entries(currentCategories?.[lang] || {})
-          const foundEntry = entries.find(([key, val]) => val.name === value)
-          const correspondingKey = foundEntry?.[0]
-          if (correspondingKey) {
-            const correspondingValue =
-              currentCategories[lang][correspondingKey].values[0]?.name || ""
-            setNewCategories((prevState) => ({
-              ...prevState,
-              [lang]: {
-                ...prevState[lang],
-                key: correspondingKey,
-                value: correspondingValue,
-              },
-            }))
-          }
-        }
-      })
+  const handleSuggestionClick = (language, key, value) => {
+    if (key === "name") {
+      setNewCategory((prevState) => ({
+        key: prevState.key,
+        name: value,
+        value: prevState.value,
+      }))
+    } else if (key === "value") {
+      setNewCategory((prevState) => ({
+        key: prevState.key,
+        name: prevState.name,
+        value: value,
+      }))
     }
-
-    // If a value is selected, update the corresponding value in other languages
-    if (field === "value") {
-      const selectedCategoryKey = newCategories[language]?.key
-      if (selectedCategoryKey) {
-        languages.forEach((lang) => {
-          if (lang !== language) {
-            const correspondingValue = currentCategories?.[lang]?.[
-              selectedCategoryKey
-            ]?.values.find((v) => v.name === value)
-            if (correspondingValue) {
-              setNewCategories((prevState) => ({
-                ...prevState,
-                [lang]: {
-                  ...prevState[lang],
-                  value: correspondingValue.name,
-                },
-              }))
-            }
-          }
-        })
-      }
-    }
-  }
-
-  const getSuggestions = (language, field) => {
-    if (field === "key") {
-      return Object.keys(currentCategories?.[language] || {}).map(
-        (key) => currentCategories[language][key].name
-      )
-    } else if (field === "value") {
-      const selectedCategoryKey = newCategories[language]?.key
-      if (selectedCategoryKey) {
-        const translatedKey = Object.keys(currentCategories[language]).find(
-          (key) => currentCategories[language][key].name === selectedCategoryKey
-        )
-        return currentCategories?.[language]?.[translatedKey]?.values.map((v) => v.name) || []
-      }
-    }
-    return []
   }
 
   const handleSubmit = () => {
-    const mainKey = editingCategory || newCategories.en.key
-
-    const updatedCategories = languages.reduce((acc, language) => {
-      const { key, value } = newCategories?.[language]
-
-      if (key && value) {
-        if (!acc?.[language]) {
-          acc[language] = {}
-        }
-
-        if (!acc?.[language]?.[mainKey]) {
-          acc[language][mainKey] = {}
-        }
-
-        // if it's a company category, handle the image
-        if (key.toLowerCase() === "company" && companyImage) {
-          acc[language][mainKey] = {
-            [key.toLowerCase()]: {
-              name: value,
-              image: companyImage || "", // handle the image for the company (on backend, it's handled by uploading the image to S3 and saving the URL in the database)
-            },
-          }
-        } else {
-          acc[language][mainKey] = {
-            [key.toLowerCase()]: {
-              name: value,
-            },
-          }
-        }
-      }
-
-      return acc
-    }, {})
-
-    handleAddOrEditCategory(updatedCategories)
+    handleAddCategory(newCategory)
     finishEditing()
   }
 
@@ -238,7 +94,7 @@ const EditCategoryModal = ({
         ref={modalRef}
       >
         <h2>{t("Edit Categories")}</h2>
-        {newCategories.en.key === "company" ? (
+        {newCategory.key === "company" ? (
           <>
             <input
               type="file"
@@ -269,7 +125,7 @@ const EditCategoryModal = ({
             <input
               className="category-key"
               placeholder="category"
-              value={newCategories?.[language].key || ""} // current category key
+              value={newCategory?.key || ""} // current category key
               onChange={(e) =>
                 handleInputChange(language, "key", e.target.value.toLocaleLowerCase())
               }
@@ -279,20 +135,20 @@ const EditCategoryModal = ({
               list={`key-suggestions-${language}`}
             />
             <datalist id={`key-suggestions-${language}`}>
-              {getSuggestions(language, "key").map((suggestion) => (
+              {allCategories.map((categorySuggestion) => (
                 <option
-                  key={suggestion}
-                  value={suggestion}
-                  onClick={() => handleSuggestionClick(language, "key", suggestion)}
+                  key={categorySuggestion.key}
+                  value={categorySuggestion.name[language]}
+                  onClick={() => handleSuggestionClick("name", categorySuggestion.name)}
                 >
-                  {suggestion}
+                  {categorySuggestion.name[language]}
                 </option>
               ))}
             </datalist>
             <input
               className="category-value"
               placeholder="value"
-              value={newCategories?.[language].value || ""} // category value (name)
+              value={categories?.value?.[language] || ""} // category value (name)
               onChange={(e) =>
                 handleInputChange(language, "value", e.target.value.toLocaleLowerCase())
               }
@@ -302,15 +158,17 @@ const EditCategoryModal = ({
               list={`value-suggestions-${language}`}
             />
             <datalist id={`value-suggestions-${language}`}>
-              {getSuggestions(language, "value").map((suggestion) => (
-                <option
-                  key={suggestion}
-                  value={suggestion}
-                  onClick={() => handleSuggestionClick(language, "value", suggestion)}
-                >
-                  {suggestion}
-                </option>
-              ))}
+              {allCategories
+                .find((category) => category.key === newCategory.key)
+                .value.map((value) => (
+                  <option
+                    key={value[language]}
+                    value={value[language]}
+                    onClick={() => handleSuggestionClick("value", value)}
+                  >
+                    {value[language]}
+                  </option>
+                ))}
             </datalist>
           </div>
         ))}

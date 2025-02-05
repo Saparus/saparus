@@ -51,24 +51,26 @@ export const addProduct = async (
     return
   }
 
-  const translatedCategories = ensureCategoryTranslations(categories)
+  // const translatedCategories = ensureCategoryTranslations(categories)
 
-  try {
-    const { data } = await ajax.post(`/products?api_key=${api_key}`, {
-      name,
-      description,
-      images,
-      inStock,
-      fixedPrice,
-      price,
-      categories: translatedCategories,
-    })
+  console.log(categories)
 
-    return data
-  } catch (error) {
-    console.error("error adding product:", error)
-    throw error
-  }
+  // try {
+  //   const { data } = await ajax.post(`/products?api_key=${api_key}`, {
+  //     name,
+  //     description,
+  //     images,
+  //     inStock,
+  //     fixedPrice,
+  //     price,
+  //     categories: translatedCategories,
+  //   })
+
+  //   return data
+  // } catch (error) {
+  //   console.error("error adding product:", error)
+  //   throw error
+  // }
 }
 
 // delete a product by id (requires api_key)

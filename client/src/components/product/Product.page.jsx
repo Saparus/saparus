@@ -114,7 +114,7 @@ const Product = () => {
           </p>
         </div>
         <p className="product-description">{description}</p>
-        <CategoryList categories={categories[currentLanguage]} />
+        <CategoryList categories={categories} />
         {images?.length > 1 ? (
           <ProductImageSelect
             images={images}

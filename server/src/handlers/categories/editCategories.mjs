@@ -14,18 +14,10 @@ export const editCategories = async (event) => {
 
     // Upload image if exists
     if (image && newCategory?.en?.company?.company?.name) {
-      imageURL = await uploadImage(
-        image,
-        "company_images",
-        undefined,
-        newCategory.en.company.company.name
-      )
+      imageURL = await uploadImage(image, "company_images", undefined, newCategory.key)
       console.log("Uploaded imageURL:", imageURL)
     }
 
-    // HERE
-
-    // Fetch existing categories from the database
     const getParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: { id: "categories" },
@@ -116,7 +108,6 @@ export const editCategories = async (event) => {
 
     console.log("Updated categories:", JSON.stringify(existingCategories, null, 2))
 
-    // Save updated categories to the database
     const params = {
       TableName: process.env.CATEGORIES_TABLE,
       Item: {
