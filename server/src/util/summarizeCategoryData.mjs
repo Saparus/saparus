@@ -1,10 +1,5 @@
 export const summarizeCategoryData = (products, categories) => {
-  const categoryData = categories
-
   const languages = ["en", "ka", "ru"]
-
-  console.log("categories:", JSON.stringify(categories, null, 2))
-  console.log("products:", JSON.stringify(products, null, 2))
 
   let overallMinPrice = Infinity
   let overallMaxPrice = -Infinity
@@ -20,8 +15,6 @@ export const summarizeCategoryData = (products, categories) => {
         }
       })
     })
-
-    console.log("valueData:", JSON.stringify(valueData, null, 2))
 
     products.forEach((product) => {
       const { price, categories: productCategories } = product
@@ -43,11 +36,7 @@ export const summarizeCategoryData = (products, categories) => {
         }
       })
     })
-
-    console.log("valueData:", JSON.stringify(valueData, null, 2))
   })
-
-  console.log("categories:", JSON.stringify(categories, null, 2))
 
   return {
     categories: categories,
