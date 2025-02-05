@@ -159,7 +159,7 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
               {name[currentLanguage]}
             </option>
             <option value="All">{t("All")}</option>
-            {value[currentLanguage].map(({ category: name, amount }, index) => {
+            {value[currentLanguage].map(({ name: category, amount }, index) => {
               if (amount === 0 || !category) return null
 
               return (
