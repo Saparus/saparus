@@ -1,5 +1,5 @@
 export const summarizeCategoryData = (products, categories) => {
-  const categoryData = []
+  const categoryData = categories
 
   const languages = ["en", "ka", "ru"]
 
@@ -10,16 +10,17 @@ export const summarizeCategoryData = (products, categories) => {
   let overallMaxPrice = -Infinity
 
   categories.forEach((category) => {
-    const { key, name, value } = category
-
-    const valueData = {}
+    // const { key, name, value } = category
 
     // Initialize valueData for each language
     languages.forEach((language) => {
-      valueData[language] = {}
-      value[language].forEach((valueItem) => {
-        if (!valueData[language][valueItem[language]]) {
-          valueData[language][valueItem[language]] = 0
+      category.value[language].forEach((valueItem, index) => {
+        if (!valueItem.name) {
+          category.value[language][index].name = category[language]
+        }
+
+        if (!valueItem.amount) {
+          category.value[language][index].amount = 0
         }
       })
     })
@@ -37,9 +38,9 @@ export const summarizeCategoryData = (products, categories) => {
       productCategories.forEach((productCategory) => {
         if (productCategory.key === key) {
           languages.forEach((language) => {
-            value[language].forEach((valueItem) => {
-              if (productCategory.value[language] === valueItem[language]) {
-                valueData[language][valueItem[language]] += 1
+            category.value[language].forEach((valueItem, index) => {
+              if (productCategory.value[language] === valueItem.name) {
+                category.value[language][index].amount += 1
               }
             })
           })
@@ -48,27 +49,12 @@ export const summarizeCategoryData = (products, categories) => {
     })
 
     console.log("valueData:", JSON.stringify(valueData, null, 2))
-
-    const valueArray = {}
-
-    languages.forEach((language) => {
-      valueArray[language] = Object.keys(valueData[language]).map((key) => ({
-        name: key,
-        amount: valueData[language][key],
-      }))
-    })
-
-    console.log("valueArray:", JSON.stringify(valueArray, null, 2))
-
-    categoryData.push({
-      key,
-      name,
-      value: valueArray,
-    })
   })
 
+  console.log("categories:", JSON.stringify(categories, null, 2))
+
   return {
-    categories: categoryData,
+    categories: categories,
     minPrice: overallMinPrice,
     maxPrice: overallMaxPrice,
   }
