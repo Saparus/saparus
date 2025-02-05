@@ -25,7 +25,7 @@ export const summarizeCategoryData = (products, categories) => {
       }
 
       productCategories.forEach((productCategory) => {
-        if (productCategory.key === key) {
+        if (productCategory.key === category.key) {
           languages.forEach((language) => {
             category.value[language].forEach((valueItem, index) => {
               if (productCategory.value[language] === valueItem.name) {
