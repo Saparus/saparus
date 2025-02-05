@@ -17,7 +17,7 @@ export const summarizeCategoryData = (products, categories) => {
     languages.forEach((language) => {
       valueData[language] = []
 
-      value.forEach((valueItem) => {
+      value[language].forEach((valueItem) => {
         languages.forEach((language) => {
           if (!valueData[language][valueItem[language]]) {
             valueData[language][valueItem[language]] = 0
@@ -25,6 +25,8 @@ export const summarizeCategoryData = (products, categories) => {
         })
       })
     })
+
+    console.log("valueData:", JSON.stringify(valueData, null, 2))
 
     products.forEach((product) => {
       const { price, categories: productCategories } = product
@@ -36,10 +38,10 @@ export const summarizeCategoryData = (products, categories) => {
 
       productCategories.forEach((productCategory) => {
         if (productCategory.key === key) {
-          value.forEach((valueItem) => {
-            languages.forEach((lang) => {
-              if (productCategory.value[lang] === valueItem[lang]) {
-                valueData[lang][valueItem[lang]] += 1
+          languages.forEach((language) => {
+            value[language].forEach((valueItem) => {
+              if (productCategory.value[language] === valueItem[language]) {
+                valueData[language][valueItem[language]] += 1
               }
             })
           })
@@ -47,13 +49,18 @@ export const summarizeCategoryData = (products, categories) => {
       })
     })
 
+    console.log("valueData:", JSON.stringify(valueData, null, 2))
+
     const valueArray = {}
+
     languages.forEach((language) => {
       valueArray[language] = Object.keys(valueData[language]).map((key) => ({
         name: key,
         amount: valueData[language][key],
       }))
     })
+
+    console.log("valueArray:", JSON.stringify(valueArray, null, 2))
 
     categoryData.push({
       key,
