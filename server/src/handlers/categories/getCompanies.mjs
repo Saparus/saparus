@@ -5,14 +5,14 @@ import { summarizeCategoryData } from "../../util/summarizeCategoryData.mjs"
 
 export const getCompanies = async (event) => {
   try {
-    const categoryParams = {
+    const getParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
         id: "categories",
       },
     }
 
-    const getCommand = new GetCommand(categoryParams)
+    const getCommand = new GetCommand(getParams)
     const { Item } = await db.send(getCommand)
 
     const categories = Item?.categories
@@ -28,16 +28,16 @@ export const getCompanies = async (event) => {
       }
     }
 
-    const productParams = {
+    const scanParams = {
       TableName: process.env.PRODUCTS_TABLE,
     }
 
-    const scanCommand = new ScanCommand(productParams)
+    const scanCommand = new ScanCommand(scanParams)
     const { Items: products } = await db.send(scanCommand)
 
     const summarizedData = summarizeCategoryData(products, categories)
 
-    const companyCategory = summarizedData.find((category) => (category.key = "company"))
+    const companyCategory = summarizedData.categories.find((category) => (category.key = "company"))
 
     return {
       statusCode: 200,

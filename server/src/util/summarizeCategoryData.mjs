@@ -7,9 +7,9 @@ export const summarizeCategoryData = (products, categories) => {
   categories.forEach((category) => {
     languages.forEach((language) => {
       category.value[language].forEach((valueItem, index) => {
-        if (!valueItem.name && !valueItem.amount) {
+        if (!valueItem && !valueItem.amount) {
           category.value[language][index] = {
-            name: valueItem.name,
+            name: valueItem,
             amount: 0,
           }
         }

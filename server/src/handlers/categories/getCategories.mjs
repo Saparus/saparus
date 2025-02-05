@@ -5,14 +5,14 @@ import { summarizeCategoryData } from "../../util/summarizeCategoryData.mjs"
 
 export const getCategories = async (event) => {
   try {
-    const params = {
+    const getParams = {
       TableName: process.env.CATEGORIES_TABLE,
       Key: {
         id: "categories",
       },
     }
 
-    const getCommand = new GetCommand(params)
+    const getCommand = new GetCommand(getParams)
     const { Item } = await db.send(getCommand)
 
     const categories = Item?.categories
