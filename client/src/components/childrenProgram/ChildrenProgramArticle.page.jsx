@@ -9,7 +9,8 @@ import Loading from "../other/Loading"
 const NewsArticle = () => {
   const { id } = useParams()
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { t } = useTranslation("translation", { keyPrefix: "children program" })
 

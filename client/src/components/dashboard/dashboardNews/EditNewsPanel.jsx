@@ -13,7 +13,7 @@ import { deleteChildrenProgramArticle } from "../../../services/childrenProgramS
 import ConfirmDeletionModal from "../ConfirmDeletionModal.jsx"
 import LanguageSelect from "../LanguageSelect.jsx"
 
-const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
+const EditNewsArticlePanel = ({ article, onSave, apiKey, type = "news", isLoading }) => {
   const navigate = useNavigate()
   // const { title, text, date, images } = article
 
@@ -21,7 +21,8 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
 
   const { id } = useParams()
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const textRef = useRef(null)
 
@@ -38,22 +39,32 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
   const deleteMutation = useMutation({
     mutationFn: async () =>
       type === "news"
-        ? await deleteNewsArticle(id, token)
-        : await deleteChildrenProgramArticle(id, token),
+        ? await deleteNewsArticle(id, apiKey)
+        : await deleteChildrenProgramArticle(id, apiKey),
+    onMutate: () => {
+      toast.loading(t(`Deleting ${type} article...`))
+    },
     onSuccess: () => {
-      toast.success("Successfully deleted news article")
-      queryClient.invalidateQueries(["news", token]) // this will cause refetching
-      navigate("../../admin/news")
+      toast.dismiss()
+      toast.success(t(`Successfully deleted ${type} article`))
+
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey.includes(type === "children program" ? "children" : type),
+      })
+
+      navigate(`../../admin/${type === "children program" ? "children" : type}`)
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        t(
-          "Something went wrong while deleting news article, check browser console for more detailed explanation"
-        )
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
+
+  const { isLoading: isDeleting } = deleteMutation
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
@@ -152,7 +163,7 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
       <input
         type="text"
         name="title"
-        placeholder="title"
+        placeholder={t("title")}
         autoFocus={true}
         className="article-title"
         onChange={handleInputChange}
@@ -166,7 +177,7 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
         onClick={() => handleFieldEditStart("title")}
         className="article-title field-button"
       >
-        {currentArticle.title[selectedLanguage] || <p className="placeholder-text">title</p>}
+        {currentArticle.title[selectedLanguage] || <p className="placeholder-text">{t("title")}</p>}
       </button>
     )
   }
@@ -176,7 +187,7 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
       <textarea
         ref={textRef}
         name="text"
-        placeholder="text"
+        placeholder={t("text")}
         autoFocus={true}
         className="article-text"
         onChange={handleInputChange}
@@ -192,7 +203,7 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
         {currentArticle.text[selectedLanguage] ? (
           <p className="article-text-content">{currentArticle.text[selectedLanguage]}</p>
         ) : (
-          <p className="placeholder-text">text</p>
+          <p className="placeholder-text">{t("text")}</p>
         )}
       </button>
     )
@@ -247,13 +258,24 @@ const EditNewsArticlePanel = ({ article, onSave, token, type = "news" }) => {
           setSelectedLanguage={setSelectedLanguage}
         />
         <button
-          onClick={onSave}
+          onClick={() => {
+            if (isLoading || isDeleting) return
+
+            onSave(currentArticle)
+          }}
+          disabled={isLoading || isDeleting}
+          type="submit"
           className="confirm-button"
         >
           <CheckmarkIcon />
         </button>
         <button
-          onClick={handleOpenConfirmCloseModal}
+          onClick={() => {
+            if (isLoading || isDeleting) return
+
+            handleOpenConfirmCloseModal()
+          }}
+          disabled={isLoading || isDeleting}
           className="delete-button"
         >
           <TrashIcon />

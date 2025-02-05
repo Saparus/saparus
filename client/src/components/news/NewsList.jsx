@@ -11,7 +11,8 @@ import PageSelect from "../catalog/PageSelect"
 
 const NewsList = () => {
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { t } = useTranslation("translation", { keyPrefix: "news" })
 
@@ -61,7 +62,8 @@ const NewsList = () => {
                 text={article.text}
                 date={new Date(article.date).toLocaleDateString()}
                 image={article.images?.[0]}
-                to={`../news/${article.id}`}
+                id={article.id}
+                type="news"
               />
             ))}
           </div>

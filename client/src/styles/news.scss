@@ -135,6 +135,9 @@
     margin: 1rem auto 0;
 
     img {
+      max-width: 100%;
+      max-height: 500px !important;
+      margin: auto;
       border-radius: 0.5rem;
     }
   }

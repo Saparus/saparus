@@ -5,12 +5,16 @@ import { useQuery } from "react-query"
 
 import { ReactComponent as TrashIcon } from "../../assets/icons/trash.svg"
 
-import { getCategories } from "../../services/productServices"
+import { getCategories } from "../../services/categoryServices"
 
 import PriceSlider from "./PriceSlider"
 import Loading from "../other/Loading"
 
-const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButton = false }) => {
+const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = false }) => {
+  const { i18n } = useTranslation()
+
+  const currentLanguage = i18n.language.split("-")[0]
+
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 
   // const used_categories = ["company", "type", "price"]
@@ -55,6 +59,22 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
   }
 
   useEffect(() => {
+    if (data) {
+      const { minPrice, maxPrice } = data
+
+      // check if minPrice or maxPrice are not already set
+      if (minPrice != null && maxPrice != null && !inputValue.minPrice && !inputValue.maxPrice) {
+        setInputValue((prevState) => ({
+          ...prevState,
+          minPrice,
+          maxPrice,
+        }))
+        setDefaultPriceExtremum({ minPrice, maxPrice })
+      }
+    }
+  }, [data])
+
+  useEffect(() => {
     setInputValue((prev) => ({
       ...prev,
       categories: {
@@ -64,14 +84,23 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
     }))
   }, [selectedCompany])
 
+  useEffect(() => {
+    setFilter({})
+  }, [currentLanguage])
+
   const renderCategories = () => {
     if (isLoading) return <Loading />
-    if (error || !data) return <div>something went wrong</div>
+    if (error || !data) {
+      console.log(error)
+      return <div>something went wrong</div>
+    }
+
+    const categories = transformCategories(data.categories)
 
     const handleOnSelect = (event) => {
       const { name, value } = event.target
 
-      if (name === "companies") {
+      if (name === "company") {
         setInputValue((prev) => ({
           ...prev,
           categories: {
@@ -90,15 +119,23 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
       }
     }
 
-    const { categories, companies, minPrice, maxPrice } = data
+    const { minPrice, maxPrice } = data
 
     const priceOptions = []
     for (let i = minPrice; i <= maxPrice; i += 100) {
       priceOptions.push(i)
     }
 
-    const renderCategorySelect = (key, categoryArray) => {
-      const categoriesToNotTranslate = ["price", "company"]
+    const renderCategorySelect = (category) => {
+      const { key, subKeys, values } = category
+
+      // check if all amounts are 0
+      if (values.every((category) => category?.[currentLanguage]?.amount === 0)) {
+        return null
+      }
+
+      if (!Object.keys(subKeys).includes(currentLanguage)) return
+
       return (
         <div
           className="select-holder"
@@ -116,50 +153,22 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
               disabled
               value=""
             >
-              {t(key)}
+              {subKeys[currentLanguage]}
             </option>
             <option value="All">{t("All")}</option>
-            {categoryArray.map((category, index) => (
-              <option
-                key={index}
-                value={category.name}
-              >
-                {categoriesToNotTranslate.includes(key)
-                  ? category.name + ` (${category.amount})`
-                  : t(category.name) + ` (${category.amount})`}
-              </option>
-            ))}
-          </select>
-        </div>
-      )
-    }
+            {values.map((category, index) => {
+              if (category?.[currentLanguage]?.amount === 0 || !category?.[currentLanguage]?.name)
+                return null
 
-    const renderCompanySelect = () => {
-      return (
-        <div className="select-holder">
-          <select
-            id="select-companies"
-            className="select category"
-            name="companies"
-            value={inputValue.categories?.company || selectedCompany || ""}
-            onChange={handleOnSelect}
-          >
-            <option
-              defaultValue
-              disabled
-              value=""
-            >
-              {t("companies")}
-            </option>
-            <option value="All">{t("All")}</option>
-            {companies.map((company, index) => (
-              <option
-                key={index}
-                value={company.name}
-              >
-                {company.name + ` (${company.amount})`}
-              </option>
-            ))}
+              return (
+                <option
+                  key={`${category?.[currentLanguage]?.name}-${index}`}
+                  value={category?.[currentLanguage]?.name}
+                >
+                  {category?.[currentLanguage]?.name}
+                </option>
+              )
+            })}
           </select>
         </div>
       )
@@ -167,10 +176,8 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
 
     return (
       <>
-        {Object.entries(categories).map(([key, categoryArray]) =>
-          renderCategorySelect(key, categoryArray)
-        )}
-        {renderCompanySelect()}
+        {categories.map((category) => renderCategorySelect(category))}
+        {/* {renderCompanySelect()} */}
       </>
     )
   }
@@ -216,8 +223,8 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
         handleMaxPriceChange={handleMaxPriceChange}
         maxPrice={maxPrice}
         minPrice={minPrice}
-        currentMaxPrice={inputValue.maxPrice}
-        currentMinPrice={inputValue.minPrice}
+        currentMaxPrice={inputValue.maxPrice || maxPrice}
+        currentMinPrice={inputValue.minPrice || minPrice}
         t={t}
       />
     )
@@ -237,7 +244,7 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
           onChange={handleInputChange}
           placeholder={t("search by name")}
         />
-        {renderCategories()}
+        <div className="categories-list-select">{renderCategories()}</div>
       </div>
       {renderPriceRanges()}
 
@@ -278,3 +285,36 @@ const Categories = ({ selectedCompany, setFilter, filter, showAddNewProductButto
 }
 
 export default Categories
+
+export const transformCategories = (input) => {
+  const languages = Object.keys(input)
+  const result = []
+
+  languages.forEach((lang) => {
+    const categories = input[lang]
+    Object.keys(categories).forEach((categoryKey) => {
+      const category = categories[categoryKey]
+      let existingCategory = result.find((item) => item.key === categoryKey)
+
+      if (!existingCategory) {
+        existingCategory = {
+          key: categoryKey,
+          subKeys: {},
+          values: [],
+        }
+        result.push(existingCategory)
+      }
+
+      existingCategory.subKeys[lang] = category.name
+
+      category.values.forEach((value, index) => {
+        if (!existingCategory.values[index]) {
+          existingCategory.values[index] = {}
+        }
+        existingCategory.values[index][lang] = { name: value.name, amount: value.amount }
+      })
+    })
+  })
+
+  return result
+}

@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useTranslation } from "react-i18next"
 import { useState, useEffect } from "react"
@@ -11,9 +11,10 @@ import Loading from "../../other/Loading"
 import Product from "./EditProductLink"
 import PageSelect from "../../catalog/PageSelect"
 
-const ProductList = ({ filter, resetFilter, token }) => {
+const ProductList = ({ filter, resetFilter, apiKey }) => {
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -31,19 +32,33 @@ const ProductList = ({ filter, resetFilter, token }) => {
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id) => {
-      return await deleteProduct(id, token)
+      return await deleteProduct(id, apiKey)
+    },
+    onMutate: () => {
+      toast.loading(t("Deleting product..."))
     },
     onSuccess: () => {
-      toast.success("Successfully deleted product")
-      queryClient.invalidateQueries(["products", filter, currentLanguage, limit, page])
+      toast.dismiss()
+      toast.success(t("Successfully deleted product"))
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("products"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("categories"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("companies"),
+      })
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        t(
-          "Something went wrong while adding product, check browser console for more detailed explanation"
-        )
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      console.log(errorMessage)
+      toast.error(errorMessage)
     },
   })
 
@@ -68,17 +83,12 @@ const ProductList = ({ filter, resetFilter, token }) => {
     if (products.length === 0) {
       return (
         <>
-          <button
-            className="reset-filters"
-            onClick={(e) => {
-              resetFilter(e)
-              goToPage(1)
-            }}
-          >
+          <div className="reset-filters">
             <h3 className="products-not-found-message">
-              {t("Products not found")}, <span>{t("click here to reset filters")}</span>
+              {t("Products not found")},{" "}
+              <Link to="../../admin/products/add">{t("click here to add new product")}</Link>
             </h3>
-          </button>
+          </div>
         </>
       )
     } else {

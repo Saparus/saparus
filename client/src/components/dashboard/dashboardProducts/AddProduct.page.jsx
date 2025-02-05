@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useNavigate } from "react-router-dom"
 import { useMutation, useQueryClient } from "react-query"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
@@ -27,7 +27,9 @@ const emptyProductData = {
 }
 
 const AddProductPage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
+
+  const navigate = useNavigate()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -45,28 +47,55 @@ const AddProductPage = () => {
         fixedPrice,
         price,
         categories,
-        token
+        apiKey
       )
     },
-    onSuccess: () => {
-      toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["products", token]) // this will cause refetching
+    onMutate: () => {
+      // showing loading toast when the mutation starts
+      toast.loading(t("Adding product..."))
+    },
+    onSuccess: (data) => {
+      // updating the toast to success
+      toast.dismiss()
+      toast.success(t("Successfully added product"))
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("dashboard-products"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("products"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("categories"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("companies"),
+      })
+
+      // if (data.product.id) navigate(`../../admin/products/edit/${data.product.id}`)
+      navigate(`../../admin/products`)
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        t(
-          "Something went wrong while adding product, check browser console for more detailed explanation"
-        )
-      )
+      // updating the toast to error
+      const errorMessage = error.response?.data?.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
+
+  const { isLoading } = addProductMutation
 
   return (
     <ProductEditPanel
       product={emptyProductData}
       onSave={addProductMutation.mutate}
-      token={token}
+      isLoading={isLoading}
+      apiKey={apiKey}
     />
   )
 }

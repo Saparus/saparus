@@ -12,7 +12,7 @@ import EditNewsPanel from "./EditNewsPanel"
 import Loading from "../../other/Loading"
 
 const EditNewsArticlePage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { id } = useParams()
 
@@ -22,27 +22,37 @@ const EditNewsArticlePage = () => {
     data: article,
     isLoading,
     error,
-  } = useQuery(["dashboard-news", id, token], () => getEditSingleNewsArticle(id, token))
+  } = useQuery(["dashboard-news", id, apiKey], () => getEditSingleNewsArticle(id, apiKey))
 
   const queryClient = useQueryClient()
 
   const editNewsArticleMutation = useMutation({
-    mutationFn: async (product) => {
-      const { title, text, images } = product
+    mutationFn: async (newsItem) => {
+      const { title, text, images } = newsItem
 
-      return await editNewsArticle(id, title, text, images, token)
+      return await editNewsArticle(id, title, text, images, apiKey)
+    },
+    onMutate: () => {
+      toast.loading(t("Saving news article..."))
     },
     onSuccess: () => {
-      toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["news", token]) // this will cause refetching
+      toast.dismiss()
+      toast.success(t("Changes saved successfully"))
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("news"),
+      })
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        "Something went wrong while adding product, check browser console for more detailed explanation"
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
+
+  const { isLoading: isEditing } = editNewsArticleMutation
 
   if (isLoading) return <Loading />
   if (error || !article) return <div>{t("Something went wrong")}</div>
@@ -51,7 +61,8 @@ const EditNewsArticlePage = () => {
     <EditNewsPanel
       article={article}
       onSave={editNewsArticleMutation.mutate}
-      token={token}
+      isLoading={isEditing}
+      apiKey={apiKey}
     />
   )
 }

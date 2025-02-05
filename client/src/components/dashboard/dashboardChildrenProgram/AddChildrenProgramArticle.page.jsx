@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query"
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 import { addChildrenProgramArticle } from "../../../services/childrenProgramServices"
 
@@ -22,33 +23,51 @@ const emptyNewsArticle = {
 }
 
 const AddChildrenProgramArticle = () => {
-  const { token } = useOutletContext()
+  const { t } = useTranslation("translation", { keyPrefix: "children program" })
+
+  const { apiKey } = useOutletContext()
+
+  const navigate = useNavigate()
 
   const queryClient = useQueryClient()
 
   const addProductMutation = useMutation({
     mutationFn: async (product) => {
-      const { title, text, images, id } = product
+      const { title, text, images } = product
 
-      return await addChildrenProgramArticle(title, text, images, id, token)
+      return await addChildrenProgramArticle(title, text, images, apiKey)
     },
-    onSuccess: () => {
-      toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["news", token]) // this will cause refetching
+    onMutate: () => {
+      toast.loading(t("Adding children program..."))
+    },
+    onSuccess: (data) => {
+      toast.dismiss()
+      toast.success(t("Successfully added children program"))
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("children"),
+      })
+
+      // if (data.article.id) navigate(`../../admin/children/${data.article.id}`)
+      if (data.article.id) navigate(`../../admin/children`)
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        "Something went wrong while adding product, check browser console for more detailed explanation"
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
+
+  const { isLoading } = addProductMutation
 
   return (
     <EditNewsPanel
       article={emptyNewsArticle}
-      onSave={addProductMutation.mutation}
-      token={token}
+      onSave={addProductMutation.mutate}
+      apiKey={apiKey}
+      isLoading={isLoading}
       type="children program"
     />
   )

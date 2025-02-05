@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
+import { useMutation, useQueryClient } from "react-query"
+import { useOutletContext, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 import { ReactComponent as TrashIcon } from "../../../assets/icons/trash.svg"
 import { ReactComponent as ResetIcon } from "../../../assets/icons/spinning-arrow.svg"
@@ -8,16 +11,25 @@ import { ReactComponent as UploadIcon } from "../../../assets/icons/upload.svg"
 import { ReactComponent as CheckmarkIcon } from "../../../assets/icons/checkmark.svg"
 import { ReactComponent as ArrowIcon } from "../../../assets/icons/arrow.svg"
 
+import { deleteProduct } from "../../../services/productServices"
+
 import ProductImageSelect from "../../product/ProductImageSelect"
 import ConfirmDeletionModal from "../ConfirmDeletionModal"
 import LanguageSelect from "../LanguageSelect"
 import EditCategoryList from "./EditCategoryList"
 
-const ProductEditPanel = ({ product, onSave }) => {
+const ProductEditPanel = ({ product, onSave, isLoading }) => {
+  const navigate = useNavigate()
+
+  const { apiKey } = useOutletContext()
+
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { t } = useTranslation("translation", { keyPrefix: "products" })
+
+  const queryClient = useQueryClient()
 
   const descriptionRef = useRef(null)
 
@@ -25,8 +37,9 @@ const ProductEditPanel = ({ product, onSave }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isConfirmDeletionModalVisible, setIsConfirmDeletionModalVisible] = useState(false)
-  const [newCategory, setNewCategory] = useState({ key: "", value: "" })
+  // const [newCategory, setNewCategory] = useState({ key: "", value: "" })
   const [isAbleToSave, setIsAbleToSave] = useState(false)
+
   const [activeFields, setActiveFields] = useState({
     name: false,
     description: false,
@@ -43,13 +56,13 @@ const ProductEditPanel = ({ product, onSave }) => {
 
   const handleSelectNextImage = () => {
     setCurrentImageIndex((prevState) =>
-      prevState + 1 >= currentProduct.images.length ? 0 : prevState + 1
+      prevState + 1 >= currentProduct.images?.length ? 0 : prevState + 1
     )
   }
 
   const handleSelectPrevImage = () => {
     setCurrentImageIndex((prevState) =>
-      prevState - 1 < 0 ? currentProduct.images.length - 1 : prevState - 1
+      prevState - 1 < 0 ? currentProduct.images?.length - 1 : prevState - 1
     )
   }
 
@@ -107,17 +120,7 @@ const ProductEditPanel = ({ product, onSave }) => {
       if (category === "price" && value[0] === "0") {
         if (
           product.name.en === value ||
-          product.name.ka === value ||
-          product.name.ru === value ||
-          product.description.en === value ||
-          product.description.ka === value ||
-          product.description.ru === value ||
           currentProduct.name.en === "" ||
-          currentProduct.name.ka === "" ||
-          currentProduct.name.ru === "" ||
-          currentProduct.description.en === "" ||
-          currentProduct.description.ka === "" ||
-          currentProduct.description.ru === "" ||
           prevState.fixedPrice === product.fixedPrice ||
           !product.price === currentProduct.price ||
           prevState.inStock === product.inStock ||
@@ -177,17 +180,36 @@ const ProductEditPanel = ({ product, onSave }) => {
     setCurrentImageIndex((prevState) => (prevState > 0 ? prevState - 1 : 0))
   }
 
+  const deleteProductMutation = useMutation({
+    mutationFn: async (id) => {
+      return await deleteProduct(id, apiKey)
+    },
+    onMutate: () => {
+      toast.loading(t("Deleting product..."))
+    },
+    onSuccess: () => {
+      toast.dismiss()
+      toast.success(t("Successfully deleted product"))
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("products"),
+      })
+
+      navigate("../../admin/products")
+    },
+    onError: (error) => {
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      console.log(errorMessage)
+      toast.error(errorMessage)
+    },
+  })
+
   useEffect(() => {
     // fix latter, don't forget
     const hasProductChanged = () => {
-      if (
-        currentProduct.name.en === "" ||
-        currentProduct.name.ka === "" ||
-        currentProduct.name.ru === "" ||
-        currentProduct.description.en === "" ||
-        currentProduct.description.ka === "" ||
-        currentProduct.description.ru === ""
-      ) {
+      if (currentProduct.name.en === "") {
         return false
       }
 
@@ -202,8 +224,8 @@ const ProductEditPanel = ({ product, onSave }) => {
         product.inStock !== currentProduct.inStock ||
         product.price !== currentProduct.price ||
         product.fixedPrice !== currentProduct.fixedPrice ||
-        product.images.length !== currentProduct.images.length ||
-        product.images.some((image, index) => image !== currentProduct.images[index])
+        product.images?.length !== currentProduct.images?.length ||
+        product.images?.some((image, index) => image !== currentProduct.images?.[index])
       )
     }
 
@@ -213,17 +235,25 @@ const ProductEditPanel = ({ product, onSave }) => {
   const renderImage = () => (
     <div className="product-image-wrapper">
       <div className="dashboard-product-image product-image">
-        {currentProduct.images.length > 1 && (
+        {currentProduct.images?.length > 1 && (
           <>
             <button
+              disabled={isLoading}
               className="change-product-image next"
-              onClick={() => handleSelectNextImage()}
+              onClick={() => {
+                if (isLoading) return
+                handleSelectNextImage()
+              }}
             >
               <ArrowIcon className="next-arrow" />
             </button>
             <button
+              disabled={isLoading}
               className="change-product-image prev"
-              onClick={() => handleSelectPrevImage()}
+              onClick={() => {
+                if (isLoading) return
+                handleSelectPrevImage()
+              }}
             >
               <ArrowIcon className="prev-arrow" />
             </button>
@@ -239,14 +269,12 @@ const ProductEditPanel = ({ product, onSave }) => {
               onChange={handleImageUpload}
             />
           </label>
-          {/* <button
-            className="button plus-button"
-            onClick={() => handleAddEmptyImage()}
-          >
-            <PlusIcon />
-          </button> */}
           <button
-            onClick={handleRemoveImage}
+            disabled={isLoading}
+            onClick={() => {
+              if (isLoading) return
+              handleRemoveImage()
+            }}
             className="button trash-button"
           >
             <MinusIcon />
@@ -260,23 +288,28 @@ const ProductEditPanel = ({ product, onSave }) => {
             <TrashIcon />
           </button>
           <button
+            disabled={isLoading}
+            onClick={() => {
+              if (isLoading) return
+              handleReset()
+            }}
             className="button reset-button"
-            onClick={handleReset}
           >
             <ResetIcon />
           </button>
           <button
             className="button save-button"
-            disabled={!isAbleToSave}
+            disabled={!isAbleToSave || isLoading}
             type="submit"
             onClick={() => {
+              if (isLoading) return
               onSave(currentProduct)
             }}
           >
             <CheckmarkIcon />
           </button>
         </div>
-        {currentProduct.images[currentImageIndex] ? (
+        {currentProduct.images?.[currentImageIndex] ? (
           <img
             src={currentProduct.images[currentImageIndex]}
             alt={""}
@@ -313,7 +346,11 @@ const ProductEditPanel = ({ product, onSave }) => {
         />
       ) : (
         <button
-          onClick={() => handleFieldEditStart("name")}
+          disabled={isLoading}
+          onClick={() => {
+            if (isLoading) return
+            handleFieldEditStart("name")
+          }}
           className="product-name field-button"
         >
           {currentProduct.name[selectedLanguage] || <p className="placeholder-text">{t("name")}</p>}
@@ -325,8 +362,11 @@ const ProductEditPanel = ({ product, onSave }) => {
       return (
         <div className="product-short-information">
           <button
+            disabled={isLoading}
             onClick={() => {
               setCurrentProduct((prevState) => {
+                if (isLoading) return
+
                 setIsAbleToSave(!prevState.inStock !== product.inStock)
 
                 return {
@@ -350,9 +390,11 @@ const ProductEditPanel = ({ product, onSave }) => {
               type="checkbox"
               id="fixedPrice"
               name="fixedPrice"
-              checked={currentProduct.fixedPrice}
+              checked={Boolean(currentProduct.fixedPrice)}
               onChange={() => {
                 setCurrentProduct((prevState) => {
+                  if (isLoading) return
+
                   setIsAbleToSave(
                     !prevState.fixedPrice !== product.fixedPrice ||
                       product.price !== currentProduct.price
@@ -367,9 +409,7 @@ const ProductEditPanel = ({ product, onSave }) => {
               required
             />
           </label>
-          {!currentProduct.fixedPrice ? (
-            ""
-          ) : activeFields.price ? (
+          {activeFields.price ? (
             <div className="product-price-wrapper">
               <input
                 type="number"
@@ -387,6 +427,7 @@ const ProductEditPanel = ({ product, onSave }) => {
           ) : (
             <button
               className="field-button price-field-button"
+              disabled={isLoading}
               onClick={() => handleFieldEditStart("price")}
             >
               <div className="product-price">
@@ -414,7 +455,11 @@ const ProductEditPanel = ({ product, onSave }) => {
         />
       ) : (
         <button
-          onClick={() => handleFieldEditStart("description")}
+          onClick={() => {
+            if (isLoading) return
+            handleFieldEditStart("description")
+          }}
+          disabled={isLoading}
           className="product-description field-button"
         >
           {currentProduct.description[selectedLanguage] ? (
@@ -431,17 +476,16 @@ const ProductEditPanel = ({ product, onSave }) => {
     const renderCategories = () => {
       const { categories } = currentProduct
 
-      const categoryArray = Object.entries(categories).map(([key, value]) => ({ key, value }))
+      // const categoryArray = Object.entries(categories).map(([key, value]) => ({ key, value }))
 
       return (
         <EditCategoryList
-          categories={categoryArray}
+          categories={categories}
           isActive={activeFields.categories}
-          newCategory={newCategory}
-          setNewCategory={setNewCategory}
           setCurrentProduct={setCurrentProduct}
           handleFieldEditStart={handleFieldEditStart}
           handleFieldEditFinish={handleFieldEditFinish}
+          selectedLanguage={selectedLanguage}
         />
       )
     }
@@ -480,6 +524,9 @@ const ProductEditPanel = ({ product, onSave }) => {
       {isConfirmDeletionModalVisible ? (
         <ConfirmDeletionModal
           onClose={handleCloseConfirmCloseModal}
+          deleteItem={() => {
+            deleteProductMutation.mutate(product.id)
+          }}
           message={t("are you sure you want to delete this product? this action cannot be undone.")}
         />
       ) : (

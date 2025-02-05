@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
 
@@ -6,6 +6,8 @@ import AuthenticationPanel from "./AdminAuthenticationPanel"
 import DashboardHeader from "./DashboardHeader"
 
 const Dashboard = () => {
+  const navigate = useNavigate()
+
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [accountInfo, setAccountInfo] = useState(null)
 
@@ -21,16 +23,9 @@ const Dashboard = () => {
     setAccountInfo(null)
     setIsAuthorized(false)
 
+    navigate("/")
+
     if (showToast) toast.success("You've successfully logged out.")
-  }
-
-  const checkTokenExpiration = (expirationDate) => {
-    const currentTime = Date.now()
-
-    if (currentTime > expirationDate) {
-      handleLogOut(false)
-      toast.success("Your session has expired, please, log in again")
-    }
   }
 
   useEffect(() => {
@@ -41,8 +36,6 @@ const Dashboard = () => {
     const parsedAccountInfo = JSON.parse(savedAccountInfo)
 
     const currentTime = new Date().getTime()
-
-    checkTokenExpiration(accountInfo?.expirationDate)
 
     if (parsedAccountInfo.expirationDate && parsedAccountInfo.expirationDate < currentTime) {
       localStorage.removeItem("accountInfo")
@@ -73,12 +66,12 @@ const Dashboard = () => {
           isAuthorized={isAuthorized}
           name={accountInfo?.name}
           handleLogOut={handleLogOut}
-          token={accountInfo?.token}
+          apiKey={accountInfo?.apiKey}
         />
       </nav>
       {renderAskAuthenticationPanel()}
       <div className="outlet">
-        <Outlet context={{ isAuthorized, token: accountInfo?.token }} />
+        <Outlet context={{ isAuthorized, apiKey: accountInfo?.apiKey }} />
       </div>
     </div>
   )

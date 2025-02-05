@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import "./App.scss"
 
 import Header from "./components/other/Header"
@@ -67,6 +67,15 @@ const App = () => {
           path="admin"
           element={<DashboardPage />}
         >
+          <Route
+            index
+            element={
+              <Navigate
+                to="products"
+                replace
+              />
+            }
+          />
           <Route
             path="products"
             element={<DashboardProductListPage />}

@@ -17,6 +17,7 @@ const EditAboutItem = ({
   handleAboutItemMoveUp,
   handleAboutItemMoveDown,
   handleDeleteAboutItem,
+  aboutItemList,
 }) => {
   const { t } = useTranslation("translation", { keyPrefix: "products" })
 
@@ -131,7 +132,9 @@ const EditAboutItem = ({
           onClick={() => handleFieldEditStart("title")}
         >
           {title[selectedLanguage] ? (
-            <h2 className="about-information-title">{title[selectedLanguage]}</h2>
+            <h2 className="about-information-title">
+              {title[selectedLanguage] + " - " + aboutItem.position}
+            </h2>
           ) : (
             <h2 className="about-information-title">{t("title")}</h2>
           )}
@@ -144,7 +147,7 @@ const EditAboutItem = ({
         <textarea
           type="text"
           name="text"
-          placeholder="text"
+          placeholder={t("text")}
           autoFocus={true}
           className="about-information-text"
           onChange={handleInputChange}
@@ -161,7 +164,7 @@ const EditAboutItem = ({
           {text[selectedLanguage] ? (
             <p className="about-information-text">{text[selectedLanguage]}</p>
           ) : (
-            <p className="about-information-text">text</p>
+            <p className="about-information-text">{t("text")}</p>
           )}
         </button>
       )
@@ -179,6 +182,8 @@ const EditAboutItem = ({
     setCurrentItem(structuredClone(aboutItem))
   }, [aboutItem])
 
+  console.log(aboutItem.title.en, aboutItemList.length, aboutItem.position)
+
   return (
     <div
       ref={DashboardAboutItemRef}
@@ -187,14 +192,15 @@ const EditAboutItem = ({
       <div className="centered">
         <div className="about-item-options">
           <button
-            onClick={handleAboutItemMoveUp}
-            disabled={aboutItem.position === 0}
+            onClick={() => handleAboutItemMoveUp(aboutItem.id)}
+            disabled={aboutItem.position === 1}
             className="move-about-item move-up"
           >
             <ArrowIcon className="icon" />
           </button>
           <button
-            onClick={handleAboutItemMoveDown}
+            onClick={() => handleAboutItemMoveDown(aboutItem.id)}
+            disabled={aboutItem.position === aboutItemList.length}
             className="move-about-item move-down"
           >
             <ArrowIcon className="icon" />
@@ -211,13 +217,18 @@ const EditAboutItem = ({
         {isConfirmDeletionModalVisible ? (
           <ConfirmDeletionModal
             onClose={handleCloseConfirmCloseModal}
-            message="are you sure you want to delete this? this action cannot be undone."
+            message={t("are you sure you want to delete this? this action cannot be undone.")}
             deleteItem={handleDeleteAboutItem}
           />
         ) : (
           ""
         )}
-        <div className="image">
+        <div
+          className="image"
+          style={{
+            "--no-image-text": `"${t("no image")}\n${t("click here to upload")}"`,
+          }}
+        >
           <img
             src={image}
             alt=""

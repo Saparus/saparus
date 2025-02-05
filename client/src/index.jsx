@@ -11,7 +11,14 @@ import "./i18n"
 
 import "react-toastify/dist/ReactToastify.css"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: 30 * 60 * 1000, // 30 minutes in milliseconds
+      staleTime: 30 * 60 * 1000,
+    },
+  },
+})
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(

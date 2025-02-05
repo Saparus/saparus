@@ -15,10 +15,14 @@ const Product = ({ product }) => {
         to={`/catalog/${id}`}
       >
         <div className="image">
-          <img
-            src={images[0]}
-            alt=""
-          />
+          {images?.length > 0 ? (
+            <img
+              src={images[0] + "/s.webp"}
+              alt=""
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="information">
           <p className="name">{name}</p>
@@ -35,7 +39,6 @@ const Product = ({ product }) => {
         to="/about"
       >
         <div className="shop">
-          {/* STC */}
           <p className={`price ${fixedPrice ? "fixed-price" : "unfixed-price"}`}>
             {fixedPrice ? price + "$" : t("Price on Request")}
           </p>

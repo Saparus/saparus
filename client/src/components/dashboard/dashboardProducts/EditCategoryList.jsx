@@ -1,118 +1,85 @@
-import { useTranslation } from "react-i18next"
+import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 
-import { ReactComponent as XMarkIcon } from "../../../assets/icons/xmark.svg"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
+
+import EditCategoryModal from "./EditCategoryModal"
+import CategoryItem from "./CategoryItem"
 
 const EditCategoryList = ({
   categories,
   isActive,
-  newCategory,
-  setNewCategory,
   setCurrentProduct,
   handleFieldEditFinish,
   handleFieldEditStart,
+  selectedLanguage,
 }) => {
+  const [currentlyEditing, setCurrentlyEditing] = useState(false)
+
+  const handleAddCategory = (newCategory) => {
+    setCurrentProduct((prevState) => ({
+      ...prevState,
+      categories: {
+        ...prevState.categories.filter((category) => category.key !== newCategory.key),
+        ...newCategory,
+      },
+    }))
+  }
+
+  const removeCategory = (key) => {
+    setCurrentProduct((prevState) => {
+      const updatedCategories = { ...prevState.categories }
+
+      Object.keys(updatedCategories).forEach((language) => {
+        if (updatedCategories[language]?.[key]) {
+          delete updatedCategories[language][key]
+        }
+      })
+
+      return {
+        ...prevState,
+        categories: updatedCategories,
+      }
+    })
+  }
+
   return (
     <div className="category-list">
-      {categories.map((category) =>
-        category.value ? (
-          <CategoryItem
-            key={category.key}
-            type={category.key}
-            value={category.value}
-            removeCategory={() => {
-              setCurrentProduct((prevState) => {
-                const filteredCategories = categories.filter((item) => item.key !== category.key)
+      {categories.names.map((name, index) => (
+        <CategoryItem
+          key={`${selectedLanguage}-${name}`}
+          type={name}
+          value={categories.values[index]}
+          editCategory={() => setCurrentlyEditing(name)}
+          removeCategory={() => removeCategory(name)}
+          selectedLanguage={selectedLanguage}
+        />
+      ))}
 
-                const filteredCategoriesObject = filteredCategories.reduce(
-                  (acc, { key, value }) => {
-                    acc[key] = value
-                    return acc
-                  },
-                  {}
-                )
-
-                return {
-                  ...prevState,
-                  categories: filteredCategoriesObject,
-                }
-              })
-            }}
-          />
-        ) : (
-          ""
-        )
-      )}
-      {isActive ? (
-        <div className="new-category-input">
-          <input
-            className="category-key"
-            value={newCategory.key}
-            onChange={(e) => {
-              setNewCategory((prevState) => ({ ...prevState, key: e.target.value }))
-            }}
-            placeholder="key"
-          />
-          <input
-            className="category-value"
-            value={newCategory.value}
-            onChange={(e) => {
-              setNewCategory((prevState) => ({ ...prevState, value: e.target.value }))
-            }}
-            placeholder="value"
-          />
-          <button
-            onClick={() => {
-              setCurrentProduct((prevState) => ({
-                ...prevState,
-                categories: { ...prevState.categories, [newCategory.key]: newCategory.value },
-              }))
-              setNewCategory({ key: "", value: "" })
-            }}
-            className="add-button"
-          >
-            add
-          </button>
-          <button
-            onClick={() => {
-              handleFieldEditFinish("categories")
-              setNewCategory({ key: "", value: "" })
-            }}
-            className="discard-button"
-          >
-            discard
-          </button>
-        </div>
-      ) : (
+      {!currentlyEditing ? (
         <button
-          onClick={() => {
-            handleFieldEditStart("categories")
-          }}
+          onClick={() => setCurrentlyEditing(true)}
           className="add-category-button"
         >
           <PlusIcon className="icon" />
         </button>
-      )}
+      ) : null}
+
+      {currentlyEditing &&
+        createPortal(
+          <EditCategoryModal
+            languages={["en", "ka", "ru"]}
+            categories={categories}
+            finishEditing={() => setCurrentlyEditing(false)}
+            selectedLanguage={selectedLanguage}
+            handleAddCategory={handleAddCategory}
+            removeCategory={removeCategory}
+            editingCategory={currentlyEditing === true ? "" : currentlyEditing}
+          />,
+          document.querySelector(".app")
+        )}
     </div>
   )
 }
 
 export default EditCategoryList
-
-const CategoryItem = ({ type, value, removeCategory }) => {
-  const { t } = useTranslation("translation")
-
-  return (
-    <div className="category-item">
-      <div className="category-item-text">
-        <p className={`category-type-key`}>{t(type)}</p>
-        <p className={`category-type-key`}>|</p>
-        <p className={`category-${type}`}>{t(value)}</p>
-      </div>
-
-      <button onClick={removeCategory}>
-        <XMarkIcon className="icon" />
-      </button>
-    </div>
-  )
-}

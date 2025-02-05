@@ -10,9 +10,10 @@ import NewsArticleEdit from "./NewsArticleEdit"
 import Loading from "../../other/Loading"
 import PageSelect from "../../catalog/PageSelect"
 
-const DashboardNewsList = ({ token, type = "news" }) => {
+const DashboardNewsList = ({ apiKey, type = "news" }) => {
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const { t } = useTranslation("translation", { keyPrefix: "news" })
 
@@ -21,10 +22,10 @@ const DashboardNewsList = ({ token, type = "news" }) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Number(searchParams.get("page")) || 1
 
-  const { data, isLoading, error } = useQuery([limit, page, token, type], () =>
+  const { data, isLoading, error } = useQuery([limit, page, apiKey, type], () =>
     type === "news"
-      ? getEditNewsArticles(limit, page, token)
-      : getEditChildrenProgramArticles(limit, page, token)
+      ? getEditNewsArticles(limit, page, apiKey)
+      : getEditChildrenProgramArticles(limit, page, apiKey)
   )
 
   if (isLoading) return <Loading />
@@ -61,9 +62,10 @@ const DashboardNewsList = ({ token, type = "news" }) => {
       return (
         <>
           <div className="news-article-list">
-            {articles.map((article, index) => (
+            {articles?.map((article, index) => (
               <NewsArticleEdit
                 key={index}
+                type={type === "children program" ? "children" : type}
                 title={article.title}
                 text={article.text}
                 currentLanguage={currentLanguage}

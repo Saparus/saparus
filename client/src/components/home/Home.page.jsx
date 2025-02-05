@@ -38,7 +38,7 @@ const Home = () => {
               icon={<CatalogIcon />}
             />
             <HeroLink
-              text={t("Child Program")}
+              text={t("Children Program")}
               url="/children"
               icon={<Child />}
             />

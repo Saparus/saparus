@@ -14,25 +14,17 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
-    whitelist: languages,
-    debug: process.env.REACT_APP_MODE === "development" ? true : false,
-
+    supportedLngs: languages,
+    nonExplicitSupportedLngs: true,
+    load: "languageOnly", // if true, variants like "en-US" will resolve to "en" (does not work)
     resources: {
-      en: {
-        translation: en,
-      },
-      ka: {
-        translation: ka,
-      },
-      ru: {
-        translation: ru,
-      },
+      en: { translation: en },
+      ka: { translation: ka },
+      ru: { translation: ru },
     },
-
     interpolation: {
       escapeValue: false,
     },
-
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],

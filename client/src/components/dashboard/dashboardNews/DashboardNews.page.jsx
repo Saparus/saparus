@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import DashboardNewsList from "./DashboardNewsList"
 
 const DashboardNews = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { t } = useTranslation("translation", { keyPrefix: "news" })
 
@@ -20,7 +20,7 @@ const DashboardNews = () => {
         </Link>
       </div>
 
-      <DashboardNewsList token={token} />
+      <DashboardNewsList apiKey={apiKey} />
     </div>
   )
 }

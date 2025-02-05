@@ -1,6 +1,6 @@
-import ajax, { authHeaders } from "./ajax"
+import ajax from "./ajax"
 
-// edit product details by id (requires token)
+// edit product details by id (requires api_key)
 export const editProduct = async (
   name,
   description,
@@ -10,16 +10,25 @@ export const editProduct = async (
   price,
   categories,
   id,
-  token
+  api_key
 ) => {
-  if (!token) throw new Error("token is required")
+  if (!api_key) {
+    return
+  }
 
   try {
-    const { data } = await ajax.patch(
-      `/product/edit/${id}`,
-      { name, description, images, inStock, fixedPrice, price, categories },
-      authHeaders(token)
-    )
+    const translatedCategories = ensureCategoryTranslations(categories)
+
+    const { data } = await ajax.patch(`/products/edit/${id}?api_key=${api_key}`, {
+      name,
+      description,
+      images,
+      inStock,
+      fixedPrice,
+      price,
+      categories: translatedCategories,
+    })
+
     return data
   } catch (error) {
     console.error(`error editing product with id ${id}:`, error)
@@ -27,18 +36,7 @@ export const editProduct = async (
   }
 }
 
-// get product categories
-export const getCategories = async () => {
-  try {
-    const { data } = await ajax.get("/product/categories")
-    return data
-  } catch (error) {
-    console.error("error fetching product categories:", error)
-    throw error
-  }
-}
-
-// add a new product (requires token)
+// add a new product (requires api_key)
 export const addProduct = async (
   name,
   description,
@@ -47,29 +45,43 @@ export const addProduct = async (
   fixedPrice,
   price,
   categories,
-  token
+  api_key
 ) => {
-  if (!token) throw new Error("token is required")
-
-  try {
-    const { data } = await ajax.post(
-      "/product/add",
-      { name, description, images, inStock, fixedPrice, price, categories },
-      authHeaders(token)
-    )
-    return data
-  } catch (error) {
-    console.error("error adding product:", error)
-    throw error
+  if (!api_key) {
+    return
   }
+
+  // const translatedCategories = ensureCategoryTranslations(categories)
+
+  console.log(categories)
+
+  // try {
+  //   const { data } = await ajax.post(`/products?api_key=${api_key}`, {
+  //     name,
+  //     description,
+  //     images,
+  //     inStock,
+  //     fixedPrice,
+  //     price,
+  //     categories: translatedCategories,
+  //   })
+
+  //   return data
+  // } catch (error) {
+  //   console.error("error adding product:", error)
+  //   throw error
+  // }
 }
 
-// delete a product by id (requires token)
-export const deleteProduct = async (id, token) => {
-  if (!token) throw new Error("token is required")
+// delete a product by id (requires api_key)
+export const deleteProduct = async (id, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
 
   try {
-    const { data } = await ajax.delete(`/product/delete/${id}`, authHeaders(token))
+    const { data } = await ajax.delete(`/products/${id}?api_key=${api_key}`)
     return data
   } catch (error) {
     console.error(`error deleting product with id ${id}:`, error)
@@ -83,7 +95,9 @@ export const getProducts = async (filter, language, limit = 20, page = 1) => {
 
   try {
     const { data } = await ajax.get(
-      `/product/get?filter=${filterString}&language=${language}&limit=${limit}&page=${page}`
+      `/products?${
+        filterString ? "filter=" + filterString : ""
+      }&language=${language}&limit=${limit}&page=${page}`
     )
     return data
   } catch (error) {
@@ -95,7 +109,7 @@ export const getProducts = async (filter, language, limit = 20, page = 1) => {
 // get a single product by id and language
 export const getProduct = async (id, language) => {
   try {
-    const { data } = await ajax.get(`/product/get/${id}?language=${language}`)
+    const { data } = await ajax.get(`/products/${id}?language=${language}`)
     return data
   } catch (error) {
     console.error(`error fetching product with id ${id}:`, error)
@@ -103,13 +117,52 @@ export const getProduct = async (id, language) => {
   }
 }
 
-// get an editable product by id (requires token)
-export const getEditProduct = async (id, token) => {
+// get an editable product by id (requires api_key)
+export const getEditProduct = async (id, api_key) => {
+  if (!api_key) {
+    console.error("api_key is required")
+    return
+  }
+
   try {
-    const { data } = await ajax.get(`/product/getEdit/${id}`, authHeaders(token))
+    const { data } = await ajax.get(`/products/admin/${id}?api_key=${api_key}`)
     return data
   } catch (error) {
     console.error(`error fetching editable product with id ${id}:`, error)
     throw error
   }
+}
+
+const ensureCategoryTranslations = (categories) => {
+  const languages = ["en", "ka", "ru"]
+  const englishCategories = categories["en"] || {}
+
+  languages.forEach((language) => {
+    if (!categories[language]) {
+      categories[language] = {}
+    }
+
+    Object.keys(englishCategories).forEach((categoryKey) => {
+      const subCategory = Object.keys(englishCategories[categoryKey])[0]
+
+      const languageSpecificSubCategory = Object.keys(categories[language][categoryKey] || {})[0]
+
+      if (
+        !languageSpecificSubCategory ||
+        !categories?.[language]?.[categoryKey]?.[languageSpecificSubCategory]?.name
+      ) {
+        categories[language] = categories[language] || {}
+
+        categories[language][categoryKey] = categories[language][categoryKey] || {}
+
+        categories[language][categoryKey][subCategory] =
+          categories[language][categoryKey][subCategory] || {}
+
+        categories[language][categoryKey][subCategory].name =
+          englishCategories[categoryKey][subCategory].name
+      }
+    })
+  })
+
+  return categories
 }

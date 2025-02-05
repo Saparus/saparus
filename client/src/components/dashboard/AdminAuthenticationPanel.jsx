@@ -5,34 +5,32 @@ import { useTranslation } from "react-i18next"
 import { login } from "../../services/authServices"
 
 const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
-  const [credentials, setCredentials] = useState({ email: "", password: "" })
-  const [error, setError] = useState({ emailError: [], passwordError: [] })
+  const [authCode, setAuthCode] = useState("")
+  const [error, setError] = useState()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
-  const handleChangeCredentials = (credential, newValue) => {
-    setCredentials((prevCredentials) => ({
-      ...prevCredentials,
-      [credential]: newValue,
-    }))
+  const handleChangeAuthCode = (newValue) => {
+    setAuthCode(newValue)
+
+    setError()
   }
 
   const handleLogIn = async () => {
-    if (!credentials.email || !credentials.password) {
-      setError({
-        emailError: !credentials.email ? ["Email is required"] : [],
-        passwordError: !credentials.password ? ["Password is required"] : [],
-      })
+    if (!authCode) {
+      setError("Please provide your authentication code")
       return
     }
 
     try {
-      const response = await login(credentials)
+      const response = await login(authCode)
+
+      console.log(response)
 
       setAccountInfo(response)
       setIsAuthorized(true)
     } catch (error) {
-      setError(error.response?.data || "Login failed")
+      setError(error?.response?.data?.message || error?.message || "Login failed")
     }
   }
 
@@ -46,62 +44,24 @@ const AuthenticationPanel = ({ setAccountInfo, setIsAuthorized }) => {
           {t("go back")}{" "}
         </Link>
         <div className="admin-auth-input">
-          <p className="login-title">{t("admin login")}</p>
-          <label htmlFor="name">
+          <h2 className="login-title">{t("admin login")}</h2>
+          <label htmlFor="authCode">
             <input
               onChange={(e) => {
-                handleChangeCredentials("email", e.target.value)
+                handleChangeAuthCode(e.target.value)
               }}
-              value={credentials.email}
-              id="name"
-              name="email"
-              placeholder={t("email")}
-              type="text"
-            />
-            {error?.emailError?.length > 0 ? (
-              <ul className="error-list">
-                {error.emailError.map((emailError) => (
-                  <li
-                    className="error-item"
-                    key={emailError}
-                  >
-                    {emailError}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              ""
-            )}
-          </label>
-          <label htmlFor="password">
-            <input
-              onChange={(e) => {
-                handleChangeCredentials("password", e.target.value)
-              }}
-              value={credentials.username}
-              id="password"
-              name="password"
-              placeholder={t("password")}
+              value={authCode}
+              id="authCode"
+              name="authCode"
+              placeholder={t("access key")}
               type="password"
             />
-            {error?.passwordError?.length > 0 ? (
-              <ul className="error-list">
-                {error.passwordError.map((passwordError) => (
-                  <li
-                    className="error-item"
-                    key={passwordError}
-                  >
-                    {passwordError}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              ""
-            )}
           </label>
+          {error?.length > 0 ? <div className="login-error">{error}</div> : ""}
           <button
             onClick={handleLogIn}
             className="submit-code"
+            disabled={!authCode || error}
           >
             {t("enter")}
           </button>

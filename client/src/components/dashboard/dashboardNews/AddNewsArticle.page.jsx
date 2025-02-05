@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "react-query"
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
@@ -23,7 +23,9 @@ const emptyNewsArticle = {
 }
 
 const AddNewsArticlePage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
+
+  const navigate = useNavigate()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -31,27 +33,38 @@ const AddNewsArticlePage = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (product) => {
-      const { title, text, images, id } = product
+      const { title, text, images } = product
 
-      return await addNewsArticle(title, text, images, id, token)
+      return await addNewsArticle(title, text, images, apiKey)
     },
-    onSuccess: () => {
-      toast.success(t("Changes saved successfully"))
-      queryClient.invalidateQueries(["news", token]) // this will cause refetching
+    onMutate: () => {
+      toast.loading(t("Adding news article..."))
+    },
+    onSuccess: (data) => {
+      toast.dismiss()
+      toast.success(t("Successfully added news article"))
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("news"),
+      })
+
+      // if (data.article.id) navigate(`../../admin/news/${data.article.id}`)
+      navigate(`../../admin/news`)
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        "Something went wrong while adding product, check browser console for more detailed explanation"
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
 
   return (
     <EditNewsPanel
       article={emptyNewsArticle}
-      onSave={addProductMutation.mutation}
-      token={token}
+      onSave={addProductMutation.mutate}
+      apiKey={apiKey}
     />
   )
 }

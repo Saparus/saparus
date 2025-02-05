@@ -39,6 +39,7 @@
           font-size: 0.75rem;
 
           span {
+            white-space: nowrap;
             font-weight: 600;
           }
         }
@@ -178,6 +179,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    .categories-list-select {
+      flex-direction: column;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
   }
 
   .select-list {
@@ -204,10 +212,11 @@
       lighten($secondary-color, 20%) 50%,
       lighten($secondary-color, 18.5%) 100%
     );
+    list-style: none;
     display: flex;
-    height: 150px;
-    padding: 20px 1%;
-    gap: 20px;
+    height: 9rem;
+    padding: 1rem 1%;
+    gap: 1rem;
     box-shadow: 0 1px 10px #2b303133;
 
     .company {
@@ -215,9 +224,94 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      width: 7rem;
+      gap: 0.5rem;
       text-align: center;
       user-select: none;
+      position: relative;
+      display: flex; //
+      flex-direction: column; //
+      align-items: center; //
+
+      span {
+        max-width: 7rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .company-logo {
+        &:hover + .edit-company-button {
+          display: block;
+        }
+      }
+
+      .company-logo {
+        &:hover + .save-company-buttons {
+          display: flex;
+        }
+      }
+
+      .edit-company-button {
+        position: absolute;
+        background-color: #edf6fab9;
+        padding: 0 0.5rem;
+        border-radius: 50%;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        height: 5rem;
+        width: 5rem;
+        top: 0rem;
+        left: 1rem;
+        display: none;
+
+        &:hover {
+          display: block;
+        }
+      }
+
+      .save-company-buttons {
+        display: none;
+        position: absolute;
+
+        padding: 0 0.5rem;
+        border-radius: 50%;
+        font-size: 0.85rem;
+        cursor: pointer;
+        height: 5rem;
+        width: 5rem;
+        top: 0rem;
+        left: 1rem;
+        flex-direction: column;
+
+        &:hover {
+          display: flex;
+        }
+      }
+
+      .save-company-button,
+      .discard-company-button {
+        width: 4rem;
+        flex: 1;
+        cursor: pointer;
+        font-weight: 600;
+        background-color: $base-color;
+
+        &:hover {
+          opacity: 0.85;
+        }
+      }
+
+      .save-company-button {
+        border-radius: 50% 50% 0 0;
+        padding-top: 0.5rem;
+      }
+
+      .discard-company-button {
+        border-radius: 0 0 50% 50%;
+        padding-bottom: 0.5rem;
+      }
 
       .undefined-company {
         background-color: $secondary-color;
@@ -239,6 +333,7 @@
 
           span {
             opacity: 0.8;
+            white-space: nowrap;
           }
         }
       }
@@ -265,24 +360,29 @@
 
         span {
           opacity: 0.9;
+          white-space: nowrap;
         }
       }
 
       .logo {
         border: transparent solid 2px;
-        width: 80px;
-        height: 80px;
+        width: 5rem;
+        height: 5rem;
         border-radius: 50%;
 
         transition: border $animation_duration $animation, opacity $animation_duration $animation;
       }
 
       span {
+        white-space: nowrap;
         font-family: $main-font;
         font-size: smaller;
         color: $base-color;
       }
     }
+  }
+
+  .categories-list-select {
   }
 
   .products-categories,
@@ -432,6 +532,7 @@
           span {
             text-decoration: underline;
             transition: opacity $animation_duration $animation;
+            white-space: nowrap;
 
             &:hover {
               opacity: 0.75;
@@ -474,7 +575,14 @@
         gap: 0.5rem;
 
         .categories-main-part {
-          flex-direction: row;
+          flex-direction: column;
+
+          .categories-list-select {
+            flex-direction: column;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+          }
         }
 
         .utils {

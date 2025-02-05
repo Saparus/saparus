@@ -47,6 +47,8 @@ const ProductImageSelect = ({
     }
   }, [currentIndex, maxSimultaneousImages, images.length])
 
+  if (!images) return null
+
   const renderImages = () => {
     return images.slice(slideIndex, slideIndex + maxSimultaneousImages).map((image, index) => (
       <button

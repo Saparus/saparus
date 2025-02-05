@@ -362,8 +362,8 @@
         text-align: justify;
         word-break: keep-all;
         overflow-x: hidden !important;
-        height: 15rem;
-        max-height: 15rem;
+        height: 12rem;
+        max-height: 12rem;
         overflow-y: auto;
 
         .product-description-content {
@@ -474,6 +474,7 @@
           align-items: center;
           justify-content: center;
           cursor: default;
+          box-shadow: $shadow;
         }
       }
     }
@@ -560,6 +561,19 @@
         width: calc(100% - 2rem);
         height: auto;
         margin: auto;
+
+        .image-not-found-message {
+          max-width: 100%;
+        }
+
+        // img {
+        //   height: auto;
+        //   width: auto;
+        //   min-height: auto;
+        //   min-width: auto;
+        //   max-height: auto;
+        //   max-width: auto;
+        // }
       }
     }
   }

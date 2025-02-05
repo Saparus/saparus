@@ -1,10 +1,10 @@
-import ajax, { authHeaders } from "./ajax"
+import ajax from "./ajax"
 
 // get children program articles based on language, limit, and page
 export const getChildrenProgramArticles = async (language, limit, page) => {
   try {
     const { data } = await ajax.get(
-      `/children/get?language=${language}&limit=${limit}&page=${page}`
+      `/children-program?language=${language}&limit=${limit}&page=${page}`
     )
     return data
   } catch (error) {
@@ -16,7 +16,7 @@ export const getChildrenProgramArticles = async (language, limit, page) => {
 // get a single children program article by id and language
 export const getSingleChildrenProgramArticle = async (id, language) => {
   try {
-    const { data } = await ajax.get(`/children/get/${id}?language=${language}`)
+    const { data } = await ajax.get(`/children-program/${id}?language=${language}`)
     return data
   } catch (error) {
     console.error(`error fetching children program article with id ${id}:`, error)
@@ -24,14 +24,15 @@ export const getSingleChildrenProgramArticle = async (id, language) => {
   }
 }
 
-// fetch editable children program articles (requires token)
-export const getEditChildrenProgramArticles = async (limit, page, token) => {
-  if (!token) return
+// fetch editable children program articles (requires api_key)
+export const getEditChildrenProgramArticles = async (limit, page, api_key) => {
+  if (!api_key) {
+    return
+  }
 
   try {
     const { data } = await ajax.get(
-      `/children/getEdit?page=${page}&limit=${limit}`,
-      authHeaders(token)
+      `/children-program/admin?page=${page}&limit=${limit}&api_key=${api_key}`
     )
     return data
   } catch (error) {
@@ -40,10 +41,14 @@ export const getEditChildrenProgramArticles = async (limit, page, token) => {
   }
 }
 
-// fetch a single editable children program article by id (requires token)
-export const getEditSingleChildrenProgramArticle = async (id, token) => {
+// fetch a single editable children program article by id (requires api_key)
+export const getEditSingleChildrenProgramArticle = async (id, api_key) => {
+  if (!api_key) {
+    return
+  }
+
   try {
-    const { data } = await ajax.get(`/children/getEdit/${id}`, authHeaders(token))
+    const { data } = await ajax.get(`/children-program/admin/${id}?api_key=${api_key}`)
     return data
   } catch (error) {
     console.error(`error fetching editable children program article with id ${id}:`, error)
@@ -51,14 +56,18 @@ export const getEditSingleChildrenProgramArticle = async (id, token) => {
   }
 }
 
-// add a new children program article (requires token)
-export const addChildrenProgramArticle = async (title, date, text, image, token) => {
+// add a new children program article (requires api_key)
+export const addChildrenProgramArticle = async (title, text, images, api_key) => {
+  if (!api_key) {
+    return
+  }
+
   try {
-    const { data } = await ajax.post(
-      "/children/add",
-      { title, text, date, image },
-      authHeaders(token)
-    )
+    const { data } = await ajax.post(`/children-program?api_key=${api_key}`, {
+      title,
+      text,
+      images,
+    })
     return data
   } catch (error) {
     console.error("error adding children program article:", error)
@@ -66,10 +75,14 @@ export const addChildrenProgramArticle = async (title, date, text, image, token)
   }
 }
 
-// delete a children program article by id (requires token)
-export const deleteChildrenProgramArticle = async (id, token) => {
+// delete a children program article by id (requires api_key)
+export const deleteChildrenProgramArticle = async (id, api_key) => {
+  if (!api_key) {
+    return
+  }
+
   try {
-    const { data } = await ajax.delete(`/children/delete/${id}`, authHeaders(token))
+    const { data } = await ajax.delete(`/children-program/${id}?api_key=${api_key}`)
     return data
   } catch (error) {
     console.error(`error deleting children program article with id ${id}:`, error)
@@ -77,14 +90,18 @@ export const deleteChildrenProgramArticle = async (id, token) => {
   }
 }
 
-// edit a children program article by id (requires token)
-export const editChildrenProgramArticle = async (id, title, text, images, token) => {
+// edit a children program article by id (requires api_key)
+export const editChildrenProgramArticle = async (id, title, text, images, api_key) => {
+  if (!api_key) {
+    return
+  }
+
   try {
-    const { data } = await ajax.patch(
-      `/news/edit/${id}`,
-      { title, text, images },
-      authHeaders(token)
-    )
+    const { data } = await ajax.patch(`/children-program/edit/${id}?api_key=${api_key}`, {
+      title,
+      text,
+      images,
+    })
     return data
   } catch (error) {
     console.error(`error editing children program article with id ${id}:`, error)

@@ -1,101 +1,815 @@
-service: saparus
+service: saparus-backend
+
+frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs20.x
   region: us-west-2
+  environment:
+    ABOUT_TABLE: ${env:ABOUT_TABLE}
+    CHILDREN_PROGRAMS_TABLE: ${env:CHILDREN_PROGRAMS_TABLE}
+    CATEGORIES_TABLE: ${env:CATEGORIES_TABLE}
+    NEWS_TABLE: ${env:NEWS_TABLE}
+    PRODUCTS_TABLE: ${env:PRODUCTS_TABLE}
+    BUCKET_NAME: saparus-images
+    API_KEY: ${env:API_KEY}
+    ACCESS_KEY: ${env:ACCESS_KEY}
 
 plugins:
-  - serverless-s3-sync
+  - serverless-bundle
+  - serverless-iam-roles-per-function
+  - serverless-prune-plugin
+
+package:
+  individually: true
 
 custom:
-  s3Sync:
-    - bucketName: saparus-products
-      localDir: client/build
-# Backend: Lambda + API Gateway configuration
+  prune:
+    automatic: true
+    number: 3
+  bundle:
+    caching: true
+    concurrency: 5
+    stats: false
+    linting: true
+    generateStatsFiles: false
+    esbuild: false
+    disableForkTsChecker: false
+    packager: npm
+
 functions:
-  # products
-  addProduct:
-    handler: products.addProduct
+  # Authentication
+  verify-api-key:
+    handler: src/handlers/auth/authorize.authorize
+    name: verify-api-key
     events:
       - http:
-          path: products
-          method: post
-
-  getCategories:
-    handler: products.getCategories
-    events:
-      - http:
-          path: products/categories
+          path: verify-api-key
           method: get
+          cors: true
 
-  getProduct:
-    handler: products.getProduct
-    events:
-      - http:
-          path: products/{id}
-          method: get
-
-  getProducts:
-    handler: products.getProducts
-    events:
-      - http:
-          path: products
-          method: get
-
-  editProduct:
-    handler: products.editProduct
-    events:
-      - http:
-          path: products/{id}
-          method: put
-
-  deleteProduct:
-    handler: products.deleteProduct
-    events:
-      - http:
-          path: products/{id}
-          method: delete
-
-  # authentication
-  register:
-    handler: auth.register
-    events:
-      - http:
-          path: auth/register
-          method: post
-
-  login:
-    handler: auth.login
+  loginUser:
+    handler: src/handlers/auth/login.login
+    name: login-user
     events:
       - http:
           path: auth/login
           method: post
+          cors: true
+    package:
+      include:
+        - ./src/handlers/auth/loginUser.mjs
+
+  # Categories
+  getCategories:
+    handler: src/handlers/categories/getCategories.getCategories
+    name: get-categories
+    iamRoleStatementsName: get-categories-role
+    events:
+      - http:
+          path: categories
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/categories/getCategories.mjs
+        - src/util/db.mjs
+        - src/util/summarizeCategoryData.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+          - "dynamodb:Scan"
+        Resource:
+          - !GetAtt CategoriesTable.Arn
+          - !GetAtt ProductsTable.Arn
+
+  getCompanies:
+    handler: src/handlers/categories/getCompanies.getCompanies
+    name: get-companies
+    iamRoleStatementsName: get-companies-role
+    events:
+      - http:
+          path: categories/companies
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/categories/getCompanies.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - src/util/summarizeCategoryData.mjs
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+          - "dynamodb:Scan"
+        Resource:
+          - !GetAtt CategoriesTable.Arn
+          - !GetAtt ProductsTable.Arn
+
+  editCategories:
+    handler: src/handlers/categories/editCategories.editCategories
+    name: edit-categories
+    iamRoleStatementsName: edit-categories-role
+    events:
+      - http:
+          path: categories
+          method: post
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/categories/updateCategories.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "dynamodb:GetItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt CategoriesTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  # About
+  getAbout:
+    handler: src/handlers/about/getAllAboutItems.getAllAboutItems
+    name: get-about
+    iamRoleStatementsName: get-about-role
+    events:
+      - http:
+          path: about
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/about/getAllAboutItems.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt AboutTable.Arn
+
+  getAllAboutItemsForAdmin:
+    handler: src/handlers/about/getAllAboutItemsForAdmin.getAllAboutItemsForAdmin
+    name: get-about-admin
+    iamRoleStatementsName: get-about-admin-role
+    events:
+      - http:
+          path: about/admin
+          method: get
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/about/getAllAboutItemsForAdmin.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt AboutTable.Arn
+
+  editAllAboutItems:
+    handler: src/handlers/about/editAllAboutItems.editAllAboutItems
+    name: edit-all-about-items
+    iamRoleStatementsName: edit-all-about-items-role
+    events:
+      - http:
+          path: about
+          method: patch
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/about/editAllAboutItems.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - node_modules/uuid
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+          - "dynamodb:DeleteItem"
+          - "dynamodb:PutItem"
+          - "dynamodb:BatchWriteItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt AboutTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  # Children Program
+  createChildrenProgram:
+    handler: src/handlers/childrenProgram/createChildrenProgram.createChildrenProgram
+    name: create-children
+    iamRoleStatementsName: create-children-role
+    events:
+      - http:
+          path: children-program
+          method: post
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/childrenProgram/createChildrenProgram.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - node_modules/uuid
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt ChildrenProgramsTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  getChildrenProgram:
+    handler: src/handlers/childrenProgram/getChildrenProgram.getChildrenProgram
+    name: get-children
+    iamRoleStatementsName: get-children-role
+    events:
+      - http:
+          path: children-program/{id}
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/childrenProgram/getChildrenProgram.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  editChildrenProgram:
+    handler: src/handlers/childrenProgram/editChildrenProgram.editChildrenProgram
+    name: edit-children
+    iamRoleStatementsName: edit-children-role
+    events:
+      - http:
+          path: children-program/edit/{id}
+          method: patch
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/childrenProgram/editChildrenProgram.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - node_modules/uuid
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt ChildrenProgramsTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  deleteChildrenProgram:
+    handler: src/handlers/childrenProgram/deleteChildrenProgram.deleteChildrenProgram
+    name: delete-children-
+    iamRoleStatementsName: delete-children-role
+    events:
+      - http:
+          path: children-program/{id}
+          method: delete
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/childrenProgram/deleteChildrenProgram.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  getAllChildrenPrograms:
+    handler: src/handlers/childrenProgram/getAllChildrenPrograms.getAllChildrenPrograms
+    name: get-all-children
+    iamRoleStatementsName: get-all-children-role
+    events:
+      - http:
+          path: children-program
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/childrenProgram/getAllChildrenPrograms.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  getChildrenProgramForAdmin:
+    handler: src/handlers/childrenProgram/getChildrenProgramForAdmin.getChildrenProgramForAdmin
+    name: get-children-admin
+    iamRoleStatementsName: get-children-admin-role
+    events:
+      - http:
+          path: children-program/admin/{id}
+          method: get
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/childrenProgram/getChildrenProgramForAdmin.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  getAllChildrenProgramsForAdmin:
+    handler: src/handlers/childrenProgram/getAllChildrenProgramsForAdmin.getAllChildrenProgramsForAdmin
+    name: get-all-children-admin
+    iamRoleStatementsName: get-all-children-admin-role
+    events:
+      - http:
+          path: children-program/admin
+          method: get
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/childrenProgram/getAllChildrenProgramsForAdmin.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ChildrenProgramsTable.Arn
+
+  # News
+  createNewsItem:
+    handler: src/handlers/news/createNewsItem.createNewsItem
+    name: create-news-item
+    iamRoleStatementsName: create-news-item-role
+    events:
+      - http:
+          path: news/create
+          method: post
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/news/createNewsItem.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - node_modules/uuid
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt NewsTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  getNewsItem:
+    handler: src/handlers/news/getNewsItem.getNewsItem
+    name: get-news-item
+    iamRoleStatementsName: get-news-item-role
+    events:
+      - http:
+          path: news/{id}
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/news/getNewsItem.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt NewsTable.Arn
+
+  editNewsItem:
+    handler: src/handlers/news/editNewsItem.editNewsItem
+    name: edit-news-item
+    iamRoleStatementsName: edit-news-item-role
+    events:
+      - http:
+          path: news/edit/{id}
+          method: patch
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/news/editNewsItem.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - node_modules/uuid
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt NewsTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  deleteNewsItem:
+    handler: src/handlers/news/deleteNewsItem.deleteNewsItem
+    name: delete-news-item
+    iamRoleStatementsName: delete-news-item-role
+    events:
+      - http:
+          path: news/{id}
+          method: delete
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/news/deleteNewsItem.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt NewsTable.Arn
+
+  getAllNewsItems:
+    handler: src/handlers/news/getAllNewsItems.getAllNewsItems
+    name: get-all-news-items
+    iamRoleStatementsName: get-all-news-items-role
+    events:
+      - http:
+          path: news
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/news/getAllNewsItems.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt NewsTable.Arn
+
+  getNewsItemForAdmin:
+    handler: src/handlers/news/getNewsItemForAdmin.getNewsItemForAdmin
+    name: get-news-item-admin
+    iamRoleStatementsName: get-news-item-admin-role
+    events:
+      - http:
+          path: news/admin/{id}
+          method: get
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/news/getNewsItemForAdmin.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt NewsTable.Arn
+
+  getAllNewsItemsForAdmin:
+    handler: src/handlers/news/getAllNewsItemsForAdmin.getAllNewsItemsForAdmin
+    name: get-all-news-items-admin
+    iamRoleStatementsName: get-all-news-items-admin-role
+    events:
+      - http:
+          path: news/admin
+          method: get
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/products/getAllNewsItemsForAdmin.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt NewsTable.Arn
+
+  # Products
+  createProduct:
+    handler: src/handlers/products/createProduct.createProduct
+    name: create-product
+    iamRoleStatementsName: create-product-role
+    timeout: 60
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/products/createProduct.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - src/util/updateGlobalCategories.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - node_modules/uuid
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "dynamodb:GetItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt ProductsTable.Arn
+          - !GetAtt CategoriesTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  getProduct:
+    handler: src/handlers/products/getProduct.getProduct
+    name: get-product
+    iamRoleStatementsName: get-product-role
+    events:
+      - http:
+          path: products/{id}
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/products/getProduct.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ProductsTable.Arn
+
+  editProduct:
+    handler: src/handlers/products/editProduct.editProduct
+    name: edit-product
+    timeout: 60
+    iamRoleStatementsName: edit-product-role
+    events:
+      - http:
+          path: products/edit/{id}
+          method: patch
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/products/editProduct.mjs
+        - src/util/db.mjs
+        - src/util/s3.mjs
+        - src/util/updateGlobalCategories.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+        - node_modules/uuid
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "dynamodb:UpdateItem"
+          - "dynamodb:GetItem"
+          - "s3:PutObject"
+          - "s3:DeleteObject"
+        Resource:
+          - !GetAtt ProductsTable.Arn
+          - !GetAtt CategoriesTable.Arn
+          - arn:aws:s3:::saparus-images/*
+
+  deleteProduct:
+    handler: src/handlers/products/deleteProduct.deleteProduct
+    name: delete-product
+    iamRoleStatementsName: delete-product-role
+    events:
+      - http:
+          path: products/{id}
+          method: delete
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/products/deleteProduct.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt ProductsTable.Arn
+
+  getAllProducts:
+    handler: src/handlers/products/getAllProducts.getAllProducts
+    name: get-all-products
+    iamRoleStatementsName: get-all-products-role
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+    package:
+      include:
+        - src/handlers/products/getAllProducts.mjs
+        - src/util/db.mjs
+        - src/util/filterProducts.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt ProductsTable.Arn
+
+  getProductForAdmin:
+    handler: src/handlers/products/getProductForAdmin.getProductForAdmin
+    name: get-product-admin
+    iamRoleStatementsName: get-product-admin-role
+    events:
+      - http:
+          path: products/admin/{id}
+          method: get
+          cors: true
+          authorizer:
+            type: TOKEN
+            name: verify-api-key
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 1800
+    package:
+      include:
+        - src/handlers/products/getProductForAdmin.mjs
+        - src/util/db.mjs
+        - node_modules/@aws-sdk/lib-dynamodb
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt ProductsTable.Arn
 
 resources:
-  Resources: # CloudFront distribution for serving the frontend
-    FrontendCloudFront:
-      Type: AWS::CloudFront::Distribution
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: "AWS::ApiGateway::GatewayResponse"
       Properties:
-        DistributionConfig:
-          Enabled: 'true'
-          Origins:
-            - DomainName: saparus-products.s3.us-west-2.amazonaws.com
-              Id: S3Origin
-              S3OriginConfig:
-                OriginAccessIdentity: ''
-          DefaultCacheBehavior:
-            TargetOriginId: S3Origin
-            ViewerProtocolPolicy: redirect-to-https
-            ForwardedValues:
-              QueryString: 'false'
-              Cookies:
-                Forward: 'none'
-          DefaultRootObject: index.html
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
 
-# Define the deployment path for frontend files
-package:
-  exclude:
-    - "server/**"
-  include:
-    - "client/**"
+    AboutTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AboutTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    ChildrenProgramsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ChildrenProgramsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    NewsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: NewsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    ProductsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ProductsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    CategoriesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: CategoriesTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

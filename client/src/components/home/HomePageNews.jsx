@@ -11,9 +11,7 @@ const HomePageNews = () => {
   const { t } = useTranslation("translation", { keyPrefix: "time" })
   const { i18n } = useTranslation()
 
-  const languages = ["en", "ka", "ru"]
-
-  const currentLanguage = languages.includes(i18n.language) ? i18n.language : "en"
+  const currentLanguage = i18n.language.split("-")[0]
 
   const {
     data: news,
@@ -25,16 +23,19 @@ const HomePageNews = () => {
   if (error) return <div>Error fetching news</div>
 
   const renderLatestNews = () => {
+    if (!news?.articles?.length) return <div>No news articles</div>
+
     return (
       <Link
-        to="/news/0"
+        to={`/news/${news.articles[0].id}`}
         className="latest-news"
       >
-        <div className="image">
-          {news.articles[0]?.images ? (
+        <div className={`image ${news.articles[0].images?.[0] ? "" : "no-image"}`}>
+          {news?.articles[0]?.images ? (
             <img
               src={news.articles[0].images?.[0]}
-              alt={news.articles[0].title}
+              alt=""
+              loading="eager"
             />
           ) : (
             <div className="no-image-image"></div>
@@ -56,23 +57,40 @@ const HomePageNews = () => {
       </Link>
     )
   }
+
+  const renderNews = () => {
+    if (!news?.articles?.length || !news?.articles) return
+
+    return (
+      <>
+        <NewsItem
+          key={news.articles[0].id}
+          title={news.articles[0].title}
+          text={news.articles[0].text}
+          date={new Date(news.articles[0].date).toLocaleDateString()}
+          url={`/news/${news.articles[0].id}`}
+          className="first-article"
+        />
+        {news.articles.slice(1, 4).map((newsItem) => (
+          <NewsItem
+            key={newsItem.id}
+            title={newsItem.title}
+            text={newsItem.text}
+            date={new Date(newsItem.date).toLocaleDateString()}
+            url={`/news/${newsItem.id}`}
+          />
+        ))}
+      </>
+    )
+  }
+
   return (
     <section className="home-page-news">
-      <h2>News</h2>
+      {news?.articles?.length ? <h2>News</h2> : ""}
       <div className="news">
         {renderLatestNews()}
-        <div className="news-list">
-          {news.articles.slice(1, 4).map((newsItem) => (
-            <NewsItem
-              key={newsItem.id}
-              title={newsItem.title}
-              text={newsItem.text}
-              date={new Date(newsItem.date).toLocaleDateString()}
-              url={`/news/${newsItem.id}`}
-            />
-          ))}
-        </div>
-        {news.pagination.hasNextPage ? (
+        <div className="news-list">{renderNews()}</div>
+        {news?.pagination.hasNextPage ? (
           <Link
             className="view-more-news-link"
             to="news"

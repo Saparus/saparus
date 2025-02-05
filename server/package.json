@@ -9,7 +9,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "aws-sdk": "^2.1692.0",
-    "jsonwebtoken": "^9.0.2"
+    "@aws-sdk/client-dynamodb": "^3.716.0",
+    "@aws-sdk/client-lambda": "^3.716.0",
+    "@aws-sdk/client-s3": "^3.717.0",
+    "@aws-sdk/lib-dynamodb": "^3.716.0",
+    "@aws-sdk/util-dynamodb": "^3.716.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "serverless": "^3.38.0",
+    "sharp": "^0.33.5",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "serverless-bundle": "^6.3.1",
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-prune-plugin": "^2.1.0"
   }
 }

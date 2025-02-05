@@ -17,7 +17,8 @@ const Product = () => {
 
   const { id } = useParams()
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
 
   const {
     data: product,
@@ -27,18 +28,16 @@ const Product = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  // const product = getProduct(Number(id))
-
   const handleSelectNextImage = () => {
     setCurrentImageIndex((prevState) => {
-      if (prevState + 1 >= product.images.length) return 0
+      if (prevState + 1 >= product.images?.length) return 0
       else return prevState + 1
     })
   }
 
   const handleSelectPrevImage = () => {
     setCurrentImageIndex((prevState) => {
-      if (prevState - 1 < 0) return product.images.length - 1
+      if (prevState - 1 < 0) return product.images?.length - 1
       else return prevState - 1
     })
   }
@@ -51,7 +50,7 @@ const Product = () => {
     return (
       <div className="product-image-wrapper">
         <div className="product-image">
-          {product.images.length > 1 ? (
+          {product.images && product.images?.length > 1 ? (
             <>
               <button
                 className="change-product-image next"
@@ -70,10 +69,10 @@ const Product = () => {
             ""
           )}
 
-          {product.images[currentImageIndex] ? (
+          {product.images?.[currentImageIndex] ? (
             <img
               src={product.images[currentImageIndex]}
-              alt={product.name}
+              alt=""
             />
           ) : (
             <div className="image-not-found-message">{t("Image not found")}</div>
@@ -116,7 +115,7 @@ const Product = () => {
         </div>
         <p className="product-description">{description}</p>
         <CategoryList categories={categories} />
-        {images.length > 1 ? (
+        {images?.length > 1 ? (
           <ProductImageSelect
             images={images}
             handleSelectImage={handleSelectImage}

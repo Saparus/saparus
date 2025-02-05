@@ -16,7 +16,6 @@ const Catalog = () => {
       <div className="products-categories">
         <Categories
           selectedCompany={filter?.categories?.company}
-          filter={filter}
           setFilter={setFilter}
         />
         <Products

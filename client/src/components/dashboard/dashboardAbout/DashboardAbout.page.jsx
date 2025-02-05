@@ -15,33 +15,42 @@ import LanguageSelect from "../LanguageSelect"
 import Map from "../../other/Map"
 
 const DashboardAboutPage = () => {
-  const { token } = useOutletContext()
+  const { apiKey } = useOutletContext()
 
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
+
+  const currentLanguage = i18n.language.split("-")[0]
+
+  const { t } = useTranslation("translation", { keyPrefix: "products" })
 
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage.split("-")[0])
   const [wasSomethingChanged, setWasSomethingChanged] = useState(false)
 
   const [aboutItemList, setAboutItemList] = useState([])
 
-  const { data, isLoading, error } = useQuery(["about", token], () => getAllEditAboutItems(token), {
-    enabled: !!token,
-  })
+  const { data, isLoading, error } = useQuery(
+    ["about", apiKey],
+    () => getAllEditAboutItems(apiKey),
+    {
+      enabled: !!apiKey,
+    }
+  )
 
   const queryClient = useQueryClient()
 
   const editAboutItemsMutation = useMutation({
-    mutationFn: async () => await editAllAboutItems(aboutItemList, token),
+    mutationFn: async () => await editAllAboutItems(aboutItemList, apiKey),
     onSuccess: () => {
       toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["about", token]) // it will cause refetching
+      queryClient.invalidateQueries(["about", apiKey]) // it will cause refetching
     },
     onError: (error) => {
-      console.log(error)
-      toast.error(
-        "Something went wrong while saving About page, check browser console for more detailed explanation"
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      queryClient.invalidateQueries(["about", apiKey])
+
+      console.log(errorMessage)
+      toast.error(errorMessage)
     },
   })
 
@@ -102,17 +111,20 @@ const DashboardAboutPage = () => {
     const index1 = itemList.findIndex((item) => item.id === id1)
     const index2 = itemList.findIndex((item) => item.id === id2)
 
-    let temp = { ...itemList[index1] }
+    if (index1 === -1 || index2 === -1) {
+      console.error("One or both items not found in the list.")
+      return
+    }
 
+    // Swap positions
+    const tempPosition = itemList[index1].position
     itemList[index1].position = itemList[index2].position
-    itemList[index2].position = temp.position
+    itemList[index2].position = tempPosition
 
-    temp = itemList[index1]
-
-    itemList[index1] = structuredClone(itemList[index2])
-    itemList[index2] = structuredClone(temp)
-
-    itemList.sort((a, b) => a.position - b.position)
+    // Swap the items
+    const tempItem = itemList[index1]
+    itemList[index1] = itemList[index2]
+    itemList[index2] = tempItem
 
     setAboutItemList(itemList)
   }
@@ -120,7 +132,7 @@ const DashboardAboutPage = () => {
   const handleAboutItemMoveUp = (id) => {
     const itemToUpdate = aboutItemList.find((item) => item.id === id)
 
-    if (itemToUpdate.position > 0) {
+    if (itemToUpdate.position >= 0) {
       const itemToSwap = aboutItemList.find((item) => item.position === itemToUpdate.position - 1)
 
       if (!itemToSwap) return
@@ -132,8 +144,10 @@ const DashboardAboutPage = () => {
   const handleAboutItemMoveDown = (id) => {
     const itemToUpdate = aboutItemList.find((item) => item.id === id)
 
-    if (itemToUpdate.position < aboutItemList.length - 1) {
+    if (itemToUpdate.position <= aboutItemList.length) {
       const itemToSwap = aboutItemList.find((item) => item.position === itemToUpdate.position + 1)
+
+      if (!itemToSwap) return
 
       swapPlaces(id, itemToSwap.id)
     }
@@ -173,7 +187,9 @@ const DashboardAboutPage = () => {
 
     if (!data || !aboutItemList || error) return <div>something went wrong</div>
 
-    return aboutItemList.map((aboutItem) => {
+    const sortedAboutItemList = [...aboutItemList].sort((a, b) => a.position - b.position)
+
+    return sortedAboutItemList.map((aboutItem) => {
       return (
         <EditAboutItem
           key={aboutItem.id}
@@ -195,6 +211,7 @@ const DashboardAboutPage = () => {
             handleChange()
             handleDeleteAboutItem(aboutItem.id)
           }}
+          aboutItemList={aboutItemList}
         />
       )
     })
@@ -207,13 +224,13 @@ const DashboardAboutPage = () => {
           className="change-confirm"
           onClick={handleSave}
         >
-          confirm
+          {t("confirm")}
         </button>
         <button
           className="change-discard"
           onClick={handleDiscard}
         >
-          discard
+          {t("discard")}
         </button>
       </div>
     )
@@ -237,7 +254,7 @@ const DashboardAboutPage = () => {
         className="add-about-item"
         onClick={handleAddNewAboutItem}
       >
-        add
+        {t("add new item")}
       </button>
       {wasSomethingChanged ? renderConfirmChange() : ""}
     </div>

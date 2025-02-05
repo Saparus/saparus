@@ -1,13 +1,11 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
-// import { getEditProduct } from "../../../data/products"
-// import { editProduct, getEditProduct } from "../../../services/productServices"
-// import { getEditSingleNewsArticle, editNewsArticle } from "../../../services/newsServices"
 import {
-  getEditChildrenProgramArticles,
+  getEditSingleChildrenProgramArticle,
   editChildrenProgramArticle,
 } from "../../../services/childrenProgramServices"
 
@@ -15,7 +13,11 @@ import EditNewsPanel from "../dashboardNews/EditNewsPanel"
 import Loading from "../../other/Loading"
 
 const EditChildrenProgramArticle = () => {
-  const { token } = useOutletContext()
+  const { t } = useTranslation("translation", { keyPrefix: "children program" })
+
+  const navigate = useNavigate()
+
+  const { apiKey } = useOutletContext()
 
   const { id } = useParams()
 
@@ -23,7 +25,9 @@ const EditChildrenProgramArticle = () => {
     data: article,
     isLoading,
     error,
-  } = useQuery(["dashboard-news", id, token], () => getEditChildrenProgramArticles(id, token))
+  } = useQuery(["dashboard-news", id, apiKey], () =>
+    getEditSingleChildrenProgramArticle(id, apiKey)
+  )
 
   const queryClient = useQueryClient()
 
@@ -31,19 +35,31 @@ const EditChildrenProgramArticle = () => {
     mutationFn: async (product) => {
       const { title, text, images } = product
 
-      return await editChildrenProgramArticle(id, title, text, images, token)
+      return await editChildrenProgramArticle(id, title, text, images, apiKey)
+    },
+    onMutate: () => {
+      toast.loading(t("Updating children program..."))
     },
     onSuccess: () => {
-      toast.success("Changes saved successfully")
-      queryClient.invalidateQueries(["children-program", token]) // this will cause refetching
+      toast.dismiss()
+      toast.success(t("Changes saved successfully"))
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("children"),
+      })
+
+      navigate("../../admin/children")
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        "Something went wrong while adding product, check browser console for more detailed explanation"
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
+
+  const { isLoading: isEditing } = editNewsArticleMutation
 
   if (isLoading) return <Loading />
   if (error || !article) return <div>Something went wrong</div>
@@ -52,7 +68,8 @@ const EditChildrenProgramArticle = () => {
     <EditNewsPanel
       article={article}
       onSave={editNewsArticleMutation.mutate}
-      token={token}
+      apiKey={apiKey}
+      isLoading={isEditing}
       type="children program"
     />
   )

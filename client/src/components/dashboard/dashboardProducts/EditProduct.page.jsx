@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { useOutletContext } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -11,7 +11,9 @@ import ProductEditPanel from "./ProductEditPanel"
 import Loading from "../../other/Loading"
 
 const EditProductPage = () => {
-  const { token } = useOutletContext()
+  const navigate = useNavigate()
+
+  const { apiKey } = useOutletContext()
 
   const { t } = useTranslation("translation", { keyPrefix: "admin" })
 
@@ -21,8 +23,8 @@ const EditProductPage = () => {
     data: product,
     isLoading,
     error,
-  } = useQuery(["dashboard-product", id, token], () => getEditProduct(id, token), {
-    enabled: !!token,
+  } = useQuery(["dashboard-product", id, apiKey], () => getEditProduct(id, apiKey), {
+    enabled: !!apiKey,
   })
 
   const queryClient = useQueryClient()
@@ -40,22 +42,44 @@ const EditProductPage = () => {
         price,
         categories,
         id,
-        token
+        apiKey
       )
+    },
+    onMutate: () => {
+      toast.loading(t("Saving product changes..."))
     },
     onSuccess: () => {
+      toast.dismiss()
       toast.success(t("Changes saved successfully"))
-      queryClient.invalidateQueries(["products", token]) // this will cause refetching
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("dashboard-product"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("products"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("categories"),
+      })
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("companies"),
+      })
+
+      navigate("../../admin/products")
     },
     onError: (error) => {
-      console.log(error.message)
-      toast.error(
-        t(
-          "Something went wrong while adding product, check browser console for more detailed explanation"
-        )
-      )
+      const errorMessage = error.response.data.message || error.message || "Something went wrong"
+
+      toast.dismiss()
+      toast.error(errorMessage)
+      console.log(errorMessage)
     },
   })
+
+  const { isLoading: isEditing } = editProductMutation
 
   if (isLoading) return <Loading />
   if (error || !product) return <div>{t("Something went wrong")}</div>
@@ -64,6 +88,7 @@ const EditProductPage = () => {
     <ProductEditPanel
       product={product}
       onSave={editProductMutation.mutate}
+      isLoading={isEditing}
     />
   )
 }
