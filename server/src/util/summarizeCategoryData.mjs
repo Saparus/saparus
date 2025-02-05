@@ -7,7 +7,7 @@ export const summarizeCategoryData = (products, categories) => {
   categories.forEach((category, categoryIndex) => {
     languages.forEach((language) => {
       category.value[language].forEach((valueItem, index) => {
-        if (!valueItem && !valueItem.amount) {
+        if (typeof valueItem !== "object" && !valueItem.amount) {
           categories[categoryIndex].value[language][index] = {
             name: valueItem,
             amount: 0,
@@ -29,7 +29,7 @@ export const summarizeCategoryData = (products, categories) => {
           languages.forEach((language) => {
             category.value[language].forEach((valueItem, index) => {
               if (productCategory.value[language] === valueItem.name) {
-                categories[index].value[language][index].amount += 1
+                categories[categoryIndex].value[language][index].amount += 1
               }
             })
           })
