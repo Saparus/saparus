@@ -14,8 +14,8 @@ export const summarizeCategoryData = (products, categories) => {
       category.value[language].forEach((valueItem, index) => {
         if (!valueItem.name && !valueItem.amount) {
           category.value[language][index] = {
-            name: valueItem.name || category[language],
-            amount: valueItem.amount || 0,
+            name: valueItem.name,
+            amount: 0,
           }
         }
       })
