@@ -4,11 +4,11 @@ export const summarizeCategoryData = (products, categories) => {
   let overallMinPrice = Infinity
   let overallMaxPrice = -Infinity
 
-  categories.forEach((category, index) => {
+  categories.forEach((category, categoryIndex) => {
     languages.forEach((language) => {
       category.value[language].forEach((valueItem, index) => {
         if (!valueItem && !valueItem.amount) {
-          categories[index].value[language][index] = {
+          categories[categoryIndex].value[language][index] = {
             name: valueItem,
             amount: 0,
           }
