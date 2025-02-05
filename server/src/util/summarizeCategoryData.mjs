@@ -10,17 +10,13 @@ export const summarizeCategoryData = (products, categories) => {
   let overallMaxPrice = -Infinity
 
   categories.forEach((category) => {
-    // const { key, name, value } = category
-
-    // Initialize valueData for each language
     languages.forEach((language) => {
       category.value[language].forEach((valueItem, index) => {
-        if (!valueItem.name) {
-          category.value[language][index].name = category[language]
-        }
-
-        if (!valueItem.amount) {
-          category.value[language][index].amount = 0
+        if (!valueItem.name && !valueItem.amount) {
+          category.value[language][index] = {
+            name: valueItem.name || category[language],
+            amount: valueItem.amount || 0,
+          }
         }
       })
     })
