@@ -16,13 +16,13 @@ export const summarizeCategoryData = (products, categories) => {
 
     languages.forEach((language) => {
       valueData[language] = []
-    })
 
-    value.forEach((valueItem) => {
-      languages.forEach((language) => {
-        if (!valueData[language][valueItem[language]]) {
-          valueData[language][valueItem[language]] = 0
-        }
+      value.forEach((valueItem) => {
+        languages.forEach((language) => {
+          if (!valueData[language][valueItem[language]]) {
+            valueData[language][valueItem[language]] = 0
+          }
+        })
       })
     })
 
