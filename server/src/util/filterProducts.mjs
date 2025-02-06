@@ -52,6 +52,8 @@ export const filterProducts = (products, filter, language = "en") => {
 
         const matchesCategories = Object.entries(categoryFilters).every(
           ([filterKey, expectedValue]) => {
+            if (expectedValue === "") return true
+
             const categoryMatch = categories.some((categoryObj) => {
               if (categoryObj.key !== filterKey) return false
               return Object.values(categoryObj.value).some(
