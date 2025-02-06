@@ -1,31 +1,22 @@
-import React from "react"
+import { useTranslation } from "react-i18next"
 
 const CategoryList = ({ categories }) => {
-  if (!categories) return null
+  const { i18n } = useTranslation()
+
+  const currentLanguage = i18n.language
+
+  if (!categories) return ""
+
+  console.log(categories)
 
   return (
     <div className="category-list">
-      {/* {Object.entries(categories).map(([categoryKey, categoryValue]) => (
+      {categories.map(({ key, value, name }, index) => (
         <div
-          key={categoryKey}
+          key={key}
           className="category-item"
         >
-          {Object.entries(categoryValue).map(([subCategoryKey, subCategoryValue]) => (
-            <div
-              key={subCategoryKey}
-              className="sub-category-item"
-            >
-              <strong>{subCategoryKey}</strong> | {subCategoryValue.name}
-            </div>
-          ))}
-        </div>
-      ))} */}
-      {categories.names((name, index) => (
-        <div
-          key={name}
-          className="category-item"
-        >
-          <strong>{name}</strong> | {categories.value[index]}
+          <strong>{name[currentLanguage] + "\u00A0"} </strong> | {value[currentLanguage]}
         </div>
       ))}
     </div>

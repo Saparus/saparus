@@ -474,13 +474,9 @@ const ProductEditPanel = ({ product, onSave, isLoading }) => {
     }
 
     const renderCategories = () => {
-      const { categories } = currentProduct
-
-      // const categoryArray = Object.entries(categories).map(([key, value]) => ({ key, value }))
-
       return (
         <EditCategoryList
-          categories={categories}
+          categories={currentProduct.categories}
           isActive={activeFields.categories}
           setCurrentProduct={setCurrentProduct}
           handleFieldEditStart={handleFieldEditStart}

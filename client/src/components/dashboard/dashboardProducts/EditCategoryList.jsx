@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
+import { useQuery } from "react-query"
 import { createPortal } from "react-dom"
 
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
+import { getCategories } from "../../../services/categoryServices"
 
 import EditCategoryModal from "./EditCategoryModal"
 import CategoryItem from "./CategoryItem"
@@ -17,42 +19,38 @@ const EditCategoryList = ({
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
 
   const handleAddCategory = (newCategory) => {
+    // console.log(newCategory)
+
     setCurrentProduct((prevState) => ({
       ...prevState,
-      categories: {
-        ...prevState.categories.filter((category) => category.key !== newCategory.key),
-        ...newCategory,
-      },
+      categories: [
+        ...prevState?.categories?.filter((category) => category.key !== newCategory.key), // to prevent duplicates from being added
+        newCategory,
+      ],
     }))
   }
 
   const removeCategory = (key) => {
-    setCurrentProduct((prevState) => {
-      const updatedCategories = { ...prevState.categories }
-
-      Object.keys(updatedCategories).forEach((language) => {
-        if (updatedCategories[language]?.[key]) {
-          delete updatedCategories[language][key]
-        }
-      })
-
-      return {
-        ...prevState,
-        categories: updatedCategories,
-      }
-    })
+    setCurrentProduct((prevState) => [
+      ...prevState,
+      ...prevState.categories.filter((category) => category.key !== key),
+    ])
   }
+
+  const { data, isLoading, error } = useQuery(["categories"], getCategories)
+
+  // console.log(categories)
 
   return (
     <div className="category-list">
-      {categories.names.map((name, index) => (
+      {categories.map((category, index) => (
         <CategoryItem
-          key={`${selectedLanguage}-${name}`}
-          type={name}
-          value={categories.values[index]}
-          editCategory={() => setCurrentlyEditing(name)}
-          removeCategory={() => removeCategory(name)}
-          selectedLanguage={selectedLanguage}
+          key={`${selectedLanguage}-${category.value[selectedLanguage]}`}
+          // type={category.value[selectedLanguage].key}
+          name={category.name[selectedLanguage]}
+          value={category.value[selectedLanguage]}
+          editCategory={() => setCurrentlyEditing(category.key)}
+          removeCategory={() => removeCategory(category.value[selectedLanguage])}
         />
       ))}
 

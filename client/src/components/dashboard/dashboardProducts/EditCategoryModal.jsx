@@ -20,9 +20,9 @@ const EditCategoryModal = ({
 
   const [newCategory, setNewCategory] = useState(
     categories.find((category) => category.key === editingCategory) || {
-      key: null,
-      names: { en: null, ka: null, ru: null },
-      values: { en: null, ka: null, ru: null },
+      key: "tempKey",
+      name: { en: "", ka: "", ru: "" },
+      value: { en: "", ka: "", ru: "" },
     }
   )
 
@@ -31,8 +31,6 @@ const EditCategoryModal = ({
   const modalRef = useRef()
 
   const { data, isLoading, error } = useQuery(["categories"], getCategories)
-
-  const allCategories = data?.categories
 
   useOnClickOutside(modalRef, finishEditing)
 
@@ -48,16 +46,16 @@ const EditCategoryModal = ({
     }
   }
 
-  const handleInputChange = (language, key, value, onlyForSuggestions = false) => {
-    if (!key || !value || onlyForSuggestions) return
+  const handleInputChange = (language, field, value, onlyForSuggestions = false) => {
+    if (!field || onlyForSuggestions) return
 
-    if (key === "name") {
+    if (field === "name") {
       setNewCategory((prevState) => ({
         key: prevState.key,
         name: { ...prevState.name, [language]: value },
         value: prevState.value,
       }))
-    } else if (key === "value") {
+    } else if (field === "value") {
       setNewCategory((prevState) => ({
         key: prevState.key,
         name: prevState.name,
@@ -66,14 +64,14 @@ const EditCategoryModal = ({
     }
   }
 
-  const handleSuggestionClick = (language, key, value) => {
-    if (key === "name") {
+  const handleSuggestionClick = (field, value, resetValue = false) => {
+    if (field === "name") {
       setNewCategory((prevState) => ({
         key: prevState.key,
         name: value,
-        value: prevState.value,
+        value: resetValue ? { en: "", ka: "", ru: "" } : prevState.value,
       }))
-    } else if (key === "value") {
+    } else if (field === "value") {
       setNewCategory((prevState) => ({
         key: prevState.key,
         name: prevState.name,
@@ -83,8 +81,126 @@ const EditCategoryModal = ({
   }
 
   const handleSubmit = () => {
-    handleAddCategory(newCategory)
+    handleAddCategory({ ...newCategory, key: newCategory.name.en })
     finishEditing()
+  }
+
+  const renderNameInput = (language) => {
+    return (
+      <>
+        <input
+          className="category-key"
+          placeholder="category"
+          value={newCategory?.name?.[language] || ""} // current category key
+          onChange={(e) => {
+            const selectedValue = e.target.value.toLocaleLowerCase()
+            const selectedCategory = data?.categories?.find(
+              (category) => category.name[language]?.toLocaleLowerCase() === selectedValue
+            )
+
+            // console.log(selectedValue)
+
+            if (selectedCategory) {
+              handleSuggestionClick("name", selectedCategory.name, true)
+
+              handleInputChange(language, "name", selectedValue, true)
+            } else {
+              handleInputChange(language, "name", selectedValue)
+            }
+          }}
+          onFocus={(e) =>
+            handleInputChange(language, "name", e.target.value.toLocaleLowerCase(), true)
+          }
+          list={`key-suggestions-${language}`}
+        />
+        {isLoading ? (
+          ""
+        ) : (
+          <datalist id={`key-suggestions-${language}`}>
+            {data?.categories?.map((category) => (
+              <option
+                key={category.key}
+                value={category.name[language]}
+                onClick={() => {
+                  handleSuggestionClick("name", category)
+                }}
+              >
+                {category.name[language]}
+              </option>
+            ))}
+          </datalist>
+        )}
+      </>
+    )
+  }
+
+  const renderValueInput = (language) => {
+    return (
+      <>
+        <input
+          className="category-value"
+          placeholder="value"
+          value={newCategory?.value?.[language] || ""} // category value (name)
+          onChange={(e) => {
+            const selectedValue = e.target.value.toLocaleLowerCase()
+
+            const categoryIndex = data?.categories?.findIndex((category) =>
+              category.value[language]?.some(
+                (value) => value?.name?.toLocaleLowerCase() === selectedValue
+              )
+            )
+
+            const selectedCategory = categoryIndex !== -1 ? data.categories[categoryIndex] : null
+
+            const valueIndex =
+              selectedCategory?.value[language]?.findIndex(
+                (value) => value?.name?.toLocaleLowerCase() === selectedValue
+              ) ?? -1
+
+            if (selectedCategory && valueIndex !== -1) {
+              const selectedValues = Object.fromEntries(
+                Object.entries(selectedCategory.value).map(([lang, values]) => [
+                  lang,
+                  values[valueIndex]?.name || null,
+                ])
+              )
+
+              handleSuggestionClick("value", selectedValues)
+              handleInputChange(language, "value", selectedValue, false)
+            } else {
+              handleInputChange(language, "value", selectedValue)
+            }
+          }}
+          onFocus={(e) =>
+            handleInputChange(language, "value", e.target.value.toLocaleLowerCase(), true)
+          }
+          list={`value-suggestions-${language}`}
+        />
+        {isLoading ? (
+          ""
+        ) : (
+          <datalist id={`value-suggestions-${language}`}>
+            {data?.categories
+              ?.find(
+                (category) => category.key === newCategory.name.en
+                // category.key === newCategory.name.en || category.key === newCategory.key
+              )
+              ?.value[language].map((value, index) => {
+                if (value.amount === 0) return
+
+                return (
+                  <option
+                    key={value.name}
+                    value={value.name}
+                  >
+                    {value.name}
+                  </option>
+                )
+              })}
+          </datalist>
+        )}
+      </>
+    )
   }
 
   return (
@@ -122,54 +238,8 @@ const EditCategoryModal = ({
             className="language-section"
           >
             <h3>{t(languageNames[language])}</h3>
-            <input
-              className="category-key"
-              placeholder="category"
-              value={newCategory?.key || ""} // current category key
-              onChange={(e) =>
-                handleInputChange(language, "key", e.target.value.toLocaleLowerCase())
-              }
-              onFocus={(e) =>
-                handleInputChange(language, "key", e.target.value.toLocaleLowerCase(), true)
-              }
-              list={`key-suggestions-${language}`}
-            />
-            <datalist id={`key-suggestions-${language}`}>
-              {allCategories.map((categorySuggestion) => (
-                <option
-                  key={categorySuggestion.key}
-                  value={categorySuggestion.name[language]}
-                  onClick={() => handleSuggestionClick("name", categorySuggestion.name)}
-                >
-                  {categorySuggestion.name[language]}
-                </option>
-              ))}
-            </datalist>
-            <input
-              className="category-value"
-              placeholder="value"
-              value={categories?.value?.[language] || ""} // category value (name)
-              onChange={(e) =>
-                handleInputChange(language, "value", e.target.value.toLocaleLowerCase())
-              }
-              onFocus={(e) =>
-                handleInputChange(language, "value", e.target.value.toLocaleLowerCase(), true)
-              }
-              list={`value-suggestions-${language}`}
-            />
-            <datalist id={`value-suggestions-${language}`}>
-              {allCategories
-                .find((category) => category.key === newCategory.key)
-                .value.map((value) => (
-                  <option
-                    key={value[language]}
-                    value={value[language]}
-                    onClick={() => handleSuggestionClick("value", value)}
-                  >
-                    {value[language]}
-                  </option>
-                ))}
-            </datalist>
+            {renderNameInput(language)}
+            {renderValueInput(language)}
           </div>
         ))}
         <div className="modal-actions">

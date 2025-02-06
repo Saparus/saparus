@@ -16,7 +16,7 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
     // if (isLoading) return <Loading />
     if (isLoading) return
     if (error) return <div>something went wrong</div>
-    if (!data?.[currentLanguage]) return
+    if (!data) return
 
     const companies = data.value[currentLanguage]
 
