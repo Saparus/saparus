@@ -81,7 +81,7 @@ const EditCategoryModal = ({
   }
 
   const handleSubmit = () => {
-    handleAddCategory({ ...newCategory, key: newCategory.name.en })
+    handleAddCategory({ ...newCategory, key: newCategory.name.en, image: companyImage })
     finishEditing()
   }
 

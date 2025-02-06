@@ -29,6 +29,21 @@ export const editProduct = async (event) => {
   }
 
   try {
+    let imageURL
+
+    const companyCategory = categories.find((category) => category.image)
+
+    if (companyCategory) {
+      imageURL = await uploadImage(
+        companyCategory.image,
+        "company_images",
+        undefined,
+        companyCategory.key
+      )
+
+      console.log("Company image URL:", imageURL)
+    }
+
     const imageUrls = images?.length
       ? await Promise.all(
           images.map(async (image) => {
@@ -40,18 +55,6 @@ export const editProduct = async (event) => {
           })
         )
       : []
-
-    let imageURL
-
-    if (categories.find((category) => category.key === "company")?.image) {
-      const image = categories.en.company.company.image
-      imageURL = await uploadImage(
-        image,
-        "company_images",
-        undefined,
-        categories.find((category) => category.key === "company")
-      )
-    }
 
     categories.forEach((category) => {
       const { name, value } = category
@@ -82,7 +85,13 @@ export const editProduct = async (event) => {
         ":fixedPrice": fixedPrice,
         ":description": description,
         ":price": price,
-        ":categories": categories,
+        ":categories": categories.map((category) => {
+          if (category.key === "company") {
+            delete category.image
+          } else {
+            return category
+          }
+        }),
         ":inStock": inStock,
         ":images": imageUrls,
       },

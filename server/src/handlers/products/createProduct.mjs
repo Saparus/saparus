@@ -28,14 +28,16 @@ export const createProduct = async (event) => {
   try {
     let imageURL
 
-    if (categories.find((category) => category.key === "company")?.image) {
-      const image = categories.en.company.company.image
+    const companyCategory = categories.find((category) => category.image)
+
+    if (companyCategory) {
       imageURL = await uploadImage(
-        image,
+        companyCategory.image,
         "company_images",
         undefined,
-        categories.find((category) => category.key === "company")
+        companyCategory.key
       )
+
       console.log("Company image URL:", imageURL)
     }
 
@@ -76,7 +78,13 @@ export const createProduct = async (event) => {
       name,
       description,
       price: price !== undefined ? Number(price) : 0,
-      categories,
+      categories: categories.map((category) => {
+        if (category.key === "company") {
+          delete category.image
+        } else {
+          return category
+        }
+      }),
       fixedPrice: Boolean(fixedPrice),
       inStock: Boolean(inStock),
       images: imageUrls,
