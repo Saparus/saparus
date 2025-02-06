@@ -33,25 +33,35 @@ export const filterProducts = (products, filter, language = "en") => {
       if (key === "categories") {
         const categoryFilters = appliedFilter[key]
 
-        return Object.keys(categoryFilters).every((categoryKey) => {
+        for (const categoryKey in categoryFilters) {
           const expectedValue = categoryFilters[categoryKey]
-          const actualValues = []
+          let found = false
 
-          Object.values(categories).forEach((languageSpecificCategories) => {
-            Object.entries(languageSpecificCategories).forEach(([mainKey, category]) => {
-              if (mainKey !== categoryKey) return
+          for (const language in categories) {
+            const languageSpecificCategories = categories[language]
 
-              Object.values(category).forEach((value) => {
-                actualValues.push(value.name)
-              })
-            })
-          })
+            // if the language does not have the filtered category, skip
+            if (!languageSpecificCategories.hasOwnProperty(categoryKey)) continue
+
+            const category = languageSpecificCategories[categoryKey]
+
+            // iterate over subcategories to check the name property
+            for (const subKey in category) {
+              if (category[subKey].name === expectedValue) {
+                found = true
+                break
+              }
+            }
+            if (found) break
+          }
 
           console.log("expectedValue:", JSON.stringify(expectedValue, null, 2))
-          console.log("actualValues:", JSON.stringify(actualValues, null, 2))
+          console.log("found for categoryKey", categoryKey, ":", found)
 
-          return actualValues.includes(expectedValue)
-        })
+          // if the expected value was not found for any language, filter does not match
+          if (!found) return false
+        }
+        return true
       }
 
       if (key === "minPrice") {

@@ -186,7 +186,7 @@ const EditCategoryModal = ({
                 // category.key === newCategory.name.en || category.key === newCategory.key
               )
               ?.value[language].map((value, index) => {
-                if (value.amount === 0) return
+                // if (value.amount === 0) return
 
                 return (
                   <option
@@ -203,6 +203,8 @@ const EditCategoryModal = ({
     )
   }
 
+  console.log(newCategory)
+
   return (
     <div className="modal">
       <div
@@ -210,7 +212,7 @@ const EditCategoryModal = ({
         ref={modalRef}
       >
         <h2>{t("Edit Categories")}</h2>
-        {newCategory.key === "company" ? (
+        {newCategory.key === "company" || newCategory.name.en === "company" ? (
           <>
             <input
               type="file"

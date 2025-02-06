@@ -1,4 +1,4 @@
-import { UpdateCommand, GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
+import { UpdateCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
@@ -13,7 +13,7 @@ export const editProduct = async (event) => {
   const fixedPrice = body.fixedPrice ? true : false
   const price = body.price !== undefined ? Number(body.price) : 0
   const description = body.description
-  const categories = body.categories || {}
+  const categories = body.categories || []
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
@@ -92,8 +92,7 @@ export const editProduct = async (event) => {
     const updateCommand = new UpdateCommand(params)
     const result = await db.send(updateCommand)
 
-    // Fetch global categories
-    updateGlobalCategories(categories, imageURL)
+    await updateGlobalCategories(categories, imageURL)
 
     return {
       statusCode: 200,
