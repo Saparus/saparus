@@ -30,21 +30,47 @@ export const filterProducts = (products, filter, language = "en") => {
 
       if (key === "categories") {
         const categoryFilters = filter.categories
+        console.log("category Filters:", JSON.stringify(categoryFilters, null, 2))
 
-        if (!categoryFilters || Object.keys(categoryFilters).length === 0) return true
+        if (!categoryFilters || Object.keys(categoryFilters).length === 0) {
+          console.log("no category filters provided; condition matches by default.")
+          return true
+        }
 
         const matchesCategories = Object.entries(categoryFilters).every(
           ([filterKey, expectedValue]) => {
-            return categories.some((categoryObject) => {
-              if (categoryObject.key !== filterKey) return false
-              return Object.values(categoryObject.value).some(
-                (value) => value.toString().toLowerCase() === expectedValue.toString().toLowerCase()
+            console.log(`checking filter key: ${filterKey} with expected value: ${expectedValue}`)
+
+            const categoryMatch = categories.some((categoryObj) => {
+              console.log("evaluating category object:", JSON.stringify(categoryObj, null, 2))
+
+              if (categoryObj.key !== filterKey) {
+                console.log(
+                  `category key ${categoryObj.key} does not match filter key ${filterKey}.`
+                )
+                return false
+              }
+
+              const valueMatch = Object.values(categoryObj.value).some(
+                (val) => val.toString().toLowerCase() === expectedValue.toString().toLowerCase()
               )
+
+              console.log(`value match for category key ${filterKey}: ${valueMatch}`)
+              return valueMatch
             })
+
+            console.log(`category match for filter key ${filterKey}: ${categoryMatch}`)
+            return categoryMatch
           }
         )
 
-        if (!matchesCategories) return false
+        // if the expected value was not found for any category filter, filter does not match
+        if (!matchesCategories) {
+          console.log("product does not match category filters.")
+          return false
+        }
+
+        console.log("product matches category filters.")
       }
 
       if (key === "minPrice") {
@@ -58,11 +84,12 @@ export const filterProducts = (products, filter, language = "en") => {
       return rest[key] === appliedFilter[key]
     })
 
-    console.log("Product Matches Filter:", matchesFilter, item)
+    console.log("product Matches Filter:", matchesFilter, item)
 
     return matchesFilter
   })
 
-  console.log("Filtered Products:", JSON.stringify(filteredProducts, null, 2))
+  console.log("filtered Products:", JSON.stringify(filteredProducts, null, 2))
+
   return filteredProducts
 }
