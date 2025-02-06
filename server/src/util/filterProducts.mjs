@@ -3,8 +3,6 @@ export const filterProducts = (products, filter, language = "en") => {
   console.log("Filter:", JSON.stringify(filter, null, 2))
   console.log("Language:", language)
 
-  const appliedFilter = cleanFilter(filter)
-
   const translatedProducts = products.map((product) => {
     const { name, description, categories } = product
 
@@ -21,7 +19,7 @@ export const filterProducts = (products, filter, language = "en") => {
   const filteredProducts = translatedProducts.filter((item) => {
     const { name, description, categories, price, ...rest } = item
 
-    const matchesFilter = Object.keys(appliedFilter).every((key) => {
+    const matchesFilter = Object.keys(filter).every((key) => {
       if (key === "name") {
         return name.toLowerCase().includes(appliedFilter[key].toLowerCase())
       }
@@ -31,37 +29,22 @@ export const filterProducts = (products, filter, language = "en") => {
       }
 
       if (key === "categories") {
-        const categoryFilters = appliedFilter[key]
+        const categoryFilters = filter.categories
 
-        for (const categoryKey in categoryFilters) {
-          const expectedValue = categoryFilters[categoryKey]
-          let found = false
+        if (!categoryFilters || Object.keys(categoryFilters).length === 0) return true
 
-          for (const language in categories) {
-            const languageSpecificCategories = categories[language]
-
-            // if the language does not have the filtered category, skip
-            if (!languageSpecificCategories.hasOwnProperty(categoryKey)) continue
-
-            const category = languageSpecificCategories[categoryKey]
-
-            // iterate over subcategories to check the name property
-            for (const subKey in category) {
-              if (category[subKey].name === expectedValue) {
-                found = true
-                break
-              }
-            }
-            if (found) break
+        const matchesCategories = Object.entries(categoryFilters).every(
+          ([filterKey, expectedValue]) => {
+            return categories.some((categoryObject) => {
+              if (categoryObject.key !== filterKey) return false
+              return Object.values(categoryObject.value).some(
+                (value) => value.toString().toLowerCase() === expectedValue.toString().toLowerCase()
+              )
+            })
           }
+        )
 
-          console.log("expectedValue:", JSON.stringify(expectedValue, null, 2))
-          console.log("found for categoryKey", categoryKey, ":", found)
-
-          // if the expected value was not found for any language, filter does not match
-          if (!found) return false
-        }
-        return true
+        if (!matchesCategories) return false
       }
 
       if (key === "minPrice") {
@@ -82,26 +65,4 @@ export const filterProducts = (products, filter, language = "en") => {
 
   console.log("Filtered Products:", JSON.stringify(filteredProducts, null, 2))
   return filteredProducts
-}
-
-const cleanFilter = (obj) => {
-  return Object.keys(obj).reduce((acc, key) => {
-    const value = obj[key]
-    if (
-      value === null ||
-      value === "" ||
-      (typeof value === "object" && Object.keys(value).length === 0)
-    ) {
-      return acc
-    }
-    if (typeof value === "object" && !Array.isArray(value)) {
-      const cleaned = cleanFilter(value)
-      if (Object.keys(cleaned).length > 0) {
-        acc[key] = cleaned
-      }
-    } else {
-      acc[key] = value
-    }
-    return acc
-  }, {})
 }
