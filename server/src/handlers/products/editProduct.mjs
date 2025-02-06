@@ -31,14 +31,14 @@ export const editProduct = async (event) => {
   try {
     let imageURL
 
-    const companyCategory = categories.find((category) => category.image)
+    const companyCategory = categories.find((category) => category && category.image)
 
     if (companyCategory) {
       imageURL = await uploadImage(
         companyCategory.image,
         "company_images",
         undefined,
-        companyCategory.key
+        companyCategory.value.en
       )
 
       console.log("Company image URL:", imageURL)
@@ -57,13 +57,15 @@ export const editProduct = async (event) => {
       : []
 
     categories.forEach((category) => {
-      const { name, value } = category
+      if (category) {
+        const { name, value } = category
 
-      if (!name.ka) name.ka = name.en
-      if (!name.ru) name.ru = name.en
+        if (!name.ka) name.ka = name.en
+        if (!name.ru) name.ru = name.en
 
-      if (!value.ka) value.ka = value.en
-      if (!value.ru) value.ru = value.en
+        if (!value.ka) value.ka = value.en
+        if (!value.ru) value.ru = value.en
+      }
     })
 
     if (!name.ka) name.ka = name.en
@@ -86,11 +88,10 @@ export const editProduct = async (event) => {
         ":description": description,
         ":price": price,
         ":categories": categories.map((category) => {
-          if (category.key === "company") {
+          if (category && category.key === "company") {
             delete category.image
-          } else {
-            return category
           }
+          return category
         }),
         ":inStock": inStock,
         ":images": imageUrls,

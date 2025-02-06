@@ -28,6 +28,10 @@ const Companies = ({ setFilter, selectedCompany, filter, apiKey }) => {
           src={`https://saparus-images.s3.amazonaws.com/company_images/${company.name}/s.webp`}
           alt=""
           className="company-logo"
+          onError={(e) =>
+            (e.target.src =
+              'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="50" fill="white"/><text x="50" y="54" font-size="65" text-anchor="middle" dominant-baseline="middle" fill="gainsboro" font-family="Arial, sans-serif">?</text></svg>')
+          }
         />
       )
     }

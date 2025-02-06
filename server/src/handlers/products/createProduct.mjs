@@ -11,7 +11,7 @@ export const createProduct = async (event) => {
   const body = JSON.parse(event.body)
   console.log("Parsed body:", JSON.stringify(body, null, 2))
 
-  const { name, fixedPrice, price, description, categories = {}, inStock, images = [] } = body
+  const { name, fixedPrice, price, description, categories = [], inStock, images = [] } = body
 
   if (!name || !description) {
     console.log("Validation failed: Missing required fields")
@@ -28,14 +28,14 @@ export const createProduct = async (event) => {
   try {
     let imageURL
 
-    const companyCategory = categories.find((category) => category.image)
+    const companyCategory = categories.find((category) => category && category.image)
 
     if (companyCategory) {
       imageURL = await uploadImage(
         companyCategory.image,
         "company_images",
         undefined,
-        companyCategory.key
+        companyCategory.value.en
       )
 
       console.log("Company image URL:", imageURL)
@@ -58,13 +58,15 @@ export const createProduct = async (event) => {
     console.log("Updated categories:", JSON.stringify(categories, null, 2))
 
     categories.forEach((category) => {
-      const { name, value } = category
+      if (category) {
+        const { name, value } = category
 
-      if (!name.ka) name.ka = name.en
-      if (!name.ru) name.ru = name.en
+        if (!name.ka) name.ka = name.en
+        if (!name.ru) name.ru = name.en
 
-      if (!value.ka) value.ka = value.en
-      if (!value.ru) value.ru = value.en
+        if (!value.ka) value.ka = value.en
+        if (!value.ru) value.ru = value.en
+      }
     })
 
     if (!name.ka) name.ka = name.en
@@ -79,11 +81,10 @@ export const createProduct = async (event) => {
       description,
       price: price !== undefined ? Number(price) : 0,
       categories: categories.map((category) => {
-        if (category.key === "company") {
+        if (category && category.key === "company") {
           delete category.image
-        } else {
-          return category
         }
+        return category
       }),
       fixedPrice: Boolean(fixedPrice),
       inStock: Boolean(inStock),
