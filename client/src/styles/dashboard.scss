@@ -9,7 +9,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    // justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
 
@@ -50,8 +49,6 @@
       background-color: $success_green;
       height: 5rem;
       width: 5rem;
-      // position: absolute;
-      // visibility: hidden;
       opacity: 0;
       cursor: pointer;
       border-radius: 50%;
@@ -201,7 +198,6 @@
   .navbar {
     z-index: 9998;
     position: sticky;
-    // top: 5.5rem;
     top: 0;
     box-shadow: 0 1px 1px #1c1f1f07;
 
@@ -255,7 +251,6 @@
       height: 100%;
       display: flex;
 
-      // button,
       .log-out-button {
         background-color: $warning_red;
         color: white;
@@ -1007,9 +1002,6 @@
 }
 
 .admin-language-select {
-  // color: $base-color;
-  // margin-right: 1.5rem;
-  // background-color: $base-color;
   color: $text-color;
   margin-top: 0.25rem;
 
@@ -1064,7 +1056,6 @@
   justify-content: center;
 
   .modal-content {
-    // background-color: $base-color;
     background-color: white;
     padding: 1rem;
     border-radius: 0.5rem;
@@ -1116,12 +1107,6 @@
       transition: background-color $animation $animation_duration,
         box-shadow $animation $animation_duration;
       box-shadow: $shadow;
-
-      // &:hover {
-      //   background-color: $success-green-active;
-      //   background-color: red !important;
-      //   box-shadow: $shadow-active;
-      // }
     }
 
     .categories-modal-image {
@@ -1162,7 +1147,6 @@
         border-radius: 4px;
         font-family: $main-font;
         color: $dark-text-color;
-        // background-color: $base-color;
 
         &:focus {
           border-color: $primary-color;

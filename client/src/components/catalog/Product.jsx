@@ -26,10 +26,7 @@ const Product = ({ product }) => {
         </div>
         <div className="information">
           <p className="name">{name}</p>
-          <p
-            className={`instock ${inStock ? "is-in-stock" : ""}`}
-            // style={{ color: product.inStock ? "green" : "red" }}
-          >
+          <p className={`instock ${inStock ? "is-in-stock" : ""}`}>
             {inStock ? t("• in stock") : t("• out of stock")}
           </p>
         </div>
