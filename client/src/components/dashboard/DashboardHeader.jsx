@@ -18,10 +18,10 @@ const DashboardHeader = ({ name, handleLogOut }) => {
       {/* - <p>{name}</p> */}
       <div className="dashboard-navigation-buttons">
         <LanguageSelector className="admin-language-select" />
-        <NavLink to="products">{t("Products")}</NavLink>
+        <NavLink to="children">{t("Children Program")}</NavLink>
         <NavLink to="news">{t("News")}</NavLink>
         <NavLink to="about">{t("About")}</NavLink>
-        <NavLink to="children">{t("Children Program")}</NavLink>
+        <NavLink to="products">{t("Catalog")}</NavLink>
         <button
           onClick={handleLogOut}
           className="log-out-button"

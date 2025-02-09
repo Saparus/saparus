@@ -31,10 +31,12 @@ const EditCategoryList = ({
   }
 
   const removeCategory = (key) => {
-    setCurrentProduct((prevState) => [
+    console.log(key)
+
+    setCurrentProduct((prevState) => ({
       ...prevState,
-      ...prevState.categories.filter((category) => category.key !== key),
-    ])
+      categories: [...prevState?.categories?.filter((category) => category.key !== key)],
+    }))
   }
 
   const { data, isLoading, error } = useQuery(["categories"], getCategories)
@@ -50,7 +52,7 @@ const EditCategoryList = ({
           name={category.name[selectedLanguage]}
           value={category.value[selectedLanguage]}
           editCategory={() => setCurrentlyEditing(category.key)}
-          removeCategory={() => removeCategory(category.value[selectedLanguage])}
+          removeCategory={() => removeCategory(category.key)}
         />
       ))}
 

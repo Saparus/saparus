@@ -250,6 +250,7 @@
       width: fit-content;
       height: 100%;
       display: flex;
+      // font-size: 0.85rem;
 
       .log-out-button {
         background-color: $warning_red;
@@ -263,6 +264,7 @@
         transition: background-color $animation_duration $animation;
         height: 100%;
         align-items: center;
+        // font-size: 0.85rem;
 
         &:hover {
           background-color: $warning_red_active;
