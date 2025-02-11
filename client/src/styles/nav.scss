@@ -21,7 +21,7 @@ header {
 
   .header-bottom {
     width: 100%;
-    background-color: #0aab94;
+    background-color: $accent_green;
     color: white;
     height: 2.5rem;
     text-align: center;
@@ -41,7 +41,7 @@ header {
       align-items: center;
 
       display: flex;
-      gap: 1.5rem;
+      gap: 2.25rem;
 
       span {
         color: $base-color;
@@ -58,6 +58,11 @@ header {
         height: 100%;
         padding: 0.25rem;
         display: flex;
+        justify-content: center;
+        align-items: center;
+
+        display: flex;
+        gap: 0.5rem;
         justify-content: center;
         align-items: center;
 
@@ -392,7 +397,7 @@ header {
         font-size: 0.75rem !important;
       }
 
-      a {
+      .contact {
         font-size: 0.75rem !important;
       }
     }

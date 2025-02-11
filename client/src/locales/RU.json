@@ -14,8 +14,12 @@
 
   "other": {
     "Loading...": "Загрузка...",
-    "Georgia, Tbilisi, Navtlughi St. 2": "Грузия, Тбилиси, ул. Навтлуги 2",
-    "Page Not Found": "Страница не найдена"
+    "Georgia, Tbilisi, Navtlughi St. 2": "Грузия, Тбилиси, ул. Навтлуги, 2",
+    "Page Not Found": "Страница не найдена",
+    "Facebook": "Facebook",
+    "Email": "Эл. почта",
+    "Address": "Адрес",
+    "Phone": "Телефон"
   },
 
   "header": {
@@ -25,7 +29,11 @@
     "Catalog": "Каталог",
     "Dental instruments & Equipment": "Стоматологические инструменты и оборудование",
     "Georgia, Tbilisi, Navtlughi St. 2": "Грузия, Тбилиси, ул. Навтлуги 2",
-    "Empowering Smiles With Precision": "Укрепляем улыбки с точностью"
+    "Empowering Smiles With Precision": "Укрепляем улыбки с точностью",
+    "Facebook": "Facebook",
+    "Email": "Эл. почта",
+    "Address": "Адрес",
+    "Phone": "Телефон"
   },
 
   "footer": {

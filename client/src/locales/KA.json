@@ -15,7 +15,11 @@
   "other": {
     "Loading...": "იტვირთება...",
     "Georgia, Tbilisi, Navtlughi St. 2": "საქართველო, თბილისი, ნავთლუღის ქ. 2",
-    "Page Not Found": "გვერდი ვერ მოიძებნა"
+    "Page Not Found": "გვერდი ვერ მოიძებნა",
+    "Facebook": "Facebook",
+    "Email": "ელ. ფოსტა",
+    "Address": "მისამართი",
+    "Phone": "ტელეფონი"
   },
 
   "header": {
@@ -25,7 +29,11 @@
     "Catalog": "კატალოგი",
     "Dental instruments & Equipment": "სტომატოლოგიური ხელსაწყოები და აღჭურვილობა",
     "Georgia, Tbilisi, Navtlughi St. 2": "საქართველო, თბილისი, ნავთლუღის ქ. 2",
-    "Empowering Smiles With Precision": "ღიმილის გაძლიერება სიზუსტით"
+    "Empowering Smiles With Precision": "ღიმილის გაძლიერება სიზუსტით",
+    "Facebook": "Facebook",
+    "Email": "ელ. ფოსტა",
+    "Address": "მისამართი",
+    "Phone": "ტელეფონი"
   },
 
   "footer": {

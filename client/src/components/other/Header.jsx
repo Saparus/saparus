@@ -3,6 +3,12 @@ import { useTranslation } from "react-i18next"
 import { useState, useRef } from "react"
 
 import { useOnClickOutside } from "../../hooks/useOnClickOutside"
+
+// import { ReactComponent as Logo } from "../../assets/logo_white.svg"
+import { ReactComponent as Facebook } from "../../assets/facebook.svg"
+import { ReactComponent as Mail } from "../../assets/mail.svg"
+import { ReactComponent as Location } from "../../assets/location.svg"
+import { ReactComponent as Phone } from "../../assets/phone_white.svg"
 import { ReactComponent as Logo } from "../../assets/logo.svg"
 import { ReactComponent as Hamburger } from "../../assets/icons/hamburger.svg"
 
@@ -94,27 +100,49 @@ const Header = () => {
       <div className="header-bottom">
         <div className="contact_us">
           <span>{t("Contact Us")}</span>
-          <a href="tel:+995591808457">(+995) 591 80 84 57</a>
           <a
-            target="_blank"
-            rel="noreferrer"
             href="https://facebook.com/SapaRusLTD"
-          >
-            facebook.com/SapaRusLTD
-          </a>
-          <a
+            className="contact"
             target="_blank"
             rel="noreferrer"
-            href="mailto:kim.safarov@saparus.ge"
           >
-            kim.safarov@saparus.ge
+            <Facebook className="icon" />
+            {t("Facebook")}
           </a>
           <a
+            href="mailto:kim.safarov@saparus.ge"
+            className="contact"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Mail className="icon" />
+            {t("Email")}
+          </a>
+          <a
+            href="https://maps.app.goo.gl/FRag4mkH8iydc2VR6"
+            className="contact"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Location className="icon" />
+            {t("Address")}
+          </a>
+          <a
+            href="tel:+995591808457"
+            className="contact"
+          >
+            <Phone
+              className="icon"
+              target="_blank"
+            />
+            {t("Phone")}
+          </a>
+          {/* <a
             target="blank_"
             href="https://www.google.com/maps/place/2+Navtlughi+St,+T'bilisi,+Georgia/@41.6853664,44.83921,17.47z/data=!4m6!3m5!1s0x40440c4c97fa6d4f:0xcfa8a1b7aae8b24e!8m2!3d41.6853125!4d44.8413214!16s%2Fg%2F1ydphwmb2?entry=tts&g_ep=EgoyMDI0MDcxNy4wKgBIAVAD"
           >
             {t("Georgia, Tbilisi, Navtlughi St. 2")}
-          </a>
+          </a> */}
         </div>
       </div>
     )

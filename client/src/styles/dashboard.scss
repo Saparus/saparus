@@ -286,7 +286,7 @@
           background-color: $primary-color-active;
         }
         &.active {
-          color: lighten($accent_green, 10%);
+          color: lighten($accent_green, 30%);
         }
 
         &:nth-of-type(1) {

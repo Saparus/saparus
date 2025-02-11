@@ -13,9 +13,13 @@
   "dental tool": "Dental Tool",
 
   "other": {
-    "Loading...": "Loading...",
-    "Georgia, Tbilisi, Navtlughi St. 2": "Georgia, Tbilisi, Navtlughi St. 2",
-    "Page Not Found": "Page Not Found"
+    "Loading...": "იტვირთება...",
+    "Georgia, Tbilisi, Navtlughi St. 2": "საქართველო, თბილისი, ნავთლუღის ქ. 2",
+    "Page Not Found": "გვერდი ვერ მოიძებნა",
+    "Facebook": "Facebook",
+    "Email": "Email",
+    "Address": "Address",
+    "Phone": "Phone"
   },
 
   "header": {
@@ -25,7 +29,11 @@
     "Catalog": "Catalog",
     "Dental instruments & Equipment": "Dental Instruments & Equipment",
     "Georgia, Tbilisi, Navtlughi St. 2": "Georgia, Tbilisi, Navtlughi St. 2",
-    "Empowering Smiles With Precision": "Empowering Smiles With Precision"
+    "Empowering Smiles With Precision": "Empowering Smiles With Precision",
+    "Facebook": "Facebook",
+    "Email": "Email",
+    "Address": "Address",
+    "Phone": "Phone"
   },
 
   "footer": {

@@ -1,12 +1,12 @@
-import React from "react"
 import { useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+
 import { ReactComponent as Logo } from "../../assets/logo_white.svg"
 import { ReactComponent as Facebook } from "../../assets/facebook.svg"
 import { ReactComponent as Mail } from "../../assets/mail.svg"
 import { ReactComponent as Location } from "../../assets/location.svg"
 import { ReactComponent as Phone } from "../../assets/phone_white.svg"
-import { useTranslation } from "react-i18next"
 
 export const Contacts = () => {
   const { t } = useTranslation("translation", { keyPrefix: "other" })
@@ -20,7 +20,7 @@ export const Contacts = () => {
         rel="noreferrer"
       >
         <Facebook className="icon" />
-        facebook.com/SapaRusLTD
+        {t("Facebook")}
       </a>
       <a
         href="mailto:kim.safarov@saparus.ge"
@@ -29,7 +29,7 @@ export const Contacts = () => {
         rel="noreferrer"
       >
         <Mail className="icon" />
-        kim.safarov@saparus.ge
+        {t("Email")}
       </a>
       <a
         href="https://maps.app.goo.gl/FRag4mkH8iydc2VR6"
@@ -38,7 +38,7 @@ export const Contacts = () => {
         rel="noreferrer"
       >
         <Location className="icon" />
-        {t("Georgia, Tbilisi, Navtlughi St. 2")}
+        {t("Address")}
       </a>
       <a
         href="tel:+995591808457"
@@ -48,7 +48,7 @@ export const Contacts = () => {
           className="icon"
           target="_blank"
         />
-        +(995) 591 80 84 57
+        {t("Phone")}
       </a>
     </div>
   )
