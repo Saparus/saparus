@@ -12,10 +12,6 @@ export const updateGlobalCategories = async (categories, imageURL) => {
     const { Item } = await db.send(new GetCommand(categoryParams))
     const globalCategories = Item?.categories || []
 
-    console.log("imageURL:", JSON.stringify(imageURL, null, 2))
-    console.log("categories:", JSON.stringify(categories, null, 2))
-    console.log("globalCategories before:", JSON.stringify(globalCategories, null, 2))
-
     categories.forEach((category) => {
       // find if the category already exists in global categories
       const existingCategory = globalCategories.find(
@@ -41,8 +37,6 @@ export const updateGlobalCategories = async (categories, imageURL) => {
         globalCategories.push(newCategory)
       }
     })
-
-    console.log("globalCategories after:", JSON.stringify(globalCategories, null, 2))
 
     const putParams = {
       TableName: process.env.CATEGORIES_TABLE,

@@ -4,7 +4,6 @@ import { useState, useRef } from "react"
 
 import { useOnClickOutside } from "../../hooks/useOnClickOutside"
 
-// import { ReactComponent as Logo } from "../../assets/logo_white.svg"
 import { ReactComponent as Facebook } from "../../assets/facebook.svg"
 import { ReactComponent as Mail } from "../../assets/mail.svg"
 import { ReactComponent as Location } from "../../assets/location.svg"
@@ -13,7 +12,6 @@ import { ReactComponent as Logo } from "../../assets/logo.svg"
 import { ReactComponent as Hamburger } from "../../assets/icons/hamburger.svg"
 
 import LanguageSelector from "./LanguageSelector"
-import DashboardHeader from "../dashboard/DashboardHeader"
 
 const Header = () => {
   const { t } = useTranslation("translation", { keyPrefix: "header" })

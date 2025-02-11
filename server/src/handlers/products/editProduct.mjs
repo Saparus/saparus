@@ -40,8 +40,6 @@ export const editProduct = async (event) => {
         undefined,
         companyCategory.value.en
       )
-
-      console.log("Company image URL:", imageURL)
     }
 
     const imageUrls = images?.length

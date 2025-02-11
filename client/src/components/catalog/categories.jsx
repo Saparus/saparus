@@ -131,14 +131,6 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
 
       const languages = Object.keys(value)
 
-      // languages.every((language) =>
-      //   value[language].every(({ name: value, amount }) => {
-      //     console.log({ name: name[language], value, amount })
-
-      //     return amount === 0
-      //   })
-      // )
-
       if (
         languages.every((language) => value[language].every(({ name, amount }) => amount === 0))
       ) {
