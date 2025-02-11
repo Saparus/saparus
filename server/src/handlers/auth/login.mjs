@@ -1,53 +1,36 @@
 export const login = async (event) => {
-  const { access_key: accessKey } = JSON.parse(event.body)
+  const authHeader = event.headers?.Authorization
 
-  // Validate input
-  if (!accessKey) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return {
       statusCode: 400,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ message: "Access key was not provided" }),
+      body: JSON.stringify({ message: "Authorization header missing or invalid" }),
     }
   }
 
-  try {
-    // Validate access key
-    const validAccessKey = process.env.ACCESS_KEY
+  const accessKey = authHeader.replace("Bearer ", "")
 
-    if (accessKey !== validAccessKey) {
-      return {
-        statusCode: 401,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ message: "Invalid access key" }),
-      }
-    }
-
-    // Return the API key
-    const apiKey = process.env.API_KEY
-
+  if (accessKey !== process.env.ACCESS_KEY) {
     return {
-      statusCode: 200,
+      statusCode: 401,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
-      body: JSON.stringify({ apiKey }),
+      body: JSON.stringify({ message: "Invalid access key" }),
     }
-  } catch (error) {
-    console.error(error)
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ message: "Internal server error" }),
-    }
+  }
+
+  return {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+    },
+    body: JSON.stringify({ apiKey: process.env.API_KEY }),
   }
 }
