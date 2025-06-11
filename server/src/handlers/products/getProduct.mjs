@@ -29,8 +29,6 @@ export const getProduct = async (event) => {
   try {
     const { Item: product } = await db.send(getCommand)
 
-    console.log(product)
-
     if (!product) {
       return {
         statusCode: 404,

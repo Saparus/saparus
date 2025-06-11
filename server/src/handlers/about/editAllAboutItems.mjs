@@ -8,7 +8,6 @@ export const editAllAboutItems = async (event) => {
   const { aboutItems } = JSON.parse(event.body)
 
   try {
-    // Prepare delete requests for all existing items
     const existingItems = await db.send(new ScanCommand({ TableName: process.env.ABOUT_TABLE }))
 
     const deleteRequests = existingItems.Items.map((item) => ({
@@ -17,7 +16,6 @@ export const editAllAboutItems = async (event) => {
       },
     }))
 
-    // Prepare put requests for new items
     const putRequests = await Promise.all(
       aboutItems.map(async (item) => {
         const itemId = uuid()

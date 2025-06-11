@@ -1,32 +1,20 @@
 export const summarizeCategoryData = (products, categories) => {
-  const categoryData = []
-
   const languages = ["en", "ka", "ru"]
-
-  console.log("categories:", JSON.stringify(categories, null, 2))
-  console.log("products:", JSON.stringify(products, null, 2))
 
   let overallMinPrice = Infinity
   let overallMaxPrice = -Infinity
 
-  categories.forEach((category) => {
-    const { key, name, value } = category
-
-    const valueData = {}
-
+  categories.forEach((category, categoryIndex) => {
     languages.forEach((language) => {
-      valueData[language] = []
-
-      value[language].forEach((valueItem) => {
-        languages.forEach((language) => {
-          if (!valueData[language][valueItem[language]]) {
-            valueData[language][valueItem[language]] = 0
+      category.value[language].forEach((valueItem, index) => {
+        if (typeof valueItem !== "object" && !valueItem.amount) {
+          categories[categoryIndex].value[language][index] = {
+            name: valueItem,
+            amount: 0,
           }
-        })
+        }
       })
     })
-
-    console.log("valueData:", JSON.stringify(valueData, null, 2))
 
     products.forEach((product) => {
       const { price, categories: productCategories } = product
@@ -37,40 +25,21 @@ export const summarizeCategoryData = (products, categories) => {
       }
 
       productCategories.forEach((productCategory) => {
-        if (productCategory.key === key) {
+        if (productCategory.key === category.key) {
           languages.forEach((language) => {
-            value[language].forEach((valueItem) => {
-              if (productCategory.value[language] === valueItem[language]) {
-                valueData[language][valueItem[language]] += 1
+            category.value[language].forEach((valueItem, index) => {
+              if (productCategory.value[language] === valueItem.name) {
+                categories[categoryIndex].value[language][index].amount += 1
               }
             })
           })
         }
       })
     })
-
-    console.log("valueData:", JSON.stringify(valueData, null, 2))
-
-    const valueArray = {}
-
-    languages.forEach((language) => {
-      valueArray[language] = Object.keys(valueData[language]).map((key) => ({
-        name: key,
-        amount: valueData[language][key],
-      }))
-    })
-
-    console.log("valueArray:", JSON.stringify(valueArray, null, 2))
-
-    categoryData.push({
-      key,
-      name,
-      value: valueArray,
-    })
   })
 
   return {
-    categories: categoryData,
+    categories: categories,
     minPrice: overallMinPrice,
     maxPrice: overallMaxPrice,
   }

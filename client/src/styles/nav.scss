@@ -21,7 +21,7 @@ header {
 
   .header-bottom {
     width: 100%;
-    background-color: #0aab94;
+    background-color: $accent_green;
     color: white;
     height: 2.5rem;
     text-align: center;
@@ -41,7 +41,7 @@ header {
       align-items: center;
 
       display: flex;
-      gap: 1.5rem;
+      gap: 2.25rem;
 
       span {
         color: $base-color;
@@ -58,6 +58,11 @@ header {
         height: 100%;
         padding: 0.25rem;
         display: flex;
+        justify-content: center;
+        align-items: center;
+
+        display: flex;
+        gap: 0.5rem;
         justify-content: center;
         align-items: center;
 
@@ -157,7 +162,6 @@ header {
 }
 
 .language-selector {
-  // margin-right: 2rem;
   right: 2rem;
   font-family: $main-font;
   font-size: 0.85rem;
@@ -393,7 +397,7 @@ header {
         font-size: 0.75rem !important;
       }
 
-      a {
+      .contact {
         font-size: 0.75rem !important;
       }
     }
@@ -405,12 +409,6 @@ header {
     display: none !important;
     height: 9rem !important;
     .contact_us {
-      // display: flex;
-      // flex-wrap: wrap;
-      // height: 9rem !important;
-      // gap: 0 !important;
-      // max-width: 500px !important;
-
       span {
         flex-basis: 100%;
         height: 1.5rem !important;

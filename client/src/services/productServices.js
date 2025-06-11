@@ -17,8 +17,6 @@ export const editProduct = async (
   }
 
   try {
-    const translatedCategories = ensureCategoryTranslations(categories)
-
     const { data } = await ajax.patch(`/products/edit/${id}?api_key=${api_key}`, {
       name,
       description,
@@ -26,7 +24,7 @@ export const editProduct = async (
       inStock,
       fixedPrice,
       price,
-      categories: translatedCategories,
+      categories: categories,
     })
 
     return data
@@ -51,26 +49,22 @@ export const addProduct = async (
     return
   }
 
-  // const translatedCategories = ensureCategoryTranslations(categories)
+  try {
+    const { data } = await ajax.post(`/products?api_key=${api_key}`, {
+      name,
+      description,
+      images,
+      inStock,
+      fixedPrice,
+      price,
+      categories,
+    })
 
-  console.log(categories)
-
-  // try {
-  //   const { data } = await ajax.post(`/products?api_key=${api_key}`, {
-  //     name,
-  //     description,
-  //     images,
-  //     inStock,
-  //     fixedPrice,
-  //     price,
-  //     categories: translatedCategories,
-  //   })
-
-  //   return data
-  // } catch (error) {
-  //   console.error("error adding product:", error)
-  //   throw error
-  // }
+    return data
+  } catch (error) {
+    console.error("error adding product:", error)
+    throw error
+  }
 }
 
 // delete a product by id (requires api_key)
@@ -131,38 +125,4 @@ export const getEditProduct = async (id, api_key) => {
     console.error(`error fetching editable product with id ${id}:`, error)
     throw error
   }
-}
-
-const ensureCategoryTranslations = (categories) => {
-  const languages = ["en", "ka", "ru"]
-  const englishCategories = categories["en"] || {}
-
-  languages.forEach((language) => {
-    if (!categories[language]) {
-      categories[language] = {}
-    }
-
-    Object.keys(englishCategories).forEach((categoryKey) => {
-      const subCategory = Object.keys(englishCategories[categoryKey])[0]
-
-      const languageSpecificSubCategory = Object.keys(categories[language][categoryKey] || {})[0]
-
-      if (
-        !languageSpecificSubCategory ||
-        !categories?.[language]?.[categoryKey]?.[languageSpecificSubCategory]?.name
-      ) {
-        categories[language] = categories[language] || {}
-
-        categories[language][categoryKey] = categories[language][categoryKey] || {}
-
-        categories[language][categoryKey][subCategory] =
-          categories[language][categoryKey][subCategory] || {}
-
-        categories[language][categoryKey][subCategory].name =
-          englishCategories[categoryKey][subCategory].name
-      }
-    })
-  })
-
-  return categories
 }

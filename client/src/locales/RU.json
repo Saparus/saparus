@@ -14,8 +14,12 @@
 
   "other": {
     "Loading...": "Загрузка...",
-    "Georgia, Tbilisi, Navtlughi St. 2": "Грузия, Тбилиси, ул. Навтлуги 2",
-    "Page Not Found": "Страница не найдена"
+    "Georgia, Tbilisi, Navtlughi St. 2": "Грузия, Тбилиси, ул. Навтлуги, 2",
+    "Page Not Found": "Страница не найдена",
+    "Facebook": "Facebook",
+    "Email": "Эл. почта",
+    "Address": "Адрес",
+    "Phone": "Телефон"
   },
 
   "header": {
@@ -25,7 +29,11 @@
     "Catalog": "Каталог",
     "Dental instruments & Equipment": "Стоматологические инструменты и оборудование",
     "Georgia, Tbilisi, Navtlughi St. 2": "Грузия, Тбилиси, ул. Навтлуги 2",
-    "Empowering Smiles With Precision": "Укрепляем улыбки с точностью"
+    "Empowering Smiles With Precision": "Укрепляем улыбки с точностью",
+    "Facebook": "Facebook",
+    "Email": "Эл. почта",
+    "Address": "Адрес",
+    "Phone": "Телефон"
   },
 
   "footer": {
@@ -130,6 +138,7 @@
     "Georgian": "Грузинский",
     "Russian": "Русский",
     "Admin Dashboard": "Административная панель",
+    "Saparus Admin Dashboard": "Административная панель",
     "password": "пароль",
     "email": "электронная почта",
     "Adding news article...": "Добавление статьи...",
@@ -160,7 +169,8 @@
     "click here to add new product": "Нажмите здесь, чтобы добавить новый продукт",
     "upload image": "Загрузить изображение",
     "edit": "редактировать",
-    "Adding company...": "Добавление компании..."
+    "Adding company...": "Добавление компании...",
+    "Catalog": "Каталог"
   },
 
   "children program": {

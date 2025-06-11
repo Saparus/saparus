@@ -1,97 +1,73 @@
 export const filterProducts = (products, filter, language = "en") => {
-  console.log("Initial Products:", JSON.stringify(products, null, 2))
-  console.log("Filter:", JSON.stringify(filter, null, 2))
-  console.log("Language:", language)
-
-  const appliedFilter = cleanFilter(filter)
-
   const translatedProducts = products.map((product) => {
     const { name, description, categories } = product
 
-    return {
+    const translatedProduct = {
       ...product,
       name: name[language],
       description: description[language],
-      categories: categories,
+      categories,
     }
-  })
 
-  console.log("Translated Products:", JSON.stringify(translatedProducts, null, 2))
+    return translatedProduct
+  })
 
   const filteredProducts = translatedProducts.filter((item) => {
     const { name, description, categories, price, ...rest } = item
 
-    const matchesFilter = Object.keys(appliedFilter).every((key) => {
+    const matchesFilter = Object.keys(filter).every((key) => {
       if (key === "name") {
-        return name.toLowerCase().includes(appliedFilter[key].toLowerCase())
+        const match = name.toLowerCase().includes(filter[key].toLowerCase())
+        return match
       }
 
       if (key === "description") {
-        return description.toLowerCase().includes(appliedFilter[key].toLowerCase())
+        const match = description.toLowerCase().includes(filter[key].toLowerCase())
+
+        return match
       }
 
       if (key === "categories") {
-        const categoryFilters = appliedFilter[key]
+        const categoryFilters = filter.categories
+        if (!categoryFilters || Object.keys(categoryFilters).length === 0) return true
 
-        return Object.keys(categoryFilters).every((categoryKey) => {
-          const expectedValue = categoryFilters[categoryKey]
-          const actualValues = []
+        const matchesCategories = Object.entries(categoryFilters).every(
+          ([filterKey, expectedValue]) => {
+            if (expectedValue === "") return true
 
-          Object.values(categories).forEach((languageSpecificCategories) => {
-            Object.entries(languageSpecificCategories).forEach(([mainKey, category]) => {
-              if (mainKey !== categoryKey) return
-
-              Object.values(category).forEach((value) => {
-                actualValues.push(value.name)
-              })
+            const categoryMatch = categories.some((categoryObj) => {
+              if (categoryObj.key !== filterKey) return false
+              return Object.values(categoryObj.value).some(
+                (val) => val.toString().toLowerCase() === expectedValue.toString().toLowerCase()
+              )
             })
-          })
 
-          console.log("expectedValue:", JSON.stringify(expectedValue, null, 2))
-          console.log("actualValues:", JSON.stringify(actualValues, null, 2))
+            return categoryMatch
+          }
+        )
 
-          return actualValues.includes(expectedValue)
-        })
+        return matchesCategories
       }
 
       if (key === "minPrice") {
-        return price >= appliedFilter[key]
+        const match = price >= filter.minPrice
+
+        return match
       }
 
       if (key === "maxPrice") {
-        return price <= appliedFilter[key]
+        const match = price <= filter.maxPrice
+
+        return match
       }
 
-      return rest[key] === appliedFilter[key]
-    })
+      const match = rest[key] === filter[key]
 
-    console.log("Product Matches Filter:", matchesFilter, item)
+      return match
+    })
 
     return matchesFilter
   })
 
-  console.log("Filtered Products:", JSON.stringify(filteredProducts, null, 2))
   return filteredProducts
-}
-
-const cleanFilter = (obj) => {
-  return Object.keys(obj).reduce((acc, key) => {
-    const value = obj[key]
-    if (
-      value === null ||
-      value === "" ||
-      (typeof value === "object" && Object.keys(value).length === 0)
-    ) {
-      return acc
-    }
-    if (typeof value === "object" && !Array.isArray(value)) {
-      const cleaned = cleanFilter(value)
-      if (Object.keys(cleaned).length > 0) {
-        acc[key] = cleaned
-      }
-    } else {
-      acc[key] = value
-    }
-    return acc
-  }, {})
 }

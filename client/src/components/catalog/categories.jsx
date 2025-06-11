@@ -95,7 +95,7 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
       return <div>something went wrong</div>
     }
 
-    const categories = transformCategories(data.categories)
+    const categories = data.categories
 
     const handleOnSelect = (event) => {
       const { name, value } = event.target
@@ -127,14 +127,15 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
     }
 
     const renderCategorySelect = (category) => {
-      const { key, subKeys, values } = category
+      const { key, value, name } = category
 
-      // check if all amounts are 0
-      if (values.every((category) => category?.[currentLanguage]?.amount === 0)) {
+      const languages = Object.keys(value)
+
+      if (
+        languages.every((language) => value[language].every(({ name, amount }) => amount === 0))
+      ) {
         return null
       }
-
-      if (!Object.keys(subKeys).includes(currentLanguage)) return
 
       return (
         <div
@@ -153,19 +154,18 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
               disabled
               value=""
             >
-              {subKeys[currentLanguage]}
+              {name[currentLanguage]}
             </option>
             <option value="All">{t("All")}</option>
-            {values.map((category, index) => {
-              if (category?.[currentLanguage]?.amount === 0 || !category?.[currentLanguage]?.name)
-                return null
+            {value[currentLanguage].map(({ name: category, amount }, index) => {
+              if (amount === 0 || !category) return null
 
               return (
                 <option
-                  key={`${category?.[currentLanguage]?.name}-${index}`}
-                  value={category?.[currentLanguage]?.name}
+                  key={`${category}-${index}`}
+                  value={category}
                 >
-                  {category?.[currentLanguage]?.name}
+                  {category}
                 </option>
               )
             })}
@@ -285,36 +285,3 @@ const Categories = ({ selectedCompany, setFilter, showAddNewProductButton = fals
 }
 
 export default Categories
-
-export const transformCategories = (input) => {
-  const languages = Object.keys(input)
-  const result = []
-
-  languages.forEach((lang) => {
-    const categories = input[lang]
-    Object.keys(categories).forEach((categoryKey) => {
-      const category = categories[categoryKey]
-      let existingCategory = result.find((item) => item.key === categoryKey)
-
-      if (!existingCategory) {
-        existingCategory = {
-          key: categoryKey,
-          subKeys: {},
-          values: [],
-        }
-        result.push(existingCategory)
-      }
-
-      existingCategory.subKeys[lang] = category.name
-
-      category.values.forEach((value, index) => {
-        if (!existingCategory.values[index]) {
-          existingCategory.values[index] = {}
-        }
-        existingCategory.values[index][lang] = { name: value.name, amount: value.amount }
-      })
-    })
-  })
-
-  return result
-}

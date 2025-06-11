@@ -1,20 +1,15 @@
 import { v4 as uuid } from "uuid"
-import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb"
+import { PutCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
 import { updateGlobalCategories } from "../../util/updateGlobalCategories.mjs"
 
 export const createProduct = async (event) => {
-  console.log("Received event:", JSON.stringify(event, null, 2))
-
   const body = JSON.parse(event.body)
-  console.log("Parsed body:", JSON.stringify(body, null, 2))
-
-  const { name, fixedPrice, price, description, categories = {}, inStock, images = [] } = body
+  const { name, fixedPrice, price, description, categories = [], inStock, images = [] } = body
 
   if (!name || !description) {
-    console.log("Validation failed: Missing required fields")
     return {
       statusCode: 400,
       headers: {
@@ -28,15 +23,15 @@ export const createProduct = async (event) => {
   try {
     let imageURL
 
-    if (categories.find((category) => category.key === "company")?.image) {
-      const image = categories.en.company.company.image
+    const companyCategory = categories.find((category) => category && category.image)
+
+    if (companyCategory) {
       imageURL = await uploadImage(
-        image,
+        companyCategory.image,
         "company_images",
         undefined,
-        categories.find((category) => category.key === "company")
+        companyCategory.value.en
       )
-      console.log("Company image URL:", imageURL)
     }
 
     const imageUrls = images?.length
@@ -51,18 +46,16 @@ export const createProduct = async (event) => {
         )
       : []
 
-    console.log("Image URLs:", JSON.stringify(imageUrls, null, 2))
-
-    console.log("Updated categories:", JSON.stringify(categories, null, 2))
-
     categories.forEach((category) => {
-      const { name, value } = category
+      if (category) {
+        const { name, value } = category
 
-      if (!name.ka) name.ka = name.en
-      if (!name.ru) name.ru = name.en
+        if (!name.ka) name.ka = name.en
+        if (!name.ru) name.ru = name.en
 
-      if (!value.ka) value.ka = value.en
-      if (!value.ru) value.ru = value.en
+        if (!value.ka) value.ka = value.en
+        if (!value.ru) value.ru = value.en
+      }
     })
 
     if (!name.ka) name.ka = name.en
@@ -76,7 +69,12 @@ export const createProduct = async (event) => {
       name,
       description,
       price: price !== undefined ? Number(price) : 0,
-      categories,
+      categories: categories.map((category) => {
+        if (category && category.key === "company") {
+          delete category.image
+        }
+        return category
+      }),
       fixedPrice: Boolean(fixedPrice),
       inStock: Boolean(inStock),
       images: imageUrls,
@@ -87,10 +85,7 @@ export const createProduct = async (event) => {
       Item: productItem,
     }
 
-    console.log("Product params:", JSON.stringify(params, null, 2))
-
     await db.send(new PutCommand(params))
-    console.log("Product stored in PRODUCTS_TABLE")
 
     await updateGlobalCategories(categories, imageURL)
 

@@ -1,4 +1,4 @@
-import { UpdateCommand, GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
+import { UpdateCommand } from "@aws-sdk/lib-dynamodb"
 
 import { db } from "../../util/db.mjs"
 import { uploadImage } from "../../util/s3.mjs"
@@ -13,7 +13,7 @@ export const editProduct = async (event) => {
   const fixedPrice = body.fixedPrice ? true : false
   const price = body.price !== undefined ? Number(body.price) : 0
   const description = body.description
-  const categories = body.categories || {}
+  const categories = body.categories || []
   const inStock = body.inStock !== undefined ? Boolean(body.inStock) : false
   const images = body.images || []
 
@@ -29,6 +29,19 @@ export const editProduct = async (event) => {
   }
 
   try {
+    let imageURL
+
+    const companyCategory = categories.find((category) => category && category.image)
+
+    if (companyCategory) {
+      imageURL = await uploadImage(
+        companyCategory.image,
+        "company_images",
+        undefined,
+        companyCategory.value.en
+      )
+    }
+
     const imageUrls = images?.length
       ? await Promise.all(
           images.map(async (image) => {
@@ -41,26 +54,16 @@ export const editProduct = async (event) => {
         )
       : []
 
-    let imageURL
-
-    if (categories.find((category) => category.key === "company")?.image) {
-      const image = categories.en.company.company.image
-      imageURL = await uploadImage(
-        image,
-        "company_images",
-        undefined,
-        categories.find((category) => category.key === "company")
-      )
-    }
-
     categories.forEach((category) => {
-      const { name, value } = category
+      if (category) {
+        const { name, value } = category
 
-      if (!name.ka) name.ka = name.en
-      if (!name.ru) name.ru = name.en
+        if (!name.ka) name.ka = name.en
+        if (!name.ru) name.ru = name.en
 
-      if (!value.ka) value.ka = value.en
-      if (!value.ru) value.ru = value.en
+        if (!value.ka) value.ka = value.en
+        if (!value.ru) value.ru = value.en
+      }
     })
 
     if (!name.ka) name.ka = name.en
@@ -82,7 +85,12 @@ export const editProduct = async (event) => {
         ":fixedPrice": fixedPrice,
         ":description": description,
         ":price": price,
-        ":categories": categories,
+        ":categories": categories.map((category) => {
+          if (category && category.key === "company") {
+            delete category.image
+          }
+          return category
+        }),
         ":inStock": inStock,
         ":images": imageUrls,
       },
@@ -92,8 +100,7 @@ export const editProduct = async (event) => {
     const updateCommand = new UpdateCommand(params)
     const result = await db.send(updateCommand)
 
-    // Fetch global categories
-    updateGlobalCategories(categories, imageURL)
+    await updateGlobalCategories(categories, imageURL)
 
     return {
       statusCode: 200,

@@ -19,7 +19,7 @@ const emptyProductData = {
     ka: "",
     ru: "",
   },
-  categories: {},
+  categories: [],
   inStock: false,
   price: 0,
   fixedPrice: false,
